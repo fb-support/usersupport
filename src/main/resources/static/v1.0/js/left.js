@@ -2,7 +2,8 @@
  * 前往系统设置--基本信息页面
  */
 function runUserBaseInfo() {
-
+    $(".center_show_area").hide();
+    $("#system-base-info-page").show();
 }
 
 /**

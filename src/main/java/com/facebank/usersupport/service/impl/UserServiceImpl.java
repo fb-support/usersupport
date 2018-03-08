@@ -28,7 +28,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 
     @Override
     public User getUserByPhone(String phone) {
-        //创建查询对象，传入电话号码
+        //创建查询对象，传入电话号码查询对应数据
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andPhoneEqualTo(phone);

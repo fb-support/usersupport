@@ -19,27 +19,11 @@ public interface UserService {
     User getUserByUserId(final Long userId);
 
     /**
-     * 根据手机号获取用户信息
+     * 根据多条件获取用户信息
      * @param phone
      * @return 用户对象
      */
     User getUserByPhone(final String phone);
-
-    /**
-     * 根据用户名获取用户信息
-     * @param username
-     * @return 用户对象
-     */
-    User getUserByUsername(final String username);
-
-    /**
-     * 根据邮箱获取用户信息
-     * @param email
-     * @return 用户对象
-     */
-    User getUserByEmail(final String email);
-
-
     /**
      * 插入一个用户
      * @param user  用户对象
