@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>后台管理系统</title>
+	<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="js/themes/default/default.css" />
+    <script type="text/javascript" src="js/backstage_system_store_aftersales.js" ></script>
+    <link rel="stylesheet" type="text/css" href="css/backstage_system_store_aftersales.css">
+    <script>
+
+    </script>
+</head>
+<body>
+		<!-- 隐藏页面 -->
+	<div id="hidden-opera-aftersales"></div>
+	<div id="store_aftersales_opera-dialog">
+		<form action="" method="post" id="form_aftersale">
+		<div class="t-form">
+			<div class="t-content">
+				<input type="hidden" name="asid" id="dialog_asid"/>
+				<div id="t-dialog_aftersales_root_info">
+					<ul class="nav">
+						<li class="t-dialog_asid_info">售后编号：</li>
+						<li id="dialog_asid_show"></li>
+						<li class="t-dialog_oid_info">订单编号：</li>
+						<li id="dialog_oid_show"></li>
+						<li class="t-dialog_createtime_info">创建时间：</li>
+						<li id="dialog_createTime_show"></li>
+						<li class="t-dialog_payment_info">实付金额：</li>
+						<li id="dialog_payment_show"></li>
+						<li class="t-dialog_btn_close"><span onclick="javascript:closeCrossingAftersaleDialog()">×</span></li>
+					</ul>
+				</div>
+				<!--订单中的商品信息 -->
+				<div id="t-dialog_aftersales_items">
+					
+				</div>
+				
+				<div id="t-dialog_aftersales_other_info">
+					<!--买家申请售后信息 -->
+					<div class="t-dialog_buyer">
+						<table>
+							<tr class="t-reason">
+								<td class="reason-info text-gray">退货原因：</td>
+								<td id="buyer_reason"></td>
+							</tr>
+							<tr class="t-status">
+								<td class="status-info text-gray">当前状态：</td>
+								<td id="dialog_aftersale_status"></td>
+							</tr>
+							<tr class="t-reason-extend">
+								<td class="reason-extend-info text-gray">买家陈述：</td>
+								<td id="buyer_reason-extend"></td>
+							</tr>
+							<tr class="t-buyer_voucher">
+								<td class="buyer_voucher-info text-gray">买家凭证：</td>
+								<td class="buyer_voucher">
+									
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!--卖家售后信息 -->
+					<div class="t-dialog_seller">
+						<div class="t-seller-opera">
+							<span value="1" class="seller_opera_aftersale seller_opera_selected">同意</span>
+							<span value="2" class="seller_opera_aftersale">异议并上传凭证</span>
+						</div>
+						<!--不同意退货div -->
+						<div class="t-disagress-2-return">
+							<form aciton="" method="post" id="t-seller_disagress_form">
+							<div class="t-btn-imgs">
+								<span>上传凭证</span>
+								<input type="file" id="input_seller_voucher"  multiple="multiple" accept=".jpg,.png" onchange="javascript:uploadVoucherFromFile()" />
+							</div>
+							<div class="t-imgs" id="seller_voucher_pic_list">
+								<input type="hidden" name="sellerVoucher" class="sellerVoucher"/>
+							</div>
+							<div class="t-seller_reason">
+								<textarea rows="3" cols="40" id="seller_reason_extend" placeholder="卖家自述理由。。。"></textarea>
+							</div>
+							<div class=t-disagress-2-return-submit>
+								<input type="button" value="确认" id="btn_disagress2Return"  />
+							</div>
+							</form>
+						</div>
+						<!--同意退货div -->
+						<div class="t-agress-2-return">
+							<form aciton="" method="post" id="t-seller_agress_form">
+							<div class="t-detail">
+								<table>
+									<tr class="t-return-money">
+										<td class="text-gray">退款金额：</td>
+										<td class="return_money"></td>
+									</tr>
+									<tr class="t-return-name">
+										<td class="text-gray">收款人</td>
+										<td class="return_name"></td>
+									</tr>
+									<tr class="t-return-phone">
+										<td class="text-gray">收款电话</td>
+										<td class="return_phone"></td>
+									</tr>
+									<tr class="t-return-address-info">
+										<td class="text-gray" colspan="2">请卖家填写收货地址：</td>
+									</tr>
+									<tr class="t-return-address">
+										<td colspan="2">
+											<input type="hidden" name="return_address" id="return_address"/>
+											<div class="t-address-detail">
+												<div class="t-address-show"><span id="seller_give_address_show"><!-- 卖家提供地址展示处--></span></div> 
+												<div class="t-address-opera"><span class="glyphicon glyphicon-chevron-down"></span></div>
+											</div>
+											<!-- 修改地址或者添加地址隐藏页面 -->
+											<div class="t-address-opear-hidden-div">
+												<div class="t-provinces">
+													<span class="text-gray">省份：</span>
+													<select name="provinces-name" id="provinces">
+														<option value="北京市">北京市</option>
+														<option value="广东省">广东省</option>
+														<option value="浙江省">浙江省</option>
+														<option value="重庆市">重庆市</option>
+														<option value="云南省">云南省</option>
+													</select>
+												</div>
+												<div class="t-cities">
+													<span class="text-gray">市县：</span>
+													<select name="cities-name" id="cities">
+														<option value="汕尾市">汕尾市</option>
+														<option value="汕头市">汕头市</option>
+														<option value="广州市">广州市</option>
+														<option value="湛江市">湛江市</option>
+														<option value="梅州市">梅州市</option>
+													</select>
+												</div>
+												<div class="t-detail-addres">
+													<textarea class="address_detail" rows="1" cols="35" placeholder="详细地址..."></textarea>
+												</div>
+												<input type="hidden" class="hidden_province" name="province">
+												<input type="hidden" class="hidden_city" name="city">
+												<input type="hidden" class="hidden_address" name="address_detail">
+												<input type="hidden" class="isSave_address" name="isSave_address" value="0">
+												<div class="t-submit-opera">
+													<a href="javascript:submit_address() " class="submit-only">确认</a>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class=t-agress-2-return-submit>
+								<input type="button" value="确认" id="btn_agress2Return" />
+							</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		</form>
+	</div>
+	
+	
+	<!-- 主体内容 -->
+	<div id="store_aftersales_main">
+		<!-- 中部内容区 -->
+		<div id="store_aftersales_center">
+			<div class="t-head">
+				<span>售后处理</span>
+			</div>
+			<!-- 我的售后 -->
+			<div class="t-service-content t-aftersales">
+				<div class="t-aftersales-nav">
+					<ul class="nav">
+						<li><a class="aftersales-item-head aftersales-selected" href="javascript:void(0)" value="0" >全部售后</a></li>
+						<li><a class="aftersales-item-head" href="javascript:void(0)" value="1" >待处理</a></li>
+						<li><a class="aftersales-item-head" href="javascript:void(0)" value="2" >协商中</a></li>
+						<li><a class="aftersales-item-head" href="javascript:void(0)" value="3" >退货中</a></li>
+						<li><a class="aftersales-item-head" href="javascript:void(0)" value="4" >售后结束</a></li>
+						<li class="t-batch-print"><a id="batch-print" class="aftersales-item-head" href="javascript:void(0)" value="5" >批量打印</a></li>
+					</ul>
+				</div>
+				<div class="t-aftersales-items">
+					<div class="t-aftersales-items-1">
+						<ul class="nav">
+							<li class="info-aftersales-book"><span>商品</span></li>
+							<li class="info-aftersales-value"><span>退款金额</span></li>
+							<li class="info-aftersales-status"><span>退款状态</span></li>
+							<li class="info-aftersales-detail"><span>详情</span></li>
+						</ul>
+					</div>
+					<div id="t-aftersales-items-2">
+						<!--售后列表--有js动态生成 -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "timestamp": "2018-03-07T02:05:54.850+0000",
+  "status": 500,
+  "error": "Internal Server Error",
+  "message": "nested exception is org.apache.ibatis.exceptions.PersistenceException: \r\n### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown database 'usersupport'\r\n### The error may exist in file [C:\\Users\\Ningkui\\Desktop\\userSupport\\usersupport\\target\\classes\\com\\facebank\\usersupport\\mapper\\usersupport\\usersupport\\USUserMainMapper.xml]\r\n### The error may involve com.facebank.usersupport.mapper.usersupport.usersupport.USUserMainMapper.selectByPrimaryKey\r\n### The error occurred while executing a query\r\n### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown database 'usersupport'",
+  "path": "/v1.0/usertest/getUserMainByUserId"
+}

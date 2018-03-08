@@ -1,0 +1,72 @@
+GET http://localhost:8080/v1.0/usertest/showIndex
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-07T110057.200.html
+
+###
+
+GET http://localhost:8080/v1.0/usertest/showIndex
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-07T104503.404.json
+
+###
+
+GET http://localhost:8080/v1.0/usertest/showIndex
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-07T104436.404.json
+
+###
+
+GET http://localhost:8080/v1.0/usertest/showIndex
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-07T104304.404.json
+
+###
+
+GET http://localhost:8080/v1.0/usertest/showIndex
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-07T104217.404.json
+
+###
+
+GET http://localhost:8080/v1.0/usertest/getUserMainByUserId
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-07T104133.200.json
+
+###
+
+GET http://localhost:8080/v1.0/usertest/getUserMainByUserId
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-07T102623.200.json
+
+###
+
+GET http://localhost:8080/v1.0/usertest/getUserMainByUserId
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-07T101701.200.json
+
+###
+
+GET http://localhost:8080/v1.0/usertest/getUserMainByUserId
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-03-07T100555.500.json
+
+###
+
