@@ -84,23 +84,23 @@
 	overflow: hidden;
 }
 
-#itemManager-page {
+#system-base-info-page {
 	display: none;
 }
 
-#store_baseConfigure-page {
+#system-change-password-page {
 	display: none;
 }
 
-#store_orderManager-page {
+#service-a-page {
 	display: none;
 }
 
-#store_afterSalesManager-page {
+#service-b-page {
 	display: none;
 }
 
-#report_sellnum_form {
+#permission-page {
 	display: none;
 	width: 1260px;
 	height: 600px;
@@ -108,7 +108,7 @@
 	frameborder: 0;
 }
 
-#booksales_order_form {
+#userManager-add-user-page {
 	display: none;
 	width: 1260px;
 	height: 600px;
@@ -116,15 +116,7 @@
 	
 }
 
-#deliver_announcement-page {
-	display: none;
-}
-
-#look_announcement-page {
-	display: none;
-}
-
-#set_advertising-page {
+#userManager-opera-user-page {
 	display: none;
 }
 

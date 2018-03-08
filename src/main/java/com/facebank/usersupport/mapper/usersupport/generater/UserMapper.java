@@ -4,7 +4,9 @@ import com.facebank.usersupport.pojo.User;
 import com.facebank.usersupport.pojo.UserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserMapper {
     long countByExample(UserExample example);
 

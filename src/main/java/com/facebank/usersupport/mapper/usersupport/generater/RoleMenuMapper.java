@@ -4,7 +4,9 @@ import com.facebank.usersupport.pojo.RoleMenu;
 import com.facebank.usersupport.pojo.RoleMenuExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface RoleMenuMapper {
     long countByExample(RoleMenuExample example);
 

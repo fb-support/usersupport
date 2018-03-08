@@ -1,55 +1,79 @@
 body {
-	background-color: #F8F6F6;
+	padding: 0px;
+	background-color: #C7F7FB;
 }
 
 #border {
-	padding: 120px 450px;
+	padding: 80px 300px;
 }
 
-body {
-	padding: 0px;
-	background-image: url(../images/login_background.png);
+#border #system-info {
+	padding: 20px 40px;
+}
+
+#border #system-info span {
+	font-size: 22px;
+	color: #000000;
 }
 
 #border .t-form {
 	margin-left: 40px;
-	padding: 20px 30px;
-	border: 2px solid #DBDBDB;
+	padding: 20px 150px;
+	border: 4px solid #DBDBDB;
 	background-color: #FFFFFF;
+
 }
 
-#border .t-form .nav {
-	list-style: none;
-	padding: 0px;
+#border .t-form:hover {
+	border: 4px solid #FA9C9C;
 }
 
-#border .t-form ul li {
-	padding: 15px 0px;
+#border .t-form table tr td {
+	width: 100px;
+	height: 50px;
+	margin-bottom: 20px;
+}
+
+#border .t-form table tr td .user-write-input {
+	width: 230px;
+	height: 25px;
+	padding-left: 5px;
 }
 
 
-#border .t-form ul li:last-child {
-	padding-top: 38px;
-	padding-left: 100px;
+#border .t-form table tr .t-link-register-page {
+	text-align: right;
 }
 
-#border .t-form ul li:last-child input {
-	padding: 5px 25px;
-	background-color: #F0EDED;
-	border: 1px solid #B3B3B3;
+#border .t-form table tr td #link-register-page {
+	text-decoration: none;
+	color: #797575;
+	font-size: 14px;
 }
 
-#border .t-form ul li:last-child input:hover {
-	background-color: #ED8888;
+#border .t-form table tr td #link-register-page:hover {
+	color: #0B71CE;
+}
+
+
+
+#border .t-form table tr td .login-btn {
+	padding: 10px 35px;
+	background-color: #E7E3E3;
+	border: none;
+	margin-right: 10px;
+	font-size: 16px;
+}
+
+#border .t-form table tr td #btn-submit {
+	background-color: #8388A1;
 	color: #FFFFFF;
 }
 
-#border .t-form ul .li-key span {
-	text-align: right;
-	padding-left: 46px;
+#border .t-form table tr td #btn-submit:hover {
+	background-color: #1F243B;
 }
 
-#border .t-form ul .li-key input {
-	width: 230px;
-	/*margin-left: 50px;*/
+#border .t-form table tr td #btn-reset {
+
 }

@@ -4,7 +4,9 @@ import com.facebank.usersupport.pojo.Menu;
 import com.facebank.usersupport.pojo.MenuExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface MenuMapper {
     long countByExample(MenuExample example);
 

@@ -4,7 +4,9 @@ import com.facebank.usersupport.pojo.LoginUser;
 import com.facebank.usersupport.pojo.LoginUserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface LoginUserMapper {
     long countByExample(LoginUserExample example);
 

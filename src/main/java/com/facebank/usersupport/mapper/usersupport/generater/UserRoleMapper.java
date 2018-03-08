@@ -4,7 +4,9 @@ import com.facebank.usersupport.pojo.UserRole;
 import com.facebank.usersupport.pojo.UserRoleExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserRoleMapper {
     long countByExample(UserRoleExample example);
 
