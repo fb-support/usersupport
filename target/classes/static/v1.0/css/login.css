@@ -1,0 +1,55 @@
+body {
+	background-color: #F8F6F6;
+}
+
+#border {
+	padding: 120px 450px;
+}
+
+body {
+	padding: 0px;
+	background-image: url(../images/login_background.png);
+}
+
+#border .t-form {
+	margin-left: 40px;
+	padding: 20px 30px;
+	border: 2px solid #DBDBDB;
+	background-color: #FFFFFF;
+}
+
+#border .t-form .nav {
+	list-style: none;
+	padding: 0px;
+}
+
+#border .t-form ul li {
+	padding: 15px 0px;
+}
+
+
+#border .t-form ul li:last-child {
+	padding-top: 38px;
+	padding-left: 100px;
+}
+
+#border .t-form ul li:last-child input {
+	padding: 5px 25px;
+	background-color: #F0EDED;
+	border: 1px solid #B3B3B3;
+}
+
+#border .t-form ul li:last-child input:hover {
+	background-color: #ED8888;
+	color: #FFFFFF;
+}
+
+#border .t-form ul .li-key span {
+	text-align: right;
+	padding-left: 46px;
+}
+
+#border .t-form ul .li-key input {
+	width: 230px;
+	/*margin-left: 50px;*/
+}

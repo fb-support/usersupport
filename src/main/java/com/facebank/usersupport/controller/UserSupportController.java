@@ -28,7 +28,7 @@ public class UserSupportController extends BaseController{
 
     @GetMapping("/v1.0/usertest/getUserMainByUserId")
     public RestModel getUserMainByUserId(){
-        UserMainModel model = userMainService.getUserMainByUserId(10L);
+        UserMainModel model = userMainService.getUserMainByUserId(123456L);
         return this.success(JSON.toJSONString(model));
     }
 

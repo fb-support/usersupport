@@ -1,0 +1,5 @@
+{
+  "code": "1",
+  "message": "操作成功",
+  "data": "{\"email\":\"zhangningkui@163.com\",\"gesturePwd\":\"123456\",\"gesturePwdStatus\":1,\"loginPwd\":\"123456\",\"mobile\":\"18814384402\",\"nickName\":\"张\",\"userId\":123456}"
+}

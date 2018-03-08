@@ -104,7 +104,16 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 
+		<dependency>
+			<groupId>net.sourceforge.nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+			<version>1.9.15</version>
+		</dependency>
 	<!--	<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid-spring-boot-starter</artifactId>
@@ -167,8 +176,7 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>**/*.properties</include>
-					<include>**/*.xml</include>
+					<include>**/*</include>
 				</includes>
 				<filtering>false</filtering>
 			</resource>

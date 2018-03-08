@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>后台管理系统</title>
+	<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="js/themes/default/default.css" />
+    <script type="text/javascript" src="js/backstage_system_store_order.js" ></script>
+    <link rel="stylesheet" type="text/css" href="css/backstage_system_store_order.css">
+    <script>
+
+    </script>
+</head>
+<body>
+	<!-- 隐藏页面 -->
+	<div id="hidden-opera-order"></div>
+	<div id="store_order_opera-dialog">
+		<div class="t-close">
+			<span id="t-dialog-name">发货</span>
+			<span onclick="javascript:closeOrderDialog()">×</span>
+		</div>
+		<form action="" method="post" id="form_item">
+		<div class="t-form">
+			<div class="t-content">
+				<input type="hidden" name="oid" id="deliver_order_id"/>
+				<div id="t-deliver_order_info">
+					<ul>
+						<li>订单号：</li>
+						<li id="deliver_order_id_show">534531585</li>
+						<li>创建时间：</li>
+						<li id="deliver_order_createTime">2017-5-12 12:45:22</li>
+						<li>实付金额：</li>
+						<li id="deliver_order_payment">￥81.5</li>
+					</ul>
+				</div>
+				
+			</div>
+		</div>
+		</form>
+	</div>
+	
+	
+	<!-- 主体内容 -->
+	<div id="store_order_main">
+		<!-- 中部内容区 -->
+		<div id="store_order_center">
+			<div class="t-head">
+				<span>订单管理</span>
+			</div>
+			<!-- 我的订单 -->
+			<div class="t-service-content t-order">
+				<div class="t-order-nav">
+					<ul class="nav">
+						<li><a class="order-item-head order-selected" href="javascript:void(0)" value="0" >全部订单</a></li>
+						<li><a class="order-item-head" href="javascript:void(0)" value="1" >待付款</a></li>
+						<li><a class="order-item-head" href="javascript:void(0)" value="2" >待发货</a></li>
+						<li><a class="order-item-head" href="javascript:void(0)" value="3" >待收货</a></li>
+						<li><a class="order-item-head" href="javascript:void(0)" value="4" >待评价</a></li>
+						<li><a class="order-item-head" href="javascript:void(0)" value="5" >已完成</a></li>
+						<li class="t-batch-print"><a id="batch-print" class="order-item-head" href="javascript:void(0)" value="5" >批量打印</a></li>
+					</ul>
+				</div>
+				<div class="t-order-items">
+					<div class="t-order-items-1">
+						<ul class="nav">
+							<li class="info-order-detail"><span>订单详情</span></li>
+							<li class="info-order-specific"><span>规格</span></li>
+							<li class="info-order-num">数量</li>
+							<li class="info-order-value"><span>金额</span></li>
+						</ul>
+					</div>
+					<div id="t-order-items-2">
+					<!--订单具体内容，由js动态生成 -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
