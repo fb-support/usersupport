@@ -47,13 +47,13 @@ public enum MessageKeyEnum {
     USER_UN_LOGIN("-853","请登录后执行此操作"),
     USER_NOT_OPENACCOUNT("-854","未创建银行账户"),
     USER_NOT_BINDCARD("-855","未绑定银行卡"),
-    USER_Login_LOCK("-856","用户被锁定"),
+    USER_LOGIN_LOCK("-856","用户被锁定"),
     USER_LOGIN_DISABLED("-857","用户已被停用"),
     USER_LOGIN_THIRD("-858","用户登录3次错误"), //启用验证码
     USER_LOGIN_THIRD_NO_IMAGE("-859","用户登录3次错误"),//不启用验证码
 
     //用户等级信息检验码
-    USER_MOBILE_EMPYT("-860","请输入手机号"),
+    USER_MOBILE_EMPTY("-860","请输入手机号"),
     USER_MOBILE_ILLEGAL("-861","请输入正确的手机号格式"),
     USER_PPWD_EMPTY("-862","请输入6-20位的密码"),
     USER_SMSCODE_EMPTY("-863","请输入6位短信验证码"),
