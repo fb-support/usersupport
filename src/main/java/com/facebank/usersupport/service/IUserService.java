@@ -7,7 +7,7 @@ import com.facebank.usersupport.model.UserModel;
  * @author NingKui
  * @date 2018/3/8 13:42
  **/
-public interface UserService {
+public interface IUserService {
 
     /**
      * 根据用户id获取用户信息

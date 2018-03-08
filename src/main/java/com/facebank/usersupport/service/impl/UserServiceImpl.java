@@ -4,7 +4,7 @@ import com.facebank.usersupport.mapper.usersupport.usersupport.UserMapper;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.UserExampleModel;
 import com.facebank.usersupport.model.UserModel;
-import com.facebank.usersupport.service.UserService;
+import com.facebank.usersupport.service.IUserService;
 import com.facebank.usersupport.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2018/3/8 14:08
  **/
 @Service
-public class UserServiceImpl extends BaseService implements UserService {
+public class UserServiceImpl extends BaseService implements IUserService {
 
     @Autowired
     private UserMapper userMapper;

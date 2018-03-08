@@ -34,7 +34,7 @@ public enum MessageKeyEnum {
     //以下定义固定参数错误
     //系统异常状态码
     UNKNOW("-801","系统或网路异常"),
-    UNCHECK_REQUEST_ERROR("-801","非法请求参数"),
+    UNCHECK_REQUEST_ERROR("-802","非法请求参数"),
     SESSION_EXPIRED("-803","用户session已过期，请重新登陆"),
     TOKEN_ERROR("-804", "重复提交表单"),
     SESSION_REPEAT_KIT("-805","您的账号在异地登陆，如非本人操作请及时更换密码"),
