@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理系统</title>
+    <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="js/kindeditor-all-min.js"></script>
+    <script type="text/javascript" src="lang/zh-CN.js"></script>
+    <!--<script>-->
+    <!--var item_editor;-->
+    <!--KindEditor.ready(function(K) {-->
+    <!--item_editor = K.create('#item_editor_id');-->
+    <!--});-->
+    <!--</script>-->
+</head>
+<body>
+<!-- 基本信息页面 -->
+<div style ="margin: 50px auto">
+    <table width="750px" height="400px" align="center" cellpadding="0px" cellspacing="0px" bgcolor="white" class="table table-hover">
+        <tr height="40px">
+            <td colspan="2">
+                <font size="4">基本信息</font> &nbsp;&nbsp;&nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                ID
+            </td>
+            <td>
+                <input type="text" name="id" size="34px" id="id"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                工号
+            </td>
+            <td>
+                <input type="text" name="worknumber" size="34px" id="worknumber"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                用户名
+            </td>
+            <td>
+                <input type="text" name="username" size="34px" id="username"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                手机号码：
+            </td>
+            <td>
+                <input type="text" name="phonenumber" id="phonenumber" size="34px"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                邮箱
+            </td>
+            <td>
+                <input type="text" name="email"  id="email" size="34px"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                入职时间
+            </td>
+            <td>
+                <input type="text" name="createtime" id="gmt_create" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                修改时间
+            </td>
+            <td>
+                <input type="text" name="modifytime" id="gmt_modify" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                状态
+            </td>
+            <td>
+                <input type="text" name="status" id="status" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="修改" />
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
