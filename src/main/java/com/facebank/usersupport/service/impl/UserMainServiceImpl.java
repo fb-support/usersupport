@@ -5,6 +5,7 @@ import com.facebank.usersupport.mapper.usersupport.usersupport.USUserMainMapper;
 import com.facebank.usersupport.model.UserMainModel;
 import com.facebank.usersupport.service.IUserMainService;
 import com.facebank.usersupport.service.base.BaseService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,8 @@ public class UserMainServiceImpl extends BaseService implements IUserMainService
 
     @Override
     public UserMainModel getUserMainByUserId(Long userId) {
+
+        //BeanUtils.copyProperties(source,target);
         System.out.println("++++++++++++" + usUserMainMapper);
         return usUserMainMapper.selectByPrimaryKey(userId);
     }

@@ -17,20 +17,6 @@ public enum MessageKeyEnum {
     //业务失败 无需提示用户
     ERROR("0","操作失败"),
 
-
-    //app 专用参数
-    //业务成功  请使用toast方式提示用户
-    SUCCESS_TOAST("1","操作成功"),
-    //业务成功  请使用dialog方式提示用户
-    SUCCESS_DIALOG("1","操作成功"),
-
-    //业务失败 且使用toast方式提示用户
-    FAIL_TOAST("0","操作失败"),
-    //业务失败 且使用DIALOG方式提示用户
-    FAIL_DIALOG("0","操作失败"),
-
-
-
     //以下定义固定参数错误
     //系统异常状态码
     UNKNOW("-801","系统或网路异常"),

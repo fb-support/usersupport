@@ -1,10 +1,12 @@
 package com.facebank.usersupport.model;
 
+import java.io.Serializable;
+
 /**
  * @author NingKui
  * @date 2018/3/8 16:00
  **/
-public class UserModel {
+public class UserModel implements Serializable{
     private Long userId;
 
     private Integer workNumber;

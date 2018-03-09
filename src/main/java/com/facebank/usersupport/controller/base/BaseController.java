@@ -1,4 +1,4 @@
-package com.facebank.usersupport.controller;
+package com.facebank.usersupport.controller.base;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -123,7 +123,7 @@ public class BaseController {
 
     //异常输出
     protected RestModel excpRestModel() {
-        return new RestModel(MessageKeyEnum.UNKNOW);
+        return new RestModel(MessageKeyEnum.ERROR);
     }
 
     protected RestModel excpRestModel(MessageKeyEnum messageKeyEnum) {

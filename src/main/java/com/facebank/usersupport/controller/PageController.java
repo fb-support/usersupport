@@ -1,6 +1,7 @@
 package com.facebank.usersupport.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.UserMainModel;
 import com.facebank.usersupport.service.IUserMainService;
