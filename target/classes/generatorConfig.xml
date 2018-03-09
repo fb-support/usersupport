@@ -11,8 +11,8 @@
         </commentGenerator>
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/usersupport" userId="root"
-                        password="123456">
+                        connectionURL="jdbc:mysql://192.168.0.200:3306/usersupport" userId="worker"
+                        password="qwer1234">
         </jdbcConnection>
         <!-- <jdbcConnection driverClass="oracle.jdbc.OracleDriver"
             connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:yycg"
@@ -35,7 +35,7 @@
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
         <!-- targetProject:mapper映射文件生成的位置 -->
-        <sqlMapGenerator targetPackage="com.facebank.usersupport.mapper.usersupport.generater"
+        <sqlMapGenerator targetPackage="com.facebank.usersupport.generater"
                          targetProject=".\src">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false" />
