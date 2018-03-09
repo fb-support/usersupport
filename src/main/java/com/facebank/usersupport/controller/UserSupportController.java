@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * 测试类
- *
+ * 参考类
  * @author hailong.Yang
  * @create 2018-03-05 下午3:32
  **/
@@ -31,15 +31,22 @@ public class UserSupportController extends BaseController {
     private IUserMainService userMainService;
 
 
+    // 注意：根据相关业务模块，url的第一个就写什么。格式为  /业务模块/需求
     @GetMapping("/user/getUserMainByUserId")
     public RestModel getUserMainByUserId(@RequestBody UserModel user){
         UserMainModel model = userMainService.getUserMainByUserId(123456L);
+        /** 返回值规范：使用下一行格式。若是成功，则为this.success(data),失败的话，对应想要的
+         * 错误类型传回，比如是系统或网路异常错误。那就返回：this.this.excpRestModel(MessageKeyEnum.UNKNOW);
+         */
         return this.success(JSON.toJSONString(model));
     }
 
 
-    @PostMapping("/user/postUserMainByUserId")
+    @PostMapping("/user/postUserMainByUserId，")
     public RestModel getUserMainByUserId(@RequestBody UserForm userForm){
+        /**
+         * 注意：controller层所有代码都要try-catch包裹着。这是为了用户友好
+         */
         try{
             UserMainModel model = userMainService.getUserMainByUserId(123456L);
             return this.success(JSON.toJSONString(model));

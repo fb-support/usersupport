@@ -1,6 +1,8 @@
 package com.facebank.usersupport.model;
 
-public class LoginUserModel {
+import java.io.Serializable;
+
+public class LoginUserModel implements Serializable {
     private Long loginId;
 
     private Integer loginWay;

@@ -1,6 +1,8 @@
 package com.facebank.usersupport.model;
 
-public class MenuModel {
+import java.io.Serializable;
+
+public class MenuModel implements Serializable {
     private Long menuId;
 
     private String menuUrl;

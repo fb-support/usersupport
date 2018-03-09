@@ -103,7 +103,7 @@ CREATE TABLE `user` (
   `username` varchar(32) NOT NULL,
   `password` varchar(32) NOT NULL,
   `email` varchar(32) NOT NULL,
-  `phone` varchar(11) NOT NULL,
+  `phone` varchar(16) NOT NULL,
   `gmt_create` bigint(20) NOT NULL,
   `gmt_modify` bigint(20) DEFAULT NULL,
   `status` smallint(6) NOT NULL,

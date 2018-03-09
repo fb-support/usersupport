@@ -1,6 +1,8 @@
 package com.facebank.usersupport.model;
 
-public class RoleMenuModel {
+import java.io.Serializable;
+
+public class RoleMenuModel implements Serializable {
     private Long id;
 
     private Long roleId;

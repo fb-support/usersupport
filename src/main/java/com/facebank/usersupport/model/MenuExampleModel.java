@@ -1,9 +1,10 @@
 package com.facebank.usersupport.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuExampleModel {
+public class MenuExampleModel implements Serializable {
     protected String orderByClause;
 
     protected boolean distinct;

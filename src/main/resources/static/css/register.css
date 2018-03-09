@@ -1,0 +1,88 @@
+body {
+    background-color: #44fff7;
+    overflow-y: hidden;
+}
+
+#head {
+    padding: 50px 50px 0px 50px;
+}
+
+#head span {
+    font-size: 26px;
+    color: #E21010;
+}
+
+#main_div {
+    background-color: #ffffff;
+    margin: 100px auto;
+    margin-top: 20px;
+    border-top: 4px solid #1B1B2F;
+}
+
+#main_div table tr td input {
+    width: 300px;
+}
+
+#register_table {
+    margin: auto;
+    width: 750px;
+    height: 400px;
+    align: center;
+    cellpadding: 0px;
+    cellspacing: 0px;
+    bgcolor: white;
+    background-color: #ffffff;
+}
+
+#register_table tr td {
+    padding-left: 40px;
+}
+
+.head_table {
+    height: 50px;
+}
+
+.foot_table {
+    height: 60px;
+}
+
+#phonenumber {
+    size: 34px;
+}
+
+#username {
+    size: 34px;
+}
+
+#password {
+    size: 34px;
+    background-color: white;
+}
+
+#password_verity {
+    size: 34px;
+    background-color: white;
+}
+
+#email {
+    size: 34px;
+}
+
+#btn_submit {
+    width: 150px;
+    padding: 10px 10px;
+    border: none;
+    background-color: #6AF4F8;
+    font-size: 24px;
+    text-align: center;
+    margin-left: 120px;
+}
+
+#btn_submit:hover {
+    background-color: #20233A;
+    color: white;
+}
+
+.error_info {
+    color: red;
+}

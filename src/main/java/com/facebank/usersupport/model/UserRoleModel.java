@@ -1,6 +1,8 @@
 package com.facebank.usersupport.model;
 
-public class UserRoleModel {
+import java.io.Serializable;
+
+public class UserRoleModel implements Serializable {
     private Long id;
 
     private Long userId;
