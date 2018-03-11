@@ -42,4 +42,48 @@
 
     </select>
 
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select user_id,work_number,username,password,email,phone,
+        gmt_create,gmt_modify,status
+        from user
+        where user_id=#{user_id,jdbcType=BIGINT}
+    </select>
+    <update id="updatePasswordById" parameterType="com.facebank.usersupport.model.UserModel">
+        update user
+        SET
+        password = #{password,jdbcType=VARCHAR}
+        where user_id = #{userId,jdbcType=BIGINT}
+    </update>
+    <update id="updateBaseInfomationById" parameterType="com.facebank.usersupport.model.UserModel">
+        UPDATE  user
+        SET
+        username = #{username,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR}
+        WHERE
+        work_number = #{workNumber,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAllByCondition" resultMap="BaseResultMap"
+            parameterType="com.facebank.usersupport.model.UserModel">
+        select user_id,username,phone,work_number,email,status from user
+        where
+        <if test="username!=null">
+            username like CONCAT(CONCAT('%', #{username,jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="phone!=null">
+            and phone like CONCAT(CONCAT(#{phone,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="workNumber!=null">
+            and work_number like CONCAT(CONCAT(#{workNumber,jdbcType=INTEGER}),'%')
+        </if>
+    </select>
+
+    <delete id="batchDeleteUsers" parameterType="int">
+        delete from user where user_id in
+        <foreach item="userItem" collection="array" open="(" separator="," close=")">
+            #{userItem}
+        </foreach>
+    </delete>
+
 </mapper>

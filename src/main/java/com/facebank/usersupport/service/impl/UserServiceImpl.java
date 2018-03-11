@@ -6,6 +6,8 @@ import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.UserModel;
 import com.facebank.usersupport.service.IUserService;
 import com.facebank.usersupport.service.base.BaseService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +51,33 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public List<UserModel> selectByUserModel(UserModel userModel) {
         return null;
+    }
+
+    @Override
+    public UserModel getByUserId(Long id) {
+        return  userMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int updatePasswordById(UserModel model) {
+        return userMapper.updatePasswordById(model);
+    }
+
+    @Override
+    public int updateBaseInfoMationById(UserModel model) {
+        return userMapper.updateBaseInfomationById(model);
+    }
+
+    @Override
+    public PageInfo selectByPage(int pageSize, int pageNumber, UserModel model) {
+        PageHelper.startPage(pageNumber,pageSize);
+        List<UserModel> userList = userMapper.selectAllByCondition(model);
+        PageInfo<UserModel> pageInfo =new PageInfo<>(userList);
+        return pageInfo;
+    }
+
+    @Override
+    public void deleteByUserIds(Integer[] ids) {
+        userMapper.batchDeleteUsers(ids);
     }
 }

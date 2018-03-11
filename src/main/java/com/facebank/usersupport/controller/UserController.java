@@ -4,14 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.UserForm;
+import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.UserModel;
 import com.facebank.usersupport.service.IUserService;
+import com.github.pagehelper.PageInfo;
 import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -82,6 +82,49 @@ public class UserController extends BaseController {
             e.printStackTrace();
         }
         return this.excpRestModel(MessageKeyEnum.REST_SERVICE_ERROR);
+    }
+
+    /**
+     * 分页查询
+     * @param length 单页查询数量
+     * @param start 页数
+     * @return
+     */
+    @GetMapping("/um/getUserByPage")
+    public RestModel getUserListByPage( @RequestParam(required = false, defaultValue = "1") int start,
+                                        @RequestParam(required = false, defaultValue = "10") int length,
+                                        String draw,UserModel model){
+        try {
+            int pageNo = start / length + 1;
+            PageInfo pageInfo = userService.selectByPage(length, pageNo, model);
+            PageRestModel pageRestModel = new PageRestModel(
+                    draw,
+                    pageInfo.getTotal(),
+                    pageInfo.getTotal(),
+                    pageInfo.getList()
+            );
+            return this.success(pageRestModel);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
+    }
+
+    /**
+     * 批量删除用户
+     * @param id id数组
+     * @return
+     */
+    @PostMapping("um/deleteUserByIds")
+    public RestModel deleteUserByIds(@RequestParam(value = "id[]") Integer[] id){
+        try{
+            userService.deleteByUserIds(id);
+            return this.success(null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
     }
 
 }

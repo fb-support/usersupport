@@ -1,0 +1,10 @@
+.hide{
+    display: none;
+}
+input{
+    border:0px;
+}
+
+#base_info_body table tr td {
+    padding-left: 50px;
+}

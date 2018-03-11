@@ -24,4 +24,21 @@ public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
 
 
     List<UserModel> selectByUserModel(UserModel userModel);
+
+    int updatePasswordById(UserModel model);
+
+    int updateBaseInfomationById(UserModel model);
+
+    /**
+     * 分页，多条件模糊查询
+     * @param userModel
+     * @return
+     */
+    List<UserModel> selectAllByCondition(UserModel userModel);
+
+    /**
+     * 批量删除用户
+     * @param ids
+     */
+    void batchDeleteUsers(Integer[] ids);
 }

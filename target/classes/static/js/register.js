@@ -6,7 +6,6 @@
  *  @return meg
  */
 function syncQuery(way, url, verityObj, objType ) {
-    console.log(verityObj+"进行验证！");
     var status = true;
     $.ajax({
 		type : way, //请求方式
@@ -15,7 +14,6 @@ function syncQuery(way, url, verityObj, objType ) {
 		data : "verityObj="+verityObj+"&objType="+objType,  //传参 页数
 		dataType : 'json', //返回值类型
 		success : function(msg) {
-		    console.log(msg);
 		    status = false;
 		},
 		error : function() {
@@ -123,7 +121,23 @@ $(function() {
         }
 
         if(flag) {
-            $("#form_register").submit();
+            $.ajax({
+                type : "POST", //请求方式
+                url : "/register", //请求路径
+                cache : false,
+                data : $("#form_register").serialize(),  //传参 页数
+                dataType : 'json', //返回值类型
+                success : function(msg) {
+                    if(msg.code == 1) {
+                        location.href = "/login";
+                    } else {
+                        location.href = "/register";
+                    }
+                },
+                error : function() {
+                    alert("发生了一个未知错误。请刷新重试。");
+                }
+            });
         }
     });
 });

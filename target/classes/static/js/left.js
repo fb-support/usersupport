@@ -7,6 +7,12 @@ function runUserBaseInfo() {
     //显示基本信息页面。
     $("#system-base-info-page").show();
 
+    //显示tab
+    if ( $("li[value='system-base-info-page']").length > 0 ) {
+        switchPage( "system-base-info-page" );
+    } else {
+        addSmallCardForThisPage("system-base-info-page", "用户管理");
+    }
 }
 
 /**
@@ -15,6 +21,14 @@ function runUserBaseInfo() {
 function runChangePassword() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    $("#system-change-password-page").show();
+
+    //显示tab
+    if ( $("li[value='system-change-password-page']").length > 0 ) {
+        switchPage( "system-change-password-page" );
+    } else {
+        addSmallCardForThisPage("system-change-password-page", "用户管理");
+    }
 }
 
 /**
@@ -39,6 +53,14 @@ function runB() {
 function run_addUser() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    $("#userManager-add-user-page").show();
+
+    //显示tab
+    if ( $("li[value='userManager-add-user-page']").length > 0 ) {
+        switchPage( "userManager-add-user-page" );
+    } else {
+        addSmallCardForThisPage("userManager-add-user-page", "用户管理");
+    }
 }
 
 /**
@@ -47,4 +69,13 @@ function run_addUser() {
 function runOperaUser() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //显示用户管理界面
+    $("#userManager-opera-user-page").show();
+
+    //显示tab
+    if ( $("li[value='userManager-opera-user-page']").length > 0 ) {
+        switchPage( "userManager-opera-user-page" );
+    } else {
+        addSmallCardForThisPage("userManager-opera-user-page", "用户管理");
+    }
 }

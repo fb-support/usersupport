@@ -3,6 +3,7 @@ package com.facebank.usersupport.service;
 import com.facebank.usersupport.dto.reqDto.UserForm;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.UserModel;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -26,4 +27,41 @@ public interface IUserService {
      * @return
      */
     List<UserModel> selectByUserModel(UserModel userModel);
+
+    /**
+     * 根据用户id查询用户信息
+     * @param id
+     * @return
+     */
+    UserModel getByUserId(Long id);
+
+    /**
+     * 更新用户密码
+     * @param model
+     * @return
+     */
+    int updatePasswordById(UserModel model);
+
+    /**
+     * 更新用户基本信息
+     * @param model
+     * @return
+     */
+    int updateBaseInfoMationById(UserModel model);
+
+    /**
+     * 分页，多条件模糊查询
+     * @param pageSize
+     * @param pageNumber
+     * @param model
+     * @return
+     */
+    PageInfo selectByPage(int pageSize, int pageNumber, UserModel model);
+
+    /**
+     * 批量删除用户
+     * @param ids 用户id array
+     */
+    void deleteByUserIds(Integer[] ids);
+
 }
