@@ -21,6 +21,7 @@ public class PageController extends BaseController {
     @RequestMapping("/{pageName}")
     public String showBasePage(@PathVariable String pageName){
         return pageName;
+		//
     }
 
     /**
@@ -31,6 +32,11 @@ public class PageController extends BaseController {
     @RequestMapping("/pm/{pageName}")
     public String showPermissionPage(@PathVariable String pageName){
         return "/permissionManagerment/"+pageName;
+    }
+
+    @RequestMapping("/log/{pageName}")
+    public String showLogPage(@PathVariable String pageName){
+        return "/logManagement/"+pageName;
     }
 
     @RequestMapping("/um/{pageName}")

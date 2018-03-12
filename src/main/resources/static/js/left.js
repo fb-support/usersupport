@@ -48,7 +48,16 @@ function runB() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
 }
-
+/**
+ * 前往日志-资金记录页面
+ */
+function moneyRecord() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示基本信息页面。
+    $("#log-record").show();
+}
+moneyRecord()
 /**
  * 前往用户管理--添加用户界面
  */

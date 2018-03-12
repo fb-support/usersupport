@@ -247,12 +247,11 @@
         and #{starttime}&lt;tradeTime
     </if>
     <if test="endtime != null ">
-      and tradeTime&lt;#{
-    endtime}
+      and tradeTime&lt;#{endtime}
     </if>
      </where>
      )as r
-    right join (select * from user_main
+    left join (select * from user_main
     <where>
       <if test="mobile != null and mobile != ''">
          mobile = #{mobile}

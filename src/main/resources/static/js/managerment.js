@@ -5,6 +5,9 @@ $(".checkall").click(function () {
 
 //分页显示DataTable
 var table;
+
+var userId;
+
 $(document).ready(function () {
     table = $('#datatable').DataTable({
         "searching": false,
@@ -84,6 +87,9 @@ function getQueryCondition(data) {
     return param;
 }
 
+/**
+ * 删除用户
+ */
 function deleteUser() {
     var id = [];
     $(".checkchild:checked").each(function () {
@@ -123,9 +129,10 @@ function deleteUser() {
  * @param id
  */
 function showModel(id) {
+    userId = id;
     $.ajax({
         type: "GET",
-        url: '/um/getUserById?userId='+id,
+        url: '/sc/getByUserId?userId='+id,
         cache: false,  //禁用缓存
         dataType: 'json',
         success: function (result) {
@@ -149,9 +156,26 @@ function showModel(id) {
  */
 function updateUser() {
     var param = {};
+    param.userId = userId;
     param.username = $('#m_userName').val();
     param.workNumber = $('#m_workNumber').val();
     param.phone = $('#m_phone').val();
     param.email = $('#m_email').val();
-    //TODO Ajax请求修改
+
+    $.ajax({
+        type: "POST",
+        url: '/sc/updateBaseInfoMationById',
+        cache: false,  //禁用缓存
+        data:param,
+        dataType: 'json',
+        success: function (result) {
+            if (result.code == 1) {
+                $('#updateUser').modal('hide');
+                layer.msg('操作成功');
+                table.ajax.reload();
+            } else {
+                layer.msg(result.error);
+            }
+        }
+    });
 }

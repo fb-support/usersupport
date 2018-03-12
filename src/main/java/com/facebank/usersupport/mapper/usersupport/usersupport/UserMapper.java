@@ -41,4 +41,5 @@ public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
      * @param ids
      */
     void batchDeleteUsers(Integer[] ids);
+    
 }
