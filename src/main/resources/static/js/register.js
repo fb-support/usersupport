@@ -31,6 +31,11 @@ function syncQuery(way, url, verityObj, objType ) {
  * @param chinesName 验证数据中文名
  */
 function emptyAndUniqueVerity(obj, objName, objType, chinesName) {
+
+    //根据falg判断是否格式错误。
+    if ($("#flag_"+objName).val() == false) {
+        return false;
+    }
     // 1-1.判空
     if (obj != null &&
         obj.trim() != "") {
@@ -56,8 +61,68 @@ $(function() {
         }
     });
 
+    var usernameFlag = true;
+    var emailFlag = true;
+    var phoneFlag = true;
+    var passwordFlag = true;
+
+
+// 失去焦点验证用户名格式
+    $("#username").blur(function () {
+        //用户名正则，4到16位（字母，数字，下划线，减号）
+        var usernameReg = /^[a-zA-Z0-9_-]{4,16}$/;
+        var inputUsername = $('#username').val();
+        if (!usernameReg.test(inputUsername)) {
+            $(this).parent().next().children().text("用户名格式错误，请输入正确用户名！");
+            usernameFlag = false;
+        } else {
+            $(this).parent().next().children().text("4到16位（字母，数字，下划线，减号）");
+            usernameFlag = true;
+        }
+    });
+
+    // 失去焦点验证邮箱格式
+    $("#email").blur(function () {
+        var emailReg = /^[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
+        var inputEmail = $('#email').val();
+        if (!emailReg.test(inputEmail)) {
+            $(this).parent().next().children().text("邮箱格式错误，请输入正确邮箱！");
+            emailFlag = false;
+        } else {
+            $(this).parent().next().children().text("");
+            emailFlag = true;
+        }
+    });
+
+    //失去焦点验证手机格式
+    $("#phone").blur(function () {
+        var phoneReg = /^1[34578]\d{9}$/;
+        var inputPhone = $('#phone').val();
+        if (!phoneReg.test(inputPhone)) {
+            $(this).parent().next().children().text("手机号格式错误，请输入正确手机号！");
+            phoneFlag = false;
+        } else {
+            $(this).parent().next().children().text("");
+            phoneFlag = true;
+        }
+    });
+
+    // 失去焦点验证第二次密码
+    $("#password_verity").blur(function () {
+        var inputPassword = $('#password').val();
+        var inputverity = $('#password_verity').val();
+        if (inputPassword!=inputverity) {
+            $(this).parent().next().children().text("两次输入的密码不一致！");
+            passwordFlag = false;
+        } else {
+            $(this).parent().next().children().text("");
+            passwordFlag = true;
+        }
+    });
+
     //给点击表单提交之前进行是否注册的异步查询操作
     $("#btn_submit").click(function() {
+
         //声明状态变量，为true的话，提交表单。默认为true
         var flag = true;
         /*
@@ -120,24 +185,41 @@ $(function() {
             return;
         }
 
-        if(flag) {
+        /*
+         * 判断是注册页面的还是用户管理添加用户页面的。
+         */
+        var currentUrl = window.location.pathname;
+
+        if(flag && usernameFlag && emailFlag && phoneFlag && passwordFlag) {
             $.ajax({
                 type : "POST", //请求方式
                 url : "/register", //请求路径
                 cache : false,
-                data : $("#form_register").serialize(),  //传参 页数
+                data : $("#form_insertUser").serialize(),  //传参 页数
                 dataType : 'json', //返回值类型
                 success : function(msg) {
+                    console.log(msg)
                     if(msg.code == 1) {
-                        location.href = "/login";
+                        if (currentUrl == "/register") {
+                            location.href = "/login";
+                        } else {
+                            alert("添加成功！");
+                        }
                     } else {
-                        location.href = "/register";
+                        if (url == "/register") {
+                            location.href = "/register";
+                        } else {
+                            alert("添加失败！");
+                        }
+
                     }
-                },
-                error : function() {
-                    alert("发生了一个未知错误。请刷新重试。");
                 }
             });
         }
     });
 });
+
+// ,
+// error : function() {
+//     alert("发生了一个未知错误。请刷新重试。");
+// }

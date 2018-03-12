@@ -1,0 +1,15 @@
+.table_left{
+    text-align: right;
+}
+
+.center{
+    margin: 50px auto;
+}
+
+.error{
+    text-align: left;
+    width: 400px;
+}
+.error_info {
+    color: red;
+}

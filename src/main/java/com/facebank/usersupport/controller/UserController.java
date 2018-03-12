@@ -36,6 +36,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/register")
     private RestModel register (UserForm userForm) {
+        System.out.println("工号为："+userForm.getWorkNumber());
         try {
             RestModel model = userService.insertUser(userForm);
             if (model.getCode().equals(RestModel.CODE_SUCCESS)) {
