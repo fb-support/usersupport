@@ -28,6 +28,7 @@
         select user_id from user
         where 1=1
         <if test="workNumber != null">
+
             and work_number = #{workNumber,jdbcType=INTEGER}
         </if>
         <if test="username != null">
@@ -44,7 +45,7 @@
 
     <select id="getUserById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select user_id,work_number,username,password,email,phone,
-        gmt_create,status
+        status
         from user
         where user_id=#{userId,jdbcType=BIGINT}
     </select>
