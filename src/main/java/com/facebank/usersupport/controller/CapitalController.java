@@ -7,6 +7,7 @@ import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.ICapitalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.xml.crypto.Data;
@@ -23,7 +24,7 @@ import java.util.List;
 public class CapitalController extends BaseController {
     @Autowired
     private ICapitalService iCapitalService;
-    @GetMapping("/capital/getMoneyRecord")
+    @PostMapping("/log/getMoneyRecord")
     public RestModel getMoneyRecord(String mobile, String type, String starttime, String endtime)  {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
