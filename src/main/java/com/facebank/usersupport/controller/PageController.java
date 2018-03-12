@@ -21,6 +21,7 @@ public class PageController extends BaseController {
     @RequestMapping("/{pageName}")
     public String showBasePage(@PathVariable String pageName){
         return pageName;
+		//
     }
 
     /**
