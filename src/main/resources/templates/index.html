@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/head_info::head_infor">
+</head>
+<script type="text/javascript" src="js/index.js"></script>
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<body>
+    <!--引入头部模块-->
+	<div id="mainPage_Include_head_div" th:include="common/head::header"></div>
+
+    <div id="include_left_and_main">
+        <!--引入左边菜单栏-->
+        <div th:include="common/left::lefter"></div>
+        <!--引入中间主要内容模块-->
+        <div th:include="common/content::contenter"></div>
+    </div>
+</body>
+</html>

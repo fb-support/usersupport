@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.mapper.usersupport.p2p.MoneyRecordMapper">
+  <resultMap id="BaseResultMap" type="com.facebank.usersupport.model.MoneyRecord">
+  <id column="id" jdbcType="INTEGER" property="id" />
+  <result column="toUserId" jdbcType="INTEGER" property="touserid" />
+  <result column="toUserNickname" jdbcType="VARCHAR" property="tousernickname" />
+  <result column="fromUserId" jdbcType="INTEGER" property="fromuserid" />
+  <result column="fromUserNickname" jdbcType="VARCHAR" property="fromusernickname" />
+  <result column="amount" jdbcType="DECIMAL" property="amount" />
+  <result column="accountBalance" jdbcType="DECIMAL" property="accountbalance" />
+  <result column="tradeType" jdbcType="SMALLINT" property="tradetype" />
+  <result column="tradeTime" jdbcType="TIMESTAMP" property="tradetime" />
+  <result column="tradeChannel" jdbcType="SMALLINT" property="tradechannel" />
+  <result column="tradeComment" jdbcType="VARCHAR" property="tradecomment" />
+  <result column="loanId" jdbcType="INTEGER" property="loanid" />
+  <result column="loanTitle" jdbcType="VARCHAR" property="loantitle" />
+  <result column="loanPortraitPath" jdbcType="VARCHAR" property="loanportraitpath" />
+  <result column="outSerialNo" jdbcType="VARCHAR" property="outserialno" />
+</resultMap>
+  <resultMap id="ResultMap" type="com.facebank.usersupport.dto.CapitalDto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="toUserId" jdbcType="INTEGER" property="touserid" />
+    <result column="toUserNickname" jdbcType="VARCHAR" property="tousernickname" />
+    <result column="fromUserId" jdbcType="INTEGER" property="fromuserid" />
+    <result column="fromUserNickname" jdbcType="VARCHAR" property="fromusernickname" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="accountBalance" jdbcType="DECIMAL" property="accountbalance" />
+    <result column="tradeType" jdbcType="SMALLINT" property="tradetype" />
+    <result column="tradeTime" jdbcType="TIMESTAMP" property="tradetime" />
+    <result column="tradeChannel" jdbcType="SMALLINT" property="tradechannel" />
+    <result column="tradeComment" jdbcType="VARCHAR" property="tradecomment" />
+    <result column="loanId" jdbcType="INTEGER" property="loanid" />
+    <result column="loanTitle" jdbcType="VARCHAR" property="loantitle" />
+    <result column="loanPortraitPath" jdbcType="VARCHAR" property="loanportraitpath" />
+    <result column="outSerialNo" jdbcType="VARCHAR" property="outserialno" />
+    <result column="realName" jdbcType="VARCHAR" property="realname" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, toUserId, toUserNickname, fromUserId, fromUserNickname, amount, accountBalance, 
+    tradeType, tradeTime, tradeChannel, tradeComment, loanId, loanTitle, loanPortraitPath, 
+    outSerialNo
+  </sql>
+  <sql id="Column_List">
+    id, toUserId, toUserNickname, fromUserId, fromUserNickname, amount, accountBalance,
+    tradeType, tradeTime, tradeChannel, tradeComment, loanId, loanTitle, loanPortraitPath,
+    outSerialNo, realName,mobile
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from money_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from money_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.facebank.usersupport.model.MoneyRecord">
+    insert into money_record (id, toUserId, toUserNickname, 
+      fromUserId, fromUserNickname, amount, 
+      accountBalance, tradeType, tradeTime, 
+      tradeChannel, tradeComment, loanId, 
+      loanTitle, loanPortraitPath, outSerialNo
+      )
+    values (#{id,jdbcType=INTEGER}, #{touserid,jdbcType=INTEGER}, #{tousernickname,jdbcType=VARCHAR}, 
+      #{fromuserid,jdbcType=INTEGER}, #{fromusernickname,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{accountbalance,jdbcType=DECIMAL}, #{tradetype,jdbcType=SMALLINT}, #{tradetime,jdbcType=TIMESTAMP}, 
+      #{tradechannel,jdbcType=SMALLINT}, #{tradecomment,jdbcType=VARCHAR}, #{loanid,jdbcType=INTEGER}, 
+      #{loantitle,jdbcType=VARCHAR}, #{loanportraitpath,jdbcType=VARCHAR}, #{outserialno,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.facebank.usersupport.model.MoneyRecord">
+    insert into money_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="touserid != null">
+        toUserId,
+      </if>
+      <if test="tousernickname != null">
+        toUserNickname,
+      </if>
+      <if test="fromuserid != null">
+        fromUserId,
+      </if>
+      <if test="fromusernickname != null">
+        fromUserNickname,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="accountbalance != null">
+        accountBalance,
+      </if>
+      <if test="tradetype != null">
+        tradeType,
+      </if>
+      <if test="tradetime != null">
+        tradeTime,
+      </if>
+      <if test="tradechannel != null">
+        tradeChannel,
+      </if>
+      <if test="tradecomment != null">
+        tradeComment,
+      </if>
+      <if test="loanid != null">
+        loanId,
+      </if>
+      <if test="loantitle != null">
+        loanTitle,
+      </if>
+      <if test="loanportraitpath != null">
+        loanPortraitPath,
+      </if>
+      <if test="outserialno != null">
+        outSerialNo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="touserid != null">
+        #{touserid,jdbcType=INTEGER},
+      </if>
+      <if test="tousernickname != null">
+        #{tousernickname,jdbcType=VARCHAR},
+      </if>
+      <if test="fromuserid != null">
+        #{fromuserid,jdbcType=INTEGER},
+      </if>
+      <if test="fromusernickname != null">
+        #{fromusernickname,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountbalance != null">
+        #{accountbalance,jdbcType=DECIMAL},
+      </if>
+      <if test="tradetype != null">
+        #{tradetype,jdbcType=SMALLINT},
+      </if>
+      <if test="tradetime != null">
+        #{tradetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tradechannel != null">
+        #{tradechannel,jdbcType=SMALLINT},
+      </if>
+      <if test="tradecomment != null">
+        #{tradecomment,jdbcType=VARCHAR},
+      </if>
+      <if test="loanid != null">
+        #{loanid,jdbcType=INTEGER},
+      </if>
+      <if test="loantitle != null">
+        #{loantitle,jdbcType=VARCHAR},
+      </if>
+      <if test="loanportraitpath != null">
+        #{loanportraitpath,jdbcType=VARCHAR},
+      </if>
+      <if test="outserialno != null">
+        #{outserialno,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.facebank.usersupport.model.MoneyRecord">
+    update money_record
+    <set>
+      <if test="touserid != null">
+        toUserId = #{touserid,jdbcType=INTEGER},
+      </if>
+      <if test="tousernickname != null">
+        toUserNickname = #{tousernickname,jdbcType=VARCHAR},
+      </if>
+      <if test="fromuserid != null">
+        fromUserId = #{fromuserid,jdbcType=INTEGER},
+      </if>
+      <if test="fromusernickname != null">
+        fromUserNickname = #{fromusernickname,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountbalance != null">
+        accountBalance = #{accountbalance,jdbcType=DECIMAL},
+      </if>
+      <if test="tradetype != null">
+        tradeType = #{tradetype,jdbcType=SMALLINT},
+      </if>
+      <if test="tradetime != null">
+        tradeTime = #{tradetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tradechannel != null">
+        tradeChannel = #{tradechannel,jdbcType=SMALLINT},
+      </if>
+      <if test="tradecomment != null">
+        tradeComment = #{tradecomment,jdbcType=VARCHAR},
+      </if>
+      <if test="loanid != null">
+        loanId = #{loanid,jdbcType=INTEGER},
+      </if>
+      <if test="loantitle != null">
+        loanTitle = #{loantitle,jdbcType=VARCHAR},
+      </if>
+      <if test="loanportraitpath != null">
+        loanPortraitPath = #{loanportraitpath,jdbcType=VARCHAR},
+      </if>
+      <if test="outserialno != null">
+        outSerialNo = #{outserialno,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.facebank.usersupport.model.MoneyRecord">
+    update money_record
+    set toUserId = #{touserid,jdbcType=INTEGER},
+      toUserNickname = #{tousernickname,jdbcType=VARCHAR},
+      fromUserId = #{fromuserid,jdbcType=INTEGER},
+      fromUserNickname = #{fromusernickname,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      accountBalance = #{accountbalance,jdbcType=DECIMAL},
+      tradeType = #{tradetype,jdbcType=SMALLINT},
+      tradeTime = #{tradetime,jdbcType=TIMESTAMP},
+      tradeChannel = #{tradechannel,jdbcType=SMALLINT},
+      tradeComment = #{tradecomment,jdbcType=VARCHAR},
+      loanId = #{loanid,jdbcType=INTEGER},
+      loanTitle = #{loantitle,jdbcType=VARCHAR},
+      loanPortraitPath = #{loanportraitpath,jdbcType=VARCHAR},
+      outSerialNo = #{outserialno,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getMoneyRecord" parameterType="java.util.Map" resultMap="ResultMap">
+    select
+    <include refid="Column_List" />
+    from
+    (select * from money_record
+     <where>
+      <if test="type != null and type != ''">
+        tradeType = #{type}
+      </if>
+    <if test="starttime != null ">
+        and #{starttime}&lt;tradeTime
+    </if>
+    <if test="endtime != null ">
+      and tradeTime&lt;#{endtime}
+    </if>
+     </where>
+     )as r
+    left join (select * from user_main
+    <where>
+      <if test="mobile != null and mobile != ''">
+         mobile = #{mobile}
+      </if>
+    </where>
+     ) as u
+    on r.toUserId=u.userId
+    ORDER BY r.id DESC LIMIT 10;
+  </select>
+</mapper>
