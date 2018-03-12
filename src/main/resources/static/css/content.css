@@ -4,7 +4,7 @@
 	margin-left: -20px;
 	float: left;
 	border-top: 5px solid #18A7CE;
-	background-image: url(../images/backstage_background.jpg);
+	/*background-image: url(../images/backstage_background.jpg);*/
 	padding: 0px;
 	position: absolute;
 	z-index: auto;
@@ -80,8 +80,7 @@
 
 .center_show_area {
 	width: 100%;
-	height: 720px;
-	overflow: hidden;
+	height: 540px;
 }
 
 #system-base-info-page {
