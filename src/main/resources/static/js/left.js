@@ -32,11 +32,13 @@ function runChangePassword() {
 }
 
 /**
- * 前往业务查询--a页面
+ * 前往业务查询--还款查询页面
  */
-function runA() {
+function runRepaymentSearch() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //显示还款查询页面
+    $("#service-repayment-page").show();
 }
 
 /**
