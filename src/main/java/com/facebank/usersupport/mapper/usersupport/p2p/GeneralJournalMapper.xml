@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.mapper.usersupport.p2p.GeneralJournalMapper">
+  <resultMap id="BaseResultMap" type="com.facebank.usersupport.model.GeneralJournalModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="journalType" jdbcType="SMALLINT" property="journaltype" />
+    <result column="userId" jdbcType="INTEGER" property="userId" />
+    <result column="nickName" jdbcType="VARCHAR" property="nickname" />
+    <result column="serialNumber" jdbcType="VARCHAR" property="serialnumber" />
+    <result column="startTime" jdbcType="BIGINT" property="starttime" />
+    <result column="endTime" jdbcType="BIGINT" property="endtime" />
+    <result column="relationId" jdbcType="VARCHAR" property="relationid" />
+    <result column="inOutType" jdbcType="TINYINT" property="inouttype" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="balance" jdbcType="DECIMAL" property="balance" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="createTime" jdbcType="BIGINT" property="createtime" />
+    <result column="modifyTime" jdbcType="BIGINT" property="modifytime" />
+  </resultMap>
+  <resultMap id="ResultMap" type="com.facebank.usersupport.dto.GeneralJournalDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="journalType" jdbcType="SMALLINT" property="journaltype" />
+    <result column="userId" jdbcType="INTEGER" property="userId" />
+    <result column="nickName" jdbcType="VARCHAR" property="nickname" />
+    <result column="serialNumber" jdbcType="VARCHAR" property="serialnumber" />
+    <result column="startTime" jdbcType="BIGINT" property="starttime" />
+    <result column="endTime" jdbcType="BIGINT" property="endtime" />
+    <result column="relationId" jdbcType="VARCHAR" property="relationid" />
+    <result column="inOutType" jdbcType="TINYINT" property="inouttype" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="balance" jdbcType="DECIMAL" property="balance" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="createTime" jdbcType="BIGINT" property="createtime" />
+    <result column="modifyTime" jdbcType="BIGINT" property="modifytime" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, journalType, userId, nickName, serialNumber, startTime, endTime, relationId,
+    inOutType, amount, balance, remarks, status, createTime, modifyTime
+  </sql>
+  <sql id="Column_List">
+    id, journalType, userId, nickName, serialNumber, startTime, endTime, relationId,
+    inOutType, amount, balance, remarks, status, createTime, modifyTime,mobile
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from general_journal
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from general_journal
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.facebank.usersupport.model.GeneralJournalModel">
+    insert into general_journal (id, journalType, userId,
+    nickName, serialNumber, startTime,
+    endTime, relationId, inOutType,
+    amount, balance, remarks,
+    status, createTime, modifyTime
+    )
+    values (#{id,jdbcType=BIGINT}, #{journaltype,jdbcType=SMALLINT}, #{userid,jdbcType=INTEGER},
+    #{nickname,jdbcType=VARCHAR}, #{serialnumber,jdbcType=VARCHAR}, #{starttime,jdbcType=BIGINT},
+    #{endtime,jdbcType=BIGINT}, #{relationid,jdbcType=VARCHAR}, #{inouttype,jdbcType=TINYINT},
+    #{amount,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL}, #{remarks,jdbcType=VARCHAR},
+    #{status,jdbcType=SMALLINT}, #{createtime,jdbcType=BIGINT}, #{modifytime,jdbcType=BIGINT}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.facebank.usersupport.model.GeneralJournalModel">
+    insert into general_journal
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="journaltype != null">
+        journalType,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="nickname != null">
+        nickName,
+      </if>
+      <if test="serialnumber != null">
+        serialNumber,
+      </if>
+      <if test="starttime != null">
+        startTime,
+      </if>
+      <if test="endtime != null">
+        endTime,
+      </if>
+      <if test="relationid != null">
+        relationId,
+      </if>
+      <if test="inouttype != null">
+        inOutType,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="balance != null">
+        balance,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="modifytime != null">
+        modifyTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="journaltype != null">
+        #{journaltype,jdbcType=SMALLINT},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="serialnumber != null">
+        #{serialnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        #{starttime,jdbcType=BIGINT},
+      </if>
+      <if test="endtime != null">
+        #{endtime,jdbcType=BIGINT},
+      </if>
+      <if test="relationid != null">
+        #{relationid,jdbcType=VARCHAR},
+      </if>
+      <if test="inouttype != null">
+        #{inouttype,jdbcType=TINYINT},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=BIGINT},
+      </if>
+      <if test="modifytime != null">
+        #{modifytime,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.facebank.usersupport.model.GeneralJournalModel">
+    update general_journal
+    <set>
+      <if test="journaltype != null">
+        journalType = #{journaltype,jdbcType=SMALLINT},
+      </if>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null">
+        nickName = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="serialnumber != null">
+        serialNumber = #{serialnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        startTime = #{starttime,jdbcType=BIGINT},
+      </if>
+      <if test="endtime != null">
+        endTime = #{endtime,jdbcType=BIGINT},
+      </if>
+      <if test="relationid != null">
+        relationId = #{relationid,jdbcType=VARCHAR},
+      </if>
+      <if test="inouttype != null">
+        inOutType = #{inouttype,jdbcType=TINYINT},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="balance != null">
+        balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=BIGINT},
+      </if>
+      <if test="modifytime != null">
+        modifyTime = #{modifytime,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.facebank.usersupport.model.GeneralJournalModel">
+    update general_journal
+    set journalType = #{journaltype,jdbcType=SMALLINT},
+    userId = #{userId,jdbcType=INTEGER},
+    nickName = #{nickname,jdbcType=VARCHAR},
+    serialNumber = #{serialnumber,jdbcType=VARCHAR},
+    startTime = #{starttime,jdbcType=BIGINT},
+    endTime = #{endtime,jdbcType=BIGINT},
+    relationId = #{relationid,jdbcType=VARCHAR},
+    inOutType = #{inouttype,jdbcType=TINYINT},
+    amount = #{amount,jdbcType=DECIMAL},
+    balance = #{balance,jdbcType=DECIMAL},
+    remarks = #{remarks,jdbcType=VARCHAR},
+    status = #{status,jdbcType=SMALLINT},
+    createTime = #{createtime,jdbcType=BIGINT},
+    modifyTime = #{modifytime,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!--组合查询-->
+  <select id="getGeneralJournal" parameterType="java.util.Map" resultMap="ResultMap">
+    select  *
+    from(select user_main.userId,
+    user_main.mobile,
+    user_main.nickName
+    FROM user_main
+    <where>
+      <if test="mobile != null and mobile != ''">
+        mobile = #{mobile})
+      </if>
+    </where>
+    as tmp_user
+    LEFT JOIN (
+    SELECT *
+    FROM general_journal
+    <where>
+        <if test="journalType != null and journalType != ''">
+          journalType = #{journalType}
+        </if>
+        <if test="endTime != null and endTime != ''">
+          and endTime &lt; #{endTime}
+        </if>
+        <if test="startTime != null and startTime != ''">
+          and startTime &gt; #{startTime}
+        </if>
+    </where>
+    )as tmp_gj
+    ON tmp_gj.userId=tmp_user.userId ORDER BY endTime desc LIMIT 10;
+  </select>
+
+</mapper>
