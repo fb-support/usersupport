@@ -1,5 +1,5 @@
 body {
-    background-color: #44fff7;
+    background-color: #20233A;
     overflow-y: hidden;
 }
 
@@ -9,17 +9,18 @@ body {
 
 #head span {
     font-size: 26px;
-    color: #E21010;
+    color: #ffffff;
 }
 
 #main_div {
     background-color: #ffffff;
     margin: 100px auto;
     margin-top: 20px;
-    border-top: 4px solid #1B1B2F;
+    border-top: 4px solid #d8d5ff;
 }
 
 #main_div table tr td input {
+    height: 30px;
     width: 300px;
 }
 
@@ -43,7 +44,7 @@ body {
 }
 
 .foot_table {
-    height: 60px;
+    height: 100px;
 }
 
 #phonenumber {
@@ -70,9 +71,10 @@ body {
 
 #btn_submit {
     width: 150px;
+    height: 200px;
     padding: 10px 10px;
     border: none;
-    background-color: #6AF4F8;
+    background-color: #f6f4ff;
     font-size: 24px;
     text-align: center;
     margin-left: 120px;
