@@ -35,7 +35,7 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/register")
-    private RestModel register (UserForm userForm) {
+    public RestModel register (UserForm userForm) {
         try {
             RestModel model = userService.insertUser(userForm);
             if (model.getCode().equals(RestModel.CODE_SUCCESS)) {
@@ -54,7 +54,7 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/sync/verity")
-    private RestModel register(String verityObj, String objType) {
+    public RestModel register(String verityObj, String objType) {
         try {
             UserModel userModel = new UserModel();
             // 根据验证数据类型设置对应的值
