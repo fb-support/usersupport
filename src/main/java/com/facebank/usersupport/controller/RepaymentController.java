@@ -3,9 +3,11 @@ package com.facebank.usersupport.controller;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.RepaymentForm;
+import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RepaymentModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.IRepaymentService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,8 +33,13 @@ public class RepaymentController extends BaseController {
      @PostMapping("/service/repayment")
      public RestModel repaymentSearch(RepaymentForm repaymentForm){
         try{
-            List<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymenyForm(repaymentForm);
-            return this.success(repaymentModels);
+            PageInfo<RepaymentModel> pageInfo = repaymentService.getRepaymentModelByRepaymenyForm(repaymentForm);
+            long total = pageInfo.getTotal();
+            List<RepaymentModel> repaymentModels = pageInfo.getList();
+            PageRestModel pageRestModel = new PageRestModel();
+            pageRestModel.setRecordsTotal(total);
+            pageRestModel.setData(repaymentModels);
+            return this.success(pageRestModel);
         }catch (Exception e){
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);

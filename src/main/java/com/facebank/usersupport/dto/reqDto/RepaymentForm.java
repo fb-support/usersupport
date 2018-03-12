@@ -16,6 +16,10 @@ public class RepaymentForm {
 
     private Long endTime;
 
+    private Integer page = 1;
+
+    private Integer pageSize = 20;
+
     public Long getUserId() {
         return userId;
     }
@@ -46,5 +50,21 @@ public class RepaymentForm {
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }

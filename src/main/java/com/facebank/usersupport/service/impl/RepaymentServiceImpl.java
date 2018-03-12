@@ -5,6 +5,8 @@ import com.facebank.usersupport.mapper.usersupport.p2p.RepaymentMapper;
 import com.facebank.usersupport.model.RepaymentModel;
 import com.facebank.usersupport.service.IRepaymentService;
 import com.facebank.usersupport.service.base.BaseService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +28,11 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
      * @return
      */
     @Override
-    public List<RepaymentModel> getRepaymentModelByRepaymenyForm(RepaymentForm repaymentForm) {
+    public PageInfo<RepaymentModel> getRepaymentModelByRepaymenyForm(RepaymentForm repaymentForm) {
+        PageHelper.startPage(repaymentForm.getPage(), repaymentForm.getPageSize());
         List<RepaymentModel> repaymentModels = repaymentMapper.getRepaymentModelByRepaymentForm(repaymentForm);
-        return repaymentModels;
+        PageInfo<RepaymentModel> pageInfo=new PageInfo<RepaymentModel>(repaymentModels);
+        return pageInfo;
     }
 
 }

@@ -7,7 +7,7 @@
         <result column="cred_user_id" property="credUserId"/>
         <result column="cred_plan_principal" property="credPlanPrincipal"/>
         <result column="cred_plan_interest" property="credPlanInterest"/>
-        <result column="cred_plan_date " property="credPlanDate"/>
+        <result column="cred_plan_date" property="credPlanDate"/>
         <result column="red_local_Info" property="redLocalInfo"/>
         <result column="red_plan_amount" property="redPlanAmount"/>
         <result column="red_package_type" property="redPackageType"/>
@@ -97,14 +97,17 @@
 				a.record_id = b.record_id
 		) AS pf_intere ON cred.credit_id = pf_intere.credit_id
 		<where>
-			<if test="orderId != null">
+			<if test="orderId != null and orderId != ''">
 				cred.fp_order_id = #{orderId}
 			</if>
-			<if test="userId != null">
+			<if test="userId != null and orderId != ''">
 				AND cred.user_id = #{userId}
 			</if>
-			<if test="startTime != null and endTime != null">
-				AND cred.plan_date BETWEEN #{startTime} AND #{endTime}
+			<if test="startTime != null and startTime != ''">
+				AND cred.plan_date &gt;= #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				AND cred.plan_date &lt;= #{endTime}
 			</if>
 		</where>
 		ORDER BY cred.plan_date DESC

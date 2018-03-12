@@ -2,6 +2,7 @@ package com.facebank.usersupport.service;
 
 import com.facebank.usersupport.dto.reqDto.RepaymentForm;
 import com.facebank.usersupport.model.RepaymentModel;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -16,6 +17,6 @@ public interface IRepaymentService {
      * 根据手机号、用户名、还款日期组合条件查询还款信息
      * @return
      */
-    List<RepaymentModel> getRepaymentModelByRepaymenyForm(RepaymentForm repaymentForm);
+    PageInfo<RepaymentModel> getRepaymentModelByRepaymenyForm(RepaymentForm repaymentForm);
 
 }

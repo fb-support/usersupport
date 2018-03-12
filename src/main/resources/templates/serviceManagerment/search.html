@@ -9,11 +9,13 @@
     <form class="form-inline" id="repaymentForm">
         <div class="form-group">
             <label for="userId">用户ID</label>
-            <input type="text" class="form-control" id="userId" name="userId" placeholder="用户ID">
+            <input type="text" class="form-control" id="userId" name="userId" placeholder="用户ID"
+                   onkeypress="return event.keyCode>=48&&event.keyCode<=57">
         </div>
         <div class="form-group">
             <label for="orderId">订单ID</label>
-            <input type="email" class="form-control" id="orderId" name="orderId" placeholder="订单ID">
+            <input type="email" class="form-control" id="orderId" name="orderId" placeholder="订单ID"
+                   onkeypress="return event.keyCode>=48&&event.keyCode<=57">
         </div>
         <!--<div class="form-group">
                              <label for="datetimeStart">还款日期</label>
@@ -26,11 +28,19 @@
             <input type="text" class="form_datetime" id="datetimeEnd" name="endTime" readonly>
 
         </div>
+        <span class="btn btn-default" onclick="reset()" >重置</span>
         <span class="btn btn-default" onclick="search()" >查询</span>
     </form>
 
     <script type="text/javascript">
+        //重置表单
+        function reset(){
+            $("#repaymentForm")[0].reset();
+        }
+
+        // 查询还款信息
         function search(){
+            // 将日期格式转换为时间戳
             var dateStart = $("#datetimeStart").val();
             var dateEnd = $("#datetimeEnd").val();
             var startTime = null;
@@ -41,64 +51,109 @@
             if(dateEnd != null && dateEnd != ""){
                 endTime = new Date(dateEnd).getTime();
             }
-            /*$("#datetimeStart").val(startTime);
-            $("#datetimeEnd").val(endTime);*/
+            // 获取用户输入的userId和orderId
             var userId = $("#userId").val();
             var orderId = $("#orderId").val();
+
+            if((startTime != null && startTime != "") && (endTime != null && endTime != "")){
+                var timeInterval = endTime - startTime;
+                if(timeInterval > 2592000000){
+                    alert("时间间隔不能超过30天");
+                    return;
+                }else if(timeInterval < 0){
+                    alert("结束时间不能小于开始时间");
+                    return;
+                }
+            }
+            // 当四个条件都为空时flag==true
+            var flag = (userId == null || userId == "") && (orderId == null || orderId == "") && (startTime == null || startTime == "") && (endTime == null || endTime == "");
+            if(flag){
+                alert("请输入查询条件");
+                return;
+            }
 
             $.ajax({
                 url : "/service/repayment",
                 type : "post",
-                data : /*$("#repaymentForm").serialize()*/{userId:userId,orderId:orderId,startTime:startTime,endTime:endTime},
+                data : {userId:userId,orderId:orderId,startTime:startTime,endTime:endTime},
                 dataType : "json",
                 success : function(result) {
+                    // 回显userId和orderId
+                    $("#userId").val(userId);
+                    $("#orderId").val(orderId);
                     console.log(result);
                     var tbody = window.document.getElementById("repaymentData");
-                    var datas=result.data;
+                    var datas=result.data.data;
                     console.log(datas);
                     var str="";
                     for (i in datas) {
-                        str += "<tr>" +
-                            "<td>" + datas[i].credOrderId + "</td>" +
-                            "<td>" + datas[i].credUserId + "</td>" +
-                            "<td>" + datas[i].credPlanPrincipal + "</td>" +
-                            "<td>" + datas[i].credPlanInterest + "</td>" +
-                            "<td>" + datas[i].credPlanDate + "</td>" +
-                            "<td>";
-                        if(datas[i].redLocalInfo != null && datas[i].redLocalInfo != ""){
-                            str += datas[i].redLocalInfo['"model_name"'];
-                        }else{
-                            str += "";
+                        str += "<tr>" + "<td>";
+                        if(datas[i].credOrderId != null) {
+                            str += datas[i].credOrderId;
                         }
-                        str += "</td>" +
-                            "<td>" + datas[i].redPlanAmount + "</td>" +
-                            "<td>";
+                        str += "</td>" + "<td>";
+                        if(datas[i].credUserId != null) {
+                            str += datas[i].credUserId;
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].credPlanPrincipal != null) {
+                            str += datas[i].credPlanPrincipal;
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].credPlanInterest != null) {
+                            str += datas[i].credPlanInterest;
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].credPlanDate != null) {
+                            str += new Date(parseInt(datas[i].credPlanDate)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].redLocalInfo != null){
+                            str += datas[i].redLocalInfo['"model_name"'];
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].redPlanAmount != null) {
+                            str += datas[i].redPlanAmount;
+                        }
+                        str += "</td>" + "<td>";
                         if(datas[i].redPackageType == 1000){
                             str += "加息红包";
                         }else if(datas[i].redPackageType == 1010){
                             str += "返现红包";
-                        }else{
-                            str += "";
                         }
-                        str += "</td>" +
-                            "<td>" + datas[i].redTermNum + "</td>" +
-                            "<td>" + datas[i].vipRate + "</td>" +
-                            "<td>" + datas[i].vipPlanAmount + "</td>" +
-                            "<td>" + datas[i].vipTermNum + "</td>" +
-                            "<td>" + datas[i].pfPlanAmount + "</td>" +
-                            "<td>" + datas[i].pfTermNum + "</td>" +
-                            "<td>";
+                        str += "</td>" + "<td>";
+                        if(datas[i].redTermNum != null){
+                            str += datas[i].redTermNum;
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].vipRate != null){
+                            str += datas[i].vipRate;
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].vipPlanAmount != null){
+                            str += datas[i].vipPlanAmount;
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].vipTermNum != null){
+                            str += datas[i].vipTermNum;
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].pfPlanAmount != null){
+                            str += datas[i].pfPlanAmount;
+                        }
+                        str += "</td>" + "<td>";
+                        if(datas[i].pfTermNum != null){
+                            str += datas[i].pfTermNum;
+                        }
+                        str += "</td>" + "<td>";
                         if(datas[i].pfType == 100){
                             str += "首购加息";
                         }else if(datas[i].pfType == 200){
                             str += "限时加息";
                         }else if(datas[i].pfType == 300){
                             str += "项目加息";
-                        }else{
-                            str += "";
                         }
-                        str += "</td>" +
-                            "</tr>";
+                        str += "</td>" + "</tr>";
                         console.log(str);
                     }
                     tbody.innerHTML = str;
@@ -112,7 +167,7 @@
             <div class="col-lg-5">
                 <div class="panel panel-default" style="width:100%;overflow:auto">
                     <div class="panel-heading">客户信息列表</div>
-                    <table class="table table-bordered table-striped" align="center" >
+                    <table class="table table-bordered table-striped" align="center">
                         <thead>
                         <tr>
                             <th>订单ID</th>
@@ -140,9 +195,25 @@
                 </div>
             </div>
         </div>
-        </div>
+        <ul id="page"></ul>
     </form>
+
     <script type="text/javascript">
+        $(function() {
+            var currentPage = 1;
+            var totalPages = 25;
+            $("#page").bootstrapPaginator({
+                bootstrapMajorVersion: 3, //对应的bootstrap版本
+                currentPage: currentPage, //当前页数
+                numberOfPages: 10, //每次显示页数
+                totalPages: totalPages, //总页数
+                shouldShowPage: true, //是否显示该按钮
+                useBootstrapTooltip: true,
+                //点击事件
+                onPageClicked: function(event, originalEvent, type, page) {
+                }
+            });
+        });
         //日期插件初始化
         $('#datetimeStart').datetimepicker({
             language:  'zh-CN',
