@@ -23,7 +23,7 @@
     <select id="getRepaymentModelByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
         SELECT
 			cred.fp_order_id 'cred_fp_order_id',
-			cred.user_id 'cred_user_id ',
+			cred.user_id 'cred_user_id',
 			cred.plan_principal 'cred_plan_principal',
 			cred.plan_interest 'cred_plan_interest',
 			cred.plan_date 'cred_plan_date',
