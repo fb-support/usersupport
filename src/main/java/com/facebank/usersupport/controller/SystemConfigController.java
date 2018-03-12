@@ -44,6 +44,7 @@ public class SystemConfigController extends BaseController {
     public RestModel updateBaseInfoMationById(UserModel model) {
         System.out.println(model.toString());
         try {
+            model.setGmtModify(System.currentTimeMillis());
             int status = userService.updateBaseInfoMationById(model);
             if (status > 0) {
                 return this.success(MessageKeyEnum.SUCCESS);
@@ -60,6 +61,7 @@ public class SystemConfigController extends BaseController {
     public RestModel updatePasswordById(UserModel model) {
         System.out.println(model.toString());
         try {
+            model.setGmtModify(System.currentTimeMillis());
             int status = userService.updatePasswordById(model);
             if (status > 0) {
                 return this.success(MessageKeyEnum.SUCCESS);

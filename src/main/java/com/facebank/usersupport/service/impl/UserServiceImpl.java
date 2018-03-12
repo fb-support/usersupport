@@ -54,8 +54,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public UserModel getByUserId(Long id) {
-        return  userMapper.selectByPrimaryKey(id);
+    public UserModel getByUserId(Long userId) {
+        return  userMapper.getUserById(userId);
     }
 
     @Override

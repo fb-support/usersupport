@@ -25,9 +25,26 @@ public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
 
     List<UserModel> selectByUserModel(UserModel userModel);
 
+    /**
+     * 根据用户ID修改密码
+     * @param model
+     * @return
+     */
     int updatePasswordById(UserModel model);
 
+    /**
+     * 根据用户Id修改基本信息
+     * @param model
+     * @return
+     */
     int updateBaseInfomationById(UserModel model);
+
+    /**
+     * 根据用户Id获取信息
+     * @param userId
+     * @return
+     */
+    UserModel getUserById(Long userId);
 
     /**
      * 分页，多条件模糊查询
