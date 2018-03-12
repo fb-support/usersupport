@@ -46,22 +46,25 @@
         select user_id,work_number,username,password,email,phone,
         gmt_create,gmt_modify,status
         from user
-        where user_id=#{user_id,jdbcType=BIGINT}
+        where user_id=#{userId,jdbcType=BIGINT}
     </select>
+
     <update id="updatePasswordById" parameterType="com.facebank.usersupport.model.UserModel">
         update user
         SET
         password = #{password,jdbcType=VARCHAR}
         where user_id = #{userId,jdbcType=BIGINT}
     </update>
+
     <update id="updateBaseInfomationById" parameterType="com.facebank.usersupport.model.UserModel">
         UPDATE  user
-        SET
+          SET
         username = #{username,jdbcType=VARCHAR},
         phone = #{phone,jdbcType=VARCHAR},
-        email = #{email,jdbcType=VARCHAR}
-        WHERE
+        email = #{email,jdbcType=VARCHAR},
         work_number = #{workNumber,jdbcType=INTEGER}
+          WHERE
+        user_id = #{userId,jdbcType=BIGINT}
     </update>
 
     <select id="selectAllByCondition" resultMap="BaseResultMap"
