@@ -50,7 +50,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public List<UserModel> selectByUserModel(UserModel userModel) {
-        return selectByUserModel(userModel);
+        return userMapper.selectByUserModel(userModel);
     }
 
     @Override

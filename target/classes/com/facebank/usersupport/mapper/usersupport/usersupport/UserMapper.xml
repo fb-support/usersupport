@@ -24,11 +24,11 @@
         )
     </insert>
 
-    <select id="selectByUserModel" parameterType="com.facebank.usersupport.model.UserModel">
+    <select id="selectByUserModel" parameterType="com.facebank.usersupport.model.UserModel"
+            resultMap="BaseResultMap">
         select user_id from user
         where 1=1
         <if test="workNumber != null">
-
             and work_number = #{workNumber,jdbcType=INTEGER}
         </if>
         <if test="username != null">
