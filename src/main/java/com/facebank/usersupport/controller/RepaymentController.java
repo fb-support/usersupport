@@ -45,8 +45,7 @@ public class RepaymentController extends BaseController {
             // 设置总条数
             pageBeanModel.setTotalCount(pageInfo.getTotal());
             // 设置总页数
-            double totalPage = Double.parseDouble(pageInfo.getTotal()+"")/repaymentForm.getPageSize();
-            pageBeanModel.setTotalPage((int)Math.ceil(totalPage));
+            pageBeanModel.setTotalPage(pageInfo.getPages());
             // 设置分页数据
             pageBeanModel.setData(pageInfo.getList());
             return this.success(pageBeanModel);
