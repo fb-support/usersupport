@@ -26,6 +26,11 @@ public class SystemConfigController extends BaseController {
     @Autowired
     IUserService userService;
 
+    /**
+     * 根据用户ID获取信息
+     * @param userId
+     * @return
+     */
     @GetMapping("/sc/getByUserId")
     public RestModel getByUserId(Long userId) {
         try{
@@ -60,6 +65,11 @@ public class SystemConfigController extends BaseController {
         }
     }
 
+    /**
+     * 根据用户ID修改密码
+     * @param model
+     * @return
+     */
     @PostMapping("/sc/updatePasswordById")
     public RestModel updatePasswordById(UserModel model) {
         System.out.println(model.toString());

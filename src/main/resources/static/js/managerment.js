@@ -187,11 +187,11 @@ function updateUser() {
                 if (result.code == 1) {
                     if(result.data.phoneRepeat==true){
                         toast += "手机号码重复！";}
-                    else if(result.data.emailRepeat==true){
+                    if(result.data.emailRepeat==true){
                         toast += "邮箱号码重复！";}
-                    else if(result.data.workNumberRepeat==true){
-                        toast += "工号重复！";
-                    }else if(result.data.usernameRepeat==true){
+                    if(result.data.workNumberRepeat==true){
+                        toast += "工号重复！";}
+                    if(result.data.usernameRepeat==true){
                         toast += "用户名重复！";
                     }
 
@@ -202,7 +202,7 @@ function updateUser() {
                     else{
                         $.ajax({
                             type: "POST",
-                            url: '/sc/updateBaseInfoMationById',
+                            ul: '/sc/updateBaseInfoMationById',
                             cache: false,  //禁用缓存
                             data: param,
                             dataType: 'json',
