@@ -54,7 +54,7 @@ public class UserController extends BaseController {
      * objType 验证数据类型。1为工号，2为用户名。3为手机号码。4为邮箱
      * @return
      */
-    @PostMapping("/sync/verity")
+    @GetMapping("/sync/verity")
     private RestModel register(String verityObj, String objType) {
         try {
             UserModel userModel = new UserModel();
@@ -77,7 +77,7 @@ public class UserController extends BaseController {
             //若集合为空
             //若查询返回集合大小大于0，则代表用户已存在，
             return (userModelList != null && userModelList.size() > 0) ?
-                this.excpRestModel(MessageKeyEnum.USER_EXIST) :
+                this.excpRestModel(MessageKeyEnum.ERROR) :
                 this.success(MessageKeyEnum.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();

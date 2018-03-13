@@ -1,4 +1,11 @@
 /**
+ * 定义全局变量
+ */
+ var usernameStatus = true;
+ var phoneStatus = true;
+ var emailStatus = true;
+
+/**
  * 将文本框的属性设置为可编辑状态
  * 将修改按钮隐藏，显示提交按钮
  * 加载用户基本信息
@@ -23,6 +30,48 @@ $(function () {
 });
 
 /**
+ * onchange事件，检查修改的用户名是否存在
+ */
+function check_Username() {
+    var username = $("#username").val();
+    syncQuery("username", username, "objType", 2);
+    if ( status == 0) {
+        layer.msg("用户名已经存在");
+        usernameStatus = false ;
+    }
+    else {
+        usernameStatus = true ;
+    }
+}
+
+/**
+ * onchange事件，检查修改的手机号码是否存在
+ */
+function check_phone() {
+    var phone = $("#phone").val();
+    syncQuery("phone" ,phone,"objType",3)
+        if(status == 0){
+            layer.msg("手机号已经存在");
+            phoneStatus = false;
+        }else{
+            phoneStatus = true;
+        }
+}
+
+/**
+ * onchange事件，检查修改的邮箱是否存在
+ */
+function check_email() {
+    var email = $("#email").val();
+    syncQuery("email" ,email,"objType",4);
+    if(status == 0){
+        layer.msg("邮箱已经存在");
+        phoneStatus = false;
+    }else{
+        phoneStatus = true;
+    }
+}
+/**
  * 显示用户信息
  */
 function  show_Infomation() {
@@ -35,7 +84,7 @@ function  show_Infomation() {
             userId:1
         },
         success:function (data) {
-            console.log(data);
+            // console.log(data);
             if(data.code == 1){
                 $("#work_number").val(data.data.workNumber);
                 $("#username").val(data.data.username);
@@ -69,7 +118,6 @@ function  update_Infomation() {
                 layer.msg("手机号码格式错误");
                 return;
             }
-
             if (!emailReg.test(email)) {
                 layer.msg("邮箱号码格式错误");
                 return;
@@ -78,22 +126,7 @@ function  update_Infomation() {
                 layer.msg("用户名不能为空");
                 return;
             }
-            // if(syncQuery("username" ,username,"objType",2)){
-            //     layer.msg("用户名已经存在");
-            //     return;
-            // }
-            // if(syncQuery("workNumber" ,work_number,"objType",1)){
-            //     layer.msg("用户名已经存在");
-            //     return;
-            // }
-            // if(syncQuery("phone" ,phone,"objType",3)){
-            //     layer.msg("用户名已经存在");
-            //     return;
-            // }
-            // if(syncQuery("username" ,email,"objType",4)){
-            //     layer.msg("用户名已经存在");
-            //     return;
-            // }
+            if(emailStatus && phoneStatus && usernameStatus){
             $.ajax({
                 url:"/sc/updateBaseInfoMationById",
                 async:false,
@@ -120,36 +153,40 @@ function  update_Infomation() {
                     }
                 }
             });
+      }
 }
-// /**
-//  *  ajax异步查询封装的方法
-//  *  @param way 请求方式
-//  *  @param url 请求地址
-//  *  @param data 请求数据
-//  *  @return meg
-//  */
-// function syncQuery(verityObj, objValue,objType,objTypeValue ) {
-//     $.ajax({
-//         type : "post", //请求方式
-//         url :  "/sync/verity", //请求路径
-//         async:false,
-//         cache : false,
-//         data : {
-//             verityObj:objValue,
-//             objType : objTypeValue
-//         },   //传参 页数
-//         dataType : "JSON", //返回值类型
-//         success : function(data) {
-//             console.log(data);
-//             if(data.code == 1){
-//                 return false;
-//             } else {
-//                 return true;
-//             }
-//         }
-//
-//     });
-// }
+
+/**
+ * 查询用户信息是否存在
+ * 返回一个status进行判断
+ * @type {number}
+ */
+var status = 0;
+function syncQuery(verityObj, objValue,objType,objTypeValue ) {
+    // console.log(verityObj);
+    // console.log(objValue);
+
+    $.ajax({
+        type : "GET", //请求方式
+        url :  "/sync/verity", //请求路径
+        async:false,
+        cache : false,
+        data : {
+            verityObj:objValue,
+            objType : objTypeValue
+        },   //传参 页数
+        dataType : "JSON", //返回值类型
+        success : function(data) {
+            // console.log(data);
+            if(data.code == 0){
+                status = 0;
+            } else {
+               status = 1
+            }
+        }
+    });
+    return status;
+}
 
 // /**
 //  * 异步查询唯一+判空

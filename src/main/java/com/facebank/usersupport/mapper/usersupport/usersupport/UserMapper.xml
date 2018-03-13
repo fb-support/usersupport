@@ -24,6 +24,7 @@
         )
     </insert>
 
+
     <select id="selectByUserModel" parameterType="com.facebank.usersupport.model.UserModel"
             resultMap="BaseResultMap">
         select user_id from user
@@ -40,9 +41,7 @@
         <if test="phone != null">
             and phone = #{phone,jdbcType=VARCHAR}
         </if>
-
     </select>
-
     <select id="getUserById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select user_id,work_number,username,password,email,phone,
         status
@@ -92,4 +91,17 @@
         </foreach>
     </delete>
 
+    <!--<select id="selectInfoMation" parameterType="com.facebank.usersupport.model.UserModel" resultMap="BaseResultMap">-->
+        <!--select user_id from user-->
+        <!--where-->
+        <!--<if test ="username!=null">-->
+            <!--username = #{username,jdbcType=VARCHAR}-->
+        <!--</if>-->
+        <!--<if test ="email!=null">-->
+            <!--or email = #{email,jdbcType=VARCHAR}-->
+        <!--</if>-->
+        <!--<if test = "phone!=null">-->
+            <!--or phone = #{phone,jdbcType=VARCHAR}-->
+        <!--</if>-->
+    <!--</select>-->
 </mapper>

@@ -64,4 +64,5 @@ public interface IUserService {
      */
     void deleteByUserIds(Integer[] ids);
 
+
 }
