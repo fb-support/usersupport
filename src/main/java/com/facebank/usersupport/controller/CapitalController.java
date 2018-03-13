@@ -39,7 +39,7 @@ public class CapitalController extends BaseController {
         }
 
         List<CapitalDto> capitalDtos = iCapitalService.getMoneyRecord(mobile,type,time1,time2);
-
+        System.out.println("sfdsdf");
         return this.success(capitalDtos);
     }
     @GetMapping("/capital/getGeneralJournal")
