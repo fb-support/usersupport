@@ -21,12 +21,12 @@ public interface GeneralJournalMapper {
 
     int updateByPrimaryKey(GeneralJournalModel record);
 
-    List<GeneralJournalDto> getGeneralJournal(@Param("mobile") String modile, @Param("journalType") String type, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    List<GeneralJournalDto> getGeneralJournal(@Param("mobile") String modile, @Param("journalType") String type, @Param("startTime") Long startTime, @Param("endTime") Long endTime);
 
     List<CapitalDto> getGeneralJournalPage(@Param("mobile") String mobile, @Param("journalType") String type,
-                                           @Param("startTime") Date starttime, @Param("endTime") Date endtime,
+                                           @Param("startTime") Long starttime, @Param("endTime") Long endtime,
                                            @Param("pagestart") Integer pagestart, @Param("pagecount") Integer pagecount);
 
 
-    Integer getPageCount(@Param("mobile") String mobile, @Param("journalType") String type, @Param("startTime") Date starttime, @Param("endTime") Date endtime);
+    Integer getPageCount(@Param("mobile") String mobile, @Param("journalType") String type, @Param("startTime") Long starttime, @Param("endTime") Long endtime);
 }

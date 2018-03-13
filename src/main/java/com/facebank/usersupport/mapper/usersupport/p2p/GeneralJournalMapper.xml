@@ -314,10 +314,10 @@
       <if test="journalType != null and journalType != ''">
         journalType = #{journalType}
       </if>
-      <if test="endTime != null and endTime != ''">
+      <if test="endTime != null and endTime != '' and endTime !=0">
         and endTime &lt; #{endTime}
       </if>
-      <if test="startTime != null and startTime != ''">
+      <if test="startTime != null and startTime != '' and startTime != 0">
         and startTime &gt; #{startTime}
       </if>
     </where>

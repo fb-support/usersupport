@@ -25,13 +25,13 @@ public class GeneralJournalServiceImpl extends BaseService implements com.faceba
     GeneralJournalMapper generalJournalMapper;
 
     @Override
-    public List<GeneralJournalDto> getGeneralJournal(String modile, String type, Date startTime, Date endTime) {
+    public List<GeneralJournalDto> getGeneralJournal(String modile, String type, Long startTime, Long endTime) {
         List lists = generalJournalMapper.getGeneralJournal(modile, type, startTime, endTime);
         return lists;
     }
 
     @Override
-    public PageDto getGeneralJournalPage(String mobile, String type, Date starttime, Date endtime, Integer page, Integer counts) {
+    public PageDto getGeneralJournalPage(String mobile, String type, Long starttime, Long endtime, Integer page, Integer counts) {
         Integer totalNumber = generalJournalMapper.getPageCount(mobile,type,starttime,endtime);
         int lastPage = PageUtil.getLastPage(counts,totalNumber);
         int startNumber = (page-1)*counts;

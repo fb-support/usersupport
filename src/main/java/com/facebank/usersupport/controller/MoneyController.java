@@ -52,9 +52,11 @@ public class MoneyController extends BaseController {
         System.out.println(page+"=="+couts+"=="+mobile+"=="+type+"=="+starttime+"=="+endtime);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date time1 = null;
+        long startTime=0,endTime=0;
         if (starttime!=""&&starttime!=null){
             try {
                 time1 = sdf.parse(starttime);
+                startTime = time1.getTime();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -63,12 +65,13 @@ public class MoneyController extends BaseController {
         if (endtime!=""&&endtime!=null){
             try {
                 time2 = sdf.parse(endtime);
+                endTime = time2.getTime();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        PageDto pageDto = generalJournalService.getGeneralJournalPage(mobile,type,time1,time2,page,couts);
-
+        PageDto pageDto = generalJournalService.getGeneralJournalPage(mobile,type,startTime,endTime,page,couts);
+        System.out.println(pageDto);
         return this.success(pageDto);
     }
 
