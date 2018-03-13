@@ -3,6 +3,7 @@ package com.facebank.usersupport.controller;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.RepaymentForm;
+import com.facebank.usersupport.model.PageBeanModel;
 import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RepaymentModel;
 import com.facebank.usersupport.model.RestModel;
@@ -33,13 +34,22 @@ public class RepaymentController extends BaseController {
      @PostMapping("/service/repayment")
      public RestModel repaymentSearch(RepaymentForm repaymentForm){
         try{
+            // 查询分页信息
             PageInfo<RepaymentModel> pageInfo = repaymentService.getRepaymentModelByRepaymenyForm(repaymentForm);
-            long total = pageInfo.getTotal();
-            List<RepaymentModel> repaymentModels = pageInfo.getList();
-            PageRestModel pageRestModel = new PageRestModel();
-            pageRestModel.setRecordsTotal(total);
-            pageRestModel.setData(repaymentModels);
-            return this.success(pageRestModel);
+            // 封装PageBeanModel
+            PageBeanModel pageBeanModel = new PageBeanModel();
+            // 设置当前页
+            pageBeanModel.setPage(repaymentForm.getPage());
+            // 设置每页显示条数
+            pageBeanModel.setPageSize(repaymentForm.getPageSize());
+            // 设置总条数
+            pageBeanModel.setTotalCount(pageInfo.getTotal());
+            // 设置总页数
+            double totalPage = Double.parseDouble(pageInfo.getTotal()+"")/repaymentForm.getPageSize();
+            pageBeanModel.setTotalPage((int)Math.ceil(totalPage));
+            // 设置分页数据
+            pageBeanModel.setData(pageInfo.getList());
+            return this.success(pageBeanModel);
         }catch (Exception e){
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);

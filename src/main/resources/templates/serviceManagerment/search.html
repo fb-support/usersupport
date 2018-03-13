@@ -33,6 +33,10 @@
     </form>
 
     <script type="text/javascript">
+        var page = 1;
+        var pageSize = 20;
+        var totalCount = 0;
+        var totalPage = 0;
         //重置表单
         function reset(){
             $("#repaymentForm")[0].reset();
@@ -73,18 +77,24 @@
             }
 
             $.ajax({
+                async : true,
                 url : "/service/repayment",
                 type : "post",
-                data : {userId:userId,orderId:orderId,startTime:startTime,endTime:endTime},
+                data : {userId:userId,orderId:orderId,startTime:startTime,endTime:endTime,page:page,pageSize:pageSize},
                 dataType : "json",
                 success : function(result) {
                     // 回显userId和orderId
                     $("#userId").val(userId);
                     $("#orderId").val(orderId);
-                    console.log(result);
+                    // 将分页相关数据保存到全局变量中
+                    page = result.data.page;
+                    pageSize = result.data.pageSize;
+                    totalCount = result.data.totalCount;
+                    totalPage = result.data.totalPage;
+                    $("#currentPage").val(page);
+                    $("#totalCount").html(totalPage);
                     var tbody = window.document.getElementById("repaymentData");
                     var datas=result.data.data;
-                    console.log(datas);
                     var str="";
                     for (i in datas) {
                         str += "<tr>" + "<td>";
@@ -160,6 +170,54 @@
                 }
             })
         }
+
+        // 跳转到首页
+        function toHomePage(){
+            if(page != 1 && totalPage != 0){
+                page = 1;
+                search();
+            }
+        }
+
+        // 跳转到尾页
+        function toEndPage(){
+            if(page < totalPage){
+                page = totalPage;
+                search();
+            }
+        }
+
+        // 跳转到上一页
+        function toPreviousPage(){
+            if(totalPage != 0 && page >= 2){
+                page = page -1;
+                search();
+            }
+        }
+
+        // 跳转到下一页
+        function toNextPage(){
+            if(page < totalPage){
+                page = page + 1;
+                search();
+            }
+        }
+
+        // 跳转到指定页面
+        function toPage(){
+            var currentPage = $("#currentPage").val();
+            if(totalPage != 0 && currentPage >=1 && currentPage <= totalPage && currentPage != page){
+                page = currentPage;
+                search();
+            }
+        }
+
+        //修改每页显示条数
+        function changePageSize(){
+            var size = $("#pageSize").val();
+            pageSize = size;
+            search();
+        }
     </script>
 
     <form>
@@ -195,25 +253,45 @@
                 </div>
             </div>
         </div>
-        <ul id="page"></ul>
+        <div align="center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li>
+                        <a href="javascript:void(0);" aria-label="Previous" onclick="toHomePage()">
+                            <span aria-hidden="true">首页</span>
+                        </a>
+                    </li>
+                    <li><a href="javascript:void(0);" onclick="toPreviousPage()">上一页</a></li>
+                    <li><a href="javascript:void(0);" onclick="toNextPage()">下一页</a></li>
+                    <li>
+                        <a href="javascript:void(0);" aria-label="Next" onclick="toEndPage()">
+                            <span aria-hidden="true">尾页</span>
+                        </a>
+                    </li>
+                    <span>
+                        第<input type="text" style="width: 30px" name="page" id="currentPage"
+                                onkeypress="return event.keyCode>=48&&event.keyCode<=57">/<span id="totalCount"></span>页
+                    </span>
+                    <li>
+                        <a href="javascript:void(0);" onclick="toPage()">
+                            <span aria-hidden="true">GO</span>
+                        </a>
+                    </li>
+                    <span style="margin-left:10px">
+                        每页显示
+                        <select id="pageSize" onchange="changePageSize()">
+                            <option>20</option>
+                            <option>30</option>
+                            <option>50</option>
+                        </select>
+                        条
+                    </span>
+                </ul>
+            </nav>
+        </div>
     </form>
 
     <script type="text/javascript">
-        $(function() {
-            var currentPage = 1;
-            var totalPages = 25;
-            $("#page").bootstrapPaginator({
-                bootstrapMajorVersion: 3, //对应的bootstrap版本
-                currentPage: currentPage, //当前页数
-                numberOfPages: 10, //每次显示页数
-                totalPages: totalPages, //总页数
-                shouldShowPage: true, //是否显示该按钮
-                useBootstrapTooltip: true,
-                //点击事件
-                onPageClicked: function(event, originalEvent, type, page) {
-                }
-            });
-        });
         //日期插件初始化
         $('#datetimeStart').datetimepicker({
             language:  'zh-CN',

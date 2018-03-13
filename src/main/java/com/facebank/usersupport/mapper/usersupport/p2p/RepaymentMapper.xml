@@ -20,7 +20,7 @@
         <result column="pf_type" property="pfType"/>
     </resultMap>
 
-    <select id="getRepaymentModelByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+    <!--<select id="getRepaymentModelByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
         SELECT
 			cred.fp_order_id 'cred_fp_order_id',
 			cred.user_id 'cred_user_id',
@@ -111,6 +111,126 @@
 			</if>
 		</where>
 		ORDER BY cred.plan_date DESC
-    </select>
+    </select>-->
+	<select id="getRepaymentModelByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+			cred.fp_order_id 'cred_fp_order_id',
+			cred.user_id 'cred_user_id',
+			cred.plan_principal 'cred_plan_principal',
+			cred.plan_interest 'cred_plan_interest',
+			cred.plan_date 'cred_plan_date',
+			red.local_Info 'red_local_Info',
+			red.plan_amount 'red_plan_amount',
+			red.red_package_type 'red_package_type',
+			red.term_num 'red_term_num',
+			vip.rate 'vip_rate',
+			vip.plan_amount 'vip_plan_amount',
+			vip.term_num 'vip_term_num',
+			pf_intere.plan_amount 'pf_plan_amount',
+			pf_intere.term_num 'pf_term_num',
+			pf_intere.type 'pf_type'
+		FROM
+			(
+				SELECT
+					credit_id,
+					plan_principal,
+					plan_interest,
+					plan_date,
+					fp_order_id,
+					user_id
+				FROM
+					fp_main.credit_repayment
+				<where>
+					<if test="orderId != null and orderId != ''">
+						fp_order_id = #{orderId}
+					</if>
+					<if test="userId != null and orderId != ''">
+						AND user_id = #{userId}
+					</if>
+					<if test="startTime != null and startTime != ''">
+						AND plan_date &gt;= #{startTime}
+					</if>
+					<if test="endTime != null and endTime != ''">
+						AND plan_date &lt;= #{endTime}
+					</if>
+				</where>
+			) AS cred
+			LEFT JOIN (
+				SELECT
+					a.plan_amount,
+					a.plan_date,
+					a.credit_id,
+					a.fp_order_id,
+					b.local_Info,
+					b.user_id,
+					b.red_package_type,
+					a.term_num
+				FROM
+					fp_main.red_package_repayment AS a,
+					fp_main.red_package_rec AS b
+				<where>
+					a.fp_order_id = b.fp_order_id
+					<if test="orderId != null and orderId != ''">
+						AND a.fp_order_id = #{orderId}
+					</if>
+					<if test="userId != null and orderId != ''">
+						AND b.user_id = #{userId}
+					</if>
+				</where>
+			) AS red ON cred.credit_id = red.credit_id
+			LEFT JOIN (
+				SELECT
+					a.vip_interest_rec_id,
+					a.fp_order_id,
+					a.user_id,
+					a.rate,
+					b.credit_id,
+					b.plan_amount,
+					b.plan_date,
+					b.term_num
+				FROM
+					fp_main.vip_interest_rec AS a,
+					fp_main.vip_interest_repayment AS b
+				<where>
+					a.fp_order_id = b.fp_order_id
+					<if test="orderId != null and orderId != ''">
+						AND a.fp_order_id = #{orderId}
+					</if>
+					<if test="userId != null and orderId != ''">
+						AND a.user_id = #{userId}
+					</if>
+				</where>
+			) AS vip ON cred.credit_id = vip.credit_id
+			LEFT JOIN (
+				SELECT
+					b.record_id,
+					b.type,
+					b.invest_user,
+					b.credit_id,
+					b.plan_date,
+					b.term_num,
+					b.plan_amount
+				FROM
+					pf_interest.record AS a,
+					pf_interest.repayment AS b
+				WHERE
+					a.record_id = b.record_id
+			) AS pf_intere ON cred.credit_id = pf_intere.credit_id
+		<where>
+			<if test="orderId != null and orderId != ''">
+				cred.fp_order_id = #{orderId}
+			</if>
+			<if test="userId != null and orderId != ''">
+				AND cred.user_id = #{userId}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				AND cred.plan_date &gt;= #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				AND cred.plan_date &lt;= #{endTime}
+			</if>
+		</where>
+		ORDER BY cred.plan_date DESC
+	</select>
 
 </mapper>
