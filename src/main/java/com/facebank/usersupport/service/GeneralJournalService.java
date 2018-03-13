@@ -1,6 +1,7 @@
 package com.facebank.usersupport.service;
 
 import com.facebank.usersupport.dto.GeneralJournalDto;
+import com.facebank.usersupport.dto.PageDto;
 import com.facebank.usersupport.model.GeneralJournalModel;
 
 import java.util.Date;
@@ -20,4 +21,10 @@ public interface GeneralJournalService {
      * @return
      */
     List<GeneralJournalDto> getGeneralJournal(String modile, String type, Date startTime, Date endTime);
+    /**
+     * 根据电话号码，业务类型，分页查询
+     * @param
+     * @return
+     */
+    PageDto getGeneralJournalPage(String mobile, String type, Date starttime, Date endtime, Integer page, Integer counts);
 }

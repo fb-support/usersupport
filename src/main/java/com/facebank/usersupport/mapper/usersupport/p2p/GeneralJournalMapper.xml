@@ -240,11 +240,11 @@
     FROM user_main
     <where>
       <if test="mobile != null and mobile != ''">
-        mobile = #{mobile})
+        mobile = #{mobile}
       </if>
     </where>
-    as tmp_user
-    LEFT JOIN (
+    )as tmp_user
+    INNER JOIN (
     SELECT *
     FROM general_journal
     <where>
@@ -259,7 +259,70 @@
         </if>
     </where>
     )as tmp_gj
-    ON tmp_gj.userId=tmp_user.userId ORDER BY endTime desc LIMIT 10;
+    ON tmp_gj.userId=tmp_user.userId ORDER BY endTime desc;
+  </select>
+
+  <select id="getGeneralJournalPage" parameterType="java.util.Map" resultMap="ResultMap">
+    select  *
+    from(select user_main.userId,
+    user_main.mobile,
+    user_main.nickName
+    FROM user_main
+    <where>
+      <if test="mobile != null and mobile != ''">
+        mobile = #{mobile}
+      </if>
+    </where>
+    )as tmp_user
+    INNER JOIN (
+    SELECT *
+    FROM general_journal
+    <where>
+      <if test="journalType != null and journalType != ''">
+        journalType = #{journalType}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and endTime &lt; #{endTime}
+      </if>
+      <if test="startTime != null and startTime != ''">
+        and startTime &gt; #{startTime}
+      </if>
+    </where>
+    )as tmp_gj
+    ON tmp_gj.userId=tmp_user.userId ORDER BY endTime desc  LIMIT #{pagestart},#{pagecount};
+  </select>
+
+  <select id="getPageCount" parameterType="java.util.Map" resultType="int">
+    select  count(*)
+    from
+    (
+    select user_main.userId,
+    user_main.mobile,
+    user_main.nickName
+    FROM user_main
+    <where>
+      <if test="mobile != null and mobile != ''">
+        mobile = #{mobile}
+      </if>
+    </where>
+    )as tmp_user
+    INNER JOIN
+    (
+    SELECT *
+    FROM general_journal
+    <where>
+      <if test="journalType != null and journalType != ''">
+        journalType = #{journalType}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and endTime &lt; #{endTime}
+      </if>
+      <if test="startTime != null and startTime != ''">
+        and startTime &gt; #{startTime}
+      </if>
+    </where>
+    )as tmp_gj
+    ON tmp_gj.userId=tmp_user.userId ;
   </select>
 
 </mapper>

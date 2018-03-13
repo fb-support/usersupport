@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" style="width: 100%;">
+
+<div th:include="common/head_info::head_infor"></div>
+<script type="text/javascript" th:src="@{../js/paging.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
+<link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
+
+
+
+<div class="container center" style="width:100%;">
+    <div class="container center" style="width:100%;">
+        <form class="navbar-form navbar-left" role="search" >
+            <div class="form-group">
+                <input type="text" name="mobile" class="form-control" placeholder="手机号">
+                <input type="text" name="type" class="form-control" placeholder="类型">
+                <input type="text" name="starttime" class="form-control" placeholder="开始时间">--
+                <input type="text" name="endtime" class="form-control" placeholder="结束时间">
+            </div>
+            <button type="button" class="btn btn-default">Submit</button>
+        </form>
+
+        <div class="panel panel-default" style="width:100%;height:350px;overflow:auto;">
+            <!-- Table -->
+            <table class="table" style="word-break: keep-all;width: 100%;">
+                <thead>
+                <tr style="word-break: keep-all;width: 100%;">
+                    <th>id</th>
+                    <th >类型</th>
+                    <th >账户id</th>
+                    <th >账户名</th>
+                    <th >流水号</th>
+                    <th >动作发起时间</th>
+                    <th >资金到账时间</th>
+                    <th >关联id</th>
+                    <th >收入支出</th>
+                    <th >金额</th>
+                    <th >余额</th>
+                    <th >备注</th>
+                    <th >状态</th>
+                    <th>创建时间</th>
+                    <th>修改时间</th>
+                    <th>手机号码</th>
+                </tr>
+                </thead>
+                <tbody style="word-break: keep-all;width: 100%;">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div id="paging"></div>
+    </div>
+    <script>
+
+        $(document).ready(function () {
+            getData(1,10);
+        })
+        $('[type="button"]').click(function () {
+            getData(1,10);
+        })
+        var getData = function (page,pageSize) {
+            $.ajax({
+                url: "/money/generalPage",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    mobile: $('[name="mobile"]').val(),
+                    type: $('[name="type"]').val(),
+                    starttime: $('[name="starttime"]').val(),
+                    endtime: $('[name="endtime"]').val(),
+                    page : page,
+                    couts : pageSize
+                },
+                success: function (sourceData) {
+                    var str = "";
+                    var resdata = sourceData.data;
+                    console.log(resdata);
+                    var data = resdata.pageData;
+                    console.log(data);
+                    createPageNav({
+                        $container : $("#paging"),
+                        pageCount : resdata.totalPages,
+                        currentNum : resdata.currentPage,
+                        afterFun : function(num){
+                            getData(num,10);
+                        },
+                        hasCommonPage:false
+                    });
+                    var str = "";
+                    for (var i = 0; i < data.length; i++) {
+                        var inoutString="";
+                        if( data[i].inouttype == 0){
+                            inoutString="支出";
+                        }else{
+                            inoutString="收入";
+                        }
+                        str += '<tr>'
+                            +  "<td class = 'alltd'>" + validate(data[i].id) + "</td>" +
+                            "<td>" + validate(data[i].journaltype) + "</td>" +
+                            "<td>" + validate(data[i].userId) + "</td>" +
+                            "<td>" + validate(data[i].nickname) + "</td>" +
+                            "<td>" + validate(data[i].serialnumber) + "</td>" +
+                            "<td>" + validate(data[i].starttime) + "</td>" +
+                            "<td>" + validate(data[i].endtime) + "</td>" +
+                            "<td>" + validate(data[i].relationid) + "</td>" +
+                            "<td>" + inoutString + "</td>" +
+                            "<td>" + validate(data[i].amount) + "</td>" +
+                            "<td>" + validate(data[i].balance) + "</td>" +
+                            "<td>" + validate(data[i].remarks) + "</td>" +
+                            "<td>" + validate(data[i].status) + "</td>" +
+                            "<td>" + validate(data[i].createtime) + "</td>" +
+                            "<td>" + validate(data[i].modifytime) + "</td>" +
+                            "<td>" + validate(data[i].mobile) + "</td>" +
+                            + '</tr>';
+                    }
+                    $('tbody').html(str);
+                }
+            })
+        }
+        var validate = function (data) {
+            if(data==null){
+                return "";
+            }
+            return data;
+        }
+    </script>
+</html>

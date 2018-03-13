@@ -3,6 +3,7 @@ package com.facebank.usersupport.controller;
 import com.alibaba.fastjson.JSON;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.GeneralJournalDto;
+import com.facebank.usersupport.dto.PageDto;
 import com.facebank.usersupport.model.GeneralJournalModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.GeneralJournalService;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.crypto.Data;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -41,4 +44,32 @@ public class MoneyController extends BaseController {
 
         return this.success(generalJournalModelList);
     }
+
+    @RequestMapping("/money/generalPage")
+    public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int page,
+                                  @RequestParam(required = false, defaultValue = "10") int couts,
+                                  String mobile, String type, String starttime, String endtime)  {
+        System.out.println(page+"=="+couts+"=="+mobile+"=="+type+"=="+starttime+"=="+endtime);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date time1 = null;
+        if (starttime!=""&&starttime!=null){
+            try {
+                time1 = sdf.parse(starttime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Date time2 =null;
+        if (endtime!=""&&endtime!=null){
+            try {
+                time2 = sdf.parse(endtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        PageDto pageDto = generalJournalService.getGeneralJournalPage(mobile,type,time1,time2,page,couts);
+
+        return this.success(pageDto);
+    }
+
 }
