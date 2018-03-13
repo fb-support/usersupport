@@ -1,5 +1,6 @@
 package com.facebank.usersupport.config;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,7 +18,6 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
@@ -31,7 +31,7 @@ public class DataSourceUserSupportPrimary {
 
     @Bean(name="dataSourceTransactionManagerUserSupport")
     @Primary
-    public DataSourceTransactionManager dataSourceTransactionManagerUserPrimaryWrite(@Qualifier("dsUserSupport") DataSource datasource){
+    public DataSourceTransactionManager dataSourceTransactionManagerUserPrimaryWrite(@Qualifier("dsUserSupport") DruidDataSource datasource){
         return new DataSourceTransactionManager(datasource);
     }
 
@@ -44,8 +44,8 @@ public class DataSourceUserSupportPrimary {
 
     @Bean(name="dsUserSupport")
     @Primary
-    public DataSource dsUserPrimaryWrite(@Qualifier("dataSourcePropertiesUserSupport") DataSourceProperties properties) {
-        org.apache.tomcat.jdbc.pool.DataSource dataSource = (org.apache.tomcat.jdbc.pool.DataSource) properties.initializeDataSourceBuilder().type(org.apache.tomcat.jdbc.pool.DataSource.class).build();
+    public DruidDataSource dsUserPrimaryWrite(@Qualifier("dataSourcePropertiesUserSupport") DataSourceProperties properties) {
+        DruidDataSource dataSource = (DruidDataSource) properties.initializeDataSourceBuilder().type(DruidDataSource.class).build();
         DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(properties.determineUrl());
         String validationQuery = databaseDriver.getValidationQuery();
         if (validationQuery != null) {
@@ -58,7 +58,7 @@ public class DataSourceUserSupportPrimary {
 
     @Bean(name = "sqlSessionFactoryUserSupport")
     @Primary
-    public SqlSessionFactory sqlSessionFactoryUserPrimaryWrite(@Qualifier("dsUserSupport") DataSource dataSource) throws Exception {
+    public SqlSessionFactory sqlSessionFactoryUserPrimaryWrite(@Qualifier("dsUserSupport") DruidDataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:com/facebank/usersupport/mapper/usersupport/usersupport/*.xml"));
