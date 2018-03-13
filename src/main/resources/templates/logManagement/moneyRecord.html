@@ -53,6 +53,7 @@
 <script>
     var counts = 5;
     $(document).ready(function () {
+
         getPageAttribute(1,counts);
     })
     //查询
@@ -130,7 +131,7 @@
                         +'<th>'+amount+'</th>'
                         +'<th>'+accountbalance+'</th>'
                         +'<th>'+tradetype+'</th>'
-                        +'<th>'+tradetime+'</th>'
+                        +'<th>'+formatDate(tradetime)+'</th>'
                         +'<th>'+tradechannel+'</th>'
                         +'<th>'+tradecomment+'</th>'
                         +'<th>'+loanid+'</th>'
@@ -179,6 +180,12 @@
                 $("#datetimeStart").datetimepicker('setEndDate',new Date());
             }
         });
+
+        //日期转换
+    function formatDate(now) {
+        if (now==""){return "";}
+        return new Date(now).toLocaleDateString()+ " " + new Date(now).toLocaleTimeString();
+    }
     </script>
 </body>
 </html>

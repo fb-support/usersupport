@@ -106,16 +106,16 @@
                             "<td>" + validate(data[i].userId) + "</td>" +
                             "<td>" + validate(data[i].nickname) + "</td>" +
                             "<td>" + validate(data[i].serialnumber) + "</td>" +
-                            "<td>" + validate(data[i].starttime) + "</td>" +
-                            "<td>" + validate(data[i].endtime) + "</td>" +
+                            "<td>" + formatDate(validate(data[i].starttime)) + "</td>" +
+                            "<td>" + formatDate(validate(data[i].endtime)) + "</td>" +
                             "<td>" + validate(data[i].relationid) + "</td>" +
                             "<td>" + inoutString + "</td>" +
                             "<td>" + validate(data[i].amount) + "</td>" +
                             "<td>" + validate(data[i].balance) + "</td>" +
                             "<td>" + validate(data[i].remarks) + "</td>" +
                             "<td>" + validate(data[i].status) + "</td>" +
-                            "<td>" + validate(data[i].createtime) + "</td>" +
-                            "<td>" + validate(data[i].modifytime) + "</td>" +
+                            "<td>" + formatDate(validate(data[i].createtime)) + "</td>" +
+                            "<td>" + formatDate(validate(data[i].modifytime)) + "</td>" +
                             "<td>" + validate(data[i].mobile) + "</td>" +
                             + '</tr>';
                     }
@@ -163,5 +163,9 @@
                 $("#datetimeStart").datetimepicker('setEndDate',new Date());
             }
         });
+        function formatDate(now) {
+            if (now==""){return "";}
+           return new Date(now).toLocaleDateString()+ " " + new Date(now).toLocaleTimeString();
+        }
     </script>
 </html>
