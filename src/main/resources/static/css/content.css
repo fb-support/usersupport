@@ -49,6 +49,13 @@
 	height: 180px;
 }
 
+#log-record {
+	display: none;
+}
+
+#log-journal{
+	display: none;
+}
 #center .shortcuts-service ul {
 	padding-top: 40px;
 	height: 100px;
