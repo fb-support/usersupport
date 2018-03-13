@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head >
     <div th:include="common/head_info::head_infor"></div>
-    <script type="text/javascript" th:src="@{../js/moneyRecord.js}"></script>
     <script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
     <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
@@ -11,7 +10,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
 </head>
 <body>
-<div class="container center">
+<div class="container center" style="width: 100%;">
     <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
             <input type="text" name="mobile"  class="form-control" placeholder="手机号">
