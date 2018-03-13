@@ -162,7 +162,7 @@ function updateUser() {
     param.phone = $('#m_phone').val();
     param.email = $('#m_email').val();
 
-    //正则
+    
     var emailReg = /^[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
     var phoneReg = /^1[34578]\d{9}$/;
     if (!phoneReg.test(param.phone)) {
@@ -174,7 +174,7 @@ function updateUser() {
         layer.msg("邮箱号码格式错误");
         return;
     }
-    
+
         $.ajax({
             type: "POST",
             url: '/sc/updateBaseInfoMationById',

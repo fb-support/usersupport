@@ -2,6 +2,7 @@ package com.facebank.usersupport.mapper.usersupport.usersupport;
 
 import com.facebank.usersupport.mapper.usersupport.base.BaseWriteMapper;
 import com.facebank.usersupport.model.UserModel;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -59,4 +60,5 @@ public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
      */
     void batchDeleteUsers(Integer[] ids);
 
+    UserModel selectInfoMation(String objValue);
 }

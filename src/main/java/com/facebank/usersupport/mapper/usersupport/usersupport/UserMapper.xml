@@ -24,23 +24,16 @@
         )
     </insert>
 
-    <select id="selectByUserModel" parameterType="com.facebank.usersupport.model.UserModel">
+    <select id="selectByUserModel" parameterType="com.facebank.usersupport.model.UserModel" resultMap="BaseResultMap">
         select user_id from user
-        where 1=1
-        <if test="workNumber != null">
+        where
+        work_number = #{workNumber,jdbcType=INTEGER}
 
-            and work_number = #{workNumber,jdbcType=INTEGER}
-        </if>
-        <if test="username != null">
-            and username = #{username,jdbcType=VARCHAR}
-        </if>
-        <if test="email != null">
-            and email = #{email,jdbcType=VARCHAR}
-        </if>
-        <if test="phone != null">
-            and phone = #{phone,jdbcType=VARCHAR}
-        </if>
+        or username = #{username,jdbcType=VARCHAR}
 
+        or email = #{email,jdbcType=VARCHAR}
+
+        or phone = #{phone,jdbcType=VARCHAR}
     </select>
 
     <select id="getUserById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -92,4 +85,17 @@
         </foreach>
     </delete>
 
+    <select id="selectInfoMation" parameterType="com.facebank.usersupport.model.UserModel" resultMap="BaseResultMap">
+        select user_id from user
+        where
+        <if test ="username!=null">
+            username = #{username,jdbcType=VARCHAR}
+        </if>
+        <if test ="email!=null">
+            or email = #{email,jdbcType=VARCHAR}
+        </if>
+        <if test = "phone!=null">
+            or phone = #{phone,jdbcType=VARCHAR}
+        </if>
+    </select>
 </mapper>
