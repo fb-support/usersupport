@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
+<html lang="zh-CN">
 <html xmlns:th="http://www.thymeleaf.org">
 <head> <div th:include="common/head_info::head_infor"></div>
     <script type="text/javascript" th:src="@{../js/base_infomation.js}"></script>
     <link rel="stylesheet" th:href="@{../css/base_infomation.css}">
     <script  type="text/javascript" th:src="@{../js/jquery.js}"></script>
-    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
     <script  type="text/javascript" th:src="@{../js/jquery.validate.js}"></script>
 </head>
 
@@ -32,7 +31,7 @@
                 用户名
             </td>
             <td>
-                <input type="text" name="username" size="34px" id="username" readonly="readonly" onchange="check_Username();"/>
+                <input type="text" name="username" size="34px" id="username" readonly="readonly"/>
             </td>
         </tr>
         <tr>
@@ -40,7 +39,7 @@
                 手机号码：
             </td>
             <td>
-                <input type="text" name="phone" id="phone" size="34px" readonly="readonly" onchange="check_phone();"/>
+                <input type="text" name="phone" id="phone" size="34px" readonly="readonly"/>
             </td>
         </tr>
         <tr>
@@ -48,17 +47,17 @@
                 邮箱
             </td>
             <td>
-                <input type="text" name="email"  id="email" size="34px" readonly="readonly"onchange="check_email();"/>
+                <input type="text" name="email"  id="email" size="34px" readonly="readonly"/>
             </td>
         </tr>
-        <!--<tr>-->
-            <!--<td>-->
-                <!--入职时间-->
-            <!--</td>-->
-            <!--<td>-->
-                <!--<p  name="gmt_create" id="gmt_create" > </p>-->
-            <!--</td>-->
-        <!--</tr>-->
+        <tr>
+            <td>
+                入职时间
+            </td>
+            <td>
+                <p  name="gmt_create" id="gmt_create" > </p>
+            </td>
+        </tr>
         <tr>
             <td>
                 状态
@@ -72,7 +71,7 @@
                 <button class="btn btn-large" type="button"  id="btn_modify" >
                     修改
                 </button>
-                <button class="hide" type="button"  id="btn_submit" onclick="update_Infomation();" >
+                <button class="hide" type="submit"  id="btn_submit" >
                     确定
                 </button>
 

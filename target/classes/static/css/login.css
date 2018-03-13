@@ -1,24 +1,32 @@
 body {
 	padding: 0px;
-	background-color: #C7F7FB;
+	background-color: #36374c;
+	margin: 0px;
+	overflow: hidden;
 }
 
 #border {
-	padding: 80px 300px;
+
 }
 
 #border #system-info {
-	padding: 20px 40px;
+	padding: 40px 80px 20px 80px;
+	width: 100%;
+	height: 60px;
+	background-color: #36374c;
 }
 
 #border #system-info span {
-	font-size: 22px;
+	font-size: 30px;
 	color: #000000;
+	color: white;
 }
 
 #border .t-form {
-	margin-left: 40px;
-	padding: 20px 150px;
+	width: 100%;
+	margin-left: 0px;
+	align-content: center;
+	padding-top: 40px;
 	border: 4px solid #DBDBDB;
 	background-color: #FFFFFF;
 
@@ -59,7 +67,7 @@ body {
 
 #border .t-form table tr td .login-btn {
 	padding: 10px 35px;
-	background-color: #E7E3E3;
+	background-color: white;
 	border: none;
 	margin-right: 10px;
 	font-size: 16px;
@@ -71,9 +79,14 @@ body {
 }
 
 #border .t-form table tr td #btn-submit:hover {
-	background-color: #1F243B;
+	background-color: red;
 }
 
 #border .t-form table tr td #btn-reset {
 
+}
+
+.error td p {
+	color: red;
+	text-align: center;
 }

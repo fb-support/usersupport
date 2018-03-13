@@ -1,5 +1,6 @@
 package com.facebank.usersupport.service.impl;
 
+import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.dto.reqDto.UserForm;
 import com.facebank.usersupport.mapper.usersupport.usersupport.UserMapper;
 import com.facebank.usersupport.model.RestModel;
@@ -36,6 +37,39 @@ public class UserServiceImpl extends BaseService implements IUserService {
         UserModel userModel = new UserModel();
         BeanUtils.copyProperties(userForm,userModel);
 
+        //创建验证的model对象
+        UserModel verityModel = new UserModel();
+        // 1.验证工号是否唯一
+        verityModel.setWorkNumber(userModel.getWorkNumber());
+        List<UserModel> verityReturnList = selectByUserModel(verityModel);
+        if(verityReturnList != null && verityReturnList.size() > 0) {
+            return new RestModel("850","工号已被注册");
+        }
+
+        // 2.验证用户名是否唯一
+        verityModel.setWorkNumber(null);
+        verityModel.setUsername(userModel.getUsername());
+        verityReturnList = selectByUserModel(verityModel);
+        if(verityReturnList != null && verityReturnList.size() > 0) {
+            return new RestModel("850","用户名已被注册");
+        }
+
+        // 3.验证电话是否唯一
+        verityModel.setUsername(null);
+        verityModel.setPhone(userModel.getPhone());
+        verityReturnList = selectByUserModel(verityModel);
+        if(verityReturnList != null && verityReturnList.size() > 0) {
+            return new RestModel("850","手机号已被注册");
+        }
+
+        // 4.验证邮箱是否唯一
+        verityModel.setPhone(null);
+        verityModel.setEmail(userModel.getEmail());
+        verityReturnList = selectByUserModel(verityModel);
+        if(verityReturnList != null && verityReturnList.size() > 0) {
+            return new RestModel("850","邮箱已被注册");
+        }
+
         //补全对象字段
         userModel.setGmtCreate(System.currentTimeMillis());
         userModel.setGmtModify(System.currentTimeMillis());
@@ -51,12 +85,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public List<UserModel> selectByUserModel(UserModel userModel) {
         return userMapper.selectByUserModel(userModel);
-
     }
 
     @Override
-    public UserModel getByUserId(Long userId) {
-        return  userMapper.getUserById(userId);
+    public UserModel getByUserId(Long id) {
+        return  userMapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -81,6 +114,4 @@ public class UserServiceImpl extends BaseService implements IUserService {
     public void deleteByUserIds(Integer[] ids) {
         userMapper.batchDeleteUsers(ids);
     }
-
-
 }

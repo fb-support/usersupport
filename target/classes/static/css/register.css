@@ -70,9 +70,10 @@ body {
 }
 
 #btn_submit {
+    padding: 10px 20px;
     width: 150px;
-    height: 200px;
-    padding: 10px 10px;
+    height: 60px !important;
+    padding: 10px 20px;
     border: none;
     background-color: #f6f4ff;
     font-size: 24px;
@@ -83,6 +84,10 @@ body {
 #btn_submit:hover {
     background-color: #20233A;
     color: white;
+}
+
+.error {
+    width: 300px;
 }
 
 .error_info {

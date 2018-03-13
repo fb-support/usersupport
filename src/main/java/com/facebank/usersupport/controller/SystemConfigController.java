@@ -7,13 +7,10 @@ import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.UserModel;
 import com.facebank.usersupport.service.IUserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 系统设置Controller
@@ -47,7 +44,6 @@ public class SystemConfigController extends BaseController {
     public RestModel updateBaseInfoMationById(UserModel model) {
         System.out.println(model.toString());
         try {
-            model.setGmtModify(System.currentTimeMillis());
             int status = userService.updateBaseInfoMationById(model);
             if (status > 0) {
                 return this.success(MessageKeyEnum.SUCCESS);
@@ -64,7 +60,6 @@ public class SystemConfigController extends BaseController {
     public RestModel updatePasswordById(UserModel model) {
         System.out.println(model.toString());
         try {
-            model.setGmtModify(System.currentTimeMillis());
             int status = userService.updatePasswordById(model);
             if (status > 0) {
                 return this.success(MessageKeyEnum.SUCCESS);
@@ -76,4 +71,5 @@ public class SystemConfigController extends BaseController {
             return this.excpRestModel(MessageKeyEnum.ERROR);
         }
     }
+
 }

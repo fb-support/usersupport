@@ -30,10 +30,10 @@ public interface IUserService {
 
     /**
      * 根据用户id查询用户信息
-     * @param userId
+     * @param id
      * @return
      */
-    UserModel getByUserId(Long userId);
+    UserModel getByUserId(Long id);
 
     /**
      * 更新用户密码
@@ -63,6 +63,5 @@ public interface IUserService {
      * @param ids 用户id array
      */
     void deleteByUserIds(Integer[] ids);
-
 
 }

@@ -6,8 +6,8 @@ $(".checkall").click(function () {
 //分页显示DataTable
 var table;
 
-//userId
 var userId;
+
 $(document).ready(function () {
     table = $('#datatable').DataTable({
         "searching": false,
@@ -51,7 +51,7 @@ $(document).ready(function () {
                 "data": "userId",
                 "render": function (data, type, full, meta) {
 //                    class="btn btn-primary"
-                    return '<button type="button" onclick="showModel(' + data + ');" >修改信息</button>';
+                    return '<button type="button" onclick="showModel('+data+');" >修改信息</button>';
                 },
                 "bSortable": false
             },
@@ -84,6 +84,7 @@ function getQueryCondition(data) {
     param.start = data.start;
     param.length = data.length;
     param.draw = data.draw;
+    console.log("查看param");
     console.log(param);
     return param;
 }
@@ -133,7 +134,7 @@ function showModel(id) {
     userId = id;
     $.ajax({
         type: "GET",
-        url: '/sc/getByUserId?userId=' + id,
+        url: '/sc/getByUserId?userId='+id,
         cache: false,  //禁用缓存
         dataType: 'json',
         success: function (result) {
@@ -163,65 +164,20 @@ function updateUser() {
     param.phone = $('#m_phone').val();
     param.email = $('#m_email').val();
 
-    
-    var emailReg = /^[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
-    var phoneReg = /^1[34578]\d{9}$/;
-    if (!phoneReg.test(param.phone)) {
-        layer.msg("手机号码格式错误");
-        return;
-    }
-
-    if (!emailReg.test(param.email)) {
-        layer.msg("邮箱号码格式错误");
-        return;
-    }
-
-        $.ajax({
-            type: "GET",
-            url: '/um/check',
-            cache: false,  //禁用缓存
-            data: param,
-            dataType: 'json',
-            success: function (result) {
-                var toast = "";
-                if (result.code == 1) {
-                    if(result.data.phoneRepeat==true){
-                        toast += "手机号码重复！";}
-                    else if(result.data.emailRepeat==true){
-                        toast += "邮箱号码重复！";}
-                    else if(result.data.workNumberRepeat==true){
-                        toast += "工号重复！";
-                    }else if(result.data.usernameRepeat==true){
-                        toast += "用户名重复！";
-                    }
-
-                    if (toast.length>1){
-                        layer.msg(toast);
-                        return;
-                    }
-                    else{
-                        $.ajax({
-                            type: "POST",
-                            url: '/sc/updateBaseInfoMationById',
-                            cache: false,  //禁用缓存
-                            data: param,
-                            dataType: 'json',
-                            success: function (result) {
-                                if (result.code == 1) {
-                                    $('#updateUser').modal('hide');
-                                    layer.msg('操作成功');
-                                    table.ajax.reload();
-                                } else {
-                                    layer.msg(result.error);
-                                }
-                            }
-                        });
-                    }
-                } else {
-                    layer.msg(result.error);
-                }
+    $.ajax({
+        type: "POST",
+        url: '/sc/updateBaseInfoMationById',
+        cache: false,  //禁用缓存
+        data:param,
+        dataType: 'json',
+        success: function (result) {
+            if (result.code == 1) {
+                $('#updateUser').modal('hide');
+                layer.msg('操作成功');
+                table.ajax.reload();
+            } else {
+                layer.msg(result.error);
             }
-        })
-
-
+        }
+    });
 }
