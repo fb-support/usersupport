@@ -18,7 +18,7 @@ public class RepaymentForm {
 
     private Integer page = 1;
 
-    private Integer pageSize = 20;
+    private Integer pageSize = 10;
 
     public Long getUserId() {
         return userId;
