@@ -81,8 +81,6 @@
 .center_show_area {
 	width: 100%;
 	height: 540px;
-	overflow: hidden;
-
 }
 
 #system-base-info-page {
@@ -93,7 +91,7 @@
 	display: none;
 }
 
-#service-repayment-page {
+#service-a-page {
 	display: none;
 }
 
@@ -113,13 +111,12 @@
 	display: none;
 	width: 1260px;
 	height: 600px;
-	margin-left: 0px;
+	margin-left: -5px;
 	
 }
 
 #userManager-opera-user-page {
 	display: none;
-	margin-top: 20px;
 }
 
 .mainPage_init_option {

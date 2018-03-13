@@ -24,7 +24,9 @@
         )
     </insert>
 
-    <select id="selectByUserModel" resultMap="BaseResultMap" parameterType="com.facebank.usersupport.model.UserModel">
+
+    <select id="selectByUserModel" parameterType="com.facebank.usersupport.model.UserModel"
+            resultMap="BaseResultMap">
         select user_id from user
         where 1=1
         <if test="workNumber != null">
@@ -39,12 +41,10 @@
         <if test="phone != null">
             and phone = #{phone,jdbcType=VARCHAR}
         </if>
-
     </select>
-
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="getUserById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select user_id,work_number,username,password,email,phone,
-        gmt_create,gmt_modify,status
+        status
         from user
         where user_id=#{userId,jdbcType=BIGINT}
     </select>
@@ -52,7 +52,8 @@
     <update id="updatePasswordById" parameterType="com.facebank.usersupport.model.UserModel">
         update user
         SET
-        password = #{password,jdbcType=VARCHAR}
+        password = #{password,jdbcType=VARCHAR},
+        gmt_modify = #{gmtModify,jdbcType=BIGINT}
         where user_id = #{userId,jdbcType=BIGINT}
     </update>
 
@@ -62,7 +63,8 @@
         username = #{username,jdbcType=VARCHAR},
         phone = #{phone,jdbcType=VARCHAR},
         email = #{email,jdbcType=VARCHAR},
-        work_number = #{workNumber,jdbcType=INTEGER}
+        work_number = #{workNumber,jdbcType=INTEGER},
+        gmt_modify = #{gmtModify,jdbcType=BIGINT}
           WHERE
         user_id = #{userId,jdbcType=BIGINT}
     </update>
@@ -89,34 +91,17 @@
         </foreach>
     </delete>
 
-
-    <resultMap id="user_role_map" type="com.facebank.usersupport.dto.UserRoleDO">
-        <id column="user_id" jdbcType="BIGINT" property="userId" />
-        <result column="work_number" jdbcType="INTEGER" property="workNumber" />
-        <result column="username" jdbcType="VARCHAR" property="username" />
-        <result column="password" jdbcType="VARCHAR" property="password" />
-        <result column="email" jdbcType="VARCHAR" property="email" />
-        <result column="phone" jdbcType="VARCHAR" property="phone" />
-        <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
-        <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
-        <result column="status" jdbcType="SMALLINT" property="status" />
-        <collection property="roles" ofType="com.facebank.usersupport.model.RoleModel">
-            <id column="role_id" jdbcType="BIGINT" property="roleId" />
-            <result column="role_name" jdbcType="VARCHAR" property="roleName" />
-        </collection>
-    </resultMap>
-
-    <select id="selectBySelectiveForPermission" parameterType="String" resultMap="user_role_map">
-        select
-        u.*,r.role_id,r.role_name
-        from user u
-        LEFT JOIN
-        user_role ur ON u.user_id = ur.user_id
-        LEFT JOIN
-        role r ON ur.role_id = r.role_id
-        where username = #{loginName,jdbcType=VARCHAR} OR
-        phone = #{loginName,jdbcType=VARCHAR} OR
-        email = #{loginName,jdbcType=VARCHAR}
-    </select>
-
+    <!--<select id="selectInfoMation" parameterType="com.facebank.usersupport.model.UserModel" resultMap="BaseResultMap">-->
+        <!--select user_id from user-->
+        <!--where-->
+        <!--<if test ="username!=null">-->
+            <!--username = #{username,jdbcType=VARCHAR}-->
+        <!--</if>-->
+        <!--<if test ="email!=null">-->
+            <!--or email = #{email,jdbcType=VARCHAR}-->
+        <!--</if>-->
+        <!--<if test = "phone!=null">-->
+            <!--or phone = #{phone,jdbcType=VARCHAR}-->
+        <!--</if>-->
+    <!--</select>-->
 </mapper>

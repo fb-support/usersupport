@@ -6,6 +6,7 @@ import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.UserForm;
 import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RestModel;
+import com.facebank.usersupport.model.UserCheckModel;
 import com.facebank.usersupport.model.UserModel;
 import com.facebank.usersupport.service.IUserService;
 import com.github.pagehelper.PageInfo;
@@ -35,18 +36,16 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/register")
-    public RestModel register (UserForm userForm) {
+    private RestModel register (UserForm userForm) {
         try {
             RestModel model = userService.insertUser(userForm);
             if (model.getCode().equals(RestModel.CODE_SUCCESS)) {
                 return this.success(JSON.toJSONString(model));
-            } else {
-                return model;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
     }
 
     /**
@@ -55,37 +54,36 @@ public class UserController extends BaseController {
      * objType 验证数据类型。1为工号，2为用户名。3为手机号码。4为邮箱
      * @return
      */
-    //@PostMapping("/sync/verity")
-//    public RestModel verity(String verityObj, String objType) {
-//        try {
-//            UserModel userModel = new UserModel();
-//            // 根据验证数据类型设置对应的值
-//            switch (objType) {
-//                case "1":
-//                    System.out.println("验证工号唯一");
-//                    userModel.setWorkNumber(Integer.parseInt(verityObj));
-//                    break;
-//                case "2":
-//                    userModel.setUsername(verityObj);
-//                    break;
-//                case "3":
-//                    userModel.setPhone(verityObj);
-//                    break;
-//                case "4":
-//                    userModel.setEmail(verityObj);
-//                    break;
-//            }
-//            List<UserModel> userModelList = userService.selectByUserModel(userModel);
-//            //若集合为空
-//            //若查询返回集合大小大于0，则代表用户已存在，
-//            return (userModelList != null && userModelList.size() > 0) ?
-//                this.excpRestModel(MessageKeyEnum.USER_EXIST) :
-//                this.success(MessageKeyEnum.SUCCESS);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return this.excpRestModel(MessageKeyEnum.REST_SERVICE_ERROR);
-//    }
+    @GetMapping("/sync/verity")
+    private RestModel register(String verityObj, String objType) {
+        try {
+            UserModel userModel = new UserModel();
+            // 根据验证数据类型设置对应的值
+            switch (objType) {
+                case "1":
+                    userModel.setWorkNumber(Integer.parseInt(verityObj));
+                    break;
+                case "2":
+                    userModel.setUsername(verityObj);
+                    break;
+                case "3":
+                    userModel.setPhone(verityObj);
+                    break;
+                case "4":
+                    userModel.setEmail(verityObj);
+                    break;
+            }
+            List<UserModel> userModelList = userService.selectByUserModel(userModel);
+            //若集合为空
+            //若查询返回集合大小大于0，则代表用户已存在，
+            return (userModelList != null && userModelList.size() > 0) ?
+                this.excpRestModel(MessageKeyEnum.ERROR) :
+                this.success(MessageKeyEnum.SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this.excpRestModel(MessageKeyEnum.REST_SERVICE_ERROR);
+    }
 
     /**
      * 分页查询
@@ -130,4 +128,44 @@ public class UserController extends BaseController {
         }
     }
 
+    /**
+     * 进行用户字段校验
+     * @param model
+     * @return
+     */
+    @GetMapping("um/check")
+    public RestModel CheckUserModel(UserModel model){
+        try{
+            UserCheckModel checkModel = new UserCheckModel();
+            UserModel TempModel = new UserModel();
+            //进行phone判断
+            TempModel.setPhone(model.getPhone());
+            if (!userService.selectByUserModel(TempModel).isEmpty()
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                checkModel.setPhoneRepeat(true);
+            //用户名判断
+            TempModel.setPhone(null);
+            TempModel.setUsername(model.getUsername());
+            if (!userService.selectByUserModel(TempModel).isEmpty()
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                checkModel.setUsernameRepeat(true);
+            //邮箱判断
+            TempModel.setUsername(null);
+            TempModel.setEmail(model.getEmail());
+            if (!userService.selectByUserModel(TempModel).isEmpty()
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                checkModel.setEmailRepeat(true);
+            //workNumber判断
+            TempModel.setEmail(null);
+            TempModel.setWorkNumber(model.getWorkNumber());
+            if (!userService.selectByUserModel(TempModel).isEmpty()
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                checkModel.setWorkNumberRepeat(true);
+
+            return this.success(checkModel);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
+    }
 }
