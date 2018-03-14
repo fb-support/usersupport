@@ -1,0 +1,60 @@
+<html th:fragment="lefter" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+	<script type="text/javascript" src="js/left.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/left.css"/>
+	<title sec:authentication="name"></title>
+	<!-- 侧边菜单栏 -->
+	<div id="side">
+		<ul class="nav">
+			<li class="module-1 item-manager">
+				<span class="big_class">系统设置</span>
+				<div class="module-2">
+					<ul class="nav">
+						<li><span class="glyphicon glyphicon-signal"></span><span>&nbsp;&nbsp;<a href="javascript:runUserBaseInfo()">基本信息</a></span></li>
+						<li><span class="glyphicon glyphicon-stats"></span><span>&nbsp;&nbsp;<a href="javascript:runChangePassword()">修改密码</a></span></li>
+					</ul>
+				</div>
+			</li>
+			<li class="module-1">
+				<span class="big_class">业务查询</span>
+				<div class="module-2">
+					<ul class="nav">
+						<li><span class="glyphicon glyphicon-signal"></span><span>&nbsp;&nbsp;<a href="javascript:runRepaymentSearch()">还款查询</a></span></li>
+						<li><span class="glyphicon glyphicon-stats"></span><span>&nbsp;&nbsp;<a href="javascript:runB()">b</a></span></li>
+					</ul>
+				</div>
+			</li>
+			<li class="module-1">
+				<span class="big_class">日志管理</span>
+				<div class="module-2">
+					<ul class="nav">
+						<li><span class="glyphicon glyphicon-signal"></span><span><a href="javascript:moneyRecord()">资金记录</a></span></li>
+						<li><span class="glyphicon glyphicon-stats"></span><span><a href="javascript:generalJournal()">资金流水</a></span></li>
+					</ul>
+				</div>
+			</li>
+			<li class="module-1" sec:authorize="hasRole('ROLE_ADMIN')">
+				<span class="big_class">权限管理</span>
+				<div class="module-2">
+					<ul class="nav">
+						<!--<li><span class="glyphicon glyphicon-eye-open"></span><span>&nbsp;&nbsp;待定</span></li>-->
+						<!--<li><span class="glyphicon glyphicon-eye-open"></span><span>&nbsp;&nbsp;待定</span></li>-->
+						<!--<li><span class="glyphicon glyphicon-eye-open"></span><span>&nbsp;&nbsp;待定</span></li>-->
+						<!--<li><span class="glyphicon glyphicon-eye-open"></span><span>&nbsp;&nbsp;待定</span></li>-->
+					</ul>
+				</div>
+			</li>
+			<li class="module-1" sec:authorize="hasRole('ROLE_ADMIN')">
+				<span class="big_class">用户管理</span>
+				<div class="module-2">
+					<ul class="nav">
+						<li><span class="glyphicon glyphicon-edit"></span><span>&nbsp;&nbsp;<a href="javascript:run_addUser()">增加用户</a></span></li>
+						<li><span class="glyphicon glyphicon-eye-open"></span><span>&nbsp;&nbsp;<a href="javascript:runOperaUser()">管理用户</a></span></li>
+					</ul>
+				</div>
+			</li>
+
+		</ul>
+	</div>
+</html>

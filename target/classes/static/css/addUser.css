@@ -1,0 +1,26 @@
+.table_left{
+    text-align: right;
+    line-height: 30px;
+}
+
+.center{
+    margin: 50px auto;
+}
+table{
+    margin: auto;
+}
+
+table tr td {
+    padding: 3px;
+    width: 200px;
+    vertical-align: middle!important;
+}
+
+table tr td {
+    width: 300px;
+}
+
+.error{
+    text-align: left;
+    width: 400px;
+}
