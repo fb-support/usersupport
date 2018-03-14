@@ -1,8 +1,6 @@
 package com.facebank.usersupport.model;
 
-import java.io.Serializable;
-
-public class RoleModel implements Serializable {
+public class RoleModel {
     private Long roleId;
 
     private String roleName;
@@ -13,7 +11,7 @@ public class RoleModel implements Serializable {
 
     private Long gmtModify;
 
-    private String creator;
+    private Long creator;
 
     private String description;
 
@@ -57,12 +55,12 @@ public class RoleModel implements Serializable {
         this.gmtModify = gmtModify;
     }
 
-    public String getCreator() {
+    public Long getCreator() {
         return creator;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+    public void setCreator(Long creator) {
+        this.creator = creator;
     }
 
     public String getDescription() {
