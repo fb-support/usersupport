@@ -1,9 +1,9 @@
 package com.facebank.usersupport.model;
 
-import java.io.Serializable;
-
-public class MenuModel implements Serializable {
+public class MenuModel {
     private Long menuId;
+
+    private String menuName;
 
     private String menuUrl;
 
@@ -13,7 +13,7 @@ public class MenuModel implements Serializable {
 
     private Long gmtModify;
 
-    private String creator;
+    private Long creator;
 
     private String description;
 
@@ -23,6 +23,14 @@ public class MenuModel implements Serializable {
 
     public void setMenuId(Long menuId) {
         this.menuId = menuId;
+    }
+
+    public String getMenuName() {
+        return menuName;
+    }
+
+    public void setMenuName(String menuName) {
+        this.menuName = menuName == null ? null : menuName.trim();
     }
 
     public String getMenuUrl() {
@@ -57,12 +65,12 @@ public class MenuModel implements Serializable {
         this.gmtModify = gmtModify;
     }
 
-    public String getCreator() {
+    public Long getCreator() {
         return creator;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+    public void setCreator(Long creator) {
+        this.creator = creator;
     }
 
     public String getDescription() {
