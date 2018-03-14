@@ -11,7 +11,7 @@ function runUserBaseInfo() {
     if ( $("li[value='system-base-info-page']").length > 0 ) {
         switchPage( "system-base-info-page" );
     } else {
-        addSmallCardForThisPage("system-base-info-page", "用户管理");
+        addSmallCardForThisPage("system-base-info-page", "基本信息");
     }
 }
 
@@ -27,7 +27,7 @@ function runChangePassword() {
     if ( $("li[value='system-change-password-page']").length > 0 ) {
         switchPage( "system-change-password-page" );
     } else {
-        addSmallCardForThisPage("system-change-password-page", "用户管理");
+        addSmallCardForThisPage("system-change-password-page", "修改密码");
     }
 }
 
@@ -90,7 +90,7 @@ function run_addUser() {
     if ( $("li[value='userManager-add-user-page']").length > 0 ) {
         switchPage( "userManager-add-user-page" );
     } else {
-        addSmallCardForThisPage("userManager-add-user-page", "用户管理");
+        addSmallCardForThisPage("userManager-add-user-page", "添加用户");
     }
 }
 

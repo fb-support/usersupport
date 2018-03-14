@@ -1,13 +1,17 @@
-package com.facebank.usersupport.model;
+package com.facebank.usersupport.dto;
+
+import com.facebank.usersupport.model.RoleModel;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
+ * 数据库查询返回数据包装对象
+ * 主要是权限管理时联合用户表和权限表查询的结果集
  * @author NingKui
- * @date 2018/3/8 16:00
+ * @date 2018/3/13 11:31
  **/
-public class UserModel implements Serializable {
-	
+public class UserRoleDO implements Serializable{
     private Long userId;
 
     private Integer workNumber;
@@ -25,6 +29,8 @@ public class UserModel implements Serializable {
     private Long gmtModify;
 
     private Short status;
+
+    private List<RoleModel> roles;
 
     public Long getUserId() {
         return userId;
@@ -47,7 +53,7 @@ public class UserModel implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+        this.username = username;
     }
 
     public String getPassword() {
@@ -55,7 +61,7 @@ public class UserModel implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
     public String getEmail() {
@@ -63,7 +69,7 @@ public class UserModel implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+        this.email = email;
     }
 
     public String getPhone() {
@@ -71,7 +77,7 @@ public class UserModel implements Serializable {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = phone;
     }
 
     public Long getGmtCreate() {
@@ -98,18 +104,11 @@ public class UserModel implements Serializable {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "UserModel{" +
-                "userId=" + userId +
-                ", workNumber=" + workNumber +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", gmtCreate=" + gmtCreate +
-                ", gmtModify=" + gmtModify +
-                ", status=" + status +
-                '}';
+    public List<RoleModel> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleModel> roles) {
+        this.roles = roles;
     }
 }

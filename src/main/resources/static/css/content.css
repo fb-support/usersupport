@@ -116,12 +116,15 @@
 	frameborder: 0;
 }
 
+#log-record {
+	display: none;
+}
+
 #userManager-add-user-page {
 	display: none;
 	width: 1260px;
 	height: 600px;
 	margin-left: 0px;
-	
 }
 
 #userManager-opera-user-page {

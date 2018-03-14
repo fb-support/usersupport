@@ -7,10 +7,15 @@ import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.UserModel;
 import com.facebank.usersupport.service.IUserService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 系统设置Controller
@@ -23,8 +28,16 @@ public class SystemConfigController extends BaseController {
     @Autowired
     IUserService userService;
 
+    /**
+     * 根据用户ID获取信息
+     * @param
+     * @return
+     */
     @GetMapping("/sc/getByUserId")
-    public RestModel getByUserId(Long userId) {
+    public RestModel getByUserId() {
+
+        Long userId = userService.getActiveUserId();
+
         try{
             UserModel model = userService.getByUserId(userId);
             return this.success(JSONObject.parseObject(JSON.toJSONString(model)));
@@ -42,8 +55,11 @@ public class SystemConfigController extends BaseController {
      */
     @PostMapping("/sc/updateBaseInfoMationById")
     public RestModel updateBaseInfoMationById(UserModel model) {
-        System.out.println(model.toString());
+
+        model.setUserId(userService.getActiveUserId());
+
         try {
+            model.setGmtModify(System.currentTimeMillis());
             int status = userService.updateBaseInfoMationById(model);
             if (status > 0) {
                 return this.success(MessageKeyEnum.SUCCESS);
@@ -56,10 +72,18 @@ public class SystemConfigController extends BaseController {
         }
     }
 
+    /**
+     * 根据用户ID修改密码
+     * @param model
+     * @return
+     */
     @PostMapping("/sc/updatePasswordById")
     public RestModel updatePasswordById(UserModel model) {
-        System.out.println(model.toString());
+
+        model.setUserId(userService.getActiveUserId());
+
         try {
+            model.setGmtModify(System.currentTimeMillis());
             int status = userService.updatePasswordById(model);
             if (status > 0) {
                 return this.success(MessageKeyEnum.SUCCESS);
@@ -71,5 +95,4 @@ public class SystemConfigController extends BaseController {
             return this.excpRestModel(MessageKeyEnum.ERROR);
         }
     }
-
 }
