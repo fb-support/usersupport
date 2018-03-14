@@ -1,5 +1,6 @@
 package com.facebank.usersupport.service.impl;
 
+import com.facebank.usersupport.dto.UserRoleDO;
 import com.facebank.usersupport.dto.reqDto.UserForm;
 import com.facebank.usersupport.mapper.usersupport.usersupport.UserMapper;
 import com.facebank.usersupport.model.RestModel;
@@ -10,6 +11,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -80,6 +83,17 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public void deleteByUserIds(Integer[] ids) {
         userMapper.batchDeleteUsers(ids);
+    }
+
+    @Override
+    public Long getActiveUserId() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        UserRoleDO userRoleDO = new UserRoleDO();
+        userRoleDO = userMapper.selectBySelectiveForPermission(userDetails.getUsername());
+        return userRoleDO.getUserId();
     }
 
 

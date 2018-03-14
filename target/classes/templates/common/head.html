@@ -1,0 +1,17 @@
+<html th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+	<link rel="stylesheet" type="text/css" href="css/head.css"/>
+	<div id="head" th:fragment="head" xmlns:th="http://www.thymeleaf.org">
+		<div class="t-logo">
+			<span>>笑&nbsp;脸&nbsp;金&nbsp;融&nbsp;客&nbsp;服&nbsp;管&nbsp;理&nbsp;系&nbsp;统</span>
+		</div>
+		<div class="t-login-info">
+			<span>欢迎&nbsp;&nbsp;&nbsp;</span>
+			<span id="loginName">管理员</span>
+			<input type="hidden" id="user_storeId" value="${user.storeId }"/>
+		</div>
+		<div class="t-login-out">
+			<a href="../login.html">安全退出</a>
+		</div>
+	</div>
+<!--</body>-->
+</html>

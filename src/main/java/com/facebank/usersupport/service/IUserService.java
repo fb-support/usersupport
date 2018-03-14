@@ -64,5 +64,11 @@ public interface IUserService {
      */
     void deleteByUserIds(Integer[] ids);
 
+    /**
+     * 获取当前用户id
+     * @return
+     */
+    Long getActiveUserId();
+
 
 }

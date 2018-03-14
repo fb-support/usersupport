@@ -1,0 +1,65 @@
+<html th:fragment="contenter"  xmlns:th="http://www.thymeleaf.org">
+
+	<script type="text/javascript" src="js/content.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/content.css"/>
+
+	<!-- 中部内容区 -->
+	<div id="center" th:fragment="content" xmlns:th="http://www.thymeleaf.org">
+		<!--上方关于点击缩略的卡片-->
+		<div class="manager-block-list">
+			<ul id="ul-block_for_page">
+			</ul>
+		</div>
+		
+		<!-- 主页显示的内容 -->
+		<div id="always-change-area">
+			<div class="shortcuts-service center_show_area">
+				<ul>
+					<li class="li-item">
+						<a href="javascript:runUserBaseInfo()">
+							<span class="glyphicon glyphicon-list mainPage_init_option"></span>
+							<br>
+							<strong>基&nbsp;本&nbsp;信&nbsp;息</strong>
+						</a>
+					</li>
+					<li class="li-order">
+						<a href="javascript:runA()">
+							<span class="glyphicon glyphicon-list-alt mainPage_init_option"></span>
+							<br>
+							<strong>业&nbsp;务&nbsp;查&nbsp;询</strong>
+						</a>
+					</li>
+					<li class="li-notice">
+						<a href="#">
+							<span class="glyphicon glyphicon-volume-up mainPage_init_option"></span>
+							<br>
+							<strong>权&nbsp;限&nbsp;管&nbsp;理</strong>
+						</a>
+					</li>
+					<li class="li-root">
+						<a href="javascript:runOperaUser()">
+							<span class="glyphicon glyphicon-user mainPage_init_option"></span>
+							<br>
+							<strong>用&nbsp;户&nbsp;管&nbsp;理</strong>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<!--系统设置--基本信息 -->
+			<iframe class="center_show_area" id="system-base-info-page" src="/sc/base_infomation" frameborder="0"></iframe>
+			<!--系统设置--修改密码 -->
+			<iframe class="center_show_area" id="system-change-password-page"  src="/sc/reset_password" frameborder="0"></iframe>
+			<!--业务查询--a -->
+			<iframe class="center_show_area" id="service-a-page"  src="/v1.0/service-a" frameborder="0"></iframe>
+			<!--业务查询--b -->
+			<iframe class="center_show_area" id="service-b-page" src="/v1.0/service-b" frameborder="0"></iframe>
+			<!--权限管理 -->
+			<iframe class="center_show_area" id="permission-page" src="/v1.0/permission" frameborder="0"></iframe>
+			<!--用户管理--增加用户 -->
+			<iframe class="center_show_area" id="userManager-add-user-page" src="/um/addUser" frameborder="0"></iframe>
+			<!--用户管理--管理用户 -->
+			<iframe class="center_show_area" id="userManager-opera-user-page" src="/um/managerment" frameborder="0"></iframe>
+
+		</div>		
+	</div>
+</html>

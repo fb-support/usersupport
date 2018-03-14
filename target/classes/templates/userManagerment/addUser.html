@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="common/head_info::head_infor"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/addUser.css}"/>
+    <script type="text/javascript" th:src="@{../js/addUser.js}"></script>
+    <script type="text/javascript" th:src="@{../js/register.js}"></script>
+</head>
+<body>
+<div class="container center">
+    <h2>增加用户</h2>
+    <form id="form_insertUser" action="/register" method="post">
+        <table class="table table-hover">
+            <tr>
+                <td class="table_left"> 工号：</td>
+                <td><input class="syncVerity" type="text" name="workNumber" id="workNumber"/></td>
+                <td class="error">
+                    <span class="error_info"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="table_left"> 用户名：</td>
+                <td><input class="syncVerity" type="text" name="username" id="username"/></td>
+                <td class="error">
+                    <span class="error_info">4到16位（字母，数字，下划线，减号）</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="table_left"> 手机号码：</td>
+                <td><input class="syncVerity" type="text" name="phone" id="phone"/></td>
+                <td class="error">
+                    <span class="error_info"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="table_left"> 邮箱：</td>
+                <td><input class="syncVerity" type="text" name="email" id="email"/></td>
+                <td class="error">
+                    <span class="error_info"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="table_left"> 密码：</td>
+                <td><input type="password" name="password" id="password"/></td>
+                <td class="error">
+                    <span class="error_info"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="table_left"> 确认密码：</td>
+                <td><input type="password" id="password_verity"/></td>
+                <td class="error">
+                    <span class="error_info"></span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input id="btn_submit" type="button" value="提交"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
