@@ -28,7 +28,6 @@ public class CustomUserService implements UserDetailsService {
 
         // 根据username/phone/email查询数据库,返回包装对象
         UserRoleDO queryResultOfUserAndRole = userMapper.selectBySelectiveForPermission(username);
-
         if(queryResultOfUserAndRole == null){
             throw new UsernameNotFoundException("用户名不存在");
         }
