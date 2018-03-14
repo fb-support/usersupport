@@ -10,3 +10,7 @@
     text-align: left;
     width: 400px;
 }
+
+.error_info {
+    color: red;
+}

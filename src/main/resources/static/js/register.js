@@ -70,13 +70,13 @@ $(function() {
 // 失去焦点验证用户名格式
     $("#username").blur(function () {
         //用户名正则，4到16位（字母，数字，下划线，减号）
-        var usernameReg = /^[a-zA-Z0-9_-]{4,16}$/;
+        var usernameReg = /^(?![0-9]+$)(?![a-zA-Z]+$)(?!@+$)([\u4e00-\u9fa50-9A-Za-z]){6,16}$/;
         var inputUsername = $('#username').val();
         if (!usernameReg.test(inputUsername)) {
             $(this).parent().next().children().text("用户名格式错误，请输入正确用户名！");
             usernameFlag = false;
         } else {
-            $(this).parent().next().children().text("4到16位（字母，数字，下划线，减号）");
+            $(this).parent().next().children().text("4到16位（字母，数字，下划线，减号）").attr("style","color:green");
             usernameFlag = true;
         }
     });
