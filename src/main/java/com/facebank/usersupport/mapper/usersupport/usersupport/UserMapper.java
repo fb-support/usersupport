@@ -1,5 +1,6 @@
 package com.facebank.usersupport.mapper.usersupport.usersupport;
 
+import com.facebank.usersupport.dto.UserRoleDO;
 import com.facebank.usersupport.mapper.usersupport.base.BaseWriteMapper;
 import com.facebank.usersupport.model.UserModel;
 import org.apache.catalina.User;
