@@ -4,17 +4,20 @@ import com.alibaba.fastjson.JSON;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.UserForm;
-import com.facebank.usersupport.model.PageRestModel;
-import com.facebank.usersupport.model.RestModel;
-import com.facebank.usersupport.model.UserCheckModel;
-import com.facebank.usersupport.model.UserModel;
+import com.facebank.usersupport.mapper.usersupport.usersupport.LoginUserMapper;
+import com.facebank.usersupport.model.*;
+import com.facebank.usersupport.service.ILoginUserService;
 import com.facebank.usersupport.service.IUserService;
 import com.github.pagehelper.PageInfo;
 import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -29,6 +32,8 @@ public class UserController extends BaseController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private ILoginUserService loginUserService;
 
     /**
      * 注册页面
@@ -167,5 +172,29 @@ public class UserController extends BaseController {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
         }
+    }
+
+
+    /**
+     * 安全退出方法
+     */
+    @PostMapping("/beforeLogoutForLog")
+    public RestModel logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            //修改登录流水表，主要是添加登出时间
+            LoginUserModel model = new LoginUserModel();
+            model.setUsername(auth.getName());
+            model.setLogoutTime(System.currentTimeMillis());
+            loginUserService.updateLoginOutTime(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+
+        return this.success(MessageKeyEnum.SUCCESS);
     }
 }

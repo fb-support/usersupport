@@ -40,7 +40,7 @@ public class LoginUserModel implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+        this.username = username;
     }
 
     public Integer getWorkNumber() {
