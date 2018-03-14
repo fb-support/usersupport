@@ -1,6 +1,7 @@
 package com.facebank.usersupport.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.UserForm;
@@ -36,7 +37,7 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/register")
-    private RestModel register (UserForm userForm) {
+    public RestModel register (UserForm userForm) {
         try {
             RestModel model = userService.insertUser(userForm);
             if (model.getCode().equals(RestModel.CODE_SUCCESS)) {
@@ -54,8 +55,8 @@ public class UserController extends BaseController {
      * objType 验证数据类型。1为工号，2为用户名。3为手机号码。4为邮箱
      * @return
      */
-    @GetMapping("/sync/verity")
-    private RestModel register(String verityObj, String objType) {
+    @PostMapping("/sync/verity")
+    public RestModel register(String verityObj, String objType) {
         try {
             UserModel userModel = new UserModel();
             // 根据验证数据类型设置对应的值
@@ -166,6 +167,44 @@ public class UserController extends BaseController {
         }catch (Exception e){
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
+    }
+
+    /**
+     * 根据用户ID获取信息
+     * @param
+     * @return
+     */
+    @GetMapping("/um/getByUserId")
+    public RestModel getByUserId(@RequestParam Long userId) {
+        try{
+            UserModel model = userService.getByUserId(userId);
+            return this.success(JSONObject.parseObject(JSON.toJSONString(model)));
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
+        }
+    }
+
+    /**
+     * 根据id更新用户信息
+     *
+     * @param model
+     * @return
+     */
+    @PostMapping("/um/updateBaseInfoMationById")
+    public RestModel updateBaseInfoMationById(UserModel model) {
+        try {
+            model.setGmtModify(System.currentTimeMillis());
+            int status = userService.updateBaseInfoMationById(model);
+            if (status > 0) {
+                return this.success(MessageKeyEnum.SUCCESS);
+            } else {
+                return this.excpRestModel(MessageKeyEnum.ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
         }
     }
 }

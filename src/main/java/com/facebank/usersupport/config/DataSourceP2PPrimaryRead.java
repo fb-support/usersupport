@@ -1,9 +1,9 @@
 package com.facebank.usersupport.config;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.tomcat.jdbc.pool.DataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
@@ -32,8 +32,8 @@ public class DataSourceP2PPrimaryRead {
     }
 
     @Bean(name= "dsP2PRead")
-    public DataSource dsUserPrimaryRead(@Qualifier("dataSourcePropertiesP2PRead") DataSourceProperties properties) {
-        DataSource dataSource = (DataSource) properties.initializeDataSourceBuilder().type(DataSource.class).build();
+    public DruidDataSource dsUserPrimaryRead(@Qualifier("dataSourcePropertiesP2PRead") DataSourceProperties properties) {
+        DruidDataSource dataSource = (DruidDataSource) properties.initializeDataSourceBuilder().type(DruidDataSource.class).build();
         DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(properties.determineUrl());
         String validationQuery = databaseDriver.getValidationQuery();
         if (validationQuery != null) {
@@ -45,7 +45,7 @@ public class DataSourceP2PPrimaryRead {
     }
 
     @Bean(name = "sqlSessionFactoryP2PRead")
-    public SqlSessionFactory sqlSessionFactoryUserPrimaryRead(@Qualifier("dsP2PRead") DataSource dataSource) throws Exception {
+    public SqlSessionFactory sqlSessionFactoryUserPrimaryRead(@Qualifier("dsP2PRead") DruidDataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:com/facebank/usersupport/mapper/usersupport/p2p/*.xml"));

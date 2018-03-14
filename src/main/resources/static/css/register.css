@@ -85,6 +85,10 @@ body {
     color: white;
 }
 
+.error {
+    width: 300px;
+}
+
 .error_info {
     color: red;
 }

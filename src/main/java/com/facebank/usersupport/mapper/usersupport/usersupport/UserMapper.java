@@ -63,6 +63,7 @@ public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
      */
     void batchDeleteUsers(Integer[] ids);
 
+
     UserModel selectInfoMation(String objValue);
 	
     /**

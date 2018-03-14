@@ -8,18 +8,18 @@
 function syncQuery(way, url, verityObj, objType ) {
     var status = true;
     $.ajax({
-        type : way, //请求方式
-        url : url, //请求路径
-        cache : false,
-        data : "verityObj="+verityObj+"&objType="+objType,  //传参 页数
-        dataType : 'json', //返回值类型
-        success : function(msg) {
-            status = false;
-        },
-        error : function() {
-            alert("发生了一个未知错误。请刷新重试。");
-        }
-    });
+		type : way, //请求方式
+		url : url, //请求路径
+		cache : false,
+		data : "verityObj="+verityObj+"&objType="+objType,  //传参 页数
+		dataType : 'json', //返回值类型
+		success : function(msg) {
+		    status = false;
+		},
+		error : function() {
+			alert("发生了一个未知错误。请刷新重试。");
+		}
+	});
     return status;
 }
 
