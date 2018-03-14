@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 用户表Controller.'
+ * 用户表Controller
  * 规范：继承base,
  * @author NingKui
  * @date 2018/3/9 10:40

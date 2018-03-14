@@ -14,7 +14,7 @@ import java.util.List;
  * @author NingKui
  * @date 2018/3/8 16:00
  **/
-public class UserModel implements Serializable, UserDetails {
+public class UserModel implements Serializable {
     private Long userId;
 
     private Integer workNumber;
@@ -32,46 +32,6 @@ public class UserModel implements Serializable, UserDetails {
     private Long gmtModify;
 
     private Short status;
-
-    private List<RoleModel> roles;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> auths = new ArrayList<>();
-        List<RoleModel> roles = this.getRoles();
-        for (RoleModel role : roles) {
-            auths.add(new SimpleGrantedAuthority(role.getRoleName()));
-        }
-        return auths;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    public List<RoleModel> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<RoleModel> roles) {
-        this.roles = roles;
-    }
 
     public Long getUserId() {
         return userId;
@@ -143,5 +103,20 @@ public class UserModel implements Serializable, UserDetails {
 
     public void setStatus(Short status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "userId=" + userId +
+                ", workNumber=" + workNumber +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModify=" + gmtModify +
+                ", status=" + status +
+                '}';
     }
 }

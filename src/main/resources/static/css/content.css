@@ -109,6 +109,10 @@
 	frameborder: 0;
 }
 
+#log-record {
+	display: none;
+}
+
 #userManager-add-user-page {
 	display: none;
 	width: 1260px;
