@@ -35,6 +35,15 @@
             var userId = $("#userId").val();
             var orderId = $("#orderId").val();
 
+            // 设置日期间隔不超过30天
+            if((startTime != null && startTime != "") && (endTime != null && endTime != "")){
+                var timeInterval = endTime - startTime;
+                if(timeInterval > 2592000000){
+                    layer.msg("时间间隔不能超过30天");
+                    return;
+                }
+            }
+
             // 当四个条件都为空时flag==true
             var flag = (userId == null || userId == "") && (orderId == null || orderId == "") && (startTime == null || startTime == "") && (endTime == null || endTime == "");
             if(flag){
@@ -43,7 +52,7 @@
             }
 
             $.ajax({
-                async : true,
+                async : false,
                 url : "/service/repayment",
                 type : "post",
                 data : {userId:userId,orderId:orderId,startTime:startTime,endTime:endTime,page:page,pageSize:pageSize},
