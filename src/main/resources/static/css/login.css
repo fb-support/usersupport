@@ -1,25 +1,19 @@
 body {
 	padding: 0px;
-	background-color: #36374c;
-	margin: 0px;
-	overflow: hidden;
+	background-color: #C7F7FB;
 }
 
 #border {
-
+	padding: 80px 300px;
 }
 
 #border #system-info {
-	padding: 40px 80px 20px 80px;
-	width: 100%;
-	height: 60px;
-	background-color: #36374c;
+	padding: 20px 40px;
 }
 
 #border #system-info span {
-	font-size: 30px;
+	font-size: 22px;
 	color: #000000;
-	color: white;
 }
 
 #border .t-form {
@@ -67,7 +61,7 @@ body {
 
 #border .t-form table tr td .login-btn {
 	padding: 10px 35px;
-	background-color: white;
+	background-color: #E7E3E3;
 	border: none;
 	margin-right: 10px;
 	font-size: 16px;
@@ -79,14 +73,9 @@ body {
 }
 
 #border .t-form table tr td #btn-submit:hover {
-	background-color: red;
+	background-color: #1F243B;
 }
 
 #border .t-form table tr td #btn-reset {
 
-}
-
-.error td p {
-	color: red;
-	text-align: center;
 }

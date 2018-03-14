@@ -1,6 +1,5 @@
 package com.facebank.usersupport.mapper.usersupport.usersupport;
 
-import com.facebank.usersupport.dto.UserRoleDO;
 import com.facebank.usersupport.mapper.usersupport.base.BaseWriteMapper;
 import com.facebank.usersupport.model.UserModel;
 import org.apache.catalina.User;
@@ -64,11 +63,11 @@ public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
     void batchDeleteUsers(Integer[] ids);
 
     UserModel selectInfoMation(String objValue);
+	
     /**
      * 多表联合查询（用户表、角色表和用户角色中间表）
      * @param loginName 用户名、手机号、email
      * @return
      */
     UserRoleDO selectBySelectiveForPermission(String loginName);
-
 }

@@ -1,20 +1,13 @@
 package com.facebank.usersupport.model;
 
-import org.apache.ibatis.mapping.FetchType;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author NingKui
  * @date 2018/3/8 16:00
  **/
 public class UserModel implements Serializable {
+	
     private Long userId;
 
     private Integer workNumber;

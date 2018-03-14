@@ -1,3 +1,10 @@
+// /**
+//  * 定义全局变量
+//  */
+//  var usernameStatus = true;
+//  var phoneStatus = true;
+//  var emailStatus = true;
+
 /**
  * 定义全局变量
  */
@@ -29,6 +36,48 @@ $(function () {
 
 });
 
+// /**
+//  * onchange事件，检查修改的用户名是否存在
+//  */
+// function check_Username() {
+//     var username = $("#username").val();
+//     syncQuery("username", username, "objType", 2);
+//     if ( status == 0) {
+//         layer.msg("用户名已经存在");
+//         usernameStatus = false ;
+//     }
+//     else {
+//         usernameStatus = true ;
+//     }
+// }
+//
+// /**
+//  * onchange事件，检查修改的手机号码是否存在
+//  */
+// function check_phone() {
+//     var phone = $("#phone").val();
+//     syncQuery("phone" ,phone,"objType",3)
+//         if(status == 0){
+//             layer.msg("手机号已经存在");
+//             phoneStatus = false;
+//         }else{
+//             phoneStatus = true;
+//         }
+// }
+//
+// /**
+//  * onchange事件，检查修改的邮箱是否存在
+//  */
+// function check_email() {
+//     var email = $("#email").val();
+//     syncQuery("email" ,email,"objType",4);
+//     if(status == 0){
+//         layer.msg("邮箱已经存在");
+//         phoneStatus = false;
+//     }else{
+//         phoneStatus = true;
+//     }
+// }
 /**
  * onchange事件，检查修改的用户名是否存在
  */
@@ -103,90 +152,112 @@ function  show_Infomation() {
         }
     });
 }
+
 /**
  * 表单提交数据更新用户信息
  */
 function  update_Infomation() {
             // validateForm();
-            var username = $("#username").val();
-            var phone = $("#phone").val();
-            var work_number = $("#work_number").val();
-            var email = $("#email").val();
+            var param = {};
+            param.username = $("#username").val();
+            param.phone = $("#phone").val();
+            param.email = $("#email").val();
+            param.userId = 1;
             var emailReg = /^[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
             var phoneReg = /^1[34578]\d{9}$/;
-            if (!phoneReg.test(phone)) {
+            if (!phoneReg.test(param.phone)) {
                 layer.msg("手机号码格式错误");
                 return;
             }
-            if (!emailReg.test(email)) {
+            if (!emailReg.test(param.email)) {
                 layer.msg("邮箱号码格式错误");
                 return;
             }
-            if(username == ""){
+            if(param.username == ""){
                 layer.msg("用户名不能为空");
                 return;
             }
-            if(emailStatus && phoneStatus && usernameStatus){
-            $.ajax({
-                url:"/sc/updateBaseInfoMationById",
-                async:false,
-                cache: false,  //禁用缓存
-                type:"POST",
-                data:{
-                    userId:1,
-                    workNumber:work_number,
-                    username:username,
-                    phone:phone,
-                    email:email
-                },
-                success:function (data) {
-                    if(data.code == 1) {
-                        layer.msg("修改成功");
-                        $("#btn_submit").removeClass("btn btn-large");
-                        $("#btn_submit").addClass("hide");
-                        $("#btn_modify").show();
-                        $("#username").attr("readOnly",true);
-                        $("#phone").attr("readOnly",true);
-                        $("#email").attr("readOnly",true);
-                    } else {
-                        layer.msg("修改失败");
+        $.ajax({
+            type: "GET",
+            url: '/um/check',
+            cache: false,  //禁用缓存
+            data: param,
+            dataType: 'json',
+            success: function (result) {
+                var toast = "";
+                if (result.code == 1) {
+                    if(result.data.phoneRepeat==true){
+                        toast += "手机号码重复！";}
+                    if(result.data.emailRepeat==true){
+                        toast += "邮箱号码重复！";}
+                    if(result.data.usernameRepeat==true){
+                        toast += "用户名重复！";
                     }
+
+                    if (toast.length>1){
+                        layer.msg(toast);
+                        return;
+                    }
+                    else{
+                            $.ajax({
+                                url:"/sc/updateBaseInfoMationById",
+                                async:false,
+                                cache: false,  //禁用缓存
+                                type:"POST",
+                                data:param,
+                                success:function (data) {
+                                    if(data.code == 1) {
+                                        layer.msg("修改成功");
+                                        $("#btn_submit").removeClass("btn btn-large");
+                                        $("#btn_submit").addClass("hide");
+                                        $("#btn_modify").show();
+                                        $("#username").attr("readOnly",true);
+                                        $("#phone").attr("readOnly",true);
+                                        $("#email").attr("readOnly",true);
+                                    } else {
+                                        layer.msg("修改失败");
+                                    }
+                                }
+                            });
+                    }
+                } else {
+                    layer.msg(result.error);
                 }
-            });
-      }
-}
-
-/**
- * 查询用户信息是否存在
- * 返回一个status进行判断
- * @type {number}
- */
-var status = 0;
-function syncQuery(verityObj, objValue,objType,objTypeValue ) {
-    // console.log(verityObj);
-    // console.log(objValue);
-
-    $.ajax({
-        type : "GET", //请求方式
-        url :  "/sync/verity", //请求路径
-        async:false,
-        cache : false,
-        data : {
-            verityObj:objValue,
-            objType : objTypeValue
-        },   //传参 页数
-        dataType : "JSON", //返回值类型
-        success : function(data) {
-            // console.log(data);
-            if(data.code == 0){
-                status = 0;
-            } else {
-               status = 1
             }
-        }
-    });
-    return status;
+        });
 }
+
+// /**
+//  * 查询用户信息是否存在
+//  * 返回一个status进行判断
+//  * @type {number}
+//  */
+// var status = 0;
+// function syncQuery(verityObj, objValue,objType,objTypeValue ) {
+//     // console.log(verityObj);
+//     // console.log(objValue);
+//
+//     $.ajax({
+//         type : "GET", //请求方式
+//         url :  "/sync/verity", //请求路径
+//         async:false,
+//         cache : false,
+//         data : {
+//             verityObj:objValue,
+//             objType : objTypeValue
+//         },   //传参 页数
+//         dataType : "JSON", //返回值类型
+//         success : function(data) {
+//             // console.log(data);
+//             if(data.code == 0){
+//                 status = 0;
+//             } else {
+//                status = 1
+//             }
+//         }
+//     });
+//     return status;
+// }
 
 // /**
 //  * 异步查询唯一+判空

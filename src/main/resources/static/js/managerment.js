@@ -8,7 +8,6 @@ var table;
 
 //userId
 var userId;
-
 $(document).ready(function () {
     table = $('#datatable').DataTable({
         "searching": false,
@@ -163,7 +162,6 @@ function updateUser() {
     param.phone = $('#m_phone').val();
     param.email = $('#m_email').val();
 
-
     var emailReg = /^[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
     var phoneReg = /^1[34578]\d{9}$/;
     if (!phoneReg.test(param.phone)) {
@@ -187,11 +185,11 @@ function updateUser() {
                 if (result.code == 1) {
                     if(result.data.phoneRepeat==true){
                         toast += "手机号码重复！";}
-                    else if(result.data.emailRepeat==true){
+                    if(result.data.emailRepeat==true){
                         toast += "邮箱号码重复！";}
-                    else if(result.data.workNumberRepeat==true){
-                        toast += "工号重复！";
-                    }else if(result.data.usernameRepeat==true){
+                    if(result.data.workNumberRepeat==true){
+                        toast += "工号重复！";}
+                    if(result.data.usernameRepeat==true){
                         toast += "用户名重复！";
                     }
 

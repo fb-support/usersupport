@@ -11,7 +11,7 @@ function runUserBaseInfo() {
     if ( $("li[value='system-base-info-page']").length > 0 ) {
         switchPage( "system-base-info-page" );
     } else {
-        addSmallCardForThisPage("system-base-info-page", "基本信息");
+        addSmallCardForThisPage("system-base-info-page", "用户管理");
     }
 }
 
@@ -27,24 +27,16 @@ function runChangePassword() {
     if ( $("li[value='system-change-password-page']").length > 0 ) {
         switchPage( "system-change-password-page" );
     } else {
-        addSmallCardForThisPage("system-change-password-page", "修改密码");
+        addSmallCardForThisPage("system-change-password-page", "用户管理");
     }
 }
 
 /**
- * 前往业务查询--还款查询页面
+ * 前往业务查询--a页面
  */
-function runRepaymentSearch() {
+function runA() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
-    //显示还款查询页面
-    $("#service-repayment-page").show();
-    //显示tab
-    if ( $("li[value='service-repayment-page']").length > 0 ) {
-        switchPage( "service-repayment-page" );
-    } else {
-        addSmallCardForThisPage("service-repayment-page", "还款查询");
-    }
 }
 
 /**
@@ -54,22 +46,7 @@ function runB() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
 }
-/**
- * 前往日志-资金记录页面
- */
-function moneyRecord() {
-    //隐藏主页中部内容区的默认内容
-    $(".center_show_area").hide();
-    //显示基本信息页面。
-    $("#log-record").show();
-    //显示tab
-    if ( $("li[value='log-record']").length > 0 ) {
-        switchPage( "log-record" );
-    } else {
-        addSmallCardForThisPage("log-record", "日志查询");
-    }
-}
-moneyRecord()
+
 /**
  * 前往用户管理--添加用户界面
  */
@@ -82,7 +59,7 @@ function run_addUser() {
     if ( $("li[value='userManager-add-user-page']").length > 0 ) {
         switchPage( "userManager-add-user-page" );
     } else {
-        addSmallCardForThisPage("userManager-add-user-page", "添加新用户");
+        addSmallCardForThisPage("userManager-add-user-page", "用户管理");
     }
 }
 

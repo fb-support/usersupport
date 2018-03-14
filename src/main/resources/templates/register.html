@@ -6,13 +6,14 @@
 </head>
 <script type="text/javascript" src="js/register.js"></script>
 <link rel="stylesheet" type="text/css" href="css/register.css">
+<script type="text/javascript" src="js/addUser.js"></script>
 <body>
 <!-- 基本信息页面 -->
 <div id="head">
     <span>笑脸金融&nbsp;&nbsp;&nbsp;客服管理系统V1.0.0</span>
 </div>
 <div id="main_div">
-    <form id="form_insertUser" action="/register" method="post">
+    <form id="form_register" action="/register" method="post">
         <table id="register_table" class="table table-hover">
             <tr class="head_table">
                 <td colspan="2">
@@ -38,7 +39,7 @@
                     <input class="syncVerity" type="text" name="username" id="username"/>
                 </td>
                 <td class="error">
-                    <span class="error_info">4到16位（非纯数字/非纯字母/不能含有@字符）</span>
+                    <span class="error_info"></span>
                 </td>
             </tr>
             <tr>
@@ -86,7 +87,7 @@
                 </td>
             </tr>
             <tr class="foot_table">
-                <td colspan="3">
+                <td colspan="2">
                     <input id="btn_submit" type="button" value="注册" />
                 </td>
             </tr>

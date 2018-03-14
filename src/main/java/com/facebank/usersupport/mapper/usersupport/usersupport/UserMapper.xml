@@ -63,7 +63,6 @@
         username = #{username,jdbcType=VARCHAR},
         phone = #{phone,jdbcType=VARCHAR},
         email = #{email,jdbcType=VARCHAR},
-        work_number = #{workNumber,jdbcType=INTEGER},
         gmt_modify = #{gmtModify,jdbcType=BIGINT}
           WHERE
         user_id = #{userId,jdbcType=BIGINT}
@@ -92,8 +91,7 @@
             #{userItem}
         </foreach>
     </delete>
-
-
+	
     <resultMap id="user_role_map" type="com.facebank.usersupport.dto.UserRoleDO">
         <id column="user_id" jdbcType="BIGINT" property="userId" />
         <result column="work_number" jdbcType="INTEGER" property="workNumber" />
