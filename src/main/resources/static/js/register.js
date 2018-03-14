@@ -32,21 +32,17 @@ function syncQuery(way, url, verityObj, objType ) {
  */
 function emptyAndUniqueVerity(obj, objName, objType, chinesName) {
 
-    //根据falg判断是否格式错误。
-    if ($("#flag_"+objName).val() == false) {
-        return false;
-    }
     // 1-1.判空
     if (obj != null &&
         obj.trim() != "") {
         // 1-2.异步查询是否唯一
         var status = syncQuery("post", "/sync/verity", obj, objType);
         if(!status) {
-            $("#" + objName).parent().next().children().text(chinesName + "已被注册！");
+            $("#" + objName).parent().next().children().text(chinesName + "已被注册！").attr("style","color:red");
         }
         return status;
     } else {
-        $("#" + objName).parent().next().children().text(chinesName + "不能为空！");
+        $("#" + objName).parent().next().children().text(chinesName + "不能为空！").attr("style","color:red");
         return false;
     }
 }
@@ -57,7 +53,9 @@ $(function() {
     // 失去焦点异步查询是否唯一或者是否为空
     $(".syncVerity").blur(function () {
         if ($(this).val() == null | $(this).val() == "") {
-            $(this).parent().next().children().text("此处不能为空！");
+            $(this).parent().next().children().text("此处不能为空！").attr("style","color:red");
+        }else {
+            $(this).parent().next().children().text("格式正确").attr("style","color:green");
         }
     });
 
@@ -69,14 +67,14 @@ $(function() {
 
 // 失去焦点验证用户名格式
     $("#username").blur(function () {
-        //用户名正则，4到16位（字母，数字，下划线，减号）
+        //用户名正则，6到16位（非纯字母，非数字，不能含有@）
         var usernameReg = /^(?![0-9]+$)(?![a-zA-Z]+$)(?!@+$)([\u4e00-\u9fa50-9A-Za-z]){6,16}$/;
         var inputUsername = $('#username').val();
         if (!usernameReg.test(inputUsername)) {
-            $(this).parent().next().children().text("用户名格式错误，请输入正确用户名！");
+            $(this).parent().next().children().text("6到16位（非纯字母，非数字，不能含有@）！").attr("style","color:red");
             usernameFlag = false;
         } else {
-            $(this).parent().next().children().text("4到16位（字母，数字，下划线，减号）").attr("style","color:green");
+            $(this).parent().next().children().text("格式正确").attr("style","color:green");
             usernameFlag = true;
         }
     });
@@ -86,10 +84,10 @@ $(function() {
         var emailReg = /^[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
         var inputEmail = $('#email').val();
         if (!emailReg.test(inputEmail)) {
-            $(this).parent().next().children().text("邮箱格式错误，请输入正确邮箱！");
+            $(this).parent().next().children().text("邮箱格式错误，请输入正确邮箱！").attr("style","color:red");
             emailFlag = false;
         } else {
-            $(this).parent().next().children().text("");
+            $(this).parent().next().children().text("格式正确").attr("style","color:green");
             emailFlag = true;
         }
     });
@@ -99,10 +97,10 @@ $(function() {
         var phoneReg = /^1[34578]\d{9}$/;
         var inputPhone = $('#phone').val();
         if (!phoneReg.test(inputPhone)) {
-            $(this).parent().next().children().text("手机号格式错误，请输入正确手机号！");
+            $(this).parent().next().children().text("手机号格式错误，请输入正确手机号！").attr("style","color:red");
             phoneFlag = false;
         } else {
-            $(this).parent().next().children().text("");
+            $(this).parent().next().children().text("格式正确").attr("style","color:green");
             phoneFlag = true;
         }
     });
@@ -112,10 +110,10 @@ $(function() {
         var inputPassword = $('#password').val();
         var inputverity = $('#password_verity').val();
         if (inputPassword!=inputverity) {
-            $(this).parent().next().children().text("两次输入的密码不一致！");
+            $(this).parent().next().children().text("两次输入的密码不一致！").attr("style","color:red");
             passwordFlag = false;
         } else {
-            $(this).parent().next().children().text("");
+            $(this).parent().next().children().text("").attr("style","color:green");
             passwordFlag = true;
         }
     });
@@ -123,74 +121,12 @@ $(function() {
     //给点击表单提交之前进行是否注册的异步查询操作
     $("#btn_submit").click(function() {
 
-        //声明状态变量，为true的话，提交表单。默认为true
-        var flag = true;
-        /*
-         * 获得表单上的数据
-         */
-        // 5.获得工号
-        var workNumber = $("#workNumber").val();
-        // 1-1.判空+异步查询唯一
-        var isOK_workNumber = emptyAndUniqueVerity(workNumber, "workNumber",1, "工号");
-        if (!isOK_workNumber) {
-            flag = false;
-            return;
-        }
-
-        // 1.获得用户名
-        var username = $("#username").val();
-        // 1-1.判空+异步查询唯一
-        var isOK_username = emptyAndUniqueVerity(username, "username", 2,  "用户名");
-        if (!isOK_username) {
-            flag = false;
-            return;
-        }
-
-        // 2.获得手机号码
-        var phonenumber = $("#phone").val();
-        // 1-1.判空+异步查询唯一
-        var isOK_phonenumber = emptyAndUniqueVerity(phonenumber, "phone", 3, "手机号");
-        if (!isOK_phonenumber) {
-            flag = false;
-            return;
-        }
-
-        // 3.获得邮箱
-        var email = $("#email").val();
-        var isOK_email = emptyAndUniqueVerity(email, "email", 4, "邮箱");
-        if (!isOK_email) {
-            flag = false;
-            return;
-        }
-
-        // 4.获得密码
-        var password = $("#password").val();
-        if (password == null |
-            password.trim() == "") {
-            flag = false;
-            return;
-        }
-
-        // 5.获得确认密码
-        var password_verity = $("#password_verity").val();
-        if (password_verity == null |
-            password_verity.trim() == "") {
-            flag = false;
-            return;
-        }
-
-        //判断两次输入密码是否一致
-        if (password != password_verity) {
-            flag = false;
-            return;
-        }
-
         /*
          * 判断是注册页面的还是用户管理添加用户页面的。
          */
         var currentUrl = window.location.pathname;
-
-        if(flag && usernameFlag && emailFlag && phoneFlag && passwordFlag) {
+        console.log(currentUrl);
+        if(usernameFlag && emailFlag && phoneFlag && passwordFlag) {
             $.ajax({
                 type : "POST", //请求方式
                 url : "/register", //请求路径
@@ -206,7 +142,7 @@ $(function() {
                             alert("添加成功！");
                         }
                     } else {
-                        if (url == "/register") {
+                        if (currentUrl == "/register") {
                             location.href = "/register";
                         } else {
                             alert("添加失败！");
