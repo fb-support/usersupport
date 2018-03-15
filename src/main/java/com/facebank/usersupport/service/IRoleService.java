@@ -27,6 +27,6 @@ public interface IRoleService {
     //角色已有菜单
     RestModel findMenuAlready(Long roleId);
 
-    //角色未有菜单
-    RestModel findMenuNotNave(Long roleId);
+    //更新角色菜单
+    RestModel updataMenu(Long[] roleId, Long id);
 }

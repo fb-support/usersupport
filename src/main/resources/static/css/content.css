@@ -56,6 +56,14 @@
 #log-journal{
 	display: none;
 }
+
+#role-manage {
+	display: none;
+}
+
+#menu-manage{
+	display: none;
+}
 #center .shortcuts-service ul {
 	padding-top: 40px;
 	height: 100px;
