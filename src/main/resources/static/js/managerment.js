@@ -6,8 +6,8 @@ $(".checkall").click(function () {
 //分页显示DataTable
 var table;
 
-//userId
 var userId;
+
 $(document).ready(function () {
     table = $('#datatable').DataTable({
         "searching": false,
@@ -132,7 +132,7 @@ function showModel(id) {
     userId = id;
     $.ajax({
         type: "GET",
-        url: '/sc/getByUserId?userId=' + id,
+        url: '/um/getByUserId?userId=' + id,
         cache: false,  //禁用缓存
         dataType: 'json',
         success: function (result) {
@@ -200,7 +200,7 @@ function updateUser() {
                     else{
                         $.ajax({
                             type: "POST",
-                            url: '/sc/updateBaseInfoMationById',
+                            url: '/um/updateBaseInfoMationById',
                             cache: false,  //禁用缓存
                             data: param,
                             dataType: 'json',
@@ -220,6 +220,4 @@ function updateUser() {
                 }
             }
         })
-
-
 }

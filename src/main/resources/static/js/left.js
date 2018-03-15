@@ -32,11 +32,13 @@ function runChangePassword() {
 }
 
 /**
- * 前往业务查询--a页面
+ * 前往业务查询--还款查询页面
  */
-function runA() {
+function runRepaymentSearch() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //显示还款查询页面
+    $("#service-repayment-page").show();
 }
 
 /**
@@ -46,7 +48,36 @@ function runB() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
 }
-
+/**
+ * 前往日志-资金记录页面
+ */
+function moneyRecord() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示基本信息页面。
+    $("#log-record").show();
+    if ( $("li[value='log-record']").length > 0 ) {
+        switchPage( "log-record" );
+    } else {
+        addSmallCardForThisPage("log-record", "资金记录");
+    }
+}
+/**
+ * 前往日志-资金流水页面
+ */
+function generalJournal() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示基本信息页面。
+    $("#log-journal").show();
+    //显示tab
+    if ( $("li[value='log-journal']").length > 0 ) {
+        switchPage( "log-journal" );
+    } else {
+        addSmallCardForThisPage("log-journal", "资金流水");
+    }
+}
+moneyRecord()
 /**
  * 前往用户管理--添加用户界面
  */

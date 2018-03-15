@@ -1,0 +1,518 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
+
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="userId">类型</label>
+            <input type="text" class="form-control" id="userId" name="userId" placeholder="类型">
+        </div>
+        <div class="form-group">
+            <label for="telephone">手机号</label>
+            <input type="text" class="form-control" id="telephone" name="mobile" placeholder="手机号">
+        </div>
+        <!--<div class="form-group">
+                             <label for="datetimeStart">还款日期</label>
+                             <input size="16" type="text" id="datetimeStart" readonly class="form_datetime">
+                         </div>-->
+        <div class="form-group">
+            <label class="labe_l">还款日期:</label>
+            <input type="text" class="" id="datetimeStart" name="startTime" readonly>
+            --
+            <input type="text" class="" id="datetimeEnd" name="endTime" readonly>
+
+        </div>
+        <button type="button" class="btn btn-default" onclick="search()">查询</button>
+    </form>
+
+    <script type="text/javascript">
+        // $(document).ready(function () {
+        //     var tbody = window.document.getElementById("tbody-result");
+        //     var data ="{\n" +
+        //         "\t\"code\": \"1\",\n" +
+        //         "\t\"message\": \"操作成功\",\n" +
+        //         "\t\"data\": [{\n" +
+        //         "\t\t\"id\": 22855,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603408462\",\n" +
+        //         "\t\t\"starttime\": 1520267763693,\n" +
+        //         "\t\t\"endtime\": 1520267763693,\n" +
+        //         "\t\t\"relationid\": \"154640\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 18.10,\n" +
+        //         "\t\t\"balance\": -19999060.26,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154640\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763693,\n" +
+        //         "\t\t\"modifytime\": 1520267763693\n" +
+        //         "\t}, {\n" +
+        //         "\t\t\"id\": 22851,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603304763\",\n" +
+        //         "\t\t\"starttime\": 1520267763678,\n" +
+        //         "\t\t\"endtime\": 1520267763678,\n" +
+        //         "\t\t\"relationid\": \"154640\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 654.65,\n" +
+        //         "\t\t\"balance\": -19999335.74,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154640\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763678,\n" +
+        //         "\t\t\"modifytime\": 1520267763678\n" +
+        //         "\t}, {\n" +
+        //         "\t\t\"id\": 22845,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603687827\",\n" +
+        //         "\t\t\"starttime\": 1520267763650,\n" +
+        //         "\t\t\"endtime\": 1520267763650,\n" +
+        //         "\t\t\"relationid\": \"154616\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 18.10,\n" +
+        //         "\t\t\"balance\": -19997365.22,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154616\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763650,\n" +
+        //         "\t\t\"modifytime\": 1520267763650\n" +
+        //         "\t}, {\n" +
+        //         "\t\t\"id\": 22841,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603174216\",\n" +
+        //         "\t\t\"starttime\": 1520267763636,\n" +
+        //         "\t\t\"endtime\": 1520267763636,\n" +
+        //         "\t\t\"relationid\": \"154616\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 654.65,\n" +
+        //         "\t\t\"balance\": -19997647.30,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154616\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763636,\n" +
+        //         "\t\t\"modifytime\": 1520267763636\n" +
+        //         "\t}, {\n" +
+        //         "\t\t\"id\": 22835,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603201655\",\n" +
+        //         "\t\t\"starttime\": 1520267763609,\n" +
+        //         "\t\t\"endtime\": 1520267763609,\n" +
+        //         "\t\t\"relationid\": \"154584\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 18.10,\n" +
+        //         "\t\t\"balance\": -19995081.70,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154584\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763609,\n" +
+        //         "\t\t\"modifytime\": 1520267763609\n" +
+        //         "\t}, {\n" +
+        //         "\t\t\"id\": 22831,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603530775\",\n" +
+        //         "\t\t\"starttime\": 1520267763595,\n" +
+        //         "\t\t\"endtime\": 1520267763595,\n" +
+        //         "\t\t\"relationid\": \"154584\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 654.65,\n" +
+        //         "\t\t\"balance\": -19995069.12,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154584\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763595,\n" +
+        //         "\t\t\"modifytime\": 1520267763595\n" +
+        //         "\t}, {\n" +
+        //         "\t\t\"id\": 22825,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603817521\",\n" +
+        //         "\t\t\"starttime\": 1520267763570,\n" +
+        //         "\t\t\"endtime\": 1520267763570,\n" +
+        //         "\t\t\"relationid\": \"154576\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 18.10,\n" +
+        //         "\t\t\"balance\": -19992528.05,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154576\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763570,\n" +
+        //         "\t\t\"modifytime\": 1520267763570\n" +
+        //         "\t}, {\n" +
+        //         "\t\t\"id\": 22821,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603004130\",\n" +
+        //         "\t\t\"starttime\": 1520267763555,\n" +
+        //         "\t\t\"endtime\": 1520267763555,\n" +
+        //         "\t\t\"relationid\": \"154576\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 654.65,\n" +
+        //         "\t\t\"balance\": -19992801.30,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154576\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763555,\n" +
+        //         "\t\t\"modifytime\": 1520267763555\n" +
+        //         "\t}, {\n" +
+        //         "\t\t\"id\": 22813,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603725727\",\n" +
+        //         "\t\t\"starttime\": 1520267763523,\n" +
+        //         "\t\t\"endtime\": 1520267763523,\n" +
+        //         "\t\t\"relationid\": \"154480\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 18.10,\n" +
+        //         "\t\t\"balance\": -19990487.81,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154480\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763523,\n" +
+        //         "\t\t\"modifytime\": 1520267763523\n" +
+        //         "\t}, {\n" +
+        //         "\t\t\"id\": 22809,\n" +
+        //         "\t\t\"journaltype\": 4041,\n" +
+        //         "\t\t\"mobile\": \"18701442405\",\n" +
+        //         "\t\t\"userId\": 527002,\n" +
+        //         "\t\t\"nickname\": \"企业借款公司\",\n" +
+        //         "\t\t\"serialnumber\": \"404020180306003603586832\",\n" +
+        //         "\t\t\"starttime\": 1520267763509,\n" +
+        //         "\t\t\"endtime\": 1520267763509,\n" +
+        //         "\t\t\"relationid\": \"154480\",\n" +
+        //         "\t\t\"inouttype\": 0,\n" +
+        //         "\t\t\"amount\": 654.65,\n" +
+        //         "\t\t\"balance\": -19990769.89,\n" +
+        //         "\t\t\"remarks\": \"标的还款计划id：154480\",\n" +
+        //         "\t\t\"status\": 1,\n" +
+        //         "\t\t\"createtime\": 1520267763509,\n" +
+        //         "\t\t\"modifytime\": 1520267763509\n" +
+        //         "\t}]\n" +
+        //         "}"
+        //     console.log(data);
+        //     var datas = data.data;
+        //     console(datas);
+        //     for (i in data) {
+        //         str += "<tr>" +
+        //             "<td>" + data[i].amount + "</td>" +
+        //             "<td>" + data[i].balance + "</td>" +
+        //             "<td>" + data[i].createtime + "</td>" +
+        //             // "<td>" + data[i].endtime + "</td>" +
+        //             // "<td>" + data[i].id + "</td>" +
+        //             // "<td>" + data[i].inouttype + "</td>" +
+        //             // "<td>" + data[i].journaltype + "</td>" +
+        //             // "<td>" + data[i].mobile + "</td>" +
+        //             // "<td>" + data[i].modifytime + "</td>" +
+        //             // "<td>" + data[i].relationid + "</td>" +
+        //             // "<td>" + data[i].remarks + "</td>" +
+        //             // "<td>" + data[i].serialnumber + "</td>" +
+        //             // "<td>" + data[i].starttime + "</td>" +
+        //             // "<td>" + data[i].status + "</td>" +
+        //             // "<td>" + data[i].userId + "</td>" +
+        //             "</tr>";
+        //         tbody.innerHTML = str;
+        //     }
+        // });
+        function search() {
+            var tbody = window.document.getElementById("tbody-result");
+            var userId = $("#userId").val();
+            var telephone = $("#telephone").val();
+            $.post("/money/getGeneralJournal", {type: userId, mobile: telephone,}, function (data) {
+                // var data ="{message:登录成功,data:[{amount:18701442405,balance:21460,4041,createtime:527002}]}"
+                console.log(data);
+                var datas = data.data;
+                console.log(datas);
+                for (i in datas) {
+                    var str="";
+                     str += "<tr>" +
+                        "<td>" + datas[i].amount + "</td>" +
+                        "<td>" + datas[i].balance + "</td>" +
+                        "<td>" + datas[i].createtime + "</td>" +
+                        "<td>" + datas[i].endtime + "</td>" +
+                        "<td>" + datas[i].id + "</td>" +
+                        "<td>" + datas[i].inouttype + "</td>" +
+                        "<td>" + datas[i].journaltype + "</td>" +
+                        "<td>" + datas[i].mobile + "</td>" +
+                        "<td>" + datas[i].modifytime + "</td>" +
+                        "<td>" + datas[i].relationid + "</td>" +
+                        "<td>" + datas[i].remarks + "</td>" +
+                        "<td>" + datas[i].serialnumber + "</td>" +
+                        "<td>" + datas[i].starttime + "</td>" +
+                        "<td>" + datas[i].status + "</td>" +
+                        "<td>" + datas[i].userId + "</td>" +
+                        "</tr>";
+                    tbody.innerHTML = str;
+                }
+            });
+        }
+    </script>
+
+    <form>
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="panel panel-default" style="overflow:scroll;">
+                    <div class="panel-heading">客户信息列表</div>
+                    <table class="table table-bordered table-striped" align="center" style="min-width:800px;">
+                        <thead>
+                        <tr>
+                            <th th:width="20px">数目</th>
+                            <th th:width="20px">收支</th>
+                            <th th:width="40px">创建时间</th>
+                            <th th:width="20px">结束时间</th>
+                            <th th:width="20px">id</th>
+                            <th th:width="20px">类型</th>
+                            <th th:width="50px"类型</th>
+                            <th th:width="20px">手机号</th>
+                            <th th:width="20px">修改时间</th>
+                            <th th:width="20px">用户名</th>
+                            <th th:width="20px">关系id</th>
+                            <th th:width="20px">标志</th>
+                            <th th:width="60px"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody-result">
+                        </tbody>
+                    </table>
+                    <div class="col-md-12 text-right">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        //日期插件初始化
+        $('#datetimeStart').datetimepicker({
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd',
+            weekStart: 1, /*以星期一为一星期开始*/
+            todayBtn: 1,
+            autoclose: 1,
+            minView: 2, /*精确到天*/
+            pickerPosition: "bottom-left"
+        }).on("changeDate", function (ev) {  //值改变事件
+            //选择的日期不能大于第二个日期控件的日期
+            if (ev.date) {
+                $("#datetimeEnd").datetimepicker('setStartDate', new Date(ev.date.valueOf()));
+            } else {
+                $("#datetimeEnd").datetimepicker('setStartDate', null);
+            }
+        });
+        $('#datetimeEnd').datetimepicker({
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd',
+            weekStart: 1, /*以星期一为一星期开始*/
+            todayBtn: 1,
+            autoclose: 1,
+            minView: 2, /*精确到天*/
+            pickerPosition: "bottom-left"
+        }).on("changeDate", function (ev) {
+            /*选择的日期不能小于第一个日期控件的日期*/
+            if (ev.date) {
+                $("#datetimeStart").datetimepicker('setEndDate', new Date(ev.date.valueOf()));
+            } else {
+                $("#datetimeStart").datetimepicker('setEndDate', new Date());
+            }
+        });
+    </script>
+
+
+    <!-- <form>
+         <div id="page-wrapper">
+             <div class="row">
+                 <div class="col-lg-12">
+                     <h1 class="page-header">还款记录查询</h1>
+                 </div>
+                 &lt;!&ndash; /.col-lg-12 &ndash;&gt;
+             </div>
+             &lt;!&ndash; /.row &ndash;&gt;
+             <div class="panel panel-default" th:class="">
+                 <div class="panel-body">
+                     <form class="form-inline" action="" method="get">
+                         <div class="form-group">
+                             <label for="customerName">用户名</label>
+                             <input type="text" class="form-control" id="customerName" value="" name="custName">
+                         </div>
+                         <div class="form-group">
+                             <label for="customerFrom">手机号</label>
+                             <input class="form-control" id="customerFrom" placeholder="注册手机号" name="custSource" value=""/>
+                             &lt;!&ndash;<option value="">&#45;&#45;请选择&#45;&#45;</option>
+                             <c:forEach items="${fromType}" var="item">
+                                 <option value="${item.dict_id}">
+                                 <c:if test="${item.dict_id == custSource}"> selected</c:if>>${item.dict_item_name }
+                                 </option>
+                             </c:forEach>&ndash;&gt;
+                         </div>
+                         <div class="form-group">
+                             <label for="datetimeStart">还款日期</label>
+                             <input size="16" type="text" id="datetimeStart" readonly class="form_datetime">
+                         </div>
+                         &lt;!&ndash; &ndash;&gt;
+                         &lt;!&ndash; <tr  c>
+                                 <th th:text="${userStat.index}">状态变量：index</th>
+                                 <th th:text="${userStat.count}">状态变量：count</th>
+                                 <th th:text="${userStat.size}">状态变量：size</th>
+                                 <th th:text="${userStat.current.userName}">状态变量：current</th>
+                                 <th th:text="${userStat.even}">状态变量：even****</th>
+                                  <th th:text="${userStat.odd}">状态变量：odd</th>
+                                 <th th:text="${userStat.first}">状态变量：first</th>
+                                 <th th:text="${userStat.last}">状态变量：last</th>
+                                 </tr>  &ndash;&gt;
+                         &lt;!&ndash;<div class="form-group">
+                             <label for="sss">业务类型</label>
+                             <select class="form-control" id="sss" name="custLevel">
+                                 <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                                 &lt;!&ndash;<option th:each="item:${levelType}" th:value="${item}"></option>
+                                 <c:forEach items="${levelType}" var="item">
+                                     <option value="${item.dict_id}"
+                                     <c:if test="${item.dict_id == custLevel}"> selected</c:if>>${item.dict_item_name }
+                                     </option>
+                                 </c:forEach>&ndash;&gt;
+                             </select>
+                         </div>&ndash;&gt;
+
+                         &lt;!&ndash;<div class="form-group">&ndash;&gt;
+                         &lt;!&ndash;<label for="custIndustry">还款日期</label>&ndash;&gt;
+                         &lt;!&ndash;<select class="form-control" id="custIndustry" name="custIndustory">&ndash;&gt;
+                         &lt;!&ndash;<option value="">&#45;&#45;请选择&#45;&#45;</option>&ndash;&gt;
+                         &lt;!&ndash;&lt;!&ndash;<c:forEach items="${industryType}" var="item">&ndash;&gt;
+                         &lt;!&ndash;<option value="${item.dict_id}">&ndash;&gt;
+                         &lt;!&ndash;<c:if test="${item.dict_id == custIndustory}"> selected</c:if>>${item.dict_item_name }</option>&ndash;&gt;
+                         &lt;!&ndash;</c:forEach>&ndash;&gt;&ndash;&gt;
+                         &lt;!&ndash;</select>&ndash;&gt;
+
+                         &lt;!&ndash;</div>&ndash;&gt;
+                         &lt;!&ndash;<div class="form-group">
+                             <label for="custLevel">客户级别</label>
+                             <select class="form-control" id="custLevel" name="custLevel">
+                                 <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                                 &lt;!&ndash;<c:forEach items="${levelType}" var="item">
+                                     <option value="${item.dict_id}"
+                                     <c:if test="${item.dict_id == custLevel}"> selected</c:if>>${item.dict_item_name }
+                                     </option>
+                                 </c:forEach>&ndash;&gt;
+                             </select>
+                         </div>&ndash;&gt;
+                         <button type="submit" class="btn btn-primary">查询</button>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </form>
+     <form>
+         <div class="row">
+             <div class="col-lg-12">
+                 <div class="panel panel-default">
+                     <div class="panel-heading">客户信息列表</div>
+                     &lt;!&ndash; /.panel-heading &ndash;&gt;
+                     <table class="table table-bordered table-striped">
+                         <thead>
+                         <tr>
+                             <th>ID</th>
+                             <th>客户名称</th>
+                             <th>客户来源</th>
+                             <th>客户所属行业</th>
+                             <th>客户级别</th>
+                             <th>固定电话</th>
+                             <th>手机</th>
+                             <th>操作</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                         &lt;!&ndash;<c:forEach items="${page.rows}" var="row">
+                             <tr>
+                                 <td>${row.cust_id}</td>
+                                 <td>${row.cust_name}</td>
+                                 <td>${row.cust_source}</td>
+                                 <td>${row.cust_industry}</td>
+                                 <td>${row.cust_level}</td>
+                                 <td>${row.cust_phone}</td>
+                                 <td>${row.cust_mobile}</td>
+                                 <td>
+                                     <a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#customerEditDialog"
+                                        onclick="editCustomer(${row.cust_id})">修改</a>
+                                     <a href="#" class="btn btn-danger btn-xs" onclick="deleteCustomer(${row.cust_id})">删除</a>
+                                 </td>
+                             </tr>
+                         </c:forEach>&ndash;&gt;
+                         </tbody>
+                     </table>
+                     <div class="col-md-12 text-right">
+
+                     </div>
+                     &lt;!&ndash; /.panel-body &ndash;&gt;
+                 </div>
+                 &lt;!&ndash; /.panel &ndash;&gt;
+             </div>
+             &lt;!&ndash; /.col-lg-12 &ndash;&gt;
+         </div>
+     </div>
+     </form>
+
+     <script type="text/javascript">
+         $("#datetimeStart").datetimepicker({
+             format: 'yyyy-mm-dd',
+             minView:'month',
+             language: 'zh-CN',
+             autoclose:true,
+             startDate:new Date()
+         }).on("click",function(){
+             $("#datetimeStart").datetimepicker("setEndDate",$("#datetimeEnd").val())
+         });
+        /* function editCustomer(id) {
+             $.ajax({
+                 type:"get",
+                 url:"<%=basePath%>customer/edit.action",
+                 data:{"id":id},
+                 success:function(data) {
+                     $("#edit_cust_id").val(data.cust_id);
+                     $("#edit_customerName").val(data.cust_name);
+                     $("#edit_customerFrom").val(data.cust_source)
+                     $("#edit_custIndustry").val(data.cust_industry)
+                     $("#edit_custLevel").val(data.cust_level)
+                     $("#edit_linkMan").val(data.cust_linkman);
+                     $("#edit_phone").val(data.cust_phone);
+                     $("#edit_mobile").val(data.cust_mobile);
+                     $("#edit_zipcode").val(data.cust_zipcode);
+                     $("#edit_address").val(data.cust_address);
+
+                 }
+             });
+         }*/
+        /* function updateCustomer() {
+             $.post("<%=basePath%>customer/update.action",$("#edit_customer_form").serialize(),function(data){
+                 alert("客户信息更新成功！");
+                 window.location.reload();
+             });
+         }
+
+         function deleteCustomer(id) {
+             if(confirm('确实要删除该客户吗?')) {
+                 $.post("<%=basePath%>customer/delete.action",{"id":id},function(data){
+                     alert("客户删除更新成功！");
+                     window.location.reload();
+                 });
+             }
+         }*/
+     </script>-->
+
+</html>

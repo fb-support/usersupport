@@ -1,6 +1,7 @@
 package com.facebank.usersupport.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.UserForm;
@@ -41,7 +42,7 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/register")
-    private RestModel register (UserForm userForm) {
+    public RestModel register (UserForm userForm) {
         try {
             RestModel model = userService.insertUser(userForm);
             if (model.getCode().equals(RestModel.CODE_SUCCESS)) {
@@ -59,8 +60,8 @@ public class UserController extends BaseController {
      * objType 验证数据类型。1为工号，2为用户名。3为手机号码。4为邮箱
      * @return
      */
-    @GetMapping("/sync/verity")
-    private RestModel register(String verityObj, String objType) {
+    @PostMapping("/sync/verity")
+    public RestModel register(String verityObj, String objType) {
         try {
             UserModel userModel = new UserModel();
             // 根据验证数据类型设置对应的值
@@ -146,14 +147,16 @@ public class UserController extends BaseController {
             //进行phone判断
             TempModel.setPhone(model.getPhone());
             if (!userService.selectByUserModel(TempModel).isEmpty()
-                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId()) {
                 checkModel.setPhoneRepeat(true);
+            }
             //用户名判断
             TempModel.setPhone(null);
             TempModel.setUsername(model.getUsername());
             if (!userService.selectByUserModel(TempModel).isEmpty()
-                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId()) {
                 checkModel.setUsernameRepeat(true);
+            }
             //邮箱判断
             TempModel.setUsername(null);
             TempModel.setEmail(model.getEmail());
@@ -164,9 +167,9 @@ public class UserController extends BaseController {
             TempModel.setEmail(null);
             TempModel.setWorkNumber(model.getWorkNumber());
             if (!userService.selectByUserModel(TempModel).isEmpty()
-                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId()) {
                 checkModel.setWorkNumberRepeat(true);
-
+            }
             return this.success(checkModel);
         }catch (Exception e){
             e.printStackTrace();
@@ -174,19 +177,59 @@ public class UserController extends BaseController {
         }
     }
 
+    /**
+     * 根据用户ID获取信息
+     * @param
+     * @return
+     */
+    @GetMapping("/um/getByUserId")
+    public RestModel getByUserId(@RequestParam Long userId) {
+        try{
+            UserModel model = userService.getByUserId(userId);
+            return this.success(JSONObject.parseObject(JSON.toJSONString(model)));
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
+        }
+    }
 
     /**
-     * 安全退出方法
+     * 根据id更新用户信息
+     *
+     * @param model
+     * @return
+     */
+    @PostMapping("/um/updateBaseInfoMationById")
+    public RestModel updateBaseInfoMationById(UserModel model) {
+        try {
+            model.setGmtModify(System.currentTimeMillis());
+            int status = userService.updateBaseInfoMationById(model);
+            if (status > 0) {
+                return this.success(MessageKeyEnum.SUCCESS);
+            } else {
+                return this.excpRestModel(MessageKeyEnum.ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
+        }
+    }
+
+    /**
+     * 安全退出时添加日志的方法
+     * @param request
+     * @param response
+     * @return
      */
     @PostMapping("/beforeLogoutForLog")
     public RestModel logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
             //修改登录流水表，主要是添加登出时间
-            LoginUserModel model = new LoginUserModel();
-            model.setUsername(auth.getName());
-            model.setLogoutTime(System.currentTimeMillis());
-            loginUserService.updateLoginOutTime(model);
+            LoginUserModel loginUserModel = new LoginUserModel();
+            loginUserModel.setUsername(auth.getName());
+            loginUserModel.setLogoutTime(System.currentTimeMillis());
+            loginUserService.updateLoginOutTime(loginUserModel);
         } catch (Exception e) {
             e.printStackTrace();
         }

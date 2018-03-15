@@ -8,7 +8,7 @@
 <body>
 <div id="border">
 	<div id="system-info">
-		<span>客服助手管理系统V1.0.0</span>
+		<span>笑脸金融&nbsp;&nbsp;客服助手管理系统&nbsp;V1.0.0</span>
 	</div>
 	<div class="t-form">
 		<form th:action="@{/login}" action="/login" method="POST">
@@ -20,6 +20,16 @@
 				<tr>
 					<td><span>通行码:&nbsp; </span></span></td>
 					<td><input class="user-write-input" type="password" name="password"></td>
+				</tr>
+				<tr>
+					<td><span>验证码:&nbsp; </span></span></td>
+					<td><input type="text" name="verityCode" class="verityCode"/></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<img src="/verityImg" class="verityImg"/>
+						<a href="#">换一张</a>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="t-link-register-page"><a id="link-register-page" href="/register">立即注册>></a></td>

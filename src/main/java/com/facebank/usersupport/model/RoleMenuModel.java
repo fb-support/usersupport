@@ -1,8 +1,6 @@
 package com.facebank.usersupport.model;
 
-import java.io.Serializable;
-
-public class RoleMenuModel implements Serializable {
+public class RoleMenuModel {
     private Long id;
 
     private Long roleId;
@@ -52,4 +50,6 @@ public class RoleMenuModel implements Serializable {
     public void setGmtModify(Long gmtModify) {
         this.gmtModify = gmtModify;
     }
+
+    
 }
