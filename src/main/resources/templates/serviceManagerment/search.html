@@ -99,7 +99,8 @@
                         }
                         str += "</td>" + "<td>";
                         if(datas[i].redLocalInfo != null){
-                            str += datas[i].redLocalInfo['"model_name"'];
+                            var localInfoJson = JSON.parse(datas[i].redLocalInfo);
+                            str += localInfoJson.model_name;
                         }
                         str += "</td>" + "<td>";
                         if(datas[i].redPlanAmount != null) {
