@@ -110,3 +110,20 @@ function runOperaUser() {
         addSmallCardForThisPage("userManager-opera-user-page", "用户管理");
     }
 }
+
+/**
+ * 前往用户登录流水界面
+ */
+function runUserLog() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示用户管理界面
+    $("#userManager-login-page").show();
+
+    //显示tab
+    if ( $("li[value='userManager-login-page']").length > 0 ) {
+        switchPage( "userManager-login-page" );
+    } else {
+        addSmallCardForThisPage("userManager-login-page", "用户登录流水");
+    }
+}

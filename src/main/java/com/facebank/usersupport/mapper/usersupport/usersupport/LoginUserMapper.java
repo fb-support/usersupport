@@ -26,4 +26,11 @@ public interface LoginUserMapper extends BaseWriteMapper<LoginUserModel, Long> {
      * 登出，添加记录中的登出时间
      */
     int updateLoginOutTime(LoginUserModel model);
+
+    /**
+     * 分页，多条件模糊查询
+     * @param loginUserModel
+     * @return
+     */
+    List<LoginUserModel> selectAllByCondition(LoginUserModel loginUserModel);
 }
