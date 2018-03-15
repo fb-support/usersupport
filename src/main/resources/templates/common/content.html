@@ -44,6 +44,13 @@
 							<strong>用&nbsp;户&nbsp;管&nbsp;理</strong>
 						</a>
 					</li>
+					<li class="li-root"  sec:authorize="hasRole('ROLE_ADMIN')">
+						<a href="javascript:runUserLog()">
+							<span class="glyphicon glyphicon-user mainPage_init_option"></span>
+							<br>
+							<strong>用&nbsp;户&nbsp;登&nbsp;录&nbsp;流&nbsp;水</strong>
+						</a>
+					</li>
 				</ul>
 			</div>
 			<!--系统设置--基本信息 -->
@@ -64,6 +71,8 @@
 			<iframe sec:authorize="hasRole('ROLE_ADMIN')" class="center_show_area" id="userManager-add-user-page" src="/um/addUser" frameborder="0"></iframe>
 			<!--用户管理--管理用户 -->
 			<iframe sec:authorize="hasRole('ROLE_ADMIN')" class="center_show_area" id="userManager-opera-user-page" src="/um/managerment" frameborder="0"></iframe>
+			<!--用户管理--用户登录流水 -->
+			<iframe sec:authorize="hasRole('ROLE_ADMIN')" class="center_show_area" id="userManager-login-page" src="/ul/managerment" frameborder="0"></iframe>
 
 		</div>		
 	</div>
