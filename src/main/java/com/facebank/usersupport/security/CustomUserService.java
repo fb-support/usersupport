@@ -77,8 +77,7 @@ public class CustomUserService implements UserDetailsService {
             System.out.println(role.getRoleName());
         }
         return new org.springframework.security.core.userdetails.User(queryResultOfUserAndRole.getUsername(),
-                queryResultOfUserAndRole.getPassword(), authorityList);
+                queryResultOfUserAndRole.getPassword(), authorities);
     }
-
 
 }

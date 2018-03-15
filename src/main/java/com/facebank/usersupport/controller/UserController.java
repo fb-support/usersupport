@@ -240,4 +240,22 @@ public class UserController extends BaseController {
 
         return this.success(MessageKeyEnum.SUCCESS);
     }
+
+    /**
+     * 验证 ---登录前的验证码问题
+     * @param verityCode
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/verity/beforeLoginForVerityCode")
+    public RestModel login(String verityCode,HttpServletRequest request, HttpServletResponse response) {
+        // 获得存在session的验证码
+        String session_VerityCode = (String)request.getSession().getAttribute("strCode");
+
+        if (session_VerityCode.trim().equals(verityCode.trim())) {
+            return this.success(MessageKeyEnum.SUCCESS);
+        }
+        return this.excpRestModel(MessageKeyEnum.ERROR);
+    }
 }
