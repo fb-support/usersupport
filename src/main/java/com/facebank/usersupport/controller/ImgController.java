@@ -19,7 +19,7 @@ import java.util.Random;
 @Controller
 public class ImgController {
 
-    @GetMapping("/verityImg")
+    @GetMapping("/verity/verityImg")
     public void createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println("调用获取验证码的方法");
         int width = 63;

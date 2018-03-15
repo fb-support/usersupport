@@ -36,4 +36,24 @@
         ORDER BY login_time DESC limit 1;
     </update>
 
+
+    <select id="selectAllByCondition" parameterType="com.facebank.usersupport.model.LoginUserModel"
+            resultMap="BaseResultMap">
+        select login_id,login_way,username,work_number,gmt_modified,
+        gmt_create,login_time,logout_time
+        from login_user
+        where 1 = 1
+        <if test="username!=null">
+            and username like CONCAT(CONCAT('%', #{username,jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="workNumber!=null">
+            and work_number like CONCAT(CONCAT(#{workNumber,jdbcType=INTEGER}),'%')
+        </if>
+        <if test="loginTime != null ">
+            and login_time>#{loginTime}
+        </if>
+        <if test="logoutTime != null ">
+            and #{logoutTime} > logout_time
+        </if>
+    </select>
 </mapper>

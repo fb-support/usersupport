@@ -73,9 +73,9 @@
         select user_id,work_number, username,
         password, email, phone,
         gmt_create, gmt_modify, status from user
-        where
+        where 1 = 1
         <if test="username!=null">
-            username like CONCAT(CONCAT('%', #{username,jdbcType=VARCHAR}), '%')
+           and username like CONCAT(CONCAT('%', #{username,jdbcType=VARCHAR}), '%')
         </if>
         <if test="phone!=null">
             and phone like CONCAT(CONCAT(#{phone,jdbcType=VARCHAR}),'%')

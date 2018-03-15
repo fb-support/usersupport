@@ -80,5 +80,4 @@ public class CustomUserService implements UserDetailsService {
                 queryResultOfUserAndRole.getPassword(), authorities);
     }
 
-
 }
