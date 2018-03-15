@@ -5,17 +5,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.UserForm;
-import com.facebank.usersupport.model.PageRestModel;
-import com.facebank.usersupport.model.RestModel;
-import com.facebank.usersupport.model.UserCheckModel;
-import com.facebank.usersupport.model.UserModel;
+import com.facebank.usersupport.mapper.usersupport.usersupport.LoginUserMapper;
+import com.facebank.usersupport.model.*;
+import com.facebank.usersupport.service.ILoginUserService;
 import com.facebank.usersupport.service.IUserService;
 import com.github.pagehelper.PageInfo;
 import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -30,6 +33,8 @@ public class UserController extends BaseController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private ILoginUserService loginUserService;
 
     /**
      * 注册页面
@@ -142,14 +147,16 @@ public class UserController extends BaseController {
             //进行phone判断
             TempModel.setPhone(model.getPhone());
             if (!userService.selectByUserModel(TempModel).isEmpty()
-                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId()) {
                 checkModel.setPhoneRepeat(true);
+            }
             //用户名判断
             TempModel.setPhone(null);
             TempModel.setUsername(model.getUsername());
             if (!userService.selectByUserModel(TempModel).isEmpty()
-                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId()) {
                 checkModel.setUsernameRepeat(true);
+            }
             //邮箱判断
             TempModel.setUsername(null);
             TempModel.setEmail(model.getEmail());
@@ -160,9 +167,9 @@ public class UserController extends BaseController {
             TempModel.setEmail(null);
             TempModel.setWorkNumber(model.getWorkNumber());
             if (!userService.selectByUserModel(TempModel).isEmpty()
-                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
+                    &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId()) {
                 checkModel.setWorkNumberRepeat(true);
-
+            }
             return this.success(checkModel);
         }catch (Exception e){
             e.printStackTrace();
@@ -206,5 +213,49 @@ public class UserController extends BaseController {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.ERROR);
         }
+    }
+
+    /**
+     * 安全退出时添加日志的方法
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/beforeLogoutForLog")
+    public RestModel logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            //修改登录流水表，主要是添加登出时间
+            LoginUserModel loginUserModel = new LoginUserModel();
+            loginUserModel.setUsername(auth.getName());
+            loginUserModel.setLogoutTime(System.currentTimeMillis());
+            loginUserService.updateLoginOutTime(loginUserModel);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+
+        return this.success(MessageKeyEnum.SUCCESS);
+    }
+
+    /**
+     * 验证 ---登录前的验证码问题
+     * @param verityCode
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/verity/beforeLoginForVerityCode")
+    public RestModel login(String verityCode,HttpServletRequest request, HttpServletResponse response) {
+        // 获得存在session的验证码
+        String session_VerityCode = (String)request.getSession().getAttribute("strCode");
+
+        if (session_VerityCode.trim().equals(verityCode.trim())) {
+            return this.success(MessageKeyEnum.SUCCESS);
+        }
+        return this.excpRestModel(MessageKeyEnum.ERROR);
     }
 }

@@ -132,6 +132,9 @@
 	margin-top: 20px;
 }
 
+#userManager-login-page{
+	display: none;
+}
 .mainPage_init_option {
 	transition: all 1.0s;
 }

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -21,10 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetailsService customUserService(){ //注册UserDetailsService 的bean
         return new CustomUserService();
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-
         //user Details Service验证
         auth.userDetailsService(customUserService())
                 .passwordEncoder(new MyPasswordEncoder());
@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //static resources configuration
                 .antMatchers("/resources/**", "/webjars/**", "/img/**","/css/**","/js/**","/fonts/**","/lang/**","/plugins/**").permitAll()
                 //login page and registration end-point
-                .antMatchers("/login", "/register").permitAll()
+                .antMatchers("/login", "/register","/verity/**").permitAll()
                 //all other requests
                 .anyRequest().authenticated()
                 .and()
@@ -49,6 +49,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login");
         http.csrf().disable()
                 .headers().frameOptions().sameOrigin();
-
     }
 }

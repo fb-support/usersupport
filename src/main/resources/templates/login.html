@@ -3,15 +3,17 @@
 <head>
 	<meta charset="UTF-8">
 	<title>笑脸金融-客服助手管理系统-登录</title>
+	<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+	<script type="text/javascript" src="js/login.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/login.css">
 </head>
 <body>
 <div id="border">
 	<div id="system-info">
-		<span>客服助手管理系统V1.0.0</span>
+		<span>笑脸金融&nbsp;&nbsp;客服助手管理系统&nbsp;V1.0.0</span>
 	</div>
 	<div class="t-form">
-		<form th:action="@{/login}" action="/login" method="POST">
+		<form th:action="@{/login}" action="/login" method="POST" onsubmit="return checkVerityCode();">
 			<table>
 				<tr>
 					<td><span>登录账号: </span></td>
@@ -20,6 +22,16 @@
 				<tr>
 					<td><span>通行码:&nbsp; </span></span></td>
 					<td><input class="user-write-input" type="password" name="password"></td>
+				</tr>
+				<tr>
+					<td><span>验证码:&nbsp; </span></span></td>
+					<td><input type="text" name="verityCode" class="verityCode" id="myVerityCode" onchange="javascript:blurForVerityCode();"/></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<img src="/verity/verityImg" class="verityImg"/>
+						<a href="#">换一张</a>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="t-link-register-page"><a id="link-register-page" href="/register">立即注册>></a></td>
