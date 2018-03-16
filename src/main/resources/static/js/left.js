@@ -39,6 +39,13 @@ function runRepaymentSearch() {
     $(".center_show_area").hide();
     //显示还款查询页面
     $("#service-repayment-page").show();
+
+    //显示tab
+    if ( $("li[value='service-repayment-page']").length > 0 ) {
+        switchPage( "service-repayment-page" );
+    } else {
+        addSmallCardForThisPage("service-repayment-page", "还款查询");
+    }
 }
 
 /**
