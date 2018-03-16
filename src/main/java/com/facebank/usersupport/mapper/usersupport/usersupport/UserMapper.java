@@ -16,15 +16,19 @@ import java.util.List;
 public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
 
     /**
-     *
-     *
-     * 可以重用BaseWriteMapper中的方法，因为BaseWriteMapper继承了BaseReadMapper
-     * 所以继承BaseWriteMapper就同时有了Read和write的基本方法
+     * 插入
+     * @param model
+     * @return
      */
     @Override
     int insert(UserModel model);
 
 
+    /**
+     * 根据不定条件查询出用户集合
+     * @param userModel
+     * @return
+     */
     List<UserModel> selectByUserModel(UserModel userModel);
 
     /**
@@ -55,16 +59,11 @@ public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
      */
     List<UserModel> selectAllByCondition(UserModel userModel);
 
-    List<UserModel> selectA(UserModel userModel);
-
     /**
      * 批量删除用户
      * @param ids
      */
     void batchDeleteUsers(Integer[] ids);
-
-
-    UserModel selectInfoMation(String objValue);
 	
     /**
      * 多表联合查询（用户表、角色表和用户角色中间表）

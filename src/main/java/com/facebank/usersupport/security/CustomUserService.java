@@ -38,13 +38,16 @@ public class CustomUserService implements UserDetailsService {
         if(queryResultOfUserAndRole == null){
             throw new UsernameNotFoundException("用户名不存在");
         }
-//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
-//        for(RoleModel role : queryResultOfUserAndRole.getRoles())
-//        {
-//            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-//            System.out.println(role.getRoleName());
-//        }
+        /*
+        暂时注释以下代码。
+         */
+///        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+///        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
+///        for(RoleModel role : queryResultOfUserAndRole.getRoles())
+///        {
+///            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+///            System.out.println(role.getRoleName());
+///        }
         List<GrantedAuthority> authorityList = new ArrayList<>();
         List<MenuModel> modelList = menuService.queryMenuByName(username);
         for(MenuModel menuModel : modelList){
@@ -53,7 +56,7 @@ public class CustomUserService implements UserDetailsService {
                 authorityList.add(grantedAuthority);
             }
 		}
-        //创建登录用户对象,用于插入登录记录表
+        // 创建登录用户对象,用于插入登录记录表
         LoginUserModel loginUserModel = new LoginUserModel();
         loginUserModel.setLoginWay(1);
         loginUserModel.setUsername(queryResultOfUserAndRole.getUsername());
@@ -62,7 +65,7 @@ public class CustomUserService implements UserDetailsService {
         loginUserModel.setGmtModified(System.currentTimeMillis());
         loginUserModel.setLoginTime(System.currentTimeMillis());
 
-        //添加记录到登录流水表，记录本次登录
+        // 添加记录到登录流水表，记录本次登录
         try {
             loginUserMapper.insert(loginUserModel);
         } catch (Exception e) {
@@ -70,7 +73,7 @@ public class CustomUserService implements UserDetailsService {
         }
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
+        // 用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
         for(RoleModel role : queryResultOfUserAndRole.getRoles())
         {
             authorities.add(new SimpleGrantedAuthority(role.getRoleName()));

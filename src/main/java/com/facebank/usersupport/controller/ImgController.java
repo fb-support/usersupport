@@ -19,27 +19,32 @@ import java.util.Random;
 @Controller
 public class ImgController {
 
+    /**
+     * 生成验证码图片的方法
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     @GetMapping("/verity/verityImg")
     public void createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("调用获取验证码的方法");
         int width = 63;
         int height = 37;
         Random random = new Random();
-        //设置response头信息
-        //禁止缓存
+        // 设置response头信息
+        // 禁止缓存
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
 
-        //生成缓冲区image类
+        // 生成缓冲区image类
         BufferedImage image = new BufferedImage(width, height, 1);
-        //产生image类的Graphics用于绘制操作
+        // 产生image类的Graphics用于绘制操作
         Graphics g = image.getGraphics();
-        //Graphics类的样式
+        // Graphics类的样式
         g.setColor(this.getRandColor(200, 250));
         g.setFont(new Font("Times New Roman",0,28));
         g.fillRect(0, 0, width, height);
-        //绘制干扰线
+        // 绘制干扰线
         for(int i=0;i<40;i++){
             g.setColor(this.getRandColor(130, 200));
             int x = random.nextInt(width);
@@ -49,7 +54,7 @@ public class ImgController {
             g.drawLine(x, y, x + x1, y + y1);
         }
 
-        //绘制字符
+        // 绘制字符
         String strCode = "";
         for(int i=0;i<4;i++){
             String rand = String.valueOf(random.nextInt(10));
@@ -57,7 +62,7 @@ public class ImgController {
             g.setColor(new Color(20+random.nextInt(110),20+random.nextInt(110),20+random.nextInt(110)));
             g.drawString(rand, 13*i+6, 28);
         }
-        //将字符保存到session中用于前端的验证
+        // 将字符保存到session中用于前端的验证
         request.getSession().setAttribute("strCode", strCode);
         g.dispose();
 
@@ -70,10 +75,12 @@ public class ImgController {
      */
     Color getRandColor(int fc,int bc){
         Random random = new Random();
-        if(fc>255)
+        if(fc>255) {
             fc = 255;
-        if(bc>255)
+        }
+        if(bc>255) {
             bc = 255;
+        }
         int r = fc + random.nextInt(bc - fc);
         int g = fc + random.nextInt(bc - fc);
         int b = fc + random.nextInt(bc - fc);

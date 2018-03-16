@@ -71,7 +71,7 @@ body {
 
 #btn_submit {
     width: 150px;
-    height: 200px;
+    height: 60px !important;
     padding: 10px 10px;
     border: none;
     background-color: #f6f4ff;
