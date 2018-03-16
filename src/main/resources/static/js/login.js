@@ -27,3 +27,10 @@ function blurForVerityCode() {
 function checkVerityCode() {
     return is_verity_success;
 }
+
+/**
+ * 更换验证码图片
+ */
+function changeVerityImg() {
+    document.getElementById("myVerityImg").src = "/verity/verityImg?time=" + Math.random();
+}

@@ -77,6 +77,7 @@ function generalJournal() {
         addSmallCardForThisPage("log-journal", "资金流水");
     }
 }
+
 /**
  * 前往权限-角色管理页面
  */
@@ -106,6 +107,7 @@ function menuManage() {
         addSmallCardForThisPage("menu-manage", "资源管理");
     }
 }
+
 moneyRecord()
 /**
  * 前往用户管理--添加用户界面

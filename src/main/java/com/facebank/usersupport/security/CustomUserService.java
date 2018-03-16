@@ -27,7 +27,7 @@ public class CustomUserService implements UserDetailsService {
     @Autowired
     IMenuService menuService;
 
-    @Autowired
+	@Autowired
     LoginUserMapper loginUserMapper;
 
     @Override
@@ -40,26 +40,26 @@ public class CustomUserService implements UserDetailsService {
             System.out.println("用户名不存在");
             throw new UsernameNotFoundException("用户名不存在");
         }
-//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
-//        for(RoleModel role : queryResultOfUserAndRole.getRoles())
-//        {
-//            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-//            System.out.println(role.getRoleName());
-//        }
+
+        /*
+        暂时注释以下代码。
+         */
+///        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+///        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
+///        for(RoleModel role : queryResultOfUserAndRole.getRoles())
+///        {
+///            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+///            System.out.println(role.getRoleName());
+///        }
         List<GrantedAuthority> authorityList = new ArrayList<>();
         List<MenuModel> modelList = menuService.queryMenuByName(username);
-        System.out.println("用户菜单权限");
-        System.out.println(modelList.toString());
-        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
-
         for(MenuModel menuModel : modelList){
             if (menuModel != null && menuModel.getMenuName()!=null) {
                 GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(menuModel.getMenuName());
                 authorityList.add(grantedAuthority);
             }
-        }
-        //创建登录用户对象,用于插入登录记录表
+		}
+        // 创建登录用户对象,用于插入登录记录表
         LoginUserModel loginUserModel = new LoginUserModel();
         loginUserModel.setLoginWay(1);
         loginUserModel.setUsername(queryResultOfUserAndRole.getUsername());
@@ -68,15 +68,15 @@ public class CustomUserService implements UserDetailsService {
         loginUserModel.setGmtModified(System.currentTimeMillis());
         loginUserModel.setLoginTime(System.currentTimeMillis());
 
-        //添加记录到登录流水表，记录本次登录
+        // 添加记录到登录流水表，记录本次登录
         try {
             loginUserMapper.insert(loginUserModel);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return new org.springframework.security.core.userdetails.User(queryResultOfUserAndRole.getUsername(),
                 queryResultOfUserAndRole.getPassword(), authorityList);
     }
-
 
 }

@@ -13,11 +13,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 用户登录流水Controller
+ * @author hanrong
+ * @date 2018/3/15
+ */
 @RestController
 public class LoginUserController extends BaseController {
 
     @Autowired
     private ILoginUserService loginUserService;
+	
     /**
      * 分页查询
      * @param length 单页查询数量
@@ -27,12 +33,12 @@ public class LoginUserController extends BaseController {
     @GetMapping("/ul/getUserByPage")
     public RestModel getUserListByPage(@RequestParam(required = false, defaultValue = "1") int start,
                                        @RequestParam(required = false, defaultValue = "10") int length,
-                                       String draw, LoginUserModel loginUserModel){
+                                       String draw,
+                                       LoginUserModel loginUserModel) {
         try{
             int pageNo = start / length + 1;
             PageInfo pageInfo =loginUserService.selectByPage(length, pageNo, loginUserModel);
-            PageRestModel pageRestModel = new PageRestModel(
-                    draw,
+            PageRestModel pageRestModel = new PageRestModel(draw,
                     pageInfo.getTotal(),
                     pageInfo.getTotal(),
                     pageInfo.getList()
