@@ -2,9 +2,11 @@ package com.facebank.usersupport.mapper.usersupport.usersupport;
 
 import com.facebank.usersupport.model.RoleMenuModel;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface RoleMenuMapper {
     int deleteByPrimaryKey(Long id);
 
