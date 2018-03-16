@@ -23,7 +23,7 @@ public class LoginUserController extends BaseController {
 
     @Autowired
     private ILoginUserService loginUserService;
-
+	
     /**
      * 分页查询
      * @param length 单页查询数量

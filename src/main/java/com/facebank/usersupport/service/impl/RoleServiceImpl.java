@@ -81,10 +81,17 @@ public class RoleServiceImpl implements IRoleService{
     }
 
     @Override
+    public RestModel updataMenu(Long[] roleId, Long id) {
+        return null;
+    }
+
+
+    @Override
     public RestModel findMenuNotNave(Long roleId) {
         List<RoleMenuModel> menus = roleMenuMapper.findMenuAlready(roleId);
         //TODO 获取所有菜单 获取已有菜单从而获取未有菜单
         return null;
     }
+
 
 }

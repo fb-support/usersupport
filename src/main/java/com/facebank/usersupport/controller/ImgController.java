@@ -62,6 +62,7 @@ public class ImgController {
             g.setColor(new Color(20+random.nextInt(110),20+random.nextInt(110),20+random.nextInt(110)));
             g.drawString(rand, 13*i+6, 28);
         }
+		
         // 将字符保存到session中用于前端的验证
         request.getSession().setAttribute("strCode", strCode);
         g.dispose();

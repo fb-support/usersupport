@@ -10,6 +10,10 @@
 		<div class="manager-block-list">
 			<ul id="ul-block_for_page">
 			</ul>
+			<div class="btn2-slide">
+				<span onclick="javascript:left_slideCard()" class="glyphicon glyphicon-triangle-left"></span>
+				<span onclick="javascript:right_slideCard()" class="glyphicon glyphicon-triangle-right"></span>
+			</div>
 		</div>
 		
 		<!-- 主页显示的内容 -->
@@ -65,6 +69,10 @@
 			<iframe class="center_show_area" id="log-record" src="/log/moneyRecord" frameborder="0"></iframe>
 			<!--资金流水 -->
 			<iframe class="center_show_area" id="log-journal" src="/log/generalJournal" frameborder="0"></iframe>
+			<!--角色管理 -->
+			<iframe class="center_show_area" id="role-manage" src="/role/roleManage" frameborder="0"></iframe>
+			<!--菜单管理 -->
+			<iframe class="center_show_area" id="menu-manage" src="/role/menuManage" frameborder="0"></iframe>
 			<!--权限管理 -->
 			<iframe sec:authorize="hasRole('ROLE_ADMIN')" class="center_show_area" id="permission-page" src="/v1.0/permission" frameborder="0"></iframe>
 			<!--用户管理--增加用户 -->

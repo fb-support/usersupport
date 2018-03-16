@@ -4,7 +4,7 @@
 	margin-left: -20px;
 	float: left;
 	border-top: 5px solid #18A7CE;
-	/*background-image: url(../images/backstage_background.jpg);*/
+	background-image: url(../images/backImg.jpg);
 	padding: 0px;
 	position: absolute;
 	z-index: auto;
@@ -18,6 +18,16 @@
 	height: 31px;
 	padding-right: 20px;
 
+}
+
+#center .manager-block-list .btn2-slide {
+	text-align: right;
+}
+
+
+#center .manager-block-list .btn2-slide span {
+	background-color: #EAE7E7;
+	padding: 3px;
 }
 
 #center .manager-block-list #ul-block_for_page li {
@@ -56,6 +66,15 @@
 #log-journal{
 	display: none;
 }
+
+#role-manage {
+	display: none;
+}
+
+#menu-manage{
+	display: none;
+}
+
 #center .shortcuts-service ul {
 	padding-top: 40px;
 	height: 100px;
