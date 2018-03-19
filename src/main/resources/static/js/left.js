@@ -39,6 +39,13 @@ function runRepaymentSearch() {
     $(".center_show_area").hide();
     //显示还款查询页面
     $("#service-repayment-page").show();
+
+    //显示tab
+    if ( $("li[value='service-repayment-page']").length > 0 ) {
+        switchPage( "service-repayment-page" );
+    } else {
+        addSmallCardForThisPage("service-repayment-page", "还款查询");
+    }
 }
 
 /**
@@ -77,6 +84,37 @@ function generalJournal() {
         addSmallCardForThisPage("log-journal", "资金流水");
     }
 }
+
+/**
+ * 前往权限-角色管理页面
+ */
+function roleManage() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示基本信息页面。
+    $("#role-manage").show();
+    if ( $("li[value='role-manage']").length > 0 ) {
+        switchPage( "role-manage" );
+    } else {
+        addSmallCardForThisPage("role-manage", "角色管理");
+    }
+}
+/**
+ * 前往权限-菜单管理页面
+ */
+function menuManage() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示基本信息页面。
+    $("#menu-manage").show();
+    //显示tab
+    if ( $("li[value='menu-manage']").length > 0 ) {
+        switchPage( "menu-manage" );
+    } else {
+        addSmallCardForThisPage("menu-manage", "资源管理");
+    }
+}
+
 moneyRecord()
 /**
  * 前往用户管理--添加用户界面

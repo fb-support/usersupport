@@ -7,6 +7,8 @@ import com.facebank.usersupport.model.RoleMenuModel;
 import com.facebank.usersupport.model.RoleModel;
 import com.facebank.usersupport.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,7 +57,15 @@ public class RoleController extends BaseController {
     public RestModel removeMenuToRole(Long id) {
         return iRoleService.deleteMenuByRole(id);
     }
-    //TODO 显示角色已有权限
+    // 显示角色已有权限
+    @RequestMapping("/role/findMenuAlready")
+    public RestModel findMenuAlready(Long id) {
+        return iRoleService.findMenuAlready(id);
+    }
+    //TODO 修改角色对应菜单
 
-    //TODO 显示角色未有权限
+    @RequestMapping("/role/updataMenu")
+    public RestModel updataMenu(@RequestParam(value = "ids[]") Long[] ids, Long id) {
+        return iRoleService.updataMenu(ids,id);
+    }
 }

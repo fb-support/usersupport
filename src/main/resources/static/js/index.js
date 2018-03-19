@@ -69,6 +69,20 @@ function closePage_and_switchOtherPage( page_id ) {
         var nextPage_id  = allNode[0].getAttribute("value");
         //显示下一个页面
         $("#"+nextPage_id).show();
+        /*
+		判断当前打开页面在删除某个选项卡后是否超过七个。
+		若小于八个，则让之前隐藏的选项卡显示多一个
+		 */
+        if (allNode.length > 6) {
+            // 遍历选项卡
+            for (var i = 0; i < allNode.length; i++) {
+                // 从左到右遍历。优先显示左边的选项卡。只显示一个
+                if (allNode[i].style.display == "none") {
+                    allNode[i].style.display = "inline";
+                    break;
+                }
+            }
+        }
     } else {
         $(".shortcuts-service").show();
     }
@@ -107,6 +121,12 @@ function addSmallCardForThisPage( page_id, page_name ) {
     li.appendChild(span_name);
     li.appendChild(span_close);
     ul.appendChild(li);
+
+    //判断当前选项卡个数，超过7个则隐藏第一个，显示最后一个。
+    var li_length = $("#ul-block_for_page li").length;
+    if (li_length > 7) {
+        $("#ul-block_for_page li")[li_length-8].style.display = "none";
+    }
 }
 
 //js获取项目根路径

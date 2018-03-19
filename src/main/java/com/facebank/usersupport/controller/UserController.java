@@ -37,7 +37,7 @@ public class UserController extends BaseController {
     private ILoginUserService loginUserService;
 
     /**
-     * 注册页面
+     * 注册方法
      * @param userForm
      * @return
      */
@@ -55,7 +55,7 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 验证是否被注册
+     * 验证字段是否被注册
      * @param verityObj 验证数据:数据类型
      * objType 验证数据类型。1为工号，2为用户名。3为手机号码。4为邮箱
      * @return
@@ -78,10 +78,11 @@ public class UserController extends BaseController {
                 case "4":
                     userModel.setEmail(verityObj);
                     break;
+                    default:
             }
             List<UserModel> userModelList = userService.selectByUserModel(userModel);
-            //若集合为空
-            //若查询返回集合大小大于0，则代表用户已存在，
+            // 若集合为空
+            // 若查询返回集合大小大于0，则代表用户已存在，
             return (userModelList != null && userModelList.size() > 0) ?
                 this.excpRestModel(MessageKeyEnum.ERROR) :
                 this.success(MessageKeyEnum.SUCCESS);
@@ -100,7 +101,8 @@ public class UserController extends BaseController {
     @GetMapping("/um/getUserByPage")
     public RestModel getUserListByPage( @RequestParam(required = false, defaultValue = "1") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        String draw,UserModel model){
+                                        String draw,
+                                        UserModel model){
         try {
             int pageNo = start / length + 1;
             PageInfo pageInfo = userService.selectByPage(length, pageNo, model);
@@ -127,7 +129,7 @@ public class UserController extends BaseController {
     public RestModel deleteUserByIds(@RequestParam(value = "id[]") Integer[] id){
         try{
             userService.deleteByUserIds(id);
-            return this.success(null);
+            return this.success(MessageKeyEnum.SUCCESS);
         }catch (Exception e){
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
@@ -144,26 +146,26 @@ public class UserController extends BaseController {
         try{
             UserCheckModel checkModel = new UserCheckModel();
             UserModel TempModel = new UserModel();
-            //进行phone判断
+            // 进行phone判断
             TempModel.setPhone(model.getPhone());
             if (!userService.selectByUserModel(TempModel).isEmpty()
                     &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId()) {
                 checkModel.setPhoneRepeat(true);
             }
-            //用户名判断
+            // 用户名判断
             TempModel.setPhone(null);
             TempModel.setUsername(model.getUsername());
             if (!userService.selectByUserModel(TempModel).isEmpty()
                     &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId()) {
                 checkModel.setUsernameRepeat(true);
             }
-            //邮箱判断
+            // 邮箱判断
             TempModel.setUsername(null);
             TempModel.setEmail(model.getEmail());
             if (!userService.selectByUserModel(TempModel).isEmpty()
                     &&userService.selectByUserModel(TempModel).get(0).getUserId()!=model.getUserId())
                 checkModel.setEmailRepeat(true);
-            //workNumber判断
+            // workNumber判断
             TempModel.setEmail(null);
             TempModel.setWorkNumber(model.getWorkNumber());
             if (!userService.selectByUserModel(TempModel).isEmpty()
@@ -225,7 +227,7 @@ public class UserController extends BaseController {
     public RestModel logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
-            //修改登录流水表，主要是添加登出时间
+            // 修改登录流水表，主要是添加登出时间
             LoginUserModel loginUserModel = new LoginUserModel();
             loginUserModel.setUsername(auth.getName());
             loginUserModel.setLogoutTime(System.currentTimeMillis());
@@ -253,7 +255,9 @@ public class UserController extends BaseController {
         // 获得存在session的验证码
         String session_VerityCode = (String)request.getSession().getAttribute("strCode");
 
-        if (session_VerityCode.trim().equals(verityCode.trim())) {
+        if (session_VerityCode != null &&
+                verityCode != null &&
+                session_VerityCode.trim().equals(verityCode.trim())) {
             return this.success(MessageKeyEnum.SUCCESS);
         }
         return this.excpRestModel(MessageKeyEnum.ERROR);

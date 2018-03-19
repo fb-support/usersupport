@@ -22,7 +22,7 @@ public class RoleServiceImpl implements IRoleService{
 
     @Override
     public RestModel insertRole(RoleModel role) {
-        role.setGmtCreate(new Date().getTime());
+        role.setGmtCreate(System.currentTimeMillis());
         role.setStatus((short) 1);
         int is_success = roleMapper.insert(role);
         if (is_success == 1){return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);}
@@ -40,7 +40,7 @@ public class RoleServiceImpl implements IRoleService{
     }
     @Override
     public RestModel updateStatus(Short status,Long id) {
-        Long currentTime =  new Date().getTime();
+        Long currentTime =  System.currentTimeMillis();
         int  is_success =  roleMapper.updateStatus(status,id,currentTime);
         if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);}
         return new RestModel();
@@ -53,7 +53,7 @@ public class RoleServiceImpl implements IRoleService{
 
     @Override
     public RestModel insertMenuByRole(RoleMenuModel roleMenuModel) {
-        roleMenuModel.setGmtCreate(new Date().getTime());
+        roleMenuModel.setGmtCreate(System.currentTimeMillis());
         int is_success = roleMenuMapper.insert(roleMenuModel);
         if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);}
         return new RestModel();
@@ -81,10 +81,17 @@ public class RoleServiceImpl implements IRoleService{
     }
 
     @Override
+    public RestModel updataMenu(Long[] roleId, Long id) {
+        return null;
+    }
+
+
+    @Override
     public RestModel findMenuNotNave(Long roleId) {
         List<RoleMenuModel> menus = roleMenuMapper.findMenuAlready(roleId);
         //TODO 获取所有菜单 获取已有菜单从而获取未有菜单
         return null;
     }
+
 
 }

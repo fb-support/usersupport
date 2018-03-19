@@ -6,6 +6,7 @@ import com.facebank.usersupport.model.MenuModel;
 import com.facebank.usersupport.model.LoginUserModel;
 import com.facebank.usersupport.model.RoleModel;
 import com.facebank.usersupport.dto.UserRoleDO;
+import com.facebank.usersupport.model.UserModel;
 import com.facebank.usersupport.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,20 +32,25 @@ public class CustomUserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) { //重写loadUserByUsername 方法获得 userdetails 类型用户
-
+        System.out.println(username);
         // 根据username/phone/email查询数据库,返回包装对象
         UserRoleDO queryResultOfUserAndRole = userMapper.selectBySelectiveForPermission(username);
-
+//        UserModel userModel = userMapper.selectBy
         if(queryResultOfUserAndRole == null){
+            System.out.println("用户名不存在");
             throw new UsernameNotFoundException("用户名不存在");
         }
-//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
-//        for(RoleModel role : queryResultOfUserAndRole.getRoles())
-//        {
-//            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-//            System.out.println(role.getRoleName());
-//        }
+
+        /*
+        暂时注释以下代码。
+         */
+///        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+///        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
+///        for(RoleModel role : queryResultOfUserAndRole.getRoles())
+///        {
+///            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+///            System.out.println(role.getRoleName());
+///        }
         List<GrantedAuthority> authorityList = new ArrayList<>();
         List<MenuModel> modelList = menuService.queryMenuByName(username);
         for(MenuModel menuModel : modelList){
@@ -53,7 +59,7 @@ public class CustomUserService implements UserDetailsService {
                 authorityList.add(grantedAuthority);
             }
 		}
-        //创建登录用户对象,用于插入登录记录表
+        // 创建登录用户对象,用于插入登录记录表
         LoginUserModel loginUserModel = new LoginUserModel();
         loginUserModel.setLoginWay(1);
         loginUserModel.setUsername(queryResultOfUserAndRole.getUsername());
@@ -62,22 +68,15 @@ public class CustomUserService implements UserDetailsService {
         loginUserModel.setGmtModified(System.currentTimeMillis());
         loginUserModel.setLoginTime(System.currentTimeMillis());
 
-        //添加记录到登录流水表，记录本次登录
+        // 添加记录到登录流水表，记录本次登录
         try {
             loginUserMapper.insert(loginUserModel);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
-        for(RoleModel role : queryResultOfUserAndRole.getRoles())
-        {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-            System.out.println(role.getRoleName());
-        }
         return new org.springframework.security.core.userdetails.User(queryResultOfUserAndRole.getUsername(),
-                queryResultOfUserAndRole.getPassword(), authorities);
+                queryResultOfUserAndRole.getPassword(), authorityList);
     }
 
 }

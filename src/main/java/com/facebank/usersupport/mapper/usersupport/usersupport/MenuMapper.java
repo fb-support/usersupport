@@ -5,9 +5,12 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
 public interface MenuMapper {
     int deleteByPrimaryKey(Long menuId);
+
+    List<MenuModel> queryAllMenu();
 
     int insert(MenuModel record);
 
@@ -17,7 +20,11 @@ public interface MenuMapper {
 
     int updateByPrimaryKeySelective(MenuModel record);
 
-    int updateByPrimaryKey(MenuModel record);
+    MenuModel updateByPrimaryKey(MenuModel record);
+
+    List<MenuModel> getMenu(@Param("menuName") String menuName, @Param("menuUrl") String menuUurl, @Param("status") Short status);
+
+    MenuModel selectById(Long menuId);
 
     List<MenuModel> queryMenuByUserId(@Param("userId") Long userId);
     List<MenuModel> queryMenuByName(@Param("username") String username);
