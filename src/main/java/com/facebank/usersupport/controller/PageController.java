@@ -38,14 +38,19 @@ public class PageController extends BaseController {
         return "/logManagement/"+pageName;
     }
 
-    @RequestMapping("/um/{pageName}")
-    public String showUserPage(@PathVariable String pageName){
-        return "/userManagerment/"+pageName;
-    }
-
     @RequestMapping("/role/{pageName}")
     public String showRoleMenuPage(@PathVariable String pageName){
         return "/permissionManagerment/"+pageName;
+    }
+
+    @RequestMapping("/menu/{pageName}")
+    public String showRoleMenuPage1(@PathVariable String pageName){
+        return "/permissionManagerment/"+pageName;
+    }
+
+    @RequestMapping("/um/{pageName}")
+    public String showUserPage(@PathVariable String pageName){
+        return "/userManagerment/"+pageName;
     }
 
     @RequestMapping("/service/{pageName}")
