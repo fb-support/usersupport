@@ -10,6 +10,7 @@ import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.IRepaymentService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 /**
  * 还款查询业务Controller
+ *
  * @author NingKui
  * @date 2018/3/9 10:42
  **/
@@ -28,12 +30,21 @@ public class RepaymentController extends BaseController {
 
     /**
      * 根据手机号、用户名、还款日期组合条件查询还款信息
+     *
      * @param repaymentForm
      * @return
      */
-     @PostMapping("/service/repayment")
-     public RestModel repaymentSearch(RepaymentForm repaymentForm){
-        try{
+    @PostMapping("/service/repayment")
+    public RestModel repaymentSearch(RepaymentForm repaymentForm) {
+        try {
+            // userId和orderId都为空
+            boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getUserId());
+            // 时间间隔不满足30天内
+            boolean timeInterval = StringUtils.isEmpty(repaymentForm.getStartTime()) || StringUtils.isEmpty(repaymentForm.getEndTime()) || (repaymentForm.getEndTime() - repaymentForm.getStartTime() > 2592000000L);
+            // 用户ID不为空、订单ID不为空、间隔30天内这三者都不满足则直接返回参数错误
+            if (isAllEmpty && timeInterval) {
+                    return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+            }
             // 查询分页信息
             PageInfo<RepaymentModel> pageInfo = repaymentService.getRepaymentModelByRepaymenyForm(repaymentForm);
             // 封装PageBeanModel
@@ -49,7 +60,7 @@ public class RepaymentController extends BaseController {
             // 设置分页数据
             pageBeanModel.setData(pageInfo.getList());
             return this.success(pageBeanModel);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
         }
