@@ -1,6 +1,7 @@
 package com.facebank.usersupport.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author HuBiao
@@ -19,11 +20,11 @@ public class RepaymentModel implements Serializable {
     /**
      * 债权计划本金
      */
-    private Double credPlanPrincipal;
+    private BigDecimal credPlanPrincipal;
     /**
      * 计划利息
      */
-    private Double credPlanInterest;
+    private BigDecimal credPlanInterest;
     /**
      * 计划时间
      */
@@ -35,7 +36,7 @@ public class RepaymentModel implements Serializable {
     /**
      * 红包金额
      */
-    private Double redPlanAmount;
+    private BigDecimal redPlanAmount;
     /**
      * 加息红包/返现红包
      */
@@ -47,11 +48,11 @@ public class RepaymentModel implements Serializable {
     /**
      * vip利率
      */
-    private Double vipRate;
+    private BigDecimal vipRate;
     /**
      * vip收益
      */
-    private Double vipPlanAmount;
+    private BigDecimal vipPlanAmount;
     /**
      * VIP期数
      */
@@ -59,7 +60,7 @@ public class RepaymentModel implements Serializable {
     /**
      * 加息金额
      */
-    private Double pfPlanAmount;
+    private BigDecimal pfPlanAmount;
     /**
      * 加息期数
      */
@@ -85,19 +86,19 @@ public class RepaymentModel implements Serializable {
         this.credUserId = credUserId;
     }
 
-    public Double getCredPlanPrincipal() {
+    public BigDecimal getCredPlanPrincipal() {
         return credPlanPrincipal;
     }
 
-    public void setCredPlanPrincipal(Double credPlanPrincipal) {
+    public void setCredPlanPrincipal(BigDecimal credPlanPrincipal) {
         this.credPlanPrincipal = credPlanPrincipal;
     }
 
-    public Double getCredPlanInterest() {
+    public BigDecimal getCredPlanInterest() {
         return credPlanInterest;
     }
 
-    public void setCredPlanInterest(Double credPlanInterest) {
+    public void setCredPlanInterest(BigDecimal credPlanInterest) {
         this.credPlanInterest = credPlanInterest;
     }
 
@@ -117,11 +118,11 @@ public class RepaymentModel implements Serializable {
         this.redLocalInfo = redLocalInfo;
     }
 
-    public Double getRedPlanAmount() {
+    public BigDecimal getRedPlanAmount() {
         return redPlanAmount;
     }
 
-    public void setRedPlanAmount(Double redPlanAmount) {
+    public void setRedPlanAmount(BigDecimal redPlanAmount) {
         this.redPlanAmount = redPlanAmount;
     }
 
@@ -141,19 +142,19 @@ public class RepaymentModel implements Serializable {
         this.redTermNum = redTermNum;
     }
 
-    public Double getVipRate() {
+    public BigDecimal getVipRate() {
         return vipRate;
     }
 
-    public void setVipRate(Double vipRate) {
+    public void setVipRate(BigDecimal vipRate) {
         this.vipRate = vipRate;
     }
 
-    public Double getVipPlanAmount() {
+    public BigDecimal getVipPlanAmount() {
         return vipPlanAmount;
     }
 
-    public void setVipPlanAmount(Double vipPlanAmount) {
+    public void setVipPlanAmount(BigDecimal vipPlanAmount) {
         this.vipPlanAmount = vipPlanAmount;
     }
 
@@ -165,11 +166,11 @@ public class RepaymentModel implements Serializable {
         this.vipTermNum = vipTermNum;
     }
 
-    public Double getPfPlanAmount() {
+    public BigDecimal getPfPlanAmount() {
         return pfPlanAmount;
     }
 
-    public void setPfPlanAmount(Double pfPlanAmount) {
+    public void setPfPlanAmount(BigDecimal pfPlanAmount) {
         this.pfPlanAmount = pfPlanAmount;
     }
 
