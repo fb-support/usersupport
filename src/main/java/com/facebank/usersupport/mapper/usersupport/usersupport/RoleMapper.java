@@ -2,9 +2,11 @@ package com.facebank.usersupport.mapper.usersupport.usersupport;
 
 import com.facebank.usersupport.model.RoleModel;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface RoleMapper {
     int deleteByPrimaryKey(Long roleId);
 
@@ -19,6 +21,6 @@ public interface RoleMapper {
     int updateStatus(@Param("status") Short status, @Param("roleId") Long roleId, @Param("currentTime") Long currentTime);
 
     int updateByPrimaryKeySelective(RoleModel record);
-
+    List<RoleModel> queryAllRole();
     int updateByPrimaryKey(RoleModel record);
 }

@@ -71,16 +71,16 @@
 			<iframe class="center_show_area" id="log-journal" src="/log/generalJournal" frameborder="0"></iframe>
 			<!--角色管理 -->
 			<iframe class="center_show_area" id="role-manage" src="/role/roleManage" frameborder="0"></iframe>
+			<!--用户角色管理 -->
+			<iframe class="center_show_area" id="userPermission-manage" src="/role/userManage" frameborder="0"></iframe>
 			<!--菜单管理 -->
-			<iframe class="center_show_area" id="menu-manage" src="/role/menuManage" frameborder="0"></iframe>
-			<!--权限管理 -->
-			<iframe sec:authorize="hasRole('ROLE_ADMIN')" class="center_show_area" id="permission-page" src="/v1.0/permission" frameborder="0"></iframe>
+			<iframe class="center_show_area" id="menu-manage" src="/menu/menuManage" frameborder="0"></iframe>
 			<!--用户管理--增加用户 -->
-			<iframe sec:authorize="hasRole('ROLE_ADMIN')" class="center_show_area" id="userManager-add-user-page" src="/um/addUser" frameborder="0"></iframe>
+			<iframe  class="center_show_area" id="userManager-add-user-page" src="/um/addUser" frameborder="0"></iframe>
 			<!--用户管理--管理用户 -->
-			<iframe sec:authorize="hasRole('ROLE_ADMIN')" class="center_show_area" id="userManager-opera-user-page" src="/um/managerment" frameborder="0"></iframe>
+			<iframe  class="center_show_area" id="userManager-opera-user-page" src="/um/managerment" frameborder="0"></iframe>
 			<!--用户管理--用户登录流水 -->
-			<iframe sec:authorize="hasRole('ROLE_ADMIN')" class="center_show_area" id="userManager-login-page" src="/ul/managerment" frameborder="0"></iframe>
+			<iframe  class="center_show_area" id="userManager-login-page" src="/ul/managerment" frameborder="0"></iframe>
 
 		</div>		
 	</div>

@@ -5,6 +5,7 @@ import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.MenuModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.IMenuService;
+import com.facebank.usersupport.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import java.util.List;
 public class MenuController extends BaseController {
     @Autowired
     private IMenuService menuService;
+    @Autowired
+    IUserService userService;
     @RequestMapping("/test1")
     public RestModel get(@RequestParam("username") String username){
         return this.success(menuService.queryMenuByName(username));
@@ -27,28 +30,29 @@ public class MenuController extends BaseController {
         return this.success(menuService.queryMenuByUserId(userId));
     }
 
-    @RequestMapping("menu/findAllMenu")
+    @RequestMapping("/menu/findAllMenu")
     public RestModel findAllMenu() { return menuService.findAll(); }
-    @GetMapping("menu/getMenu")
+    @GetMapping("/menu/getMenu")
     public RestModel getMenu(String menuName, String menuUrl, Short status) {
         List<MenuModel> menuModel = menuService.getMenu(menuName,menuUrl,status);
         return this.success(menuModel);
         //return this.success(menuModel);
     }
-    @RequestMapping("menu/updateByPrimaryKey")
+    @RequestMapping("/menu/updateByPrimaryKey")
     public RestModel updateMenu(MenuModel menuModel) {
         Date date = new Date();
         Long modifytime = date.getTime();
         menuModel.setGmtModify(modifytime);
+        System.out.println(menuModel);
         /*Long id = 11L;
         menuModel.setMenuId(id);
         menuModel.setMenuName("test13333");*/
         menuService.updateMenu(menuModel);
         return this.success(menuModel);
     }
-    @RequestMapping("menu/insertSelective")
+    @RequestMapping("/menu/insertSelective")
     public RestModel insertMenu(MenuModel menuModel) {
-
+        System.out.println(menuModel);
         Date date = new Date();
         Long createtime = date.getTime();
         /*Short s = 1;
@@ -57,20 +61,25 @@ public class MenuController extends BaseController {
         menuModel.setMenuUrl("/menu");
         menuModel.setStatus(s);
         menuModel.setCreator(id);*/
+        menuModel.setCreator(userService.getActiveUserId());
         menuModel.setGmtCreate(createtime);
-
+        System.out.println(menuModel);
         menuService.insertMenu(menuModel);
         return this.success(menuModel);
     }
-    @RequestMapping("menu/deleteMenu")
-    public void deleteMenuById(Long id) {
-        id = 10L;
-        menuService.deleteByMenuIds(id);
+    @RequestMapping("/menu/deleteMenu")
+    public RestModel deleteMenuById(Long menuId) {
+        System.out.println(menuId);
+        menuService.deleteByMenuIds(menuId);
+        return this.success("删除成功");
     }
+
     @GetMapping("/menu/selectById")
     public RestModel selectById(Long menuId) {
+        System.out.println(menuId);
         try {
             MenuModel model = menuService.selectById(menuId);
+            System.out.println(model);
             return this.success(model);
         } catch (Exception e) {
             e.printStackTrace();

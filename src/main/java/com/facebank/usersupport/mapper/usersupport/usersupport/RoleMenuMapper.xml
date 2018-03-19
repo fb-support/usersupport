@@ -17,6 +17,10 @@
     from role_menu
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <delete id="deleteByRoleId" parameterType="java.lang.Long">
+    delete from role_menu
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from role_menu
     where id = #{id,jdbcType=BIGINT}
@@ -95,7 +99,6 @@
     delete from role_menu
     where role_id = #{roleId,jdbcType=BIGINT} and menu_id = #{menuId,jdbcType=BIGINT}
   </delete>
-
   <select id="findMenuAlready" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

@@ -34,22 +34,23 @@
 					</ul>
 				</div>
 			</li>
-			<li class="module-1" sec:authorize="hasRole('ROLE_ADMIN')">
-				<span class="big_class">权限管理</span>
+			<li class="module-1"  sec:authorize="hasAnyAuthority('role','menu')" >
+				<span class="big_class" >权限管理</span>
 				<div class="module-2">
 					<ul class="nav">
-						<li><span class="glyphicon glyphicon-eye-open"></span><span><a href="javascript:roleManage()">角色管理</a></span></li>
-						<li><span class="glyphicon glyphicon-eye-open"></span><span><a href="javascript:menuManage()">资源管理</a></span></li>
+						<li  sec:authorize="hasAuthority('role')"><span class="glyphicon glyphicon-eye-open"></span><span><a href="javascript:run_addUserManeger()">用户角色管理</a></span></li>
+						<li  sec:authorize="hasAuthority('role')"><span class="glyphicon glyphicon-eye-open"></span><span><a href="javascript:roleManage()">角色管理</a></span></li>
+						<li sec:authorize="hasAuthority('menu')"><span class="glyphicon glyphicon-eye-open"></span><span><a href="javascript:menuManage()">资源管理</a></span></li>
 					</ul>
 				</div>
 			</li>
-			<li class="module-1" sec:authorize="hasRole('ROLE_ADMIN')">
+			<li class="module-1" sec:authorize="hasAuthority('user')">
 				<span class="big_class">用户管理</span>
 				<div class="module-2">
 					<ul class="nav">
-						<li><span class="glyphicon glyphicon-edit"></span><span>&nbsp;&nbsp;<a href="javascript:run_addUser()">增加用户</a></span></li>
-						<li><span class="glyphicon glyphicon-eye-open"></span><span>&nbsp;&nbsp;<a href="javascript:runOperaUser()">管理用户</a></span></li>
-						<li><span class="glyphicon glyphicon-eye-open"></span><span>&nbsp;&nbsp;<a href="javascript:runUserLog()">用户登录流水</a></span></li>
+						<li sec:authorize="hasAuthority('user')"><span class="glyphicon glyphicon-edit"></span><span>&nbsp;&nbsp;<a href="javascript:run_addUser()">增加用户</a></span></li>
+						<li sec:authorize="hasAuthority('user')"><span class="glyphicon glyphicon-eye-open"></span><span>&nbsp;&nbsp;<a href="javascript:runOperaUser()">管理用户</a></span></li>
+						<li sec:authorize="hasAuthority('user')"><span class="glyphicon glyphicon-eye-open"></span><span>&nbsp;&nbsp;<a href="javascript:runUserLog()">用户登录流水</a></span></li>
 					</ul>
 				</div>
 			</li>

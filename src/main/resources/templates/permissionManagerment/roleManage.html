@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/roleManege.js}"></script>
 </head>
 <body>
 <div class="container center" style="margin-top: 20px;">
@@ -68,16 +69,37 @@
     </div>
 </div>
 <script>
+    function updataDate  () {
+        var ids = new Array();
+        $("input:checkbox:checked").each(function () {
+            ids.push($(this).val());
+        });
+        $.ajax({
+            url:"/role/updataMenu",
+            type:"POST",
+            dataType:"json",
+            data:{ids:ids,id:recipient},
+            success:function (json) {
+                alert("提交成功");
+                $("#exampleModal").modal("hide");
+            },error:function () {
+                alert("提交失败，必须存在一条权限")
+                $("#exampleModal").modal("hide");
+            }
+        })
+    }
     var recipient="";
     $('#exampleModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // 触发事件的按钮
-         recipient = button.data('whatever') // 解析出data-whatever内容
+        recipient = button.data('whatever') // 解析出data-whatever内容
         var ids=new Array();
         $.ajax({
             url: "/menu/findAllMenu",
             type: "POST",
             dataType: "json",
             success: function (json) {
+
+                console.log(json);
                 var str = ""
                 for (var i = 0; i < json.data.length; i++) {
                     str += "<tr class='success'>" +
@@ -99,12 +121,14 @@
             dataType: "json",
             data:{id:recipient},
             success:function (json) {
+                console.log(json);
                 for (var i=0;i<json.data.length;i++){
-
-                     if (-1 !=ids.indexOf(json.data[i].menuId)){
-                         console.log(json.data[i].menuId);
-                         modal.find('#'+json.data[i].menuId).attr("checked","checked");
-                     }
+                    if(json.data[i]!=null && json.data[i].menuId!=null){
+                        if (-1 !=ids.indexOf(json.data[i].menuId)) {
+                            console.log(json.data[i].menuId);
+                            modal.find('#' + json.data[i].menuId).attr("checked", "checked");
+                        }
+                    }
                 }
             }
         })
@@ -143,23 +167,8 @@
         return data;
     }
 
-    function updataDate  () {
-        var ids = new Array();
-        $("input:checkbox:checked").each(function () {
-            ids.push($(this).val());
-        });
-       $.ajax({
-           url:"/role/updataMenu",
-           type:"POST",
-           dataType:"json",
-           data:{ids:ids,id:recipient},
-           success:function (json) {
-               alert("提交成功")
-           },error:function () {
-               alert("提交失败，必须存在一条权限")
-           }
-       })
-    }
+
+
 </script>
 </body>
 </html>

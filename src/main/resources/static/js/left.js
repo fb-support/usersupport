@@ -84,7 +84,21 @@ function generalJournal() {
         addSmallCardForThisPage("log-journal", "资金流水");
     }
 }
+/**
+ * 前往权限-用户角色管理页面
+ */
+function run_addUserManeger() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    $("#userPermission-manage").show();
 
+    //显示tab
+    if ( $("li[value='userPermission-manage']").length > 0 ) {
+        switchPage( "userPermission-manage" );
+    } else {
+        addSmallCardForThisPage("userPermission-manage", "用户角色管理");
+    }
+}
 /**
  * 前往权限-角色管理页面
  */

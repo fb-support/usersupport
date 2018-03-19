@@ -24,7 +24,7 @@ public interface MenuMapper {
 
     List<MenuModel> getMenu(@Param("menuName") String menuName, @Param("menuUrl") String menuUurl, @Param("status") Short status);
 
-    MenuModel selectById(Long menuId);
+    MenuModel selectById(@Param("menuId") Long menuId);
 
     List<MenuModel> queryMenuByUserId(@Param("userId") Long userId);
     List<MenuModel> queryMenuByName(@Param("username") String username);
