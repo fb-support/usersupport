@@ -41,21 +41,7 @@
                             </tr>
                             </thead>
                             <tbody id="permission">
-                            <tr class="success">
-                                <td><input type="checkbox"></td>
-                                <td>/test/test</td>
-                                <td>测试</td>
-                            </tr>
-                            <tr class="success">
-                                <td><input type="checkbox"></td>
-                                <td>/user/findAll</td>
-                                <td>查询所有</td>
-                            </tr>
-                            <tr class="success">
-                                <td><input type="checkbox"></td>
-                                <td>20/10/2013</td>
-                                <td>待确认</td>
-                            </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -93,27 +79,6 @@
         var button = $(event.relatedTarget) // 触发事件的按钮
         recipient = button.data('whatever') // 解析出data-whatever内容
         var ids=new Array();
-        $.ajax({
-            url: "/menu/findAllMenu",
-            type: "POST",
-            dataType: "json",
-            success: function (json) {
-
-                console.log(json);
-                var str = ""
-                for (var i = 0; i < json.data.length; i++) {
-                    str += "<tr class='success'>" +
-                        " <td><input type='checkbox' id='"+json.data[i].menuId+"'value='"+json.data[i].menuId+"'></td>" +
-                        " <td>"+json.data[i].menuUrl+"</td>" +
-                        " <td>"+json.data[i].menuName+"</td></tr>";
-                    ids[i] = json.data[i].menuId;
-                    console.log(ids[i]);
-                }
-                $('#permission').html(str);
-            },error:function () {
-                alert("flase");
-            }
-        });
         var modal = $(this);
         $.ajax({
             url:"/role/findMenuAlready",
@@ -121,15 +86,19 @@
             dataType: "json",
             data:{id:recipient},
             success:function (json) {
-                console.log(json);
-                for (var i=0;i<json.data.length;i++){
-                    if(json.data[i]!=null && json.data[i].menuId!=null){
-                        if (-1 !=ids.indexOf(json.data[i].menuId)) {
-                            console.log(json.data[i].menuId);
-                            modal.find('#' + json.data[i].menuId).attr("checked", "checked");
-                        }
+                var str = "";
+                for (var i = 0; i < json.data.length; i++) {
+                    var checked ="";
+                    if (json.data[i].roleId!=null){
+                        checked = "checked='checked'";
                     }
+                    str += "<tr class='success'>" +
+                        " <td><input type='checkbox' "+checked+"id='"+json.data[i].menuId+"'value='"+json.data[i].menuId+"'></td>"+
+                        " <td>"+json.data[i].menuUrl+"</td>" +
+                        " <td>"+json.data[i].menuName+"</td></tr>";
+                    ids[i] = json.data[i].menuId;
                 }
+                $('#permission').html(str);
             }
         })
 

@@ -15,7 +15,6 @@ function updataDate  () {
         }
     })
 }
-var recipient="";
 $('#exampleModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // 触发事件的按钮
     recipient = button.data('whatever') // 解析出data-whatever内容

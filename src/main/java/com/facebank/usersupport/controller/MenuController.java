@@ -21,70 +21,133 @@ public class MenuController extends BaseController {
     private IMenuService menuService;
     @Autowired
     IUserService userService;
+    /**
+     * 根据用户名找到对应菜单
+     * @param username
+     * @return
+     */
     @RequestMapping("/test1")
     public RestModel get(@RequestParam("username") String username){
-        return this.success(menuService.queryMenuByName(username));
+        try {
+            return this.success(menuService.queryMenuByName(username));
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNKNOW);
+        }
     }
+    /**
+     * 根据用户Id 找到对应菜单
+     * @param userId
+     * @return
+     */
     @RequestMapping("/test2")
     public RestModel gets(@RequestParam("userId") Long userId ){
-        return this.success(menuService.queryMenuByUserId(userId));
+        try {
+            return this.success(menuService.queryMenuByUserId(userId));
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNKNOW);
+        }
+
     }
 
+    /**
+     * 找到所有菜单
+     * @return
+     */
     @RequestMapping("/menu/findAllMenu")
-    public RestModel findAllMenu() { return menuService.findAll(); }
+    public RestModel findAllMenu() {
+        try {
+            return menuService.findAll();
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNKNOW);
+        }
+    }
+    /**
+     * 根据字段查询
+     * @param menuName
+     * @param menuUrl
+     * @param status
+     * @return
+     */
     @GetMapping("/menu/getMenu")
     public RestModel getMenu(String menuName, String menuUrl, Short status) {
-        List<MenuModel> menuModel = menuService.getMenu(menuName,menuUrl,status);
-        return this.success(menuModel);
-        //return this.success(menuModel);
+        try {
+            List<MenuModel> menuModel = menuService.getMenu(menuName,menuUrl,status);
+            return this.success(menuModel);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNKNOW);
+        }
     }
+    /**
+     * 更新菜单信息
+     * @param menuModel
+     * @return
+     */
     @RequestMapping("/menu/updateByPrimaryKey")
     public RestModel updateMenu(MenuModel menuModel) {
-        Date date = new Date();
-        Long modifytime = date.getTime();
-        menuModel.setGmtModify(modifytime);
-        System.out.println(menuModel);
-        /*Long id = 11L;
-        menuModel.setMenuId(id);
-        menuModel.setMenuName("test13333");*/
-        menuService.updateMenu(menuModel);
-        return this.success(menuModel);
+        try{
+            Date date = new Date();
+            Long modifytime = date.getTime();
+            menuModel.setGmtModify(modifytime);
+            System.out.println(menuModel);
+            menuService.updateMenu(menuModel);
+            return this.success(menuModel);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNKNOW);
+        }
     }
+    /**
+     * 增加新菜单
+     * @param menuModel
+     * @return
+     */
     @RequestMapping("/menu/insertSelective")
     public RestModel insertMenu(MenuModel menuModel) {
-        System.out.println(menuModel);
-        Date date = new Date();
-        Long createtime = date.getTime();
-        /*Short s = 1;
-        Long id = 1L;
-        menuModel.setMenuName("test123");
-        menuModel.setMenuUrl("/menu");
-        menuModel.setStatus(s);
-        menuModel.setCreator(id);*/
-        menuModel.setCreator(userService.getActiveUserId());
-        menuModel.setGmtCreate(createtime);
-        System.out.println(menuModel);
-        menuService.insertMenu(menuModel);
-        return this.success(menuModel);
+        try {
+            Date date = new Date();
+            Long createtime = date.getTime();
+            menuModel.setCreator(userService.getActiveUserId());
+            menuModel.setGmtCreate(createtime);
+            menuService.insertMenu(menuModel);
+            return this.success(menuModel);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNKNOW);
+        }
     }
+    /**
+     * 删除菜单
+     * @param menuId
+     * @return
+     */
     @RequestMapping("/menu/deleteMenu")
     public RestModel deleteMenuById(Long menuId) {
-        System.out.println(menuId);
-        menuService.deleteByMenuIds(menuId);
-        return this.success("删除成功");
+        try {
+            menuService.deleteByMenuIds(menuId);
+            return this.success("删除成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNKNOW);
+        }
     }
-
+    /**
+     * 根据menuId 获取菜单信息
+     * @param menuId
+     * @return
+     */
     @GetMapping("/menu/selectById")
     public RestModel selectById(Long menuId) {
         System.out.println(menuId);
         try {
             MenuModel model = menuService.selectById(menuId);
-            System.out.println(model);
             return this.success(model);
         } catch (Exception e) {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.ERROR);
         }
-
     }
 }

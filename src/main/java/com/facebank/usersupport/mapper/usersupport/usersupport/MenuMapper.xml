@@ -152,7 +152,7 @@
 				INNER JOIN (SELECT role_id FROM	role where status = 1)as trole
 				ON tuser_role.role_id = trole.role_id ) as trole_menu
 				INNER JOIN role_menu ON trole_menu.role_id = role_menu.role_id
-	)as tmenu INNER JOIN menu ON tmenu.menu_id = menu.menu_id;
+	)as tmenu INNER JOIN (select * from menu where menu.status=1)as tmp ON tmenu.menu_id = tmp.menu_id;
   </select>
   <select id="queryMenuByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
      SELECT menu.* FROM(

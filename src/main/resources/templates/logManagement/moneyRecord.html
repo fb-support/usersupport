@@ -51,9 +51,8 @@
     <div id="pageing"></div>
 </div>
 <script>
-    var counts = 5;
+    var counts = 6;
     $(document).ready(function () {
-
         getPageAttribute(1,counts);
     })
     //查询
@@ -63,7 +62,7 @@
 
     function getPageAttribute(page,couts){
         $.ajax({
-            url: "getMoneyRecordPage",
+            url: "/money/getMoneyRecordPage",
             type: "POST",
             dataType: "json",
             data: {
@@ -75,6 +74,7 @@
                 couts:couts
             },
             success: function (json) {
+                console.log(json);
                 var resdata = json.data;
                 createPageNav({
                     $container : $("#pageing"),

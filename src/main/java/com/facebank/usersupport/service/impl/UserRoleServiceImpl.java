@@ -7,12 +7,11 @@ import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.RoleModel;
 import com.facebank.usersupport.model.UserRoleModel;
 import com.facebank.usersupport.service.IUserRoleService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,63 +32,43 @@ public class UserRoleServiceImpl implements IUserRoleService {
     }
 
     @Override
-    public List <UserRoleDO> findAllUser(UserRoleDO userRoleDO) {
-        return userRoleMapper.findAllUser(userRoleDO);
+    public RestModel findAllUser(UserRoleDO userRoleDO) {
+        return new RestModel(userRoleMapper.findAllUser(userRoleDO));
     }
 
     @Override
-    public List <RoleModel> findAllRole(RoleModel roleModel) {
-        return userRoleMapper.findAllRole(roleModel);
+    public RestModel findAllRole(RoleModel roleModel) {
+        return new RestModel(userRoleMapper.findAllRole(roleModel));
     }
 
     @Override
-    public List <UserRoleModel> findRoleBegin(Long userId) {
-        return userRoleMapper.findRoleBegin(userId);
+    public RestModel findRoleBegin(Long userId) {
+        return new RestModel(userRoleMapper.findRoleBegin(userId));
     }
 
     @Override
-    public RestModel updateRole(Long[] userId, Long id) {
-        //如果已有菜单被取消则移除
-        List <Long> ids = returnIds(id);
-        for (Long item : ids) {
-            if (!Arrays.asList(userId).contains(item)) {
-                userRoleMapper.removeRoleByUser(id, item);
-            }
+    public RestModel updateRole(Long[] userIds, Long id) {
+        //删除用户角色
+        userRoleMapper.deleteByUserId(id);
+        //更新用户角色
+        for (Long item : userIds) {
+            UserRoleModel userRole = new UserRoleModel();
+            userRole.setRoleId(item);
+            userRole.setUserId(id);
+            userRole.setGmtCreate(System.currentTimeMillis());
+            userRoleMapper.insert(userRole);
         }
-        //如果未有菜单被勾选则增加
-        List <Long> allNebuId = new ArrayList <Long>();
-        List <RoleModel> roles = roleMapper.queryAllRole();
-        for (RoleModel role : roles) {
-            allNebuId.add(role.getRoleId());
-        }
-               for (Long role : allNebuId) {
-                   for (Long iditem : userId) {
-                       if (role == iditem) {
-                           userRoleMapper.removeRoleByUser(id, iditem);
-                           addRoleMenu(id, iditem);
-                   }
-               }
-           }
-        return new RestModel();
+        return new RestModel(RestModel.CODE_SUCCESS, RestModel.MESSAGE_SUCCESS);
     }
 
-    public List<Long> returnIds(Long userId) {
-        List<UserRoleModel> userRoleModels = userRoleMapper.findRoleBegin(userId);
-        List<Long> ids = new ArrayList<Long>();
-        for (UserRoleModel item:userRoleModels) {
-            new RoleModel();
-            RoleModel role = roleMapper.selectByPrimaryKey(item.getRoleId());
-            ids.add(role.getRoleId());
-        }
-        return ids;
+
+    @Override
+    public PageInfo selectByPage(int pageSize, int pageNumber, UserRoleDO userRoleDO) {
+        PageHelper.startPage(pageNumber, pageSize);
+        List<UserRoleDO> userRoleDOS = userRoleMapper.findAllUser(userRoleDO);
+        PageInfo<UserRoleDO> pageInfo = new PageInfo<>(userRoleDOS);
+        return pageInfo;
     }
-    public void addRoleMenu(Long userId, Long roleId){
-        UserRoleModel userRoleModel = new UserRoleModel();
-        userRoleModel.setUserId(userId);
-        userRoleModel.setRoleId(roleId);
-        userRoleModel.setGmtCreate(new Date().getTime());
-        userRoleModel.setGmtModify(new Date().getTime());
-        userRoleMapper.insert(userRoleModel);
-    }
+
 
 }

@@ -1,9 +1,9 @@
 package com.facebank.usersupport.service.impl;
 
+import com.facebank.usersupport.dto.RoleMenuDto;
 import com.facebank.usersupport.mapper.usersupport.usersupport.MenuMapper;
 import com.facebank.usersupport.mapper.usersupport.usersupport.RoleMapper;
 import com.facebank.usersupport.mapper.usersupport.usersupport.RoleMenuMapper;
-import com.facebank.usersupport.model.MenuModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.RoleMenuModel;
 import com.facebank.usersupport.model.RoleModel;
@@ -11,7 +11,6 @@ import com.facebank.usersupport.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -77,14 +76,8 @@ public class RoleServiceImpl implements IRoleService {
     }
     @Override
     public RestModel findMenuAlready(Long roleId) {
-        List<RoleMenuModel> roleMenus = roleMenuMapper.findMenuAlready(roleId);
-        List<MenuModel> menus =new ArrayList<MenuModel>();
-        for (RoleMenuModel item:roleMenus) {
-             new MenuModel();
-            MenuModel menu = menuMapper.selectByPrimaryKey(item.getMenuId());
-            ;menus.add(menu);
-        }
-        return new RestModel(menus);
+        List<RoleMenuDto> roleMenus = roleMenuMapper.findMenuAlready(roleId);
+        return new RestModel(roleMenus);
     }
 
     @Override
@@ -102,23 +95,6 @@ public class RoleServiceImpl implements IRoleService {
 
         return new RestModel(RestModel.CODE_SUCCESS, RestModel.MESSAGE_SUCCESS);
     }
-    public List<Long> returnIds(Long roleId) {
-        List<RoleMenuModel> roleMenus = roleMenuMapper.findMenuAlready(roleId);
-        List<Long> ids = new ArrayList<Long>();
-        for (RoleMenuModel item:roleMenus) {
-            new MenuModel();
-            MenuModel menu = menuMapper.selectByPrimaryKey(item.getMenuId());
-            ids.add(menu.getMenuId());
-        }
-        return ids;
-    }
 
-    public void addRoleMenu(Long roleId,Long menuId) {
-        RoleMenuModel roleMenuModel = new RoleMenuModel();
-        roleMenuModel.setRoleId(roleId);
-        roleMenuModel.setMenuId(menuId);
-        roleMenuModel.setGmtCreate(new Date().getTime());
-        roleMenuMapper.insert(roleMenuModel);
-    }
 
 }

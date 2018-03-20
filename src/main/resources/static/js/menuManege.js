@@ -2,7 +2,8 @@ function updataDate(){
     var data = {
         menuId : recipient,
         menuName: document.getElementById("umenuName").value,
-        status: $("#umenuStatus").val(),
+        status: $("#umenuStatus option:selected").val(),
+
         description: document.getElementById("umenuDescription").value
     }
     console.log(data);
@@ -28,7 +29,7 @@ function InsertDate () {
     var data = {
         menuName: document.getElementById("menuName").value,
         menuUrl: document.getElementById("menuUrl").value,
-        status: $("#status").val(),
+        status: $("#status option:selected").val(),
         description: document.getElementById("description").value
     }
     console.log(data);
@@ -76,10 +77,14 @@ var findAllMenu = function () {
             var data = json.data;
             var str = "";
             for (var i = 0; i < data.length; i++) {
+                var status = "禁用";
+                if(validate(data[i].status)==1){
+                    status="启用";
+                }
                 str += '<tr>' +
                     "<td >" + validate(data[i].menuId) + "</td>" +
                     "<td>" + validate(data[i].menuName) + "</td>" +
-                    "<td>" + validate(data[i].status) + "</td>" +
+                    "<td>" + status + "</td>" +
                     "<td>" + validate(data[i].description) + "</td>" +
                     "<th ><button type='button' class='btn btn-default' data-toggle='modal' data-target='#exampleModal'" +
                     "data-whatever='" + data[i].menuId + "'>编辑</button>" +

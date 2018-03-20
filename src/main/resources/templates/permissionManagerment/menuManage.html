@@ -64,7 +64,10 @@
                             <tbody  id="permissionInsert">
                             <tr><td>菜单名:<input type="text" id="menuName" class="form-control" ></td></tr>
                             <tr><td>链接:<input type="text" id="menuUrl" class="form-control"></td></tr>
-                            <tr><td>启用状态:<input type="text" id="status" class="form-control"></td></tr>
+                            <tr><td>启用状态:<select id="status" class="form-control">
+                                <option value="1" selected>启用</option>
+                                <option value="0">禁用</option>
+                            </select></td></tr>
                             <tr><td>描述:<input type="text" id="description" class="form-control"></td></tr>
                             </tbody>
                         </table>
@@ -94,11 +97,19 @@
                 console.log(json);
                 var data = json.data;
                 var str = "";
+                var select = "";
+                if(data.status == 1){
+                     select = "<option value='1' selected>启用</option><option value='0' >禁用</option></select></td></tr>";
+                }else{
+                    select = "<option value='1'>启用</option><option value='0' selected>禁用</option></select></td></tr>";
+                }
                 str += "<tr>" +
                     "<td >菜单名字:<input type='text'id='umenuName' class='form-control' value='" + data.menuName + "'></td></tr>" +
-                    "<tr><td >启用状态:<input type='text'id='umenuStatus' class='form-control' value='" + data.status + "'></td></tr>" +
+                    "<tr><td >启用状态:<select id='umenuStatus' class='form-control' >" +
+                    select +
                     "<tr><td >描述:<input type='text'id='umenuDescription' class='form-control' value='" + data.description + "'></td></tr>  "
                 $('#permission').html(str);
+                $('#umenuStatus').attr('value','data.status');
             }, error: function () {
                 alert("请求失败");
             }

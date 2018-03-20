@@ -6,16 +6,14 @@ import com.facebank.usersupport.dto.UserRoleDO;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.RoleMenuModel;
 import com.facebank.usersupport.model.RoleModel;
-import com.facebank.usersupport.model.UserRoleModel;
 import com.facebank.usersupport.service.IRoleService;
 import com.facebank.usersupport.service.IUserRoleService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 角色管理controller
@@ -27,7 +25,15 @@ public class RoleController extends BaseController {
     private IRoleService iRoleService;
     @Autowired
     private IUserRoleService userRoleService;
-    //新增角色
+
+
+    /**
+     * 功能描述: 新增角色
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/addRole")
     public RestModel insertRole(RoleModel role) {
         //TODO 获取session当前用户id
@@ -35,59 +41,140 @@ public class RoleController extends BaseController {
         return iRoleService.insertRole(role);
     }
 
-    // 查看全部角色
+    /**
+     * 功能描述: 查看全部角色
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/findAll")
     public RestModel findAll(RoleModel role) {
         return iRoleService.findAllRole();
     }
 
-    //通过id查找用户
+    /**
+     * 功能描述: 通过id查找用户
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/findRoleById")
     public RestModel findRoleById(Long id) {
         return iRoleService.findRoleById(id);
     }
 
-    // 修改角色状态
+    /**
+     * 功能描述: 修改角色状态
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/updateStatus")
     public RestModel findRoleById(Short status, Long id) {
         return iRoleService.updateStatus(status, id);
     }
-    // 角色增加菜单
+    /**
+     * 功能描述:角色增加菜单
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/addMenuToRole")
     public RestModel addMenuToRole(RoleMenuModel roleMenuModel) {
         return iRoleService.insertMenuByRole(roleMenuModel);
     }
-    // 角色移除菜单
+    /**
+     * 功能描述:角色移除菜单
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/removeMenuToRole")
     public RestModel removeMenuToRole(Long id) {
         return iRoleService.deleteMenuByRole(id);
     }
-    // 显示角色已有权限
+    /**
+     * 功能描述: 显示角色已有权限
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/findMenuAlready")
     public RestModel findMenuAlready(Long id) {
         return iRoleService.findMenuAlready(id);
     }
-
+      /**
+       * 功能描述:查找所有用户
+       * @param:
+       * @return:
+       * @auther: yaozun
+       * @date:
+       */
     @PostMapping("/role/findAllUser")
     public RestModel findAllUser(UserRoleDO userRoleDO){
-        List<UserRoleDO> lists= userRoleService.findAllUser(userRoleDO);
-        return this.success(lists);
+        return userRoleService.findAllUser(userRoleDO);
     }
+    /**
+     * 功能描述:查找所有用户分页
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
+    @RequestMapping("/role/findUserByPage")
+    public RestModel findUserByPage(@RequestParam(required = false, defaultValue = "1") int pageNo,
+                                    @RequestParam(required = false, defaultValue = "10") int length, UserRoleDO model){
+        System.out.println(pageNo);
+        PageInfo pageInfo = userRoleService.selectByPage(length, pageNo, model);
+        System.out.println(pageInfo);
+        return this.success(pageInfo);
+    }
+    /**
+     * 功能描述: 查找所有角色
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/findAllRole")
     public RestModel findAllRole(RoleModel roleModel){
-        List<RoleModel> lists = userRoleService.findAllRole(roleModel);
-        return this.success(lists);
+        return userRoleService.findAllRole(roleModel);
     }
+    /**
+     * 功能描述: 查找已有角色
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/findRoleBegin")
     public RestModel findRoleBegin(Long userId){
-        List<UserRoleModel> userRoleModel = userRoleService.findRoleBegin(userId);
-        return this.success(userRoleModel);
+        return userRoleService.findRoleBegin(userId);
     }
-
+     /**
+      * 功能描述: 更新角色
+      * @param:
+      * @return:
+      * @auther: yaozun
+      * @date:
+      */
     @RequestMapping("/role/updateRole")
     public RestModel updateRole(@RequestParam(value ="ids[]") Long[] ids, Long id) {
         return userRoleService.updateRole(ids, id);
     }
+    /**
+     * 功能描述:更新菜单
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
     @RequestMapping("/role/updataMenu")
     public RestModel updataMenu(@RequestParam(value = "ids[]") Long[] ids, Long id) {
         for(Long i: ids){

@@ -1,5 +1,6 @@
 package com.facebank.usersupport.mapper.usersupport.usersupport;
 
+import com.facebank.usersupport.dto.RoleMenuDto;
 import com.facebank.usersupport.model.RoleMenuModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,7 @@ public interface RoleMenuMapper {
 
     RoleMenuModel selectByPrimaryKey(Long id);
 
-    List<RoleMenuModel> findMenuAlready(Long roleId);
+    List<RoleMenuDto> findMenuAlready(Long roleId);
 
     int updateByPrimaryKeySelective(RoleMenuModel record);
 

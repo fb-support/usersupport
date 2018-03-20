@@ -4,8 +4,7 @@ import com.facebank.usersupport.dto.UserRoleDO;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.RoleModel;
 import com.facebank.usersupport.model.UserRoleModel;
-
-import java.util.List;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @author JJ
@@ -22,20 +21,22 @@ public interface IUserRoleService {
      * 查询所有用户以及角色
      * @return
      */
-    List<UserRoleDO> findAllUser(UserRoleDO userRoleDO);
+    RestModel findAllUser(UserRoleDO userRoleDO);
     /**
      * 查询所角色
      * @return
      */
-    List<RoleModel> findAllRole(RoleModel roleModel);
+    RestModel findAllRole(RoleModel roleModel);
     /**
      * 通过userID查询角色状态
      * @return
      */
-    List<UserRoleModel> findRoleBegin(Long userId);
+    RestModel findRoleBegin(Long userId);
     /**
      * 通过id更改角色
      * @return
      */
     RestModel updateRole(Long[] userId, Long id);
+
+    PageInfo selectByPage(int pageSize, int pageNumber, UserRoleDO userRoleDO);
 }
