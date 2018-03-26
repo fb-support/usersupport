@@ -1,10 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/menuManege.js}"></script>
 </head>
 <body>
-菜单管理
+<div class="container center" style="margin-top: 20px;">
+    <div class="panel panel-default" id="document">
+        <!-- Default panel contents -->
+        <div class="panel-heading">菜单管理
+        <button style = "float: right" class="btn btn-default" type="button" data-target="#exampleModalInsert" data-toggle="modal">新增菜单</button>
+        </div>
+
+        <!-- Table -->
+        <table class="table" >
+            <thead>
+            <tr >
+                <th >菜单编号</th>
+                <th >菜单名</th>
+                <th >启用状态</th>
+                <th >描述</th>
+                <th >操作</th>
+            </tr>
+            </thead>
+            <tbody id="menu">
+            </tbody>
+        </table>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">菜单编辑</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <tbody  id="permission">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="updataDate()">修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="exampleModalInsert" tabindex="-1" role="dialog" aria-labelledby="exampleModalInsertLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="exampleModalInsertLabel">新增菜单</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            </thead>
+                            <tbody  id="permissionInsert">
+                            <tr><td>菜单名:<input type="text" id="menuName" class="form-control" ></td></tr>
+                            <tr><td>链接:<input type="text" id="menuUrl" class="form-control"></td></tr>
+                            <tr><td>启用状态:<select id="status" class="form-control">
+                                <option value="1" selected>启用</option>
+                                <option value="0">禁用</option>
+                            </select></td></tr>
+                            <tr><td>描述:<input type="text" id="description" class="form-control"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary"   onclick="InsertDate()">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 </body>
+<script>
+    var recipient;
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // 触发事件的按钮
+        recipient = button.data('whatever') // 解析出data-whatever内容
+        console.log(recipient);
+        $.ajax({
+            url: "/menu/selectById?menuId="+recipient,
+            type: "GET",
+            dataType: "json",
+            success: function (json) {
+                console.log(json);
+                var data = json.data;
+                var str = "";
+                var select = "";
+                if(data.status == 1){
+                     select = "<option value='1' selected>启用</option><option value='0' >禁用</option></select></td></tr>";
+                }else{
+                    select = "<option value='1'>启用</option><option value='0' selected>禁用</option></select></td></tr>";
+                }
+                str += "<tr>" +
+                    "<td >菜单名字:<input type='text'id='umenuName' class='form-control' value='" + data.menuName + "'></td></tr>" +
+                    "<tr><td >启用状态:<select id='umenuStatus' class='form-control' >" +
+                    select +
+                    "<tr><td >描述:<input type='text'id='umenuDescription' class='form-control' value='" + data.description + "'></td></tr>  "
+                $('#permission').html(str);
+                $('#umenuStatus').attr('value','data.status');
+            }, error: function () {
+                alert("请求失败");
+            }
+        });
+    });
+</script>
 </html>

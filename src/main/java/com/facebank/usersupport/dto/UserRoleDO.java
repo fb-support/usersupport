@@ -12,7 +12,6 @@ import java.util.List;
  * @date 2018/3/13 11:31
  **/
 public class UserRoleDO implements Serializable{
-
     private Long userId;
 
     private Integer workNumber;
@@ -25,6 +24,8 @@ public class UserRoleDO implements Serializable{
 
     private String phone;
 
+    private String roleName;
+
     private Long gmtCreate;
 
     private Long gmtModify;
@@ -32,6 +33,10 @@ public class UserRoleDO implements Serializable{
     private Short status;
 
     private List<RoleModel> roles;
+
+    public String getRoleName() { return roleName; }
+
+    public void setRoleName(String roleName) { this.roleName = roleName; }
 
     public Long getUserId() {
         return userId;
@@ -111,21 +116,5 @@ public class UserRoleDO implements Serializable{
 
     public void setRoles(List<RoleModel> roles) {
         this.roles = roles;
-    }
-
-    @Override
-    public String toString() {
-        return "UserRoleDO{" +
-                "userId=" + userId +
-                ", workNumber=" + workNumber +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", gmtCreate=" + gmtCreate +
-                ", gmtModify=" + gmtModify +
-                ", status=" + status +
-                ", roles=" + roles +
-                '}';
     }
 }

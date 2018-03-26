@@ -5,13 +5,12 @@ import com.facebank.usersupport.dto.CapitalDto;
 import com.facebank.usersupport.dto.GeneralJournalDto;
 import com.facebank.usersupport.dto.PageDto;
 import com.facebank.usersupport.mapper.usersupport.p2p.GeneralJournalMapper;
+import com.facebank.usersupport.service.IGeneralJournalService;
 import com.facebank.usersupport.service.base.BaseService;
 import com.facebank.usersupport.util.PageUtil;
-import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ import java.util.List;
  * @create
  **/
 @Service
-public class GeneralJournalServiceImpl extends BaseService implements com.facebank.usersupport.service.GeneralJournalService {
+public class GeneralJournalServiceImpl extends BaseService implements IGeneralJournalService {
 
     @Autowired
     GeneralJournalMapper generalJournalMapper;

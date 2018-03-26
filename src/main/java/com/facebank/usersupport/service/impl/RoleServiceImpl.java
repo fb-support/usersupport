@@ -1,5 +1,7 @@
 package com.facebank.usersupport.service.impl;
 
+import com.facebank.usersupport.dto.RoleMenuDto;
+import com.facebank.usersupport.mapper.usersupport.usersupport.MenuMapper;
 import com.facebank.usersupport.mapper.usersupport.usersupport.RoleMapper;
 import com.facebank.usersupport.mapper.usersupport.usersupport.RoleMenuMapper;
 import com.facebank.usersupport.model.RestModel;
@@ -13,19 +15,20 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class RoleServiceImpl implements IRoleService{
+public class RoleServiceImpl implements IRoleService {
     @Autowired
     private RoleMapper roleMapper;
     @Autowired
     private RoleMenuMapper roleMenuMapper;
-
+    @Autowired
+    MenuMapper menuMapper;
 
     @Override
     public RestModel insertRole(RoleModel role) {
-        role.setGmtCreate(System.currentTimeMillis());
+        role.setGmtCreate(new Date().getTime());
         role.setStatus((short) 1);
         int is_success = roleMapper.insert(role);
-        if (is_success == 1){return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);}
+        if (is_success == 1){return new RestModel(RestModel.CODE_SUCCESS, RestModel.MESSAGE_SUCCESS);}
         return new RestModel();
     }
 
@@ -39,10 +42,10 @@ public class RoleServiceImpl implements IRoleService{
         return new RestModel(roleMapper.selectByPrimaryKey(id));
     }
     @Override
-    public RestModel updateStatus(Short status,Long id) {
-        Long currentTime =  System.currentTimeMillis();
+    public RestModel updateStatus(Short status, Long id) {
+        Long currentTime =  new Date().getTime();
         int  is_success =  roleMapper.updateStatus(status,id,currentTime);
-        if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);}
+        if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS, RestModel.MESSAGE_SUCCESS);}
         return new RestModel();
     }
 
@@ -53,44 +56,44 @@ public class RoleServiceImpl implements IRoleService{
 
     @Override
     public RestModel insertMenuByRole(RoleMenuModel roleMenuModel) {
-        roleMenuModel.setGmtCreate(System.currentTimeMillis());
+        roleMenuModel.setGmtCreate(new Date().getTime());
         int is_success = roleMenuMapper.insert(roleMenuModel);
-        if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);}
+        if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS, RestModel.MESSAGE_SUCCESS);}
         return new RestModel();
     }
 
     @Override
     public RestModel removeMenuByRole(Long roleId, Long menuId) {
         int is_success = roleMenuMapper.removeMenuByRole(roleId,menuId);
-        if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);}
+        if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS, RestModel.MESSAGE_SUCCESS);}
         return new RestModel();
     }
     @Override
     public RestModel deleteMenuByRole(Long id) {
         int is_success = roleMenuMapper.deleteByPrimaryKey(id);
-        if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);}
+        if (is_success==1){return new RestModel(RestModel.CODE_SUCCESS, RestModel.MESSAGE_SUCCESS);}
         return new RestModel();
     }
     @Override
     public RestModel findMenuAlready(Long roleId) {
-        List<RoleMenuModel> menus = roleMenuMapper.findMenuAlready(roleId);
-        for (RoleMenuModel item:menus) {
-            item.getMenuId();//TODO 获取已有菜单
+        List<RoleMenuDto> roleMenus = roleMenuMapper.findMenuAlready(roleId);
+        return new RestModel(roleMenus);
+    }
+
+    @Override
+    public RestModel updataMenu(Long[] menuIds, Long roleId) {
+        //删除该角色的所有所有菜单
+        roleMenuMapper.deleteByRoleId(roleId);
+        //添加角色选择的菜单
+        for (Long item:menuIds) {
+            RoleMenuModel roleMenu = new RoleMenuModel();
+            roleMenu.setRoleId(roleId);
+            roleMenu.setMenuId(item);
+            roleMenu.setGmtCreate(System.currentTimeMillis());
+            roleMenuMapper.insertSelective(roleMenu);
         }
-        return new RestModel(menus);
-    }
 
-    @Override
-    public RestModel updataMenu(Long[] roleId, Long id) {
-        return null;
-    }
-
-
-    @Override
-    public RestModel findMenuNotNave(Long roleId) {
-        List<RoleMenuModel> menus = roleMenuMapper.findMenuAlready(roleId);
-        //TODO 获取所有菜单 获取已有菜单从而获取未有菜单
-        return null;
+        return new RestModel(RestModel.CODE_SUCCESS, RestModel.MESSAGE_SUCCESS);
     }
 
 

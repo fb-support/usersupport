@@ -39,7 +39,7 @@ public class MenuServiceImpl implements IMenuService {
 
     @Override
     public MenuModel selectById(Long menuId) {
-        return menuMapper.selectById(menuId);
+        return menuMapper.selectByPrimaryKey(menuId);
     }
 
     @Override

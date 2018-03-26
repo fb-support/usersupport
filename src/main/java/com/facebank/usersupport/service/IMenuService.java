@@ -2,12 +2,10 @@ package com.facebank.usersupport.service;
 
 import com.facebank.usersupport.model.MenuModel;
 import com.facebank.usersupport.model.RestModel;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface IMenuService {
-
     /**
      * 查询菜单，根据model中的存在条件
      * @param menuName
@@ -37,7 +35,6 @@ public interface IMenuService {
 
     MenuModel selectById(Long menuId);
     RestModel findAll();
-
     List<MenuModel> queryMenuByName(String username);
     List<MenuModel> queryMenuByUserId(Long userId);
 }
