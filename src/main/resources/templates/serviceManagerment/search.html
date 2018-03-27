@@ -6,11 +6,27 @@
     <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
     <script type="text/javascript" th:src="@{../js/paging.js}"></script>
     <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+    <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
 
     <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
 </head>
     <script type="text/javascript">
+
+        $(function(){
+            // 今天
+            var today = new Date();
+            $("#datetimeEnd").val(Format(today,"yyyy-MM-dd HH:mm"));
+            today.setHours(0);
+            today.setMinutes(0);
+            today.setSeconds(0);
+            today.setMilliseconds(0);
+            var oneday = 1000 * 60 * 60 * 24;
+            // 昨天
+            var yesterday = new Date(today - oneday);
+            $("#datetimeStart").val(Format(yesterday,"yyyy-MM-dd HH:mm"));
+        })
+
         // 定义全局变量每页显示条数和当前页码
         var currentSize = 10;
         var currPage = 0;
@@ -36,17 +52,15 @@
             var orderId = $("#orderId").val();
 
             // 当四个条件都为空时flag==true
-            var flag = (userId == null || userId == "") && (orderId == null || orderId == "") && (startTime == null || startTime == "") && (endTime == null || endTime == "");
+            var flag = (userId == null || userId == "") && (orderId == null || orderId == "");
             if(flag){
-                layer.msg("以下条件至少设置一项：用户ID、订单ID、间隔5天内");
+                layer.msg("用户ID与订单ID至少设置一项");
                 return;
             }
 
-            if((userId == null || userId == "") && (orderId == null || orderId == "")){
-                if(startTime == null || startTime == "" || endTime == null || endTime == "" || ((endTime - startTime) > 432000000)){
-                    layer.msg("以下条件至少设置一项：用户ID、订单ID、间隔5天内");
-                    return;
-                }
+            if(startTime == null || startTime == "" || endTime == null || endTime == "" || ((endTime - startTime) > 172800000)){
+                layer.msg("预期还款时间不能为空，且不超过48小时");
+                return;
             }
 
             $.ajax({
@@ -189,7 +203,7 @@
                                 <th>用户ID</th>
                                 <th>债权计划本金</th>
                                 <th>计划利息</th>
-                                <th>计划时间</th>
+                                <th>计划还款时间</th>
                                 <th>红包信息</th>
                                 <th>红包金额</th>
                                 <th>加息红包/返现红包</th>

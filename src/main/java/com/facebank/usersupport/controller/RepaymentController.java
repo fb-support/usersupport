@@ -36,10 +36,10 @@ public class RepaymentController extends BaseController {
         try {
             // userId和orderId都为空
             boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getUserId());
-            // 时间间隔不满足5天内
-            boolean timeInterval = StringUtils.isEmpty(repaymentForm.getStartTime()) || StringUtils.isEmpty(repaymentForm.getEndTime()) || (repaymentForm.getEndTime() - repaymentForm.getStartTime() > 432000000L);
-            // 用户ID不为空、订单ID不为空、间隔5天内这三者都不满足则直接返回参数错误
-            if (isAllEmpty && timeInterval) {
+            // 时间间隔不满足2天内
+            boolean timeInterval = StringUtils.isEmpty(repaymentForm.getStartTime()) || StringUtils.isEmpty(repaymentForm.getEndTime()) || (repaymentForm.getEndTime() - repaymentForm.getStartTime() > 172800000L);
+            // 用户ID与订单ID都为空或者间隔超过2天则直接返回参数错误
+            if (isAllEmpty || timeInterval) {
                     return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
             }
             // 查询分页信息
