@@ -5,6 +5,7 @@
     <id column="project_user" jdbcType="BIGINT" property="projectUser" />
     <result column="project_id" jdbcType="BIGINT" property="projectId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_role" jdbcType="INTEGER" property="userRole" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
     <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />

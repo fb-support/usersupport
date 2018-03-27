@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.facebank.usersupport.online.process.model.TestProjectRecordModel">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="operating_content" jdbcType="VARCHAR" property="operatingContent" />
+    <result column="operating_people_id" jdbcType="BIGINT" property="operatingPeopleId" />
     <result column="operating_people" jdbcType="VARCHAR" property="operatingPeople" />
     <result column="project_id" jdbcType="BIGINT" property="projectId" />
     <result column="form_id" jdbcType="BIGINT" property="formId" />

@@ -2,10 +2,12 @@ package com.facebank.usersupport.online.process.model;
 
 import java.io.Serializable;
 
-public class TestProjectRecordModel implements Serializable{
+public class TestProjectRecordModel implements Serializable {
     private Long id;
 
     private String operatingContent;
+
+    private Long operatingPeopleId;
 
     private String operatingPeople;
 
@@ -33,6 +35,14 @@ public class TestProjectRecordModel implements Serializable{
 
     public void setOperatingContent(String operatingContent) {
         this.operatingContent = operatingContent == null ? null : operatingContent.trim();
+    }
+
+    public Long getOperatingPeopleId() {
+        return operatingPeopleId;
+    }
+
+    public void setOperatingPeopleId(Long operatingPeopleId) {
+        this.operatingPeopleId = operatingPeopleId;
     }
 
     public String getOperatingPeople() {

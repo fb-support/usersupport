@@ -1,15 +1,17 @@
 package com.facebank.usersupport.online.process.model;
 
-import java.io.Serializable;
-
-public class LaunchFormModel implements Serializable {
+public class LaunchFormModel {
     private Long formId;
 
     private Long projectId;
 
+    private String createUsername;
+
     private Long createUser;
 
     private Long acceptUser;
+
+    private String acceptUsername;
 
     private Integer formStatus;
 
@@ -37,6 +39,14 @@ public class LaunchFormModel implements Serializable {
         this.projectId = projectId;
     }
 
+    public String getCreateUsername() {
+        return createUsername;
+    }
+
+    public void setCreateUsername(String createUsername) {
+        this.createUsername = createUsername == null ? null : createUsername.trim();
+    }
+
     public Long getCreateUser() {
         return createUser;
     }
@@ -51,6 +61,14 @@ public class LaunchFormModel implements Serializable {
 
     public void setAcceptUser(Long acceptUser) {
         this.acceptUser = acceptUser;
+    }
+
+    public String getAcceptUsername() {
+        return acceptUsername;
+    }
+
+    public void setAcceptUsername(String acceptUsername) {
+        this.acceptUsername = acceptUsername == null ? null : acceptUsername.trim();
     }
 
     public Integer getFormStatus() {

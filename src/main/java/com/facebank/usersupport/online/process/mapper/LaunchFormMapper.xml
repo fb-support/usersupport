@@ -4,8 +4,10 @@
   <resultMap id="BaseResultMap" type="com.facebank.usersupport.online.process.model.LaunchFormModel">
     <id column="form_id" jdbcType="BIGINT" property="formId" />
     <result column="project_id" jdbcType="BIGINT" property="projectId" />
+    <result column="create_username" jdbcType="VARCHAR" property="createUsername" />
     <result column="create_user" jdbcType="BIGINT" property="createUser" />
     <result column="accept_user" jdbcType="BIGINT" property="acceptUser" />
+    <result column="accept_username" jdbcType="VARCHAR" property="acceptUsername" />
     <result column="form_status" jdbcType="INTEGER" property="formStatus" />
     <result column="note" jdbcType="VARCHAR" property="note" />
     <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />

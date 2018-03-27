@@ -9,6 +9,8 @@ public class TestProjectUserModel implements Serializable {
 
     private Long userId;
 
+    private Integer userRole;
+
     private Integer status;
 
     private Long gmtCreate;
@@ -61,5 +63,13 @@ public class TestProjectUserModel implements Serializable {
 
     public void setGmtModify(Long gmtModify) {
         this.gmtModify = gmtModify;
+    }
+
+    public Integer getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(Integer userRole) {
+        this.userRole = userRole;
     }
 }

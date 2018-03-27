@@ -9,7 +9,9 @@
     <result column="influence_scope" jdbcType="VARCHAR" property="influenceScope" />
     <result column="is_review" jdbcType="INTEGER" property="isReview" />
     <result column="other_change" jdbcType="VARCHAR" property="otherChange" />
+    <result column="create_username" jdbcType="VARCHAR" property="createUsername" />
     <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="accept_username" jdbcType="VARCHAR" property="acceptUsername" />
     <result column="accept_user" jdbcType="BIGINT" property="acceptUser" />
     <result column="project_id" jdbcType="BIGINT" property="projectId" />
     <result column="form_status" jdbcType="INTEGER" property="formStatus" />

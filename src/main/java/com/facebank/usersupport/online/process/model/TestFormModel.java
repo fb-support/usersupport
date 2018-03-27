@@ -17,7 +17,11 @@ public class TestFormModel implements Serializable {
 
     private String otherChange;
 
+    private String createUsername;
+
     private Long createUser;
+
+    private String acceptUsername;
 
     private Long acceptUser;
 
@@ -85,12 +89,28 @@ public class TestFormModel implements Serializable {
         this.otherChange = otherChange == null ? null : otherChange.trim();
     }
 
+    public String getCreateUsername() {
+        return createUsername;
+    }
+
+    public void setCreateUsername(String createUsername) {
+        this.createUsername = createUsername == null ? null : createUsername.trim();
+    }
+
     public Long getCreateUser() {
         return createUser;
     }
 
     public void setCreateUser(Long createUser) {
         this.createUser = createUser;
+    }
+
+    public String getAcceptUsername() {
+        return acceptUsername;
+    }
+
+    public void setAcceptUsername(String acceptUsername) {
+        this.acceptUsername = acceptUsername == null ? null : acceptUsername.trim();
     }
 
     public Long getAcceptUser() {
