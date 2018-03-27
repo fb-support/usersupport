@@ -1,0 +1,24 @@
+package com.facebank.usersupport.mapper.usersupport.p2p;
+
+import com.facebank.usersupport.dto.reqDto.RepaymentForm;
+import com.facebank.usersupport.mapper.usersupport.base.BaseReadMapper;
+import com.facebank.usersupport.model.RepaymentModel;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * 还款查询业务Mapper
+ * @author HuBiao
+ * @date 2018/3/9 0009 13:07
+ **/
+@Repository
+public interface RepaymentMapper extends BaseReadMapper<RepaymentModel,Long> {
+
+    /**
+     * 根据手机号、用户名、还款日期组合条件查询还款信息
+     * @return
+     */
+    List<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm);
+
+}

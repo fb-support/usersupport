@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{../attendance/js/applyTable.js}"></script>
+    <script type="text/javascript" th:src="@{../attendance/js/apply.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../attendance/css/apply.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
+</head>
+<body>
+
+    <div id="content">
+        <div class="container-fluid">
+            <form class="form-inline">
+                <!--<div class="form-group">-->
+                <!--<label>工号:</label>-->
+                <!--<input type="text" class="form-control" id="work-search" placeholder="请输入工号"/>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                <!--<label>姓名:</label>-->
+                <!--<input type="text" class="form-control" id="name-search" placeholder="请输入姓名"/>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                <!--<label>手机号:</label>-->
+                <!--<input type="text" class="form-control" id="phone-search" placeholder="请输入手机号"/>-->
+                <!--<button type="button" onclick="javascript:search();" class="btn btn-primary">查询</button>-->
+                <!--<button type="button" onclick="javascript:deleteUser();" class="btn btn-primary">删除</button>-->
+                <!--</div>-->
+                <div class="form-group">
+                    <label class="labe_l">申请日期:</label>
+                    <input type="text" class="form_datetime form-control" id="datetimeStart" name="startTime" readonly>
+                    --
+                    <input type="text" class="form_datetime form-control" id="datetimeEnd" name="endTime" readonly>
+
+                </div>
+                <span class="btn btn-default" onclick="search()">查询</span>
+            </form>
+
+            <table class="table table-bordered data-table" cellspacing="0" width="100%" id="datatable">
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" class="checkall"/>
+                    </th>
+                    <th>编号</th>
+                    <th>员工号</th>
+                    <th>姓名</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>申请时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+
+    <!--修改信息-->
+    <div class="modal fade" id="showDetail" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">详情信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="detailForm">
+                        <div class="form-group">
+                            <label class="control-label">员工号:</label>
+                            <input type="text" class="form-control" name="description" id="show_workNumber"/>
+                            <label class="control-label">员工姓名:</label>
+                            <input type="text" class="form-control" name="description" id="show_empName"/>
+                            <label class="control-label">请假开始时间:</label>
+                            <input type="text" class="form-control" name="description" id="show_startTime"/>
+                            <label class="control-label">请假结束时间:</label>
+                            <input type="text" class="form-control" name="description" id="show_endTime"/>
+                            <label class="control-label">申请日期:</label>
+                            <input type="text" class="form-control" name="description" id="show_applyDate"/>
+                            <label class="control-label">申请原因:</label>
+                            <textarea type="text" class="form-control" name="description" id="show_leaveCause"/>
+                            <label class="control-label">状态:</label>
+                            <input type="text" class="form-control" name="description" id="show_dealType"/>
+                            <label class="control-label">审批人:</label>
+                            <input type="text" class="form-control" name="description" id="deal_person"/>
+                            <label class="control-label hide" id="notpassCause">未通过原因:</label>
+                            <textarea type="text" class="form-control hide" name="description"
+                                      id="show_notpassCause"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--修改信息-->
+    <div class="modal fade" id="updateDetail" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">修改信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="roleForm">
+                        <div class="form-group">
+                            <label class="control-label">员工号:</label>
+                            <input type="text" class="form-control" name="description" id="m_workNumber"/>
+                            <label class="control-label">员工姓名:</label>
+                            <input type="text" class="form-control" name="description" id="m_empName"/>
+                            <label class="control-label">请假开始时间:</label>
+                            <input type="text" class="form_datetime form-control" id="m_startTime" name="description"/>
+                            <label class="control-label">请假结束时间:</label>
+                            <input type="text" class="form_datetime form-control" id="m_endTime" name="description"/>
+                            <label class="control-label">申请日期:</label>
+                            <input type="text" class="form-control" name="description" id="m_applyDate"/>
+                            <label class="control-label">申请原因:</label>
+                            <textarea type="text" class="form-control" name="description" id="m_leaveCause"/>
+                            <label class="control-label">状态:</label>
+                            <input type="text" class="form-control" name="description" id="m_dealType"/>
+                            <label class="control-label">审批人:</label>
+                            <input type="text" class="form-control" name="description" id="m_person"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="updateApplyDetail();" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
