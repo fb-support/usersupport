@@ -4,7 +4,6 @@ import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.RepaymentForm;
 import com.facebank.usersupport.model.PageBeanModel;
-import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RepaymentModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.IRepaymentService;
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 还款查询业务Controller
@@ -39,9 +36,9 @@ public class RepaymentController extends BaseController {
         try {
             // userId和orderId都为空
             boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getUserId());
-            // 时间间隔不满足30天内
-            boolean timeInterval = StringUtils.isEmpty(repaymentForm.getStartTime()) || StringUtils.isEmpty(repaymentForm.getEndTime()) || (repaymentForm.getEndTime() - repaymentForm.getStartTime() > 2592000000L);
-            // 用户ID不为空、订单ID不为空、间隔30天内这三者都不满足则直接返回参数错误
+            // 时间间隔不满足5天内
+            boolean timeInterval = StringUtils.isEmpty(repaymentForm.getStartTime()) || StringUtils.isEmpty(repaymentForm.getEndTime()) || (repaymentForm.getEndTime() - repaymentForm.getStartTime() > 432000000L);
+            // 用户ID不为空、订单ID不为空、间隔5天内这三者都不满足则直接返回参数错误
             if (isAllEmpty && timeInterval) {
                     return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
             }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.config.SystemProperties;
+import com.facebank.usersupport.model.RestModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

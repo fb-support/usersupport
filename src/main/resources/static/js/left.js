@@ -179,3 +179,88 @@ function runUserLog() {
         addSmallCardForThisPage("userManager-login-page", "用户登录流水");
     }
 }
+
+/**
+ * 前往考勤系统--加班管理页面
+ */
+function runOvertimeManage() {
+    // 隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    // 展示加班管理页面
+    $("#attendance-overtime-page").show();
+
+    //显示tab
+    if ( $("li[value='attendance-overtime-page']").length > 0 ) {
+        switchPage( "attendance-overtime-page" );
+    } else {
+        addSmallCardForThisPage("attendance-overtime-page", "加班管理");
+    }
+}
+
+/**
+ * 前往考勤系统--调休管理页面
+ */
+function runRestManage() {
+    // 隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    // 展示调休管理页面
+    $("#attendance-rest-page").show();
+
+    //显示tab
+    if ( $("li[value='attendance-rest-page']").length > 0 ) {
+        switchPage( "attendance-rest-page" );
+    } else {
+        addSmallCardForThisPage("attendance-rest-page", "调休管理");
+    }
+}
+
+/**
+ * 前往考勤系统--请假管理页面
+ */
+function runLeaveManage() {
+    // 隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    // 展示请假管理页面
+    $("#attendance-leave-page").show();
+
+    //显示tab
+    if ( $("li[value='attendance-leave-page']").length > 0 ) {
+        switchPage( "attendance-leave-page" );
+    } else {
+        addSmallCardForThisPage("attendance-leave-page", "请假管理");
+    }
+}
+
+/**
+ * 前往考勤系统--考勤管理页面
+ */
+function runAttendanceManage() {
+    // 隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    // 展示考勤管理页面
+    $("#attendance-attendance-page").show();
+
+    //显示tab
+    if ( $("li[value='attendance-attendance-page']").length > 0 ) {
+        switchPage( "attendance-attendance-page" );
+    } else {
+        addSmallCardForThisPage("attendance-attendance-page", "考勤管理");
+    }
+}
+
+/**
+ * 前往考勤系统--统计页面
+ */
+function runAttendanceAcount() {
+    // 隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    // 展示统计页面
+    $("#attendance-acount-page").show();
+
+    //显示tab
+    if ( $("li[value='attendance-acount-page']").length > 0 ) {
+        switchPage( "attendance-acount-page" );
+    } else {
+        addSmallCardForThisPage("attendance-acount-page", "统计");
+    }
+}

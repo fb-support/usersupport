@@ -38,13 +38,13 @@
             // 当四个条件都为空时flag==true
             var flag = (userId == null || userId == "") && (orderId == null || orderId == "") && (startTime == null || startTime == "") && (endTime == null || endTime == "");
             if(flag){
-                layer.msg("以下条件至少设置一项：用户ID、订单ID、间隔30天内");
+                layer.msg("以下条件至少设置一项：用户ID、订单ID、间隔5天内");
                 return;
             }
 
             if((userId == null || userId == "") && (orderId == null || orderId == "")){
-                if(startTime == null || startTime == "" || endTime == null || endTime == "" || ((endTime - startTime) > 2592000000)){
-                    layer.msg("以下条件至少设置一项：用户ID、订单ID、间隔30天内");
+                if(startTime == null || startTime == "" || endTime == null || endTime == "" || ((endTime - startTime) > 432000000)){
+                    layer.msg("以下条件至少设置一项：用户ID、订单ID、间隔5天内");
                     return;
                 }
             }

@@ -163,3 +163,23 @@
 .mainPage_init_option:hover {
 	transform: rotate(720deg);
 }
+
+#attendance-overtime-page{
+	display: none;
+}
+
+#attendance-rest-page{
+	display: none;
+}
+
+#attendance-leave-page{
+	display: none;
+}
+
+#attendance-attendance-page{
+	display: none;
+}
+
+#attendance-acount-page{
+	display: none;
+}
