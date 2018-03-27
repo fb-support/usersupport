@@ -33,6 +33,7 @@ public class GeneralJournalController extends BaseController {
                                     @RequestParam(required = false, defaultValue = "10") int couts,
                                     String mobile, String type, String starttime, String endtime)  {
         System.out.println(page+"=="+couts+"=="+mobile+"=="+type+"=="+starttime+"=="+endtime);
+        if (starttime==""||endtime==""){return new RestModel("时间不能为空");}
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date time1 = null;
         long startTime=0,endTime=0;
@@ -53,6 +54,7 @@ public class GeneralJournalController extends BaseController {
                 e.printStackTrace();
             }
         }
+        if(endTime-startTime>432000000){return new RestModel("日期有误，无法查询");}
         try{
             PageDto pageDto = generalJournalService.getGeneralJournalPage(mobile,type,startTime,endTime,page,couts);
 //            System.out.println(pageDto);
