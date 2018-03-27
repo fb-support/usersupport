@@ -179,3 +179,71 @@ function runUserLog() {
         addSmallCardForThisPage("userManager-login-page", "用户登录流水");
     }
 }
+
+/**
+ * 前往项目管理页面
+ */
+function runTestProjectManager() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示项目管理界面
+    $("#test-project-manager-page").show();
+
+    //显示tab
+    if ( $("li[value='test-project-manager-page']").length > 0 ) {
+        switchPage( "test-project-manager-page" );
+    } else {
+        addSmallCardForThisPage("test-project-manager-page", "项目");
+    }
+}
+
+/**
+ * 前往提测工单管理页面
+ */
+function runTestFormManager() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示提测工单管理界面
+    $("#test-form-manager-page").show();
+
+    //显示tab
+    if ( $("li[value='test-form-manager-page']").length > 0 ) {
+        switchPage( "test-form-manager-page" );
+    } else {
+        addSmallCardForThisPage("test-form-manager-page", "提测工单管理");
+    }
+}
+
+/**
+ * 前往上线工单管理页面
+ */
+function runLaunchFormManager() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示上线工单管理界面
+    $("#launch-form-manager-page").show();
+
+    //显示tab
+    if ( $("li[value='launch-form-manager-page']").length > 0 ) {
+        switchPage( "launch-form-manager-page" );
+    } else {
+        addSmallCardForThisPage("launch-form-manager-page", "上线工单管理");
+    }
+}
+
+/**
+ * 前往项目详情页面
+ */
+function runTestProjectDetail() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示项目详情界面
+    $("#test-project-detail-page").show();
+
+    //显示tab
+    if ( $("li[value='test-project-detail-page']").length > 0 ) {
+        switchPage( "test-project-detail-page" );
+    } else {
+        addSmallCardForThisPage("test-project-detail-page", "项目详情");
+    }
+}
