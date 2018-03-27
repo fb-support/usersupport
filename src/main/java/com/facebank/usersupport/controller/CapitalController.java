@@ -33,6 +33,7 @@ public class CapitalController extends BaseController {
                                     @RequestParam(required = false, defaultValue = "5") int couts,
                                     String mobile, String type, String starttime, String endtime)  {
         System.out.println(mobile+"=="+type+"=="+starttime+"=="+endtime);
+        if (starttime==""||endtime==""){return new RestModel("时间不能为空");}
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date time1 = null;
         if (starttime!=""&&starttime!=null){
@@ -50,6 +51,8 @@ public class CapitalController extends BaseController {
                 e.printStackTrace();
             }
         }
+        if(time2.getTime()-time1.getTime()>432000000){return new RestModel("日期有误，无法查询");}
+
         try{
             PageDto pageDto = iCapitalService.getMoneyRecordPage(mobile,type,time1,time2,page,couts);
             return this.success(pageDto);
