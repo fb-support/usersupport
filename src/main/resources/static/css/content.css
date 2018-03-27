@@ -163,3 +163,19 @@
 .mainPage_init_option:hover {
 	transform: rotate(720deg);
 }
+
+#test-project-manager-page {
+	display: none;
+}
+
+#test-form-manager-page {
+	display: none;
+}
+
+#launch-form-manager-page {
+	display: none;
+}
+
+#test-project-detail-page {
+	display: none;
+}

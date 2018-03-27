@@ -13,5 +13,31 @@
     <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
     <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
   </resultMap>
-
+  <select id="selectAllByCondition" parameterType="com.facebank.usersupport.online.process.model.TestProjectModel"
+          resultMap="BaseResultMap">
+    select project_id,
+      project_name,
+      project_code,
+      project_url,
+      begin_time,
+      end_time,
+      note,
+      status,
+      gmt_modify,
+      gmt_create
+    from test_project
+    where 1 = 1
+    <if test="projectId!=null">
+      and project_id like CONCAT(CONCAT('%', #{projectId,jdbcType=BIGINT}), '%')
+    </if>
+    <if test="projectName!=null">
+      and project_name like CONCAT(CONCAT(#{projectName,jdbcType=VARCHAR}),'%')
+    </if>
+    <if test="beginTime != null ">
+      and begin_time>#{beginTime}
+    </if>
+    <if test="endTime != null ">
+      and #{endTime} > end_time
+    </if>
+  </select>
 </mapper>

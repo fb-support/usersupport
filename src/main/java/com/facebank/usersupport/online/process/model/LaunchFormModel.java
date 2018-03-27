@@ -5,13 +5,19 @@ public class LaunchFormModel {
 
     private Long projectId;
 
+    private Long testFormId;
+
     private String createUsername;
 
     private Long createUser;
 
-    private Long acceptUser;
+    private Long acceptDevelopUser;
 
-    private String acceptUsername;
+    private String acceptDevelopUsername;
+
+    private Long acceptTestUser;
+
+    private String acceptTestUsername;
 
     private Integer formStatus;
 
@@ -39,12 +45,20 @@ public class LaunchFormModel {
         this.projectId = projectId;
     }
 
+    public Long getTestFormId() {
+        return testFormId;
+    }
+
+    public void setTestFormId(Long testFormId) {
+        this.testFormId = testFormId;
+    }
+
     public String getCreateUsername() {
         return createUsername;
     }
 
     public void setCreateUsername(String createUsername) {
-        this.createUsername = createUsername == null ? null : createUsername.trim();
+        this.createUsername = createUsername;
     }
 
     public Long getCreateUser() {
@@ -55,20 +69,36 @@ public class LaunchFormModel {
         this.createUser = createUser;
     }
 
-    public Long getAcceptUser() {
-        return acceptUser;
+    public Long getAcceptDevelopUser() {
+        return acceptDevelopUser;
     }
 
-    public void setAcceptUser(Long acceptUser) {
-        this.acceptUser = acceptUser;
+    public void setAcceptDevelopUser(Long acceptDevelopUser) {
+        this.acceptDevelopUser = acceptDevelopUser;
     }
 
-    public String getAcceptUsername() {
-        return acceptUsername;
+    public String getAcceptDevelopUsername() {
+        return acceptDevelopUsername;
     }
 
-    public void setAcceptUsername(String acceptUsername) {
-        this.acceptUsername = acceptUsername == null ? null : acceptUsername.trim();
+    public void setAcceptDevelopUsername(String acceptDevelopUsername) {
+        this.acceptDevelopUsername = acceptDevelopUsername;
+    }
+
+    public Long getAcceptTestUser() {
+        return acceptTestUser;
+    }
+
+    public void setAcceptTestUser(Long acceptTestUser) {
+        this.acceptTestUser = acceptTestUser;
+    }
+
+    public String getAcceptTestUsername() {
+        return acceptTestUsername;
+    }
+
+    public void setAcceptTestUsername(String acceptTestUsername) {
+        this.acceptTestUsername = acceptTestUsername;
     }
 
     public Integer getFormStatus() {

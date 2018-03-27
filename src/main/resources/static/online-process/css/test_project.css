@@ -1,0 +1,70 @@
+body {
+	background-color: #F0F0F0;
+}
+
+#project_main_body {
+	height: 500px;
+	overflow-y: scroll;
+}
+
+#project_main_body .test_project_meun .ul_menu {
+	list-style: none;
+}
+
+#project_main_body .test_project_meun .ul_menu li {
+	margin-bottom: 20px;
+	float: left;
+}
+
+#project_main_body .test_project_meun .ul_menu li #test_project_select {
+	padding: 4px 15px;
+	margin-left: 0px;
+}
+
+#project_main_body .test_project_meun .ul_menu li a {
+	text-decoration: none;
+	color: white;
+	padding: 6px 15px;
+	background-color: #2C78E7;
+}
+
+#project_main_body .test_project_meun .ul_menu li a:hover {
+	background-color: #100F18;
+}
+
+#project_main_body .test_project_meun .ul_menu .all_test_project {
+	float: right;
+	margin-right: 40px;
+	margin-top: 5px;
+}
+
+#project_main_body .test_project_meun .ul_menu .new_test_project {
+	float: right;
+	margin-right: 20px;
+	margin-top: 5px;
+}
+
+#project_main_body .test_project_content {
+	clear: both;
+	margin: 0px 15px;
+	background-color: white;
+	border: 1px solid #B9B6B6;
+	padding-top: 10px;
+	padding-bottom: 50px;
+}
+
+#project_main_body .test_project_content .form-inline div {
+	margin-bottom: 10px;
+}
+
+.form-group {
+	margin-right: 10px;
+}
+
+.form-control {
+	width: 180px !important;
+}
+
+.test_project_content .data-table thead tr th {
+	padding: 10px;
+}

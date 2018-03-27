@@ -21,8 +21,8 @@ import java.util.Properties;
  * user_primary读库数据源
  * Created by pengyuming on 2017/9/7.
  */
-@MapperScan(basePackages = "com.facebank.usersupport.mapper.usersupport.p2p",sqlSessionTemplateRef = "sqlSessionTemplateP2PRead")
-@Component
+//@MapperScan(basePackages = "com.facebank.usersupport.mapper.usersupport.p2p",sqlSessionTemplateRef = "sqlSessionTemplateP2PRead")
+//@Component
 public class DataSourceP2PPrimaryRead {
 
     @Bean(name = "dataSourcePropertiesP2PRead")
