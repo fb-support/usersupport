@@ -13,6 +13,10 @@
     <sql id="Base_Column_List">
     role_id, role_name, status, gmt_create, gmt_modify, creator, description
   </sql>
+    <select id="queryAllRole" resultMap="BaseResultMap">
+        select *
+        from role
+    </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

@@ -35,20 +35,18 @@
             var userId = $("#userId").val();
             var orderId = $("#orderId").val();
 
-            // 设置日期间隔不超过30天
-            if((startTime != null && startTime != "") && (endTime != null && endTime != "")){
-                var timeInterval = endTime - startTime;
-                if(timeInterval > 2592000000){
-                    layer.msg("时间间隔不能超过30天");
-                    return;
-                }
-            }
-
             // 当四个条件都为空时flag==true
             var flag = (userId == null || userId == "") && (orderId == null || orderId == "") && (startTime == null || startTime == "") && (endTime == null || endTime == "");
             if(flag){
-                layer.msg("请输入查询条件");
+                layer.msg("以下条件至少设置一项：用户ID、订单ID、间隔30天内");
                 return;
+            }
+
+            if((userId == null || userId == "") && (orderId == null || orderId == "")){
+                if(startTime == null || startTime == "" || endTime == null || endTime == "" || ((endTime - startTime) > 2592000000)){
+                    layer.msg("以下条件至少设置一项：用户ID、订单ID、间隔30天内");
+                    return;
+                }
             }
 
             $.ajax({

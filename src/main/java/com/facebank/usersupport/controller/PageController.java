@@ -1,14 +1,7 @@
 package com.facebank.usersupport.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.facebank.usersupport.controller.base.BaseController;
-import com.facebank.usersupport.model.RestModel;
-import com.facebank.usersupport.model.UserMainModel;
-import com.facebank.usersupport.service.IUserMainService;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,19 +26,29 @@ public class PageController extends BaseController {
         return "/permissionManagerment/"+pageName;
     }
 
+    @RequestMapping("/money/{pageName}")
+    public String showMoneyPage(@PathVariable String pageName){
+        return "/logManagement/"+pageName;
+    }
+
     @RequestMapping("/log/{pageName}")
     public String showLogPage(@PathVariable String pageName){
         return "/logManagement/"+pageName;
     }
 
-    @RequestMapping("/um/{pageName}")
-    public String showUserPage(@PathVariable String pageName){
-        return "/userManagerment/"+pageName;
-    }
-
     @RequestMapping("/role/{pageName}")
     public String showRoleMenuPage(@PathVariable String pageName){
         return "/permissionManagerment/"+pageName;
+    }
+
+    @RequestMapping("/menu/{pageName}")
+    public String showRoleMenuPage1(@PathVariable String pageName){
+        return "/permissionManagerment/"+pageName;
+    }
+
+    @RequestMapping("/um/{pageName}")
+    public String showUserPage(@PathVariable String pageName){
+        return "/userManagerment/"+pageName;
     }
 
     @RequestMapping("/service/{pageName}")
