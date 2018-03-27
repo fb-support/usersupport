@@ -13,8 +13,6 @@ import java.util.List;
  **/
 public interface BaseReadMapper<T, ID extends Serializable> {
 
-    T selectByPrimaryKey(ID id);
-
     List<T> selectAll(RowBounds rowBounds);
 
     List<T> selectAll(RowBounds rowBounds, Long offsetId);

@@ -1,4 +1,4 @@
-package com.facebank.usersupport.model;
+package com.facebank.usersupport.online.process.model;
 
 import java.io.Serializable;
 
