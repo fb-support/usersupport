@@ -1,4 +1,4 @@
-package com.facebank.usersupport.online.process.mapper;
+package com.facebank.usersupport.online.process.mapper.base;
 
 import org.apache.ibatis.session.RowBounds;
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author NingKui
  * @date 2018/3/26 17:57
  **/
-@Controller
+@Controller(value = "online_process")
 public class PageController {
 
     /**

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.online.process.mapper.TestFormMapper">
+  <resultMap id="BaseResultMap" type="com.facebank.usersupport.online.process.model.TestFormModel">
+    <id column="form_id" jdbcType="BIGINT" property="formId" />
+    <result column="form_service" jdbcType="VARCHAR" property="formService" />
+    <result column="form_branch" jdbcType="VARCHAR" property="formBranch" />
+    <result column="is_test" jdbcType="INTEGER" property="isTest" />
+    <result column="influence_scope" jdbcType="VARCHAR" property="influenceScope" />
+    <result column="is_review" jdbcType="INTEGER" property="isReview" />
+    <result column="other_change" jdbcType="VARCHAR" property="otherChange" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="accept_user" jdbcType="BIGINT" property="acceptUser" />
+    <result column="project_id" jdbcType="BIGINT" property="projectId" />
+    <result column="form_status" jdbcType="INTEGER" property="formStatus" />
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.facebank.usersupport.online.process.model.TestFormWithBLOBsModel">
+    <result column="sql_change" jdbcType="LONGVARCHAR" property="sqlChange" />
+    <result column="configure_change" jdbcType="LONGVARCHAR" property="configureChange" />
+    <result column="mq_change" jdbcType="LONGVARCHAR" property="mqChange" />
+  </resultMap>
+
+</mapper>
