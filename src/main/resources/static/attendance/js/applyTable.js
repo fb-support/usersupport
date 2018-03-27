@@ -1,8 +1,3 @@
-$(".checkall").click(function () {
-    var check = $(this).prop("checked");
-    $(".checkchild").prop("checked", check);
-});
-
 //分页显示DataTable
 var table;
 
@@ -69,12 +64,30 @@ $(document).ready(function () {
             {"orderable": false, "targets": 8}
         ],
 
+        /*是否开启主题*/
+        "bJQueryUI": true,
+        "oLanguage": {    // 语言设置
+            "sLengthMenu": "每页显示 _MENU_ 条记录",
+            "sZeroRecords": "抱歉， 没有找到",
+            "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+            "sInfoEmpty": "没有数据",
+            "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+            "sZeroRecords": "没有检索到数据",
+            "sSearch": "检索:",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "前一页",
+                "sNext": "后一页",
+                "sLast": "尾页"
+            }
+        },
+
     });
 });
 
 
 function search() {
-    table.ajax.reload();
+
 }
 
 //封装查询参数
@@ -88,139 +101,4 @@ function getQueryCondition(data) {
     param.length = data.length;
     param.draw = data.draw;
     return param;
-}
-
-/**
- * 删除用户
- */
-function deleteUser() {
-    var id = [];
-    $(".checkchild:checked").each(function () {
-        id.push($(this).val());
-    });
-
-    if ($(".checkchild:checked").length < 1) {
-        layer.msg('请选择一条数据');
-        return;
-    }
-
-    var parm = {"id": id};
-    layer.confirm('您确定要删除这些客服用户吗？', {
-        btn: ['确认', '取消'] //按钮
-    }, function () {
-        $.ajax({
-            type: "POST",
-            url: '/um/deleteUserByIds',
-            cache: false,  //禁用缓存
-            data: parm,
-            dataType: 'json',
-            success: function (result) {
-                if (result.code == 1) {
-                    layer.msg('操作成功');
-                    table.ajax.reload();
-                } else {
-                    layer.msg(data.error);
-                }
-            }
-        });
-    });
-
-}
-
-/**
- * 显示模态框
- * @param id
- */
-function showModel(id) {
-    userId = id;
-    $.ajax({
-        type: "GET",
-        url: '/um/getByUserId?userId=' + id,
-        cache: false,  //禁用缓存
-        dataType: 'json',
-        success: function (result) {
-            if (result.code == 1) {
-                $('#updateUser').modal();
-                $('#m_userName').val(result.data.username);
-                $('#m_workNumber').val(result.data.workNumber);
-                $('#m_phone').val(result.data.phone);
-                $('#m_email').val(result.data.email);
-            } else {
-                layer.msg(result.error);
-            }
-        }
-    });
-
-
-}
-
-/**
- * 修改信息
- */
-function updateUser() {
-    var param = {};
-    param.userId = userId;
-    param.username = $('#m_userName').val();
-    param.workNumber = $('#m_workNumber').val();
-    param.phone = $('#m_phone').val();
-    param.email = $('#m_email').val();
-
-    var emailReg = /^[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
-    var phoneReg = /^1[34578]\d{9}$/;
-    if (!phoneReg.test(param.phone)) {
-        layer.msg("手机号码格式错误");
-        return;
-    }
-
-    if (!emailReg.test(param.email)) {
-        layer.msg("邮箱号码格式错误");
-        return;
-    }
-
-    $.ajax({
-        type: "GET",
-        url: '/um/check',
-        cache: false,  //禁用缓存
-        data: param,
-        dataType: 'json',
-        success: function (result) {
-            var toast = "";
-            if (result.code == 1) {
-                if(result.data.phoneRepeat==true){
-                    toast += "手机号码重复！";}
-                if(result.data.emailRepeat==true){
-                    toast += "邮箱号码重复！";}
-                if(result.data.workNumberRepeat==true){
-                    toast += "工号重复！";}
-                if(result.data.usernameRepeat==true){
-                    toast += "用户名重复！";
-                }
-
-                if (toast.length>1){
-                    layer.msg(toast);
-                    return;
-                }
-                else{
-                    $.ajax({
-                        type: "POST",
-                        url: '/um/updateBaseInfoMationById',
-                        cache: false,  //禁用缓存
-                        data: param,
-                        dataType: 'json',
-                        success: function (result) {
-                            if (result.code == 1) {
-                                $('#updateUser').modal('hide');
-                                layer.msg('操作成功');
-                                table.ajax.reload();
-                            } else {
-                                layer.msg(result.error);
-                            }
-                        }
-                    });
-                }
-            } else {
-                layer.msg(result.error);
-            }
-        }
-    })
 }
