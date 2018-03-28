@@ -238,12 +238,12 @@ function runTestProjectDetail() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
     //显示项目详情界面
-    $("#test-project-detail-page").show();
+    $("#test_project_record").show();
 
     //显示tab
-    if ( $("li[value='test-project-detail-page']").length > 0 ) {
-        switchPage( "test-project-detail-page" );
+    if ( $("li[value='test_project_record']").length > 0 ) {
+        switchPage( "test_project_record" );
     } else {
-        addSmallCardForThisPage("test-project-detail-page", "项目详情");
+        addSmallCardForThisPage("test_project_record", "项目详情");
     }
 }

@@ -12,5 +12,31 @@
     <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
     <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
   </resultMap>
-
+  <select id="selectAllByCondition" parameterType="com.facebank.usersupport.online.process.model.TestProjectRecordModel"
+          resultMap="BaseResultMap">
+    select id,operating_content, operating_people_id,
+    operating_people, project_id, form_id,
+    form_type, gmt_create, gmt_modify from test_project_record
+    where 1 = 1
+    <if test="projectId!=null">
+      and project_id like CONCAT(CONCAT('%', #{projectId,jdbcType=VARCHAR}), '%')
+    </if>
+    <if test="operatingPeople!=null">
+      and operating_people like CONCAT(CONCAT(#{operatingPeople,jdbcType=VARCHAR}),'%')
+    </if>
+    <if test="formType!=null">
+      and form_type like CONCAT(CONCAT(#{formType,jdbcType=INTEGER}),'%')
+    </if>
+    order by gmt_create DESC
+  </select>
+  <insert id="insertRecord" parameterType="com.facebank.usersupport.online.process.model.TestProjectRecordModel">
+    insert into test_project_record (operating_content, operating_people_id,
+    operating_people, project_id, form_id,
+    form_type, gmt_create, gmt_modify
+    )
+    values (#{operatingContent,jdbcType=VARCHAR}, #{operatingPeopleId,jdbcType=BIGINT},
+    #{operatingPeople,jdbcType=VARCHAR}, #{projectId,jdbcType=BIGINT}, #{formId,jdbcType=BIGINT},
+    #{formType,jdbcType=INTEGER}, #{gmtCreate,jdbcType=BIGINT}, #{gmtModify,jdbcType=BIGINT}
+    )
+  </insert>
 </mapper>
