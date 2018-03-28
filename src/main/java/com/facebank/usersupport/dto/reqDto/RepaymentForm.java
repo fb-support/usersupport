@@ -10,6 +10,8 @@ public class RepaymentForm {
 
     private Long userId;
 
+    private String mobile;
+
     private Long orderId;
 
     private Long startTime;
@@ -19,7 +21,15 @@ public class RepaymentForm {
     private Integer page = 1;
 
     private Integer pageSize = 10;
-	
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public Long getUserId() {
         return userId;
     }

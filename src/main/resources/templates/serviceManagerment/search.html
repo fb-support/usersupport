@@ -10,10 +10,12 @@
 
     <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/search.css}">
 </head>
     <script type="text/javascript">
 
-        $(function(){
+        //给日期控件设置默认值
+        /*$(function(){
             // 今天
             var today = new Date();
             $("#datetimeEnd").val(Format(today,"yyyy-MM-dd HH:mm"));
@@ -25,7 +27,7 @@
             // 昨天
             var yesterday = new Date(today - oneday);
             $("#datetimeStart").val(Format(yesterday,"yyyy-MM-dd HH:mm"));
-        })
+        })*/
 
         // 定义全局变量每页显示条数和当前页码
         var currentSize = 10;
@@ -48,30 +50,36 @@
             if(dateEnd != null && dateEnd != ""){
                 endTime = new Date(dateEnd).getTime();
             }
-            var userId = $("#userId").val();
+            var mobile = $("#mobile").val();
             var orderId = $("#orderId").val();
 
-            // 当四个条件都为空时flag==true
-            var flag = (userId == null || userId == "") && (orderId == null || orderId == "");
+            // 当userId与orderId都为空时flag==true
+            var flag = (mobile == null || mobile == "") && (orderId == null || orderId == "");
             if(flag){
-                layer.msg("用户ID与订单ID至少设置一项");
+                layer.msg("手机号与订单ID不能都为空");
                 return;
             }
 
-            if(startTime == null || startTime == "" || endTime == null || endTime == "" || ((endTime - startTime) > 172800000)){
-                layer.msg("预期还款时间不能为空，且不超过48小时");
+            var mobileReg=/^[1][0-9]{10}$/;
+            if(!mobileReg.test(mobile)){
+                layer.msg("手机号格式不正确");
                 return;
             }
+
+            /*if(startTime == null || startTime == "" || endTime == null || endTime == "" || ((endTime - startTime) > 172800000)){
+                layer.msg("预期还款时间不能为空，且不超过48小时");
+                return;
+            }*/
 
             $.ajax({
                 async : false,
                 url : "/service/repayment",
                 type : "post",
-                data : {userId:userId,orderId:orderId,startTime:startTime,endTime:endTime,page:page,pageSize:pageSize},
+                data : {mobile:mobile,orderId:orderId,startTime:startTime,endTime:endTime,page:page,pageSize:pageSize},
                 dataType : "json",
                 success : function(result) {
                     // 回显userId和orderId
-                    $("#userId").val(userId);
+                    $("#mobile").val(mobile);
                     $("#orderId").val(orderId);
                     currPage = result.data.page;
                     currentSize = result.data.pageSize;
@@ -175,8 +183,8 @@
     <div style="margin-left: 20px">
         <form class="form-inline" id="repaymentForm">
             <div class="form-group">
-                <label for="userId">用户ID</label>
-                <input type="text" class="form-control" id="userId" name="userId" placeholder="用户ID">
+                <label for="mobile">手机号</label>
+                <input type="text" class="form-control" id="mobile" name="mobile" placeholder="手机号">
             </div>
             <div class="form-group">
                 <label for="orderId">订单ID</label>

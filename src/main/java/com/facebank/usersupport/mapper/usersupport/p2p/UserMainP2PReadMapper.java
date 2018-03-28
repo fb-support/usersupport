@@ -20,4 +20,6 @@ public interface UserMainP2PReadMapper extends BaseReadMapper<UserMainModel,Long
     List<UserMainModel> selectByUserIds(List<Long> userIds);
 
     List<UserMainModel> selectByMobiles(@Param("list") List<String> mobiles, @Param("userType") Integer userType);
+
+    Long selectUserIdByMobile(String mobile);
 }
