@@ -27,5 +27,6 @@
     <if test="formType!=null">
       and form_type like CONCAT(CONCAT(#{formType,jdbcType=INTEGER}),'%')
     </if>
+    order by gmt_create DESC
   </select>
 </mapper>

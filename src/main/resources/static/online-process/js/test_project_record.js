@@ -38,6 +38,14 @@ $(document).ready(function () {
             },
             {"data": "operatingPeople"},
             {"data": "operatingContent"},
+            {
+                "sClass": "text-center",
+                "data": "gmtCreate",
+                "render": function (data, type, full, meta) {
+                    return formatDate(validate(data));
+                },
+                "bSortable": false
+            },
         ],
         columnDefs: [
             {"orderable": false, "targets": 0},
@@ -45,6 +53,7 @@ $(document).ready(function () {
             {"orderable": false, "targets": 2},
             {"orderable": false, "targets": 3},
             {"orderable": false, "targets": 4},
+            {"orderable": false, "targets": 5},
         ],
     });
 });
@@ -68,4 +77,22 @@ function getQueryCondition(data) {
     param.length = data.length;
     param.draw = data.draw;
     return param;
+}
+var validate = function (data) {
+    if (data == null) {
+        return "";
+    }
+    return data;
+}
+
+function formatDate(now) {
+    if (now == "") {
+        return "";
+    }
+    return new Date(now).toLocaleString();
+}
+//格式化
+function parseData(str) {
+    var timestamp = Date.parse(new Date(str));
+    return timestamp;
 }
