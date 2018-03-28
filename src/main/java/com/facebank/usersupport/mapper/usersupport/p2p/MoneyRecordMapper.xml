@@ -138,8 +138,11 @@
       <if test="mobile != null and mobile != '' ">
         toUserNickname = #{mobile}
       </if>
-      <if test="type != null and type!= ''">
-      and   tradeType = #{type}
+      <if test="type == 1">
+      and   tradeType&lt;1000
+    </if>
+      <if test="type == 2">
+        and   tradeType&gt;=1000
       </if>
       <if test="starttime != null ">
         and #{starttime}&lt;tradeTime
