@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
+<html th:fragment="TestProjectRecord" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+        <head> <div th:include="common/head_info::head_infor"></div>
+        <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+        <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+        <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+        <script type="text/javascript"  th:src="@{../online-process/js/test_project_record.js}"></script>
+</head>
+<body>
+
+<div id="content">
+    <div class="container-fluid">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>项目编号:</label>
+                <input type="text" class="form-control" id="project-search" placeholder="请输入项目编号"/>
+            </div>
+            <div class="form-group">
+                <label>操作人员:</label>
+                <input type="text" class="form-control" id="people-search" placeholder="请输入操作人员姓名"/>
+            </div>
+            <div class="form-group">
+                <label>工单类型:</label>
+                <input type="text" class="form-control" id="formType-search" name="startTime" placeholder="请输入工单类型">
+                <button type="button" onclick="javascript:search();" class="btn btn-primary">查询</button>
+                <button type="button" onclick="" class="btn btn-primary">返回</button>
+
+            </div>
+        </form>
+
+        <table class="table table-bordered data-table" cellspacing="0" width="100%" id="datatable_record">
+            <thead>
+            <tr>
+                <!--<th>记录编号</th>-->
+                <th>项目编号</th>
+                <th>工单编号</th>
+                <th>工单类型</th>
+                <th>操作人员</th>
+                <th>操作内容</th>
+            </tr>
+            </thead>
+        </table>
+
+    </div>
+</div>
+</body>
+</html>
