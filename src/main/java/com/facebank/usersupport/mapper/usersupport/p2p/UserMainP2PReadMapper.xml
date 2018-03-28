@@ -93,4 +93,9 @@
     #{item}
    </foreach> and user_type = #{userType,jdbcType=INTEGER}
   </select>
+
+  <select id="selectUserIdByMobile" parameterType="java.lang.String" resultType="Long">
+    SELECT user_id FROM user_main WHERE mobile = #{mobile}
+  </select>
+
 </mapper>

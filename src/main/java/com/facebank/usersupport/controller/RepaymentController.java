@@ -3,6 +3,7 @@ package com.facebank.usersupport.controller;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.RepaymentForm;
+import com.facebank.usersupport.mapper.usersupport.p2p.UserMainP2PReadMapper;
 import com.facebank.usersupport.model.PageBeanModel;
 import com.facebank.usersupport.model.RepaymentModel;
 import com.facebank.usersupport.model.RestModel;
@@ -25,6 +26,9 @@ public class RepaymentController extends BaseController {
     @Autowired
     private IRepaymentService repaymentService;
 
+    @Autowired
+    private UserMainP2PReadMapper userMainP2PReadMapper;
+
     /**
      * 根据手机号、用户名、还款日期组合条件查询还款信息
      *
@@ -34,13 +38,17 @@ public class RepaymentController extends BaseController {
     @PostMapping("/service/repayment")
     public RestModel repaymentSearch(RepaymentForm repaymentForm) {
         try {
-            // userId和orderId都为空
-            boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getUserId());
-            // 时间间隔不满足2天内
-            boolean timeInterval = StringUtils.isEmpty(repaymentForm.getStartTime()) || StringUtils.isEmpty(repaymentForm.getEndTime()) || (repaymentForm.getEndTime() - repaymentForm.getStartTime() > 172800000L);
-            // 用户ID与订单ID都为空或者间隔超过2天则直接返回参数错误
+            // 手机号和orderId都为空
+            boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getMobile());
+            // 开始时间大于结束时间
+            boolean timeInterval = !StringUtils.isEmpty(repaymentForm.getStartTime()) && !StringUtils.isEmpty(repaymentForm.getEndTime()) && (repaymentForm.getEndTime() < repaymentForm.getStartTime());
+            // 用户ID与订单ID都为空或者开始时间大于结束时间则直接返回参数错误
             if (isAllEmpty || timeInterval) {
                     return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+            }
+            if(!StringUtils.isEmpty(repaymentForm.getMobile())){
+                Long userId = userMainP2PReadMapper.selectUserIdByMobile(repaymentForm.getMobile());
+                repaymentForm.setUserId(userId);
             }
             // 查询分页信息
             PageInfo<RepaymentModel> pageInfo = repaymentService.getRepaymentModelByRepaymenyForm(repaymentForm);
