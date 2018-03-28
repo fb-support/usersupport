@@ -7,10 +7,11 @@
     <script type="text/javascript" th:src="@{../js/paging.js}"></script>
     <script type="text/javascript" th:src="@{../js/layer.js}"></script>
     <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
 
     <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{../css/search.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/showLoading.css}">
 </head>
     <script type="text/javascript">
 
@@ -71,8 +72,10 @@
                 return;
             }*/
 
+            $("#searchDiv").showLoading();
+
             $.ajax({
-                async : false,
+                async : true,
                 url : "/service/repayment",
                 type : "post",
                 data : {mobile:mobile,orderId:orderId,startTime:startTime,endTime:endTime,page:page,pageSize:pageSize},
@@ -167,6 +170,10 @@
                         str += "</td>" + "</tr>";
                     }
                     tbody.innerHTML = str;
+                    $("#searchDiv").hideLoading();
+                },
+                error: function(err) {
+                    $("#searchDiv").hideLoading();
                 }
             })
         }
@@ -180,7 +187,7 @@
         }
     </script>
 
-    <div style="margin-left: 20px">
+    <div id="searchDiv" style="margin-left: 20px">
         <form class="form-inline" id="repaymentForm">
             <div class="form-group">
                 <label for="mobile">手机号</label>
