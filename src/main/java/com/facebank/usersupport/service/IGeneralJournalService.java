@@ -2,6 +2,7 @@ package com.facebank.usersupport.service;
 
 import com.facebank.usersupport.dto.GeneralJournalDto;
 import com.facebank.usersupport.dto.PageDto;
+import com.facebank.usersupport.model.RestModel;
 
 import java.util.List;
 
@@ -25,4 +26,6 @@ public interface IGeneralJournalService {
      * @return
      */
     PageDto getGeneralJournalPage(String mobile, String type, Long starttime, Long endtime, Integer page, Integer counts);
+
+    RestModel selectByMobile(String mobile, Integer type, Long startTime, Long endTime, Integer page, Integer counts);
 }

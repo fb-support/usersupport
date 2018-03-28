@@ -7,8 +7,8 @@ import com.facebank.usersupport.model.GeneralJournalModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
+
 @Repository
 public interface GeneralJournalMapper {
     int deleteByPrimaryKey(Long id);
@@ -29,4 +29,7 @@ public interface GeneralJournalMapper {
 
 
     Integer getPageCount(@Param("mobile") String mobile, @Param("journalType") String type, @Param("startTime") Long starttime, @Param("endTime") Long endtime);
+
+    List<GeneralJournalModel> selectByMobile(@Param("mobile") String mobile, @Param("type") Integer type, @Param("startTime") Long starttime, @Param("endTime") Long endtime);
+
 }

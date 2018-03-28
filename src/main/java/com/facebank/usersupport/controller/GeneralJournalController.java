@@ -1,9 +1,9 @@
 package com.facebank.usersupport.controller;
 
 import com.facebank.usersupport.controller.base.BaseController;
-import com.facebank.usersupport.dto.PageDto;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.IGeneralJournalService;
+import com.facebank.usersupport.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,12 +31,13 @@ public class GeneralJournalController extends BaseController {
     @RequestMapping("/log/generalPage")
     public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int page,
                                     @RequestParam(required = false, defaultValue = "10") int couts,
-                                    String mobile, String type, String starttime, String endtime)  {
+                                    String mobile, Integer type, String starttime, String endtime)  {
         System.out.println(page+"=="+couts+"=="+mobile+"=="+type+"=="+starttime+"=="+endtime);
         if (starttime==""||endtime==""){return new RestModel("时间不能为空");}
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date time1 = null;
-        long startTime=0,endTime=0;
+        long startTime=0;
+        long endTime=0;
         if (starttime!=""&&starttime!=null){
             try {
                 time1 = sdf.parse(starttime);
@@ -55,10 +56,9 @@ public class GeneralJournalController extends BaseController {
             }
         }
         if(endTime-startTime>432000000){return new RestModel("日期有误，无法查询");}
+        type = StrUtil.parseStringToInt(type,-1);
         try{
-            PageDto pageDto = generalJournalService.getGeneralJournalPage(mobile,type,startTime,endTime,page,couts);
-//            System.out.println(pageDto);
-            return this.success(pageDto);
+            return generalJournalService.selectByMobile(mobile,type,startTime,endTime,page,couts);
         }catch (Exception e){
             return this.excpRestModel();
         }

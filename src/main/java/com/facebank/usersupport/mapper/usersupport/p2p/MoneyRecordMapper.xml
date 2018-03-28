@@ -139,18 +139,19 @@
         toUserNickname = #{mobile}
       </if>
       <if test="type == 1">
-      and   tradeType&lt;1000
-    </if>
+        and   tradeType&lt;1000
+      </if>
       <if test="type == 2">
         and   tradeType&gt;=1000
       </if>
       <if test="starttime != null ">
-        and #{starttime}&lt;tradeTime
+        and #{starttime}&lt;=tradeTime
       </if>
       <if test="endtime != null ">
-        and tradeTime&lt;#{endtime}
+        and tradeTime&lt;=#{endtime}
       </if>
     </where>
+     ORDER BY tradeTime DESC
   </select>
 
 </mapper>
