@@ -65,13 +65,15 @@ function getQueryCondition(data) {
     var param = {};
     param.projectId = $("#project-search").val();//查询条件
     param.operatingPeople = $("#people-search").val();//查询条件
-    param.formType = $("#formType-search").val();//查询条件
-    if(param.formType == "测试工单"){
-        param.formType = 0;
+    param.formType = $("#record_form_type").val();//查询条件
+    console.log(param.formType);
+    if(param.formType == 2){
+        param.formType = null;
     }
-    if(param.formType == "上线工单"){
-        param.formType = 1;
-    }
+    // if(param.formType == "上线工单"){
+    //     param.formType = 1;
+    // }
+    if(param.formType =="")
     //组装分页参数
     param.start = data.start;
     param.length = data.length;
