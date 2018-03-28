@@ -14,7 +14,11 @@
     <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
             <input type="text" name="mobile"  class="form-control" placeholder="手机号">
-            <input type="text" name="type" class="form-control" placeholder="类型">
+            <select class="form-control "id="type" name="type">
+                <option value="">所有类型</option>
+                <option value="1">汇入</option>
+                <option value="2">汇出</option>
+            </select>
                 <input type="text" class="form-control" id="datetimeStart" name="startTime" readonly>
                 --
                 <input type="text" class="form-control" id="datetimeEnd" name="endTime" readonly>
@@ -41,8 +45,6 @@
                 <th width="80px">借款标题</th>
                 <th width="80px">标头像图片的路径</th>
                 <th width="80px">外部序列号</th>
-                <th width="60px">真名</th>
-                <th width="110px">手机号</th>
             </tr>
             </thead>
             <tbody class="table table-bordered table-striped" style="word-break: keep-all" id="moneyRecordList" ></tbody>
@@ -72,35 +74,33 @@
             },
             success: function (json) {
                 console.log(json);
-                var resdata = json.data;
+                var resdata = json.data.list;
                 createPageNav({
                     $container : $("#pageing"),
-                    pageCount : resdata.totalPages,
-                    currentNum : resdata.currentPage,
+                    pageCount : json.data.pages,
+                    currentNum : json.data.pageNum,
                     afterFun : function(num){
                         getPageAttribute(num,couts);
                     },
                     hasCommonPage:false
                 });
                 var str = "";
-                for (var i =0;i<json.data.pageData.length;i++){
-                    var id = json.data.pageData[i].id;
-                    var touserid = json.data.pageData[i].touserid;
-                    var tousernickname = json.data.pageData[i].tousernickname;
-                    var fromuserid = json.data.pageData[i].fromuserid;
-                    var fromusernickname = json.data.pageData[i].fromusernickname;
-                    var amount = json.data.pageData[i].amount;
-                    var accountbalance = json.data.pageData[i].accountbalance;
-                    var tradetype = json.data.pageData[i].tradetype;
-                    var tradetime = json.data.pageData[i].tradetime;
-                    var tradechannel = json.data.pageData[i].tradechannel;
-                    var tradecomment = json.data.pageData[i].tradecomment;
-                    var loanid = json.data.pageData[i].loanid;
-                    var loantitle = json.data.pageData[i].loantitle;
-                    var loanportraitpath = json.data.pageData[i].loanportraitpath;
-                    var outserialno = json.data.pageData[i].outserialno;
-                    var realname =json.data.pageData[i].realname;
-                    var mobile = json.data.pageData[i].mobile;
+                for (var i =0;i<json.data.list.length;i++){
+                    var id = json.data.list[i].id;
+                    var touserid = json.data.list[i].touserid;
+                    var tousernickname = json.data.list[i].tousernickname;
+                    var fromuserid = json.data.list[i].fromuserid;
+                    var fromusernickname = json.data.list[i].fromusernickname;
+                    var amount = json.data.list[i].amount;
+                    var accountbalance = json.data.list[i].accountbalance;
+                    var tradetype = json.data.list[i].tradetype;
+                    var tradetime = json.data.list[i].tradetime;
+                    var tradechannel = json.data.list[i].tradechannel;
+                    var tradecomment = json.data.list[i].tradecomment;
+                    var loanid = json.data.list[i].loanid;
+                    var loantitle = json.data.list[i].loantitle;
+                    var loanportraitpath = json.data.list[i].loanportraitpath;
+                    var outserialno = json.data.list[i].outserialno;
                     //为空转换
                     if(id == null){id = "";}
                     if(touserid == null){touserid = "";}
@@ -117,8 +117,6 @@
                     if(loantitle == null){loantitle = "";}
                     if(loanportraitpath == null){loanportraitpath = "";}
                     if(outserialno == null){outserialno = "";}
-                    if(realname == null){realname = "";}
-                    if(mobile == null){mobile = "";}
                     str += '<tr>'
                         +'<th>'+id+'</th>'
                         +'<th>'+touserid+'</th>'
@@ -135,8 +133,6 @@
                         +'<th>'+loantitle+'</th>'
                         +'<th>'+loanportraitpath+'</th>'
                         +'<th>'+outserialno+'</th>'
-                        +'<th>'+realname+'</th>'
-                        +'<th>'+mobile+'</th>'
                         +'</tr>';
                 }
                 $('#moneyRecordList').html(str);

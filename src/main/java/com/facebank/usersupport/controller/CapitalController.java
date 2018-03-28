@@ -1,7 +1,6 @@
 package com.facebank.usersupport.controller;
 
 import com.facebank.usersupport.controller.base.BaseController;
-import com.facebank.usersupport.dto.PageDto;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.ICapitalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,7 @@ public class CapitalController extends BaseController {
      * @auther: yaozun
      * @date:
      */
+
     @RequestMapping("/money/getMoneyRecordPage")
     public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int page,
                                     @RequestParam(required = false, defaultValue = "5") int couts,
@@ -54,12 +54,11 @@ public class CapitalController extends BaseController {
         if(time2.getTime()-time1.getTime()>432000000){return new RestModel("日期有误，无法查询");}
 
         try{
-            PageDto pageDto = iCapitalService.getMoneyRecordPage(mobile,type,time1,time2,page,couts);
-            return this.success(pageDto);
+            RestModel restModel = iCapitalService.selectByMobile(mobile,type,time1,time2,page,couts);
+            return restModel;
         }catch (Exception e){
             e.printStackTrace();
             return this.excpRestModel();
         }
     }
-
 }
