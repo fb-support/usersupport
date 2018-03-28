@@ -1,5 +1,6 @@
 package com.facebank.usersupport.online.process.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RestModel;
@@ -46,5 +47,19 @@ public class TestProjectRecordController extends BaseController {
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
         }
     }
+
+//    @GetMapping("/rd/insert")
+//    public RestModel insertRecord (TestProjectRecordModel testProjectRecordModel){
+//        try {
+//            RestModel model = testProjectRecordService.insertRecord(testProjectRecordModel);
+//            if (model.getCode().equals(RestModel.CODE_SUCCESS)) {
+//                return this.success(JSON.toJSONString(model));
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+//
+//    }
 
 }

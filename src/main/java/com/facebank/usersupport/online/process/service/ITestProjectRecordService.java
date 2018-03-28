@@ -1,6 +1,7 @@
 package com.facebank.usersupport.online.process.service;
 
 
+import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.online.process.model.TestProjectRecordModel;
 import com.github.pagehelper.PageInfo;
 
@@ -17,4 +18,11 @@ public interface ITestProjectRecordService {
      * @return
      */
     PageInfo selectByPage(int pageSize, int pageNumber, TestProjectRecordModel testProjectRecordModel);
+
+    /**
+     * 插入
+     * @param testProjectRecordModel
+     * @return
+     */
+    RestModel insertRecord(TestProjectRecordModel testProjectRecordModel);
 }

@@ -29,4 +29,14 @@
     </if>
     order by gmt_create DESC
   </select>
+  <insert id="insertRecord" parameterType="com.facebank.usersupport.online.process.model.TestProjectRecordModel">
+    insert into test_project_record (operating_content, operating_people_id,
+    operating_people, project_id, form_id,
+    form_type, gmt_create, gmt_modify
+    )
+    values (#{operatingContent,jdbcType=VARCHAR}, #{operatingPeopleId,jdbcType=BIGINT},
+    #{operatingPeople,jdbcType=VARCHAR}, #{projectId,jdbcType=BIGINT}, #{formId,jdbcType=BIGINT},
+    #{formType,jdbcType=INTEGER}, #{gmtCreate,jdbcType=BIGINT}, #{gmtModify,jdbcType=BIGINT}
+    )
+  </insert>
 </mapper>
