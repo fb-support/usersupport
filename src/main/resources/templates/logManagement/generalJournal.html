@@ -16,12 +16,16 @@
         <form class="navbar-form navbar-left" role="search" >
             <div class="form-group">
                 <input type="text" name="mobile" class="form-control" placeholder="手机号">
-                <input type="text" name="type" class="form-control" placeholder="类型">
+                <select class="form-control "id="type" name="type">
+                    <option value="">所有类型</option>
+                    <option value="1">收入</option>
+                    <option value="0">支出</option>
+                </select>
                 <input type="text" class="form-control" id="datetimeStart" name="startTime" readonly>
                 --
                 <input type="text" class="form-control" id="datetimeEnd" name="endTime" readonly>
             </div>
-            <button type="button" class="btn btn-default">Submit</button>
+            <button type="button" class="btn btn-default">查询</button>
         </form>
 
         <div class="panel panel-default" style="width:100%;height:350px;overflow:auto;">
@@ -44,7 +48,6 @@
                     <th >状态</th>
                     <th>创建时间</th>
                     <th>修改时间</th>
-                    <th>手机号码</th>
                 </tr>
                 </thead>
                 <tbody style="word-break: keep-all;width: 100%;">
@@ -79,14 +82,11 @@
                 },
                 success: function (sourceData) {
                     var str = "";
-                    var resdata = sourceData.data;
-                    console.log(resdata);
-                    var data = resdata.pageData;
-                    console.log(data);
+                    var data = sourceData.data.list;
                     createPageNav({
                         $container : $("#paging"),
-                        pageCount : resdata.totalPages,
-                        currentNum : resdata.currentPage,
+                        pageCount : sourceData.data.pages,
+                        currentNum : sourceData.data.pageNum,
                         afterFun : function(num){
                             getData(num,10);
                         },
@@ -103,7 +103,7 @@
                         str += '<tr>'
                             +  "<td class = 'alltd'>" + validate(data[i].id) + "</td>" +
                             "<td>" + validate(data[i].journaltype) + "</td>" +
-                            "<td>" + validate(data[i].userId) + "</td>" +
+                            "<td>" + validate(data[i].userid) + "</td>" +
                             "<td>" + validate(data[i].nickname) + "</td>" +
                             "<td>" + validate(data[i].serialnumber) + "</td>" +
                             "<td>" + formatDate(validate(data[i].starttime)) + "</td>" +
@@ -116,7 +116,6 @@
                             "<td>" + validate(data[i].status) + "</td>" +
                             "<td>" + formatDate(validate(data[i].createtime)) + "</td>" +
                             "<td>" + formatDate(validate(data[i].modifytime)) + "</td>" +
-                            "<td>" + validate(data[i].mobile) + "</td>" +
                             + '</tr>';
                     }
                     $('tbody').html(str);

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.facebank.usersupport.model.GeneralJournalModel">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="journalType" jdbcType="SMALLINT" property="journaltype" />
-    <result column="userId" jdbcType="INTEGER" property="userId" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
     <result column="nickName" jdbcType="VARCHAR" property="nickname" />
     <result column="serialNumber" jdbcType="VARCHAR" property="serialnumber" />
     <result column="startTime" jdbcType="BIGINT" property="starttime" />
@@ -325,4 +325,24 @@
     ON tmp_gj.userId=tmp_user.userId ;
   </select>
 
+  <select id="selectByMobile" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    FROM general_journal
+    <where>
+      <if test="mobile != null and mobile != ''">
+        nickName = #{mobile}
+      </if>
+      <if test="type != -1">
+        and inOutType = #{type}
+      </if>
+      <if test="endTime != null and endTime != '' and endTime !=0">
+        and startTime &lt;= #{endTime}
+      </if>
+      <if test="startTime != null and startTime != '' and startTime != 0">
+        and startTime &gt;= #{startTime}
+      </if>
+    </where>
+    ORDER BY endTime
+  </select>
 </mapper>
