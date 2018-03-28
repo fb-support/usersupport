@@ -60,10 +60,6 @@
     </div>
 </div>
     <script>
-
-        $(document).ready(function () {
-            getData(1,10);
-        })
         $('[type="button"]').click(function () {
             getData(1,10);
         })
@@ -81,44 +77,50 @@
                     couts : pageSize
                 },
                 success: function (sourceData) {
-                    var str = "";
-                    var data = sourceData.data.list;
-                    createPageNav({
-                        $container : $("#paging"),
-                        pageCount : sourceData.data.pages,
-                        currentNum : sourceData.data.pageNum,
-                        afterFun : function(num){
-                            getData(num,10);
-                        },
-                        hasCommonPage:false
-                    });
-                    var str = "";
-                    for (var i = 0; i < data.length; i++) {
-                        var inoutString="";
-                        if( data[i].inouttype == 0){
-                            inoutString="支出";
-                        }else{
-                            inoutString="收入";
+                    if (sourceData.code==202){alert(sourceData.message)}
+                    if (sourceData.code==203){alert(sourceData.message)}
+                    if (sourceData.code==204){alert(sourceData.message)}
+                    if (sourceData.code == 200) {
+                        if(sourceData.data.list==null||sourceData.data.list==""){alert("无数据。")}
+                        var str = "";
+                        var data = sourceData.data.list;
+                        createPageNav({
+                            $container: $("#paging"),
+                            pageCount: sourceData.data.pages,
+                            currentNum: sourceData.data.pageNum,
+                            afterFun: function (num) {
+                                getData(num, 10);
+                            },
+                            hasCommonPage: false
+                        });
+                        var str = "";
+                        for (var i = 0; i < data.length; i++) {
+                            var inoutString = "";
+                            if (data[i].inouttype == 0) {
+                                inoutString = "支出";
+                            } else {
+                                inoutString = "收入";
+                            }
+                            str += '<tr>'
+                                + "<td class = 'alltd'>" + validate(data[i].id) + "</td>" +
+                                "<td>" + validate(data[i].journaltype) + "</td>" +
+                                "<td>" + validate(data[i].userid) + "</td>" +
+                                "<td>" + validate(data[i].nickname) + "</td>" +
+                                "<td>" + validate(data[i].serialnumber) + "</td>" +
+                                "<td>" + formatDate(validate(data[i].starttime)) + "</td>" +
+                                "<td>" + formatDate(validate(data[i].endtime)) + "</td>" +
+                                "<td>" + validate(data[i].relationid) + "</td>" +
+                                "<td>" + inoutString + "</td>" +
+                                "<td>" + validate(data[i].amount) + "</td>" +
+                                "<td>" + validate(data[i].balance) + "</td>" +
+                                "<td>" + validate(data[i].remarks) + "</td>" +
+                                "<td>" + validate(data[i].status) + "</td>" +
+                                "<td>" + formatDate(validate(data[i].createtime)) + "</td>" +
+                                "<td>" + formatDate(validate(data[i].modifytime)) + "</td>" +
+                                +'</tr>';
                         }
-                        str += '<tr>'
-                            +  "<td class = 'alltd'>" + validate(data[i].id) + "</td>" +
-                            "<td>" + validate(data[i].journaltype) + "</td>" +
-                            "<td>" + validate(data[i].userid) + "</td>" +
-                            "<td>" + validate(data[i].nickname) + "</td>" +
-                            "<td>" + validate(data[i].serialnumber) + "</td>" +
-                            "<td>" + formatDate(validate(data[i].starttime)) + "</td>" +
-                            "<td>" + formatDate(validate(data[i].endtime)) + "</td>" +
-                            "<td>" + validate(data[i].relationid) + "</td>" +
-                            "<td>" + inoutString + "</td>" +
-                            "<td>" + validate(data[i].amount) + "</td>" +
-                            "<td>" + validate(data[i].balance) + "</td>" +
-                            "<td>" + validate(data[i].remarks) + "</td>" +
-                            "<td>" + validate(data[i].status) + "</td>" +
-                            "<td>" + formatDate(validate(data[i].createtime)) + "</td>" +
-                            "<td>" + formatDate(validate(data[i].modifytime)) + "</td>" +
-                            + '</tr>';
+                        $('tbody').html(str);
                     }
-                    $('tbody').html(str);
                 }
             })
         }
