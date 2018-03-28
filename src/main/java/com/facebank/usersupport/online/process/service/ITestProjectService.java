@@ -16,4 +16,17 @@ public interface ITestProjectService {
      * @return
      */
     PageInfo selectByPage(int pageSize, int pageNumber, TestProjectModel testProjectModel);
+
+    /**
+     * 新增一个新项目
+     * @param model
+     * @param developPeople
+     * @param testPeople
+     * @param operationsPeople
+     * @return
+     */
+    int insertProject(TestProjectModel model,
+                      String[] developPeople,
+                      String[] testPeople,
+                      String[] operationsPeople);
 }

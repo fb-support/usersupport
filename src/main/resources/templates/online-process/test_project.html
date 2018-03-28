@@ -32,10 +32,10 @@
 					</select>
 				</li>
 				<li class="all_test_project">
-					<a href="#">所有项目</a>
+					<a href="javascript:search();">所有项目</a>
 				</li>
 				<li class="new_test_project">
-					<a href="#">新建项目</a>
+					<a href="javascript:showModelForNewProject()">新建项目</a>
 				</li>
 			</ul>
 		</div>
@@ -75,5 +75,83 @@
 		    </div>
 		</div>
 	</div>
+
+	<!--添加项目页面-->
+	<div class="modal fade addTestProject_model" id="createNewProject" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<form id="newTestProjectForm">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" >新建项目</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label class="control-label">项目名称:</label>
+						<input type="text" class="form-control" name="projectName" id="m_projectName" />
+						<label class="control-label">项目代号:</label>
+						<input type="text" class="form-control" name="projectCode" id="m_projectCode"/>
+						<label class="control-label">项目地址:</label>
+						<input type="text" class="form-control" name="projectUrl" id="m_projectUrl"/>
+						<label class="control-label time_info time_info_head">起始时间:</label>
+						<div class="time_palance">
+							<input type="text" class="form-control project_time" name="str_beginTime" id="m_beginTime" readonly/>
+							<label class="control-label time_info">&nbsp;至&nbsp;</label>
+							<input type="text" class="form-control project_time" name="str_endTime" id="m_endTime" readonly/>
+						</div>
+						<label class="control-label">开发人员:</label>
+						<input type="text" class="form-control people_who_to_do" id="m_developPeople"/>
+						<input type="hidden" name="developPeople" id="m_hidden_developPeople"/>
+						<label class="control-label">测试人员:</label>
+						<input type="text" class="form-control people_who_to_do" id="m_testPeople"/>
+						<input type="hidden" name="testPeople" id="m_hidden_testPeople"/>
+						<label class="control-label">运维人员:</label>
+						<input type="text" class="form-control people_who_to_do" id="m_operationsPeople"/>
+						<input type="hidden" name="operationsPeople" id="m_hidden_operationsPeople"/>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" onclick="saveTestProject();" class="btn btn-primary">Save</button>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+	<!--选择项目关联人员的页面-->
+	<div class="modal fade people_model" id="selectPeopleForProject" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" >人员列表</h4>
+				</div>
+				<div class="modal-body">
+					<form id="peopleForm">
+						<div class="form-group">
+							<div class="search_palace_for_user">
+								<input type="text" class="form-control" name="query" id="search_username" placeholder="填入姓名或者工号"/>
+								<button type="button" onclick="javascript:searchUser();" class="btn btn-primary">查询</button>
+							</div>
+							<div class="data_show_of_user">
+								<table>
+									<tbody id="beSelect_user">
+									</tbody>
+								</table>
+
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" id="saveSelectedUserButton" onclick="saveSelectedUser();" value="" class="btn btn-primary">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>

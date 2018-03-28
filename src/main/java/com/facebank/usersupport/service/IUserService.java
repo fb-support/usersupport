@@ -70,5 +70,11 @@ public interface IUserService {
      */
     Long getActiveUserId();
 
+    /**
+     * 查询所有用户（指定技术部）
+     * @param query 查询内容
+     * @return 用户集合
+     */
+    List<UserModel> getUserForOnlineProcess(String query);
 
 }

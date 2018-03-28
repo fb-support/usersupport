@@ -68,3 +68,63 @@ body {
 .test_project_content .data-table thead tr th {
 	padding: 10px;
 }
+
+.addTestProject_model .modal-dialog .modal-body {
+	padding-left: 100px;
+	padding-right: 100px;
+}
+
+.addTestProject_model .modal-dialog .modal-content .modal-body .form-group .form-control {
+	width: 400px !important;
+	margin-bottom: 20px;
+}
+
+.addTestProject_model .modal-dialog .modal-content .modal-body .form-group .project_time {
+	width: 180px !important;
+	float: left;
+}
+
+.addTestProject_model .modal-dialog .modal-content .modal-body .form-group .time_info {
+	float: left;
+	padding-top: 5px;
+}
+
+.addTestProject_model .modal-dialog .modal-content .modal-body .form-group .time_info_head {
+	width: 400px;
+	padding-top: 0px;
+}
+
+.people_model {
+	margin-left: 950px;
+}
+
+.people_model .modal-dialog {
+	width: 350px;
+}
+
+.people_model .modal-dialog .modal-content .modal-body {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.people_model .modal-dialog .modal-content .modal-body .form-group .form-control {
+	width: 200px !important;
+	margin-bottom: 20px;
+	margin-right: 20px;
+	float: left;
+}
+
+.people_model .modal-dialog .modal-content .modal-body .form-group .data_show_of_user table tbody tr td {
+	border-top: 1px solid #dacaca;
+	border-bottom: 1px solid #dacaca;
+	padding: 10px 15px;
+	font-size: 16px;
+}
+
+.people_model .modal-dialog .modal-content .modal-body .form-group .data_show_of_user table tbody tr .beSelect_userNumber {
+	width: 140px;
+}
+
+.people_model .modal-dialog .modal-content .modal-body .form-group .data_show_of_user table tbody tr .beSelect_username {
+	width: 140px;
+}

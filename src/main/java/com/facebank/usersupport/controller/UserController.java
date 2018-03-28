@@ -262,4 +262,21 @@ public class UserController extends BaseController {
         }
         return this.excpRestModel(MessageKeyEnum.ERROR);
     }
+
+
+    /**
+     * 查询所有用户（指定技术部）集合
+     * @return
+     */
+    @GetMapping("/online-process/getUserByQuery")
+    public RestModel getUserListByQuery( String query){
+        try {
+            List<UserModel> list = userService.getUserForOnlineProcess(query);
+            return this.success(list);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
+    }
 }

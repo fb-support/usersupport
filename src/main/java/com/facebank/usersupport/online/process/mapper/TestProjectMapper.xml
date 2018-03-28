@@ -31,7 +31,7 @@
       and project_id like CONCAT(CONCAT('%', #{projectId,jdbcType=BIGINT}), '%')
     </if>
     <if test="projectName!=null">
-      and project_name like CONCAT(CONCAT(#{projectName,jdbcType=VARCHAR}),'%')
+      and project_name like CONCAT(CONCAT('%', #{projectName,jdbcType=VARCHAR}),'%')
     </if>
     <if test="beginTime != null ">
       and begin_time>#{beginTime}
@@ -40,4 +40,28 @@
       and #{endTime} > end_time
     </if>
   </select>
+
+  <insert id="insert" parameterType="com.facebank.usersupport.online.process.model.TestProjectModel">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="projectId">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into test_project(
+      project_name,
+      project_code,
+      project_url,
+      begin_time,
+      end_time,
+      gmt_modify,
+      gmt_create
+    )
+    value(
+      #{projectName,jdbcType=VARCHAR},
+      #{projectCode,jdbcType=VARCHAR},
+      #{projectUrl,jdbcType=VARCHAR},
+      #{beginTime,jdbcType=BIGINT},
+      #{endTime,jdbcType=BIGINT},
+      #{gmtModify,jdbcType=BIGINT},
+      #{gmtCreate,jdbcType=BIGINT}
+    )
+  </insert>
 </mapper>

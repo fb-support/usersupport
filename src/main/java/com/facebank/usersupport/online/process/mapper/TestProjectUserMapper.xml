@@ -11,4 +11,23 @@
     <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
   </resultMap>
 
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into test_project_user(
+      project_id,
+      user_id,
+      user_role,
+      gmt_create,
+      gmt_modify
+    ) values
+    <foreach collection="list" item="record" index="index"
+             separator=",">
+      (
+      #{record.projectId},
+      #{record.userId},
+      #{record.userRole},
+      #{record.gmtCreate},
+      #{record.gmtModify}
+      )
+    </foreach>
+  </insert>
 </mapper>
