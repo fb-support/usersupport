@@ -234,7 +234,7 @@ function runLaunchFormManager() {
 /**
  * 前往项目详情页面
  */
-function runTestProjectDetail() {
+function runTestProjectDetail(data) {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
     //显示项目详情界面

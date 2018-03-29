@@ -16,8 +16,10 @@
 
 	<script type="text/javascript" th:src="@{../online-process/js/test_project.js}"></script>
 	<link rel="stylesheet" type="text/css" th:href="@{../online-process/css/test_project.css}">
+
 </head>
 <body>
+    <iframe class="test_project_detail_module" id="test_project_detail_module" src="/online-process/TestProjectRecord" frameborder="0"></iframe>
 	<div id="project_main_body">
 		<div class="test_project_meun">
 			<ul class="ul_menu">
@@ -32,7 +34,7 @@
 					</select>
 				</li>
 				<li class="all_test_project">
-					<a href="javascript:search();">所有项目</a>
+					<a href="javascript:searchAllProject();">所有项目</a>
 				</li>
 				<li class="new_test_project">
 					<a href="javascript:showModelForNewProject()">新建项目</a>
@@ -52,14 +54,14 @@
 		            </div>
 		            <div class="form-group">
 		                <label>起始时间:</label>
-		                <input type="text" class="form-control" id="datetimeStart" name="startTime" readonly>
+		                <input type="text" class="form-control" id="projectSearchdatetimeStart" name="startTime" readonly>
 		                <label>结束时间:</label>
-		                <input type="text" class="form-control" id="datetimeEnd" name="endTime" readonly>
-		                <button type="button" onclick="javascript:search();" class="btn btn-primary">查询</button>
+		                <input type="text" class="form-control" id="projectSearchdatetimeEnd" name="endTime" readonly>
+		                <button type="button" onclick="javascript:searchAllProject();" class="btn btn-primary">查询</button>
 		            </div>
 		        </form>
 
-		        <table class="table table-bordered data-table" cellspacing="0" width="100%" id="datatable">
+		        <table class="table table-bordered data-table" cellspacing="0" width="100%" id="testProject_datatable">
 		            <thead>
 		            <tr>
 		                <th>项目编号</th>
@@ -68,7 +70,7 @@
 		                <th>起始时间</th>
 		                <th>结束时间</th>
 		                <th>状态</th>
-		                <th>操作</th>
+		                <th>查看详情</th>
 		            </tr>
 		            </thead>
 		        </table>

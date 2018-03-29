@@ -166,6 +166,7 @@
 
 #test-project-manager-page {
 	display: none;
+	margin-bottom: 50px;
 }
 
 #test-form-manager-page {
@@ -178,4 +179,6 @@
 
 #test_project_record{
 	display: none;
+	margin-top: 20px;
+	margin-bottom: 50px;
 }

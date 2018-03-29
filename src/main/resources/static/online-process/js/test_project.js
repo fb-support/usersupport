@@ -3,7 +3,7 @@ var table;
 
 $(document).ready(function () {
     //项目管理主页日期条件的插件初始化
-    $('#datetimeStart').datetimepicker({
+    $('#projectSearchdatetimeStart').datetimepicker({
         language: 'zh-CN',
         format: 'yyyy-mm-dd',
         weekStart: 1, /*以星期一为一星期开始*/
@@ -14,12 +14,12 @@ $(document).ready(function () {
     }).on("changeDate", function (ev) {  //值改变事件
         //选择的日期不能大于第二个日期控件的日期
         if (ev.date) {
-            $("#datetimeEnd").datetimepicker('setStartDate', new Date(ev.date.valueOf()));
+            $("#projectSearchdatetimeEnd").datetimepicker('setStartDate', new Date(ev.date.valueOf()));
         } else {
-            $("#datetimeEnd").datetimepicker('setStartDate', null);
+            $("#projectSearchdatetimeEnd").datetimepicker('setStartDate', null);
         }
     });
-    $('#datetimeEnd').datetimepicker({
+    $('#projectSearchdatetimeEnd').datetimepicker({
         language: 'zh-CN',
         format: 'yyyy-mm-dd',
         weekStart: 1, /*以星期一为一星期开始*/
@@ -30,9 +30,9 @@ $(document).ready(function () {
     }).on("changeDate", function (ev) {
         /*选择的日期不能小于第一个日期控件的日期*/
         if (ev.date) {
-            $("#datetimeStart").datetimepicker('setEndDate', new Date(ev.date.valueOf()));
+            $("#projectSearchdatetimeStart").datetimepicker('setEndDate', new Date(ev.date.valueOf()));
         } else {
-            $("#datetimeStart").datetimepicker('setEndDate', new Date());
+            $("#projectSearchdatetimeStart").datetimepicker('setEndDate', new Date());
         }
     });
 
@@ -70,7 +70,7 @@ $(document).ready(function () {
         }
     });
 
-    table = $('#datatable').DataTable({
+    table = $('#testProject_datatable').DataTable({
         "searching": false,
         "bJQueryUI": true,
         "sPaginationType": "full_numbers",
@@ -78,7 +78,7 @@ $(document).ready(function () {
 
         ajax: function (data, callback, settings) {
             //封装请求参数
-            var param = getQueryCondition(data);
+            var param = project_getQueryCondition(data);
 
             $.ajax({
                 type: "GET",
@@ -132,7 +132,7 @@ $(document).ready(function () {
                 "sClass": "text-center",
                 "data": "projectId",
                 "render": function (data, type, full, meta) {
-                    return '<span class="glyphicon glyphicon-list-alt" onclick="showModel(' + data + ');"></span>';
+                    return "<span class='glyphicon glyphicon-list-alt btn_lookProjectDetail' onclick='lookProjectDetail(this)'></span>";
                 },
                 "bSortable": false
             },
@@ -164,12 +164,12 @@ $(document).ready(function () {
                 $("#saveSelectedUserButton").attr("value",3);
                 break;
         }
-
     });
+
 });
 
 
-function search() {
+function searchAllProject() {
     table.ajax.reload();
 }
 
@@ -188,15 +188,15 @@ function formatDate(now) {
 }
 
 //封装查询参数
-function getQueryCondition(data) {
+function project_getQueryCondition(data) {
     var param = {};
     param.projectName = $("#projectName-search").val();
     param.projectId = $("#projectId-search").val();
-    if ($('#datetimeStart').val() != null && $('#datetimeStart').val().length > 0) {
-        param.beginTime = parseData($('#datetimeStart').val());
+    if ($('#projectSearchdatetimeStart').val() != null && $('#projectSearchdatetimeStart').val().length > 0) {
+        param.beginTime = parseData($('#projectSearchdatetimeStart').val());
     }
-    if ($("#datetimeEnd").val() != null && $("#datetimeEnd").val().length > 0) {
-        param.endTime = parseData($("#datetimeEnd").val());
+    if ($("#projectSearchdatetimeEnd").val() != null && $("#projectSearchdatetimeEnd").val().length > 0) {
+        param.endTime = parseData($("#projectSearchdatetimeEnd").val());
     }
     //组装分页参数
     param.start = data.start;
@@ -212,16 +212,12 @@ function parseData(str) {
 }
 
 /**
- * 显示模态框
  * 为了查看指定项目编号的详细操作记录和内容
- * @param id 显示指定项目编号的内容
  */
-function showModel(id) {
-    $('#createNewProject').modal();
-    // $('#m_userName').val(result.data.username);
-    // $('#m_workNumber').val(result.data.workNumber);
-    // $('#m_phone').val(result.data.phone);
-    // $('#m_email').val(result.data.email);
+function lookProjectDetail(obj) {
+    console.log(obj);
+    //obj.
+    window.parent.runTestProjectDetail();
 }
 
 /**

@@ -12,7 +12,7 @@ body {
 }
 
 #project_main_body .test_project_meun .ul_menu li {
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	float: left;
 }
 
@@ -53,9 +53,11 @@ body {
 	padding-bottom: 50px;
 }
 
-#project_main_body .test_project_content .form-inline div {
-	margin-bottom: 10px;
+#testProject_datatable tbody tr td {
+	padding: 8px 10px;
+	font-size: 14px;
 }
+
 
 .form-group {
 	margin-right: 10px;
@@ -67,6 +69,10 @@ body {
 
 .test_project_content .data-table thead tr th {
 	padding: 10px;
+}
+
+.addTestProject_model {
+	margin-left: -200px;
 }
 
 .addTestProject_model .modal-dialog .modal-body {
@@ -95,7 +101,7 @@ body {
 }
 
 .people_model {
-	margin-left: 950px;
+	margin-left: 750px;
 }
 
 .people_model .modal-dialog {
@@ -127,4 +133,8 @@ body {
 
 .people_model .modal-dialog .modal-content .modal-body .form-group .data_show_of_user table tbody tr .beSelect_username {
 	width: 140px;
+}
+
+#test_project_detail_module {
+	display: none;
 }

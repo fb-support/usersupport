@@ -12,7 +12,7 @@ $(document).ready(function () {
 
             $.ajax({
                 type: "GET",
-                url: '/rd/selectByPage',
+                url: '/online-process/selectByPage',
                 cache: false,  //禁用缓存
                 data: param,    //传入已封装的参数
                 dataType: "json",
@@ -57,7 +57,9 @@ $(document).ready(function () {
         ],
     });
 });
-function search() {
+function search(data) {
+    console.log("成功调用search方法");
+    console.log(data);
     table.ajax.reload();
 }
 //封装查询参数
@@ -66,7 +68,6 @@ function getQueryCondition(data) {
     param.projectId = $("#project-search").val();//查询条件
     param.operatingPeople = $("#people-search").val();//查询条件
     param.formType = $("#record_form_type").val();//查询条件
-    console.log(param.formType);
     if(param.formType == 2){
         param.formType = null;
     }

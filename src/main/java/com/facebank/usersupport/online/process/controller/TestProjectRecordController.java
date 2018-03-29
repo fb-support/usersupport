@@ -26,7 +26,7 @@ public class TestProjectRecordController extends BaseController {
      * @param start 页数
      * @return
      */
-    @GetMapping("/rd/selectByPage")
+    @GetMapping("/online-process/selectByPage")
     public RestModel getRecordListByPage(@RequestParam(required = false, defaultValue = "1") int start,
                                          @RequestParam(required = false, defaultValue = "10") int length,
                                          String draw,
