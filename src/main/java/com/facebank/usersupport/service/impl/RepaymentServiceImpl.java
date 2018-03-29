@@ -28,11 +28,12 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
      * @return
      */
     @Override
-    public PageInfo<RepaymentModel> getRepaymentModelByRepaymenyForm(RepaymentForm repaymentForm) {
-        PageHelper.startPage(repaymentForm.getPage(), repaymentForm.getPageSize());
+    public List<RepaymentModel> getRepaymentModelByRepaymenyForm(RepaymentForm repaymentForm) {
+        /*Integer page = repaymentForm.getStart() / repaymentForm.getLength() + 1;
+        PageHelper.startPage(page, repaymentForm.getLength());*/
         List<RepaymentModel> repaymentModels = repaymentMapper.getRepaymentModelByRepaymentForm(repaymentForm);
-        PageInfo<RepaymentModel> pageInfo=new PageInfo<RepaymentModel>(repaymentModels);
-        return pageInfo;
+        /*PageInfo<RepaymentModel> pageInfo=new PageInfo<RepaymentModel>(repaymentModels);*/
+        return repaymentModels;
     }
 
 }

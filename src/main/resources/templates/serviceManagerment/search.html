@@ -4,294 +4,86 @@
     <script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
     <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
     <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
-    <script type="text/javascript" th:src="@{../js/paging.js}"></script>
     <script type="text/javascript" th:src="@{../js/layer.js}"></script>
     <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
     <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
+    <script type="text/javascript" th:src="@{../js/search.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
 
     <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/showLoading.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
 </head>
-    <script type="text/javascript">
-
-        //给日期控件设置默认值
-        /*$(function(){
-            // 今天
-            var today = new Date();
-            $("#datetimeEnd").val(Format(today,"yyyy-MM-dd HH:mm"));
-            today.setHours(0);
-            today.setMinutes(0);
-            today.setSeconds(0);
-            today.setMilliseconds(0);
-            var oneday = 1000 * 60 * 60 * 24;
-            // 昨天
-            var yesterday = new Date(today - oneday);
-            $("#datetimeStart").val(Format(yesterday,"yyyy-MM-dd HH:mm"));
-        })*/
-
-        // 定义全局变量每页显示条数和当前页码
-        var currentSize = 10;
-        var currPage = 0;
-
-        //重置表单
-        function reset(){
-            $("#repaymentForm")[0].reset();
-        }
-
-        //查询还款信息
-        function search(page,pageSize){
-            var dateStart = $("#datetimeStart").val();
-            var dateEnd = $("#datetimeEnd").val();
-            var startTime = null;
-            var endTime = null;
-            if(dateStart != null && dateStart != ""){
-                startTime = new Date(dateStart).getTime();
-            }
-            if(dateEnd != null && dateEnd != ""){
-                endTime = new Date(dateEnd).getTime();
-            }
-            var mobile = $("#mobile").val();
-            var orderId = $("#orderId").val();
-
-            // 当userId与orderId都为空时flag==true
-            var flag = (mobile == null || mobile == "") && (orderId == null || orderId == "");
-            if(flag){
-                layer.msg("手机号与订单ID不能都为空");
-                return;
-            }
-
-            var mobileReg=/^[1][0-9]{10}$/;
-            if(!mobileReg.test(mobile)){
-                layer.msg("手机号格式不正确");
-                return;
-            }
-
-            /*if(startTime == null || startTime == "" || endTime == null || endTime == "" || ((endTime - startTime) > 172800000)){
-                layer.msg("预期还款时间不能为空，且不超过48小时");
-                return;
-            }*/
-
-            $("#searchDiv").showLoading();
-
-            $.ajax({
-                async : true,
-                url : "/service/repayment",
-                type : "post",
-                data : {mobile:mobile,orderId:orderId,startTime:startTime,endTime:endTime,page:page,pageSize:pageSize},
-                dataType : "json",
-                success : function(result) {
-                    // 回显userId和orderId
-                    $("#mobile").val(mobile);
-                    $("#orderId").val(orderId);
-                    currPage = result.data.page;
-                    currentSize = result.data.pageSize;
-                    createPageNav({
-                        $container : $("#paging"),
-                        /*页面总数*/
-                        pageCount : result.data.totalPage,
-                        /*当前页*/
-                        currentNum : result.data.page,
-                        afterFun : function(pageNum){
-                            search(pageNum,currentSize);
-                        }
-                    });
-                    var tbody = window.document.getElementById("repaymentData");
-                    var datas=result.data.data;
-                    var str="";
-                    for (i in datas) {
-                        str += "<tr>" + "<td>";
-                        if(datas[i].credOrderId != null) {
-                            str += datas[i].credOrderId;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].credUserId != null) {
-                            str += datas[i].credUserId;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].credPlanPrincipal != null) {
-                            str += datas[i].credPlanPrincipal;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].credPlanInterest != null) {
-                            str += datas[i].credPlanInterest;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].credPlanDate != null) {
-                            str += new Date(parseInt(datas[i].credPlanDate)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].redLocalInfo != null){
-                            var localInfoJson = JSON.parse(datas[i].redLocalInfo);
-                            str += localInfoJson.model_name;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].redPlanAmount != null) {
-                            str += datas[i].redPlanAmount;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].redPackageType == 1000){
-                            str += "加息红包";
-                        }else if(datas[i].redPackageType == 1010){
-                            str += "返现红包";
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].redTermNum != null){
-                            str += datas[i].redTermNum;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].vipRate != null){
-                            str += datas[i].vipRate;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].vipPlanAmount != null){
-                            str += datas[i].vipPlanAmount;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].vipTermNum != null){
-                            str += datas[i].vipTermNum;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].pfPlanAmount != null){
-                            str += datas[i].pfPlanAmount;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].pfTermNum != null){
-                            str += datas[i].pfTermNum;
-                        }
-                        str += "</td>" + "<td>";
-                        if(datas[i].pfType == 100){
-                            str += "首购加息";
-                        }else if(datas[i].pfType == 200){
-                            str += "限时加息";
-                        }else if(datas[i].pfType == 300){
-                            str += "项目加息";
-                        }
-                        str += "</td>" + "</tr>";
-                    }
-                    tbody.innerHTML = str;
-                    $("#searchDiv").hideLoading();
-                },
-                error: function(err) {
-                    $("#searchDiv").hideLoading();
-                }
-            })
-        }
-
-        //修改每页显示条数
-        function changePageSize(){
-            currentSize = $("#pageSize").val();
-            if(currPage != 0){
-                search(currPage,currentSize);
-            }
-        }
-    </script>
-
-    <div id="searchDiv" style="margin-left: 20px">
-        <form class="form-inline" id="repaymentForm">
-            <div class="form-group">
-                <label for="mobile">手机号</label>
-                <input type="text" class="form-control" id="mobile" name="mobile" placeholder="手机号">
-            </div>
-            <div class="form-group">
-                <label for="orderId">订单ID</label>
-                <input type="email" class="form-control" id="orderId" name="orderId" placeholder="订单ID">
-            </div>
-            <div class="form-group">
-                <label class="labe_l">还款日期:</label>
-                <input type="text" class="form_datetime form-control" id="datetimeStart" name="startTime" readonly>
-                --
-                <input type="text" class="form_datetime form-control" id="datetimeEnd" name="endTime" readonly>
-
-            </div>
-            <span class="btn btn-default" onclick="reset()" >重置</span>
-            <span class="btn btn-default" onclick="search()" >查询</span>
-        </form>
-        <form>
-            <div class="row">
-                <div class="panel panel-default" style="width: auto;">
-                    <div class="panel-heading" style="width: 100%">客户信息列表</div>
-                    <table class="table table-bordered table-striped" align="center">
-                        <thead>
-                            <tr>
-                                <th>订单ID</th>
-                                <th>用户ID</th>
-                                <th>债权计划本金</th>
-                                <th>计划利息</th>
-                                <th>计划还款时间</th>
-                                <th>红包信息</th>
-                                <th>红包金额</th>
-                                <th>加息红包/返现红包</th>
-                                <th>红包期限</th>
-                                <th>vip利率</th>
-                                <th>vip收益</th>
-                                <th>vip期数</th>
-                                <th>加息金额</th>
-                                <th>加息期数</th>
-                                <th>首购加息/限时加息/项目加息</th>
-                            </tr>
-                        </thead>
-                        <tbody id="repaymentData">
-                        </tbody>
-                    </table>
+    <div id="content">
+        <div class="container-fluid">
+            <form class="form-inline" id="repaymentForm">
+                <div class="form-group">
+                    <label for="mobile">手机号</label>
+                    <input type="text" class="form-control" id="mobile" name="mobile" placeholder="手机号">
                 </div>
-                <div id="paging" style="float: left;"></div>
-                <div style="float: left;height: 74px;margin-top: 28px;margin-left: 15px">
-                    每页显示
-                    <select id="pageSize" onchange="changePageSize()">
-                        <option>10</option>
-                        <option>20</option>
-                        <option>30</option>
-                    </select>
-                    条
+                <div class="form-group">
+                    <label for="orderId">订单ID</label>
+                    <input type="email" class="form-control" id="orderId" name="orderId" placeholder="订单ID">
                 </div>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label class="labe_l">还款日期:</label>
+                    <input type="text" class="form_datetime form-control" id="datetimeStart" name="startTime" readonly>
+                    --
+                    <input type="text" class="form_datetime form-control" id="datetimeEnd" name="endTime" readonly>
+
+                </div>
+                <span class="btn btn-default" onclick="reset()" >重置</span>
+                <span class="btn btn-default" onclick="search()" >查询</span>
+            </form>
+
+            <table class="table table-bordered data-table" cellspacing="0" width="100%" id="datatable" style="word-break: keep-all;white-space:nowrap">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="checkall"/>
+                        </th>
+                        <th>订单ID</th>
+                        <th>用户ID</th>
+                        <th>债权计划本金</th>
+                        <th>计划利息</th>
+                        <th>计划还款时间</th>
+                        <th>红包信息</th>
+                        <th>红包金额</th>
+                        <th>加息红包/返现红包</th>
+                        <th>红包期限</th>
+                        <th>vip利率</th>
+                        <th>vip收益</th>
+                        <th>vip期数</th>
+                        <th>加息金额</th>
+                        <th>加息期数</th>
+                        <th>首购加息/限时加息/项目加息</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="checkall"/>
+                        </th>
+                        <th>订单ID</th>
+                        <th>用户ID</th>
+                        <th>债权计划本金</th>
+                        <th>计划利息</th>
+                        <th>计划还款时间</th>
+                        <th>红包信息</th>
+                        <th>红包金额</th>
+                        <th>加息红包/返现红包</th>
+                        <th>红包期限</th>
+                        <th>vip利率</th>
+                        <th>vip收益</th>
+                        <th>vip期数</th>
+                        <th>加息金额</th>
+                        <th>加息期数</th>
+                        <th>首购加息/限时加息/项目加息</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
-
-    <script type="text/javascript">
-        //日期插件初始化
-        $('#datetimeStart').datetimepicker({
-            language:  'zh-CN',
-            // format:'yyyy-mm-dd',
-            format:'yyyy-mm-dd hh:ii',
-            weekStart: 1, /*以星期一为一星期开始*/
-            todayBtn:  1,
-            autoclose: 1,
-            // minView:2, /*精确到天*/
-            todayHighlight: 1,
-            startView: 2,
-            forceParse: 0,
-            showMeridian: 1,
-            pickerPosition: "bottom-left"
-        }).on("changeDate",function(ev){  //值改变事件
-            //选择的日期不能大于第二个日期控件的日期
-            if(ev.date){
-                $("#datetimeEnd").datetimepicker('setStartDate', new Date(ev.date.valueOf()));
-            }else{
-                $("#datetimeEnd").datetimepicker('setStartDate',null);
-            }
-        });
-        $('#datetimeEnd').datetimepicker({
-            language:  'zh-CN',
-            format:'yyyy-mm-dd hh:ii',
-            weekStart: 1, /*以星期一为一星期开始*/
-            todayBtn:  1,
-            autoclose: 1,
-            // minView:2, /*精确到天*/
-            todayHighlight: 1,
-            startView: 2,
-            forceParse: 0,
-            showMeridian: 1,
-            pickerPosition: "bottom-left"
-        }).on("changeDate",function(ev){
-            /*选择的日期不能小于第一个日期控件的日期*/
-            if(ev.date){
-                $("#datetimeStart").datetimepicker('setEndDate', new Date(ev.date.valueOf()));
-            }else{
-                $("#datetimeStart").datetimepicker('setEndDate',new Date());
-            }
-        });
-    </script>
 
 </html>

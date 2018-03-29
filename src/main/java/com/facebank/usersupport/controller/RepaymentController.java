@@ -5,6 +5,7 @@ import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.reqDto.RepaymentForm;
 import com.facebank.usersupport.mapper.usersupport.p2p.UserMainP2PReadMapper;
 import com.facebank.usersupport.model.PageBeanModel;
+import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RepaymentModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.IRepaymentService;
@@ -13,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 还款查询业务Controller
@@ -36,7 +41,7 @@ public class RepaymentController extends BaseController {
      * @return
      */
     @PostMapping("/service/repayment")
-    public RestModel repaymentSearch(RepaymentForm repaymentForm) {
+    public RestModel repaymentSearch(RepaymentForm repaymentForm,String draw) {
         try {
             // 手机号和orderId都为空
             boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getMobile());
@@ -50,21 +55,17 @@ public class RepaymentController extends BaseController {
                 Long userId = userMainP2PReadMapper.selectUserIdByMobile(repaymentForm.getMobile());
                 repaymentForm.setUserId(userId);
             }
-            // 查询分页信息
-            PageInfo<RepaymentModel> pageInfo = repaymentService.getRepaymentModelByRepaymenyForm(repaymentForm);
-            // 封装PageBeanModel
-            PageBeanModel pageBeanModel = new PageBeanModel();
-            // 设置当前页
-            pageBeanModel.setPage(repaymentForm.getPage());
-            // 设置每页显示条数
-            pageBeanModel.setPageSize(repaymentForm.getPageSize());
-            // 设置总条数
-            pageBeanModel.setTotalCount(pageInfo.getTotal());
-            // 设置总页数
-            pageBeanModel.setTotalPage(pageInfo.getPages());
-            // 设置分页数据
-            pageBeanModel.setData(pageInfo.getList());
-            return this.success(pageBeanModel);
+            // 查询还款信息
+            List<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymenyForm(repaymentForm);
+
+            PageRestModel pageRestModel = new PageRestModel(
+                    draw,
+                    new Long(repaymentModels.size()+""),
+                    new Long(repaymentModels.size()+""),
+                    repaymentModels
+            );
+
+            return this.success(pageRestModel);
         } catch (Exception e) {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
