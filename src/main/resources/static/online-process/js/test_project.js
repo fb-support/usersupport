@@ -215,9 +215,9 @@ function parseData(str) {
  * 为了查看指定项目编号的详细操作记录和内容
  */
 function lookProjectDetail(obj) {
-    console.log(obj);
-    //obj.
-    window.parent.runTestProjectDetail();
+    // 获取当前想要查看详情的项目编号
+    var projectId = obj.parentElement.parentElement.children[0];
+    window.parent.runTestProjectDetail(projectId);
 }
 
 /**

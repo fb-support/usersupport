@@ -234,7 +234,7 @@ function runLaunchFormManager() {
 /**
  * 前往项目详情页面
  */
-function runTestProjectDetail(data) {
+function runTestProjectDetail(projectId) {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
     //显示项目详情界面
@@ -246,4 +246,11 @@ function runTestProjectDetail(data) {
     } else {
         addSmallCardForThisPage("test_project_record", "项目详情");
     }
+
+    console.log(projectId)
+    // 将参数赋值到页面中指定的标签内。
+    var obj = document.getElementById('test_project_record').contentWindow;
+    obj.document.getElementById('project-search').value = projectId.innerText;
+    // 调用该页面的重新加载方法
+    obj.search();
 }
