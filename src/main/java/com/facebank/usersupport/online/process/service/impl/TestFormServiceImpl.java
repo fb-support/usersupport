@@ -38,6 +38,7 @@ public class TestFormServiceImpl extends BaseService implements ITestFormService
 
     @Override
     public int updateTestForm(TestFormWithBLOBsModel testFormModel) {
+        testFormModel.setGmtModify(System.currentTimeMillis());
         return testFormMapper.updateTestFormById(testFormModel);
     }
 

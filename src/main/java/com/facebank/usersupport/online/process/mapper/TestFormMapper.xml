@@ -50,7 +50,8 @@
       other_change = #{otherChange,jdbcType=VARCHAR},
         sql_change = #{sqlChange,jdbcType=LONGVARCHAR},
        configure_change = #{configureChange,jdbcType=LONGVARCHAR},
-          mq_change = #{mqChange,jdbcType=LONGVARCHAR}
+          mq_change = #{mqChange,jdbcType=LONGVARCHAR},
+          gmt_modify = #{gmtModify,jdbcType=BIGINT}
         WHERE
       form_id = #{formId,jdbcType=BIGINT}
   </update>
