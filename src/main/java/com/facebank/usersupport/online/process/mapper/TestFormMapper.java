@@ -39,4 +39,11 @@ public interface TestFormMapper extends BaseWriteMapper<TestFormWithBLOBsModel,L
      * @return
      */
     int updateTestFormStatus(@Param("formId") Long formId, @Param("formStatus") Integer formStatus);
+
+    /**
+     * 查询测试通过的测试工单
+     * @param projectId
+     * @return
+     */
+    List<TestFormWithBLOBsModel> selectSuccessTestForm(@Param("projectId") Long projectId);
 }

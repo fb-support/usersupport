@@ -54,5 +54,10 @@ public class TestFormServiceImpl extends BaseService implements ITestFormService
         return testFormMapper.updateTestFormStatus(formId,formStatus);
     }
 
+    @Override
+    public List<TestFormWithBLOBsModel> selectSuccessTestForm(Long projectId) {
+        return testFormMapper.selectSuccessTestForm(projectId);
+    }
+
 
 }

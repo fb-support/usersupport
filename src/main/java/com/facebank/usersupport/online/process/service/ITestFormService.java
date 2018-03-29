@@ -3,6 +3,8 @@ package com.facebank.usersupport.online.process.service;
 import com.facebank.usersupport.online.process.model.TestFormWithBLOBsModel;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 
 /**
  * @Author : ChinaLHR
@@ -51,5 +53,12 @@ public interface ITestFormService {
      * @return
      */
     int updateTestFormStatus(Long formId, Integer formStatus);
+
+    /**
+     * 根据projectId 查询测试通过的工单
+     * @param projectId
+     * @return
+     */
+    List<TestFormWithBLOBsModel> selectSuccessTestForm(Long projectId);
 }
 
