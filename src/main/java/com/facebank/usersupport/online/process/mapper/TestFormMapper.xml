@@ -1,27 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.facebank.usersupport.online.process.mapper.TestFormMapper">
-  <resultMap id="BaseResultMap" type="com.facebank.usersupport.online.process.model.TestFormModel">
-    <id column="form_id" jdbcType="BIGINT" property="formId" />
-    <result column="form_service" jdbcType="VARCHAR" property="formService" />
-    <result column="form_branch" jdbcType="VARCHAR" property="formBranch" />
-    <result column="is_test" jdbcType="INTEGER" property="isTest" />
-    <result column="influence_scope" jdbcType="VARCHAR" property="influenceScope" />
-    <result column="is_review" jdbcType="INTEGER" property="isReview" />
-    <result column="other_change" jdbcType="VARCHAR" property="otherChange" />
-    <result column="create_username" jdbcType="VARCHAR" property="createUsername" />
-    <result column="create_user" jdbcType="BIGINT" property="createUser" />
-    <result column="accept_username" jdbcType="VARCHAR" property="acceptUsername" />
-    <result column="accept_user" jdbcType="BIGINT" property="acceptUser" />
-    <result column="project_id" jdbcType="BIGINT" property="projectId" />
-    <result column="form_status" jdbcType="INTEGER" property="formStatus" />
-    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.facebank.usersupport.online.process.model.TestFormWithBLOBsModel">
-    <result column="sql_change" jdbcType="LONGVARCHAR" property="sqlChange" />
-    <result column="configure_change" jdbcType="LONGVARCHAR" property="configureChange" />
-    <result column="mq_change" jdbcType="LONGVARCHAR" property="mqChange" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.facebank.usersupport.online.process.model.TestFormModel">
+        <id column="form_id" jdbcType="BIGINT" property="formId"/>
+        <result column="form_service" jdbcType="VARCHAR" property="formService"/>
+        <result column="form_branch" jdbcType="VARCHAR" property="formBranch"/>
+        <result column="is_test" jdbcType="INTEGER" property="isTest"/>
+        <result column="influence_scope" jdbcType="VARCHAR" property="influenceScope"/>
+        <result column="is_review" jdbcType="INTEGER" property="isReview"/>
+        <result column="other_change" jdbcType="VARCHAR" property="otherChange"/>
+        <result column="create_username" jdbcType="VARCHAR" property="createUsername"/>
+        <result column="create_user" jdbcType="BIGINT" property="createUser"/>
+        <result column="accept_username" jdbcType="VARCHAR" property="acceptUsername"/>
+        <result column="accept_user" jdbcType="BIGINT" property="acceptUser"/>
+        <result column="project_id" jdbcType="BIGINT" property="projectId"/>
+        <result column="form_status" jdbcType="INTEGER" property="formStatus"/>
+        <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
+        <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify"/>
+    </resultMap>
 
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.facebank.usersupport.online.process.model.TestFormWithBLOBsModel">
+        <result column="sql_change" jdbcType="LONGVARCHAR" property="sqlChange"/>
+        <result column="configure_change" jdbcType="LONGVARCHAR" property="configureChange"/>
+        <result column="mq_change" jdbcType="LONGVARCHAR" property="mqChange"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.facebank.usersupport.online.process.model.TestFormWithBLOBsModel">
+    insert into test_form (form_service, form_branch,is_test, influence_scope, is_review,other_change,create_username, create_user, accept_username
+    ,accept_user,project_id,form_status,gmt_create,gmt_modify,sql_change,configure_change,mq_change)
+    values (#{formService,jdbcType=VARCHAR}, #{formBranch,jdbcType=VARCHAR},
+    #{isTest,jdbcType=INTEGER}, #{influenceScope,jdbcType=VARCHAR}, #{isReview,jdbcType=INTEGER},
+    #{otherChange,jdbcType=VARCHAR}, #{createUsername,jdbcType=VARCHAR}, #{createUser,jdbcType=BIGINT},
+    #{acceptUsername,jdbcType=VARCHAR},#{acceptUser,jdbcType=BIGINT},#{projectId,jdbcType=INTEGER},
+    #{formStatus,jdbcType=INTEGER},#{gmtCreate,jdbcType=BIGINT},#{gmtModify,jdbcType=BIGINT},
+    #{sqlChange,jdbcType=LONGVARCHAR},#{configureChange,jdbcType=LONGVARCHAR},#{mqChange,jdbcType=LONGVARCHAR}
+    )
+  </insert>
+
+    <update id="updateTestFormById"
+            parameterType="com.facebank.usersupport.online.process.model.TestFormWithBLOBsModel">
+      UPDATE test_form
+        SET
+      form_service = #{formService,jdbcType=VARCHAR},
+      form_branch =  #{formBranch,jdbcType=VARCHAR},
+          is_test = #{isTest,jdbcType=INTEGER},
+      influence_scope =  #{influenceScope,jdbcType=VARCHAR},
+      is_review = #{isReview,jdbcType=INTEGER},
+      other_change = #{otherChange,jdbcType=VARCHAR},
+        sql_change = #{sqlChange,jdbcType=LONGVARCHAR},
+       configure_change = #{configureChange,jdbcType=LONGVARCHAR},
+          mq_change = #{mqChange,jdbcType=LONGVARCHAR}
+        WHERE
+      form_id = #{formId,jdbcType=BIGINT}
+  </update>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="ResultMapWithBLOBs">
+        SELECT
+          form_id,form_service,form_branch,is_test,influence_scope,is_review,other_change,sql_change,configure_change,mq_change
+        FROM
+          test_form
+        WHERE
+          form_id = #{formId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectAllByCondition"
+            resultMap="ResultMapWithBLOBs">
+        SELECT form_id,form_service, form_branch,is_test,influence_scope,is_review,other_change,sql_change,configure_change,mq_change,
+        form_status,create_username,create_user,accept_username,accept_user
+        FROM test_form
+        WHERE
+        form_service like CONCAT(CONCAT('%', #{formService,jdbcType=VARCHAR}), '%')
+        <if test="formStatus !=null">
+          and form_status = #{formStatus,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <update id="updateTestFormStatus">
+      UPDATE test_form
+        SET
+      form_status = #{formStatus}
+        WHERE
+      form_id = #{formId}
+    </update>
 </mapper>
