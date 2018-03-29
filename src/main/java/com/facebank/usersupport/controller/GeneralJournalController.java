@@ -33,7 +33,8 @@ public class GeneralJournalController extends BaseController {
                                     @RequestParam(required = false, defaultValue = "10") int couts,
                                     String mobile, Integer type, String starttime, String endtime)  {
         System.out.println(page+"=="+couts+"=="+mobile+"=="+type+"=="+starttime+"=="+endtime);
-        if (starttime==""||endtime==""){return new RestModel("时间不能为空");}
+        if (mobile==""){return new RestModel("202","手机号不能为空");}
+        if (starttime==""||endtime==""){return new RestModel("203","时间不能为空");}
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date time1 = null;
         long startTime=0;
@@ -55,13 +56,13 @@ public class GeneralJournalController extends BaseController {
                 e.printStackTrace();
             }
         }
-        if(endTime-startTime>432000000){return new RestModel("日期有误，无法查询");}
+        if(endTime-startTime>432000000){return new RestModel("204","日期区间最大为5天，无法查询");}
         type = StrUtil.parseStringToInt(type,-1);
-        try{
+//        try{
             return generalJournalService.selectByMobile(mobile,type,startTime,endTime,page,couts);
-        }catch (Exception e){
-            return this.excpRestModel();
-        }
+//        }catch (Exception e){
+//            return this.excpRestModel();
+//        }
 
     }
 
