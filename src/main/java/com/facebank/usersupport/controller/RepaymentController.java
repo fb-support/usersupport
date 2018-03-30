@@ -64,7 +64,6 @@ public class RepaymentController extends BaseController {
                     new Long(repaymentModels.size()+""),
                     repaymentModels
             );
-
             return this.success(pageRestModel);
         } catch (Exception e) {
             e.printStackTrace();
