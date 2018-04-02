@@ -17,6 +17,6 @@ public interface IRepaymentService {
      * 根据手机号、用户名、还款日期组合条件查询还款信息
      * @return
      */
-    List<RepaymentModel> getRepaymentModelByRepaymenyForm(RepaymentForm repaymentForm);
+    List<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm);
 
 }

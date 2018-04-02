@@ -12,11 +12,19 @@ public class RepaymentModel implements Serializable {
     /**
      * 订单号
      */
-    private Long credOrderId;
+    private Long orderId;
     /**
      * 用户id
      */
-    private Long credUserId;
+    private Long userId;
+    /**
+     * 债权id
+     */
+    private Long creditId;
+    /**
+     * 计划时间
+     */
+    private Long planDate;
     /**
      * 债权计划本金
      */
@@ -25,10 +33,6 @@ public class RepaymentModel implements Serializable {
      * 计划利息
      */
     private BigDecimal credPlanInterest;
-    /**
-     * 计划时间
-     */
-    private Long credPlanDate;
     /**
      * 红包信息
      */
@@ -70,20 +74,36 @@ public class RepaymentModel implements Serializable {
      */
     private Integer pfType;
 
-    public Long getCredOrderId() {
-        return credOrderId;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setCredOrderId(Long credOrderId) {
-        this.credOrderId = credOrderId;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
-    public Long getCredUserId() {
-        return credUserId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setCredUserId(Long credUserId) {
-        this.credUserId = credUserId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getCreditId() {
+        return creditId;
+    }
+
+    public void setCreditId(Long creditId) {
+        this.creditId = creditId;
+    }
+
+    public Long getPlanDate() {
+        return planDate;
+    }
+
+    public void setPlanDate(Long planDate) {
+        this.planDate = planDate;
     }
 
     public BigDecimal getCredPlanPrincipal() {
@@ -100,14 +120,6 @@ public class RepaymentModel implements Serializable {
 
     public void setCredPlanInterest(BigDecimal credPlanInterest) {
         this.credPlanInterest = credPlanInterest;
-    }
-
-    public Long getCredPlanDate() {
-        return credPlanDate;
-    }
-
-    public void setCredPlanDate(Long credPlanDate) {
-        this.credPlanDate = credPlanDate;
     }
 
     public String getRedLocalInfo() {

@@ -56,7 +56,7 @@ public class RepaymentController extends BaseController {
                 repaymentForm.setUserId(userId);
             }
             // 查询还款信息
-            List<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymenyForm(repaymentForm);
+            List<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm);
 
             PageRestModel pageRestModel = new PageRestModel(
                     draw,
@@ -64,6 +64,7 @@ public class RepaymentController extends BaseController {
                     new Long(repaymentModels.size()+""),
                     repaymentModels
             );
+
             return this.success(pageRestModel);
         } catch (Exception e) {
             e.printStackTrace();
