@@ -16,12 +16,21 @@ import java.util.List;
 public interface RepaymentMapper extends BaseReadMapper<RepaymentModel,Long> {
 
     /**
-     * 根据手机号、用户名、还款日期组合条件查询还款相关信息
+     * 根据手机号、用户名、还款日期组合条件查询债券还款相关信息
      * @return
      */
     List<RepaymentModel> getCreditInfoByRepaymentForm(RepaymentForm repaymentForm);
     List<RepaymentModel> getRedPackageInfoByRepaymentForm(RepaymentForm repaymentForm);
     List<RepaymentModel> getVipInfoByRepaymentForm(RepaymentForm repaymentForm);
     List<RepaymentModel> getPfInterestInfoByRepaymentForm(RepaymentForm repaymentForm);
+
+    /**
+     * 根据手机号、用户名、还款日期组合条件查询订单还款相关信息
+     * @return
+     */
+    List<RepaymentModel> getOrderCreditInfoByRepaymentForm(RepaymentForm repaymentForm);
+    List<RepaymentModel> getOrderRedPackageInfoByRepaymentForm(RepaymentForm repaymentForm);
+    List<RepaymentModel> getOrderVipInfoByRepaymentForm(RepaymentForm repaymentForm);
+    List<RepaymentModel> getOrderPfInterestInfoByRepaymentForm(RepaymentForm repaymentForm);
 
 }

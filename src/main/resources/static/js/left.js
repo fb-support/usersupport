@@ -37,23 +37,32 @@ function runChangePassword() {
 function runRepaymentSearch() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
-    //显示还款查询页面
+    //显示债权还款查询页面
     $("#service-repayment-page").show();
 
     //显示tab
     if ( $("li[value='service-repayment-page']").length > 0 ) {
         switchPage( "service-repayment-page" );
     } else {
-        addSmallCardForThisPage("service-repayment-page", "还款查询");
+        addSmallCardForThisPage("service-repayment-page", "债券还款查询");
     }
 }
 
 /**
  * 前往业务查询--b页面
  */
-function runB() {
+function runRepaymentOrderSearch() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //显示订单还款查询页面
+    $("#service-repaymentOrder-page").show();
+
+    //显示tab
+    if ( $("li[value='service-repaymentOrder-page']").length > 0 ) {
+        switchPage( "service-repaymentOrder-page" );
+    } else {
+        addSmallCardForThisPage("service-repaymentOrder-page", "订单还款查询");
+    }
 }
 /**
  * 前往日志-资金记录页面

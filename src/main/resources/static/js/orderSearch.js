@@ -81,7 +81,7 @@ function search(page,pageSize){
             "searching": true, // 从结果搜索
             "bJQueryUI": true,
             "ordering" : true, // 排序
-            "aaSorting": [7, "desc"], // 按第7列倒序排列
+            "aaSorting": [5, "desc"], // 按第7列倒序排列
             "sPaginationType": "full_numbers",
             "serverSide": false, // true代表后台分页，false代表前台分页
             // 表格填充数据来源，使用ajax异步请求后台获取数据
@@ -94,7 +94,7 @@ function search(page,pageSize){
                 // 查询还款数据
                 $.ajax({
                     async : true,
-                    url : "/service/repayment",
+                    url : "/service/repaymentOrder",
                     type : "post",
                     data : param,
                     dataType : "json",
@@ -102,9 +102,8 @@ function search(page,pageSize){
                         // 关闭遮罩效果
                         $("#content").hideLoading();
                         callback(result.data[0]);
-
+                        // 构建用户资产表格
                         loadTable2(result.data[1].data)
-
                     },
                     error: function(err) {
                         $("#content").hideLoading();
@@ -113,18 +112,11 @@ function search(page,pageSize){
             },
             "columns": [
                 {
-                    "className": 'details-control',
-                    "orderable": false,
-                    "data": null,
-                    "defaultContent": ''
-                },
-                {
                     "data": null,
                     "render": function (data, type, full, meta) {
                         return meta.row+1;
                     }
                 },
-                {"data": "creditId"},
                 {"data": "orderId"},
                 {"data": "userId"},
                 {"data": "credPlanPrincipal"},
@@ -150,58 +142,13 @@ function search(page,pageSize){
                     }
                 },
                 {"data": "credRealPrincipal"},
-                {"data": "credRealInterest"}
-                /*,
-                {
-                    "data": "redLocalInfo",
-                    "render": function (data, type, full, meta) {
-                        var localInfoJson = JSON.parse(data);
-                        return localInfoJson.model_name;
-                    }
-                },
+                {"data": "credRealInterest"},
                 {"data": "redPlanAmount"},
-                {
-                    "data": "redPackageType",
-                    "render": function (data, type, full, meta) {
-                        // 红包类型：1000加息红包；1010返现红包。
-                        switch (data) {
-                            case 1000:
-                                return "加息红包";
-                                break;
-                            case 1010:
-                                return "返现红包";
-                                break;
-                        }
-                    }
-                },
-                {
-                    "data": "redTermNum",
-                    "render": function (data, type, full, meta) {
-                        return new Date(parseInt(data)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
-                    }
-                },
-                {"data": "vipRate"},
+                {"data": "redRealAmount"},
                 {"data": "vipPlanAmount"},
-                {"data": "vipTermNum"},
+                {"data": "vipRealAmount"},
                 {"data": "pfPlanAmount"},
-                {"data": "pfTermNum"},
-                {
-                    "data": "pfType",
-                    "render": function (data, type, full, meta) {
-                        // 加息类型：1000加息红包；1010返现红包。
-                        switch (data) {
-                            case 100:
-                                return "首购加息";
-                                break;
-                            case 200:
-                                return "限时加息";
-                                break;
-                            case 300:
-                                return "项目加息";
-                                break;
-                        }
-                    }
-                }*/
+                {"data": "pfRealAmount"}
             ],
             /*是否开启主题*/
             "bJQueryUI": true,
@@ -221,22 +168,6 @@ function search(page,pageSize){
                 }
             }
         });
-
-        // Add event listener for opening and closing details
-        $('#datatable tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = myTable.row(tr);
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            }else {
-                // Open this row
-                row.child( tableFormat(row.data()) ).show();
-                tr.addClass('shown');
-            }
-        });
-
         tableNotLoad = false;
     }else {
         myTable.ajax.reload();
@@ -284,87 +215,6 @@ function loadTable2(data) {
             ]
         });
     }
-}
-
-// 展开行详细信息
-function tableFormat ( d ) {
-    // d是点击那一行的数据
-    var str = "";
-    var redIsNull = ((d.redLocalInfo == null || d.redLocalInfo == "") && (d.redPlanAmount == null || d.redPlanAmount == "") && (d.redTermNum == null || d.redTermNum == "") && (d.redPackageType == null || d.redPackageType == ""));
-    if(!redIsNull){
-        str += '<table class="table table-bordered data-table" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-            '<tr>'+
-            '<th>红包信息:</th>'+
-            '<th>应收红包金额:</th>'+
-            '<th>实收红包金额:</th>'+
-            '<th>加息红包/返现红包:</th>'+
-            '<th>红包期限:</th>'+
-            '</tr>'+
-            '<tr align="center">';
-        if(d.redLocalInfo != null && d.redLocalInfo != ""){
-            var redInfo = JSON.parse(d.redLocalInfo);
-            str += '<td>'+redInfo.model_name+'</td>';
-        }else{
-            str += '<td></td>';
-        }
-        str += '<td>'+d.redPlanAmount+'</td>'+
-            '<td>'+d.redRealAmount+'</td>';
-        if(d.redPackageType == 1000){
-            str += '<td>加息红包</td>';
-        }else if(d.redPackageType == 1010){
-            str += '<td>加息红包</td>';
-        }else{
-            str += '<td></td>';
-        }
-        if(d.redTermNum != null && d.redTermNum != ""){
-            str += '<td>'+new Date(parseInt(d.redTermNum)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ")+'</td>';
-        }else{
-            str += '<td></td>';
-        }
-        str += '</tr>'+ '</table>';
-    }
-    var vipIsNull = ((d.vipRate == null || d.vipRate == "") && (d.vipPlanAmount == null || d.vipPlanAmount == "") && (d.vipTermNum == null || d.vipTermNum == ""));
-    if(!vipIsNull){
-        str += '<table class="table table-bordered data-table" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-            '<tr>'+
-            '<th>vip利率:</th>'+
-            '<th>应收vip收益:</th>'+
-            '<th>实收vip收益:</th>'+
-            '<th>vip期数:</th>'+
-            '</tr>'+
-            '<tr align="center">'+
-            '<td>'+d.vipRate+'</td>'+
-            '<td>'+d.vipPlanAmount+'</td>'+
-            '<td>'+d.vipRealAmount+'</td>'+
-            '<td>'+d.vipTermNum+'</td>'+
-            '</tr>'+'</table>';
-    }
-    var pfIsNull = ((d.pfPlanAmount == null || d.pfPlanAmount == "") && (d.pfTermNum == null || d.pfTermNum == "") && (d.pfType == null || d.pfType == ""));
-    if(!pfIsNull){
-        str += '<table class="table table-bordered data-table" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-            '<tr>'+
-            '<th>应收加息金额:</th>'+
-            '<th>实收加息金额:</th>'+
-            '<th>加息期数:</th>'+
-            '<th>首购加息/限时加息/项目加息:</th>'+
-            '</tr>'+
-            '<tr align="center">'+
-            '<td>'+d.pfPlanAmount+'</td>'+
-            '<td>'+d.pfRealAmount+'</td>'+
-            '<td>'+d.pfTermNum+'</td>';
-        if(d.pfType == 100){
-            str += '<td>首购加息</td>';
-        }else if(d.pfType == 200){
-            str += '<td>限时加息</td>';
-        }else if(d.pfType == 300){
-            str += '<td>项目加息</td>';
-        }else{
-            str += '<td></td>';
-        }
-        str += '</tr>'+
-            '</table>';
-    }
-    return str;
 }
 
 /**

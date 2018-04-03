@@ -14,6 +14,8 @@ public class RepaymentForm {
 
     private Long orderId;
 
+    private Integer bizStatus;
+
     private Long startTime;
 
     private Long endTime;
@@ -52,6 +54,14 @@ public class RepaymentForm {
 
     public void setEndTime(Long endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getBizStatus() {
+        return bizStatus;
+    }
+
+    public void setBizStatus(Integer bizStatus) {
+        this.bizStatus = bizStatus;
     }
 
     public Long getOrderId() {

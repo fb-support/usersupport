@@ -7,7 +7,7 @@
     <script type="text/javascript" th:src="@{../js/layer.js}"></script>
     <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
     <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
-    <script type="text/javascript" th:src="@{../js/search.js}"></script>
+    <script type="text/javascript" th:src="@{../js/orderSearch.js}"></script>
     <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
 
     <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
@@ -56,6 +56,8 @@
                 </div>
             </form>
 
+            <!-- datatable_length datatable_filter <table class=""width="100%" id="datatable" style="word-break: keep-all;white-space:nowrap">-->
+
             <div>
                 <label>用户资产信息：</label>
             </div>
@@ -74,57 +76,45 @@
             </table>
 
             <div style="margin-top: 20px">
-                <label>用户债权还款信息：</label>
+                <label>用户订单还款信息：</label>
             </div>
             <table id="datatable" class="table table-bordered data-table display" cellspacing="0" style="width:100%;word-break: keep-all;white-space:nowrap">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>编号</th>
-                        <th>债权ID</th>
                         <th>订单ID</th>
                         <th>用户ID</th>
-                        <th>债权计划本金</th>
-                        <th>债权计划利息</th>
+                        <th>订单计划本金</th>
+                        <th>订单计划利息</th>
                         <th>计划还款时间</th>
                         <th>是否还款</th>
-                        <th>债权实收本金</th>
-                        <th>债权实收利息</th>
-                        <!--<th>红包信息</th>
-                        <th>红包金额</th>
-                        <th>加息红包/返现红包</th>
-                        <th>红包期限</th>
-                        <th>vip利率</th>
-                        <th>vip收益</th>
-                        <th>vip期数</th>
-                        <th>加息金额</th>
-                        <th>加息期数</th>
-                        <th>首购加息/限时加息/项目加息</th>-->
+                        <th>订单实收本金</th>
+                        <th>订单实收利息</th>
+                        <th>应收红包金额</th>
+                        <th>实收红包金额</th>
+                        <th>vip计划收益</th>
+                        <th>vip实际收益</th>
+                        <th>应收加息金额</th>
+                        <th>实收加息金额</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <th></th>
                         <th>编号</th>
-                        <th>债权ID</th>
                         <th>订单ID</th>
                         <th>用户ID</th>
-                        <th>债权计划本金</th>
-                        <th>债权计划利息</th>
+                        <th>订单计划本金</th>
+                        <th>订单计划利息</th>
                         <th>计划还款时间</th>
                         <th>是否还款</th>
-                        <th>债权实收本金</th>
-                        <th>债权实收利息</th>
-                        <!--<th>红包信息</th>
-                        <th>红包金额</th>
-                        <th>加息红包/返现红包</th>
-                        <th>红包期限</th>
-                        <th>vip利率</th>
-                        <th>vip收益</th>
-                        <th>vip期数</th>
-                        <th>加息金额</th>
-                        <th>加息期数</th>
-                        <th>首购加息/限时加息/项目加息</th>-->
+                        <th>订单实收本金</th>
+                        <th>订单实收利息</th>
+                        <th>应收红包金额</th>
+                        <th>实收红包金额</th>
+                        <th>vip计划收益</th>
+                        <th>vip实际收益</th>
+                        <th>应收加息金额</th>
+                        <th>实收加息金额</th>
                     </tr>
                 </tfoot>
             </table>

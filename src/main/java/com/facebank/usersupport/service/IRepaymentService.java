@@ -14,9 +14,15 @@ import java.util.List;
 public interface IRepaymentService {
 
     /**
-     * 根据手机号、用户名、还款日期组合条件查询还款信息
+     * 根据手机号、用户名、还款日期组合条件查询债券还款信息
      * @return
      */
     List<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm);
+
+    /**
+     * 根据手机号、用户名、还款日期组合条件查询订单还款信息
+     * @return
+     */
+    List<RepaymentModel> getRepaymentOrderByRepaymentForm(RepaymentForm repaymentForm);
 
 }
