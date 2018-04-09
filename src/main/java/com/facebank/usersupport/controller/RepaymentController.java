@@ -73,8 +73,8 @@ public class RepaymentController extends BaseController {
             );
             PageRestModel pageRestModel2 = new PageRestModel(
                     draw,
-                    new Long(repaymentModels.size()+""),
-                    new Long(repaymentModels.size()+""),
+                    new Long(userCapitalInfoModels.size()+""),
+                    new Long(userCapitalInfoModels.size()+""),
                     userCapitalInfoModels
             );
             PageRestModel[] pageRestModels = new PageRestModel[2];

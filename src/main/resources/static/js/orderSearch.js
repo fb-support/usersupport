@@ -41,6 +41,15 @@ $(function(){
             $("#datetimeStart").datetimepicker('setEndDate',new Date());
         }
     });
+
+    var today = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+
+    $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm"));
+    $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm"));
 });
 
 var tableNotLoad = true;

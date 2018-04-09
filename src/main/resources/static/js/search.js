@@ -41,6 +41,15 @@ $(function(){
             $("#datetimeStart").datetimepicker('setEndDate',new Date());
         }
     });
+
+    var today = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+
+    $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm"));
+    $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm"));
 });
 
 var tableNotLoad = true;
@@ -112,12 +121,12 @@ function search(page,pageSize){
                 });
             },
             "columns": [
-                {
+                /*{
                     "className": 'details-control',
                     "orderable": false,
                     "data": null,
                     "defaultContent": ''
-                },
+                },*/
                 {
                     "data": null,
                     "render": function (data, type, full, meta) {
@@ -127,8 +136,6 @@ function search(page,pageSize){
                 {"data": "creditId"},
                 {"data": "orderId"},
                 {"data": "userId"},
-                {"data": "credPlanPrincipal"},
-                {"data": "credPlanInterest"},
                 {
                     "data": "planDate",
                     "render": function (data, type, full, meta) {
@@ -149,9 +156,10 @@ function search(page,pageSize){
                         }
                     }
                 },
+                {"data": "credPlanPrincipal"},
                 {"data": "credRealPrincipal"},
-                {"data": "credRealInterest"}
-                /*,
+                {"data": "credPlanInterest"},
+                {"data": "credRealInterest"},
                 {
                     "data": "redLocalInfo",
                     "render": function (data, type, full, meta) {
@@ -160,6 +168,7 @@ function search(page,pageSize){
                     }
                 },
                 {"data": "redPlanAmount"},
+                {"data": "redRealAmount"},
                 {
                     "data": "redPackageType",
                     "render": function (data, type, full, meta) {
@@ -182,8 +191,10 @@ function search(page,pageSize){
                 },
                 {"data": "vipRate"},
                 {"data": "vipPlanAmount"},
+                {"data": "vipRealAmount"},
                 {"data": "vipTermNum"},
                 {"data": "pfPlanAmount"},
+                {"data": "pfRealAmount"},
                 {"data": "pfTermNum"},
                 {
                     "data": "pfType",
@@ -201,7 +212,7 @@ function search(page,pageSize){
                                 break;
                         }
                     }
-                }*/
+                }
             ],
             /*是否开启主题*/
             "bJQueryUI": true,
@@ -223,7 +234,7 @@ function search(page,pageSize){
         });
 
         // Add event listener for opening and closing details
-        $('#datatable tbody').on('click', 'td.details-control', function () {
+        /*$('#datatable tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = myTable.row(tr);
             if ( row.child.isShown() ) {
@@ -235,7 +246,7 @@ function search(page,pageSize){
                 row.child( tableFormat(row.data()) ).show();
                 tr.addClass('shown');
             }
-        });
+        });*/
 
         tableNotLoad = false;
     }else {
