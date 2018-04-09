@@ -163,12 +163,34 @@ function search(page,pageSize){
                 {
                     "data": "redLocalInfo",
                     "render": function (data, type, full, meta) {
-                        var localInfoJson = JSON.parse(data);
-                        return localInfoJson.model_name;
+                        if(data != null && data != ""){
+                            var localInfoJson = JSON.parse(data);
+                            return localInfoJson.model_name;
+                        }else{
+                            return "";
+                        }
                     }
                 },
-                {"data": "redPlanAmount"},
-                {"data": "redRealAmount"},
+                {
+                    "data": "redPlanAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "redRealAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
                 {
                     "data": "redPackageType",
                     "render": function (data, type, full, meta) {
@@ -180,6 +202,9 @@ function search(page,pageSize){
                             case 1010:
                                 return "返现红包";
                                 break;
+                            default:
+                                return "";
+                                break;
                         }
                     }
                 },
@@ -189,13 +214,76 @@ function search(page,pageSize){
                         return new Date(parseInt(data)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
                     }
                 },
-                {"data": "vipRate"},
-                {"data": "vipPlanAmount"},
-                {"data": "vipRealAmount"},
-                {"data": "vipTermNum"},
-                {"data": "pfPlanAmount"},
-                {"data": "pfRealAmount"},
-                {"data": "pfTermNum"},
+                {
+                    "data": "vipRate",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "vipPlanAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "vipRealAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "vipTermNum",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "pfPlanAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "pfRealAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "pfTermNum",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
                 {
                     "data": "pfType",
                     "render": function (data, type, full, meta) {
@@ -209,6 +297,9 @@ function search(page,pageSize){
                                 break;
                             case 300:
                                 return "项目加息";
+                                break;
+                            default:
+                                return "";
                                 break;
                         }
                     }
