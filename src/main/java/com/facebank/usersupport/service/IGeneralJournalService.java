@@ -25,7 +25,6 @@ public interface IGeneralJournalService {
      * @param
      * @return
      */
-    PageDto getGeneralJournalPage(String mobile, String type, Long starttime, Long endtime, Integer page, Integer counts);
 
-    RestModel selectByMobile(String mobile, Integer type, Long startTime, Long endTime, Integer page, Integer counts);
+    RestModel selectByMobile(String mobile, Integer type, Long startTime, Long endTime, Integer page, Integer counts, String draw);
 }

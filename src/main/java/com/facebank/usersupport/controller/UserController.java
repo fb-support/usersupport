@@ -101,8 +101,7 @@ public class UserController extends BaseController {
     @GetMapping("/um/getUserByPage")
     public RestModel getUserListByPage( @RequestParam(required = false, defaultValue = "1") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        String draw,
-                                        UserModel model){
+                                        String draw, UserModel model){
         try {
             int pageNo = start / length + 1;
             PageInfo pageInfo = userService.selectByPage(length, pageNo, model);
