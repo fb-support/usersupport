@@ -3,13 +3,9 @@
 
 <div th:include="common/head_info::head_infor"></div>
 <script type="text/javascript" th:src="@{../js/paging.js}"></script>
-<link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
 <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
-<script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
-<link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
-<script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
+<script type="text/javascript" th:src="@{../js/My97DatePicker/WdatePicker.js}"></script>
 <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
-<script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
 
 
 <div class="container center" style="width:100%;">
@@ -22,9 +18,9 @@
                     <option value="1">收入</option>
                     <option value="0">支出</option>
                 </select>
-                <input type="text" class="form-control" id="datetimeStart" name="startTime" readonly>
-                --
-                <input type="text" class="form-control" id="datetimeEnd" name="endTime" readonly>
+                    <input id="datetimeStart" class="Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
+                    --
+                    <input id="datetimeEnd" class="Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
             </div>
             <button type="button" class="btn btn-default">查询</button>
         </form>
@@ -62,48 +58,6 @@
 </div>
     <script>
         $(function(){
-            //日期插件初始化
-            $("#datetimeStart").datetimepicker({
-                language:  'zh-CN',
-                // format:'yyyy-mm-dd',
-                format:'yyyy-mm-dd hh:ii',
-                weekStart: 1, /*以星期一为一星期开始*/
-                todayBtn:  1,
-                autoclose: 1,
-                // minView:2, /*精确到天*/
-                todayHighlight: 1,
-                startView: 2,
-                forceParse: 0,
-                showMeridian: 1,
-                pickerPosition: "bottom-left"
-            }).on("changeDate",function(ev){  //值改变事件
-                //选择的日期不能大于第二个日期控件的日期
-                if(ev.date){
-                    $("#datetimeEnd").datetimepicker('setStartDate', null);
-                }else{
-                    $("#datetimeEnd").datetimepicker('setStartDate',null);
-                }
-            });
-            $("#datetimeEnd").datetimepicker({
-                language:  'zh-CN',
-                format:'yyyy-mm-dd hh:ii',
-                weekStart: 1, /*以星期一为一星期开始*/
-                todayBtn:  1,
-                autoclose: 1,
-                // minView:2, /*精确到天*/
-                todayHighlight: 1,
-                startView: 2,
-                forceParse: 0,
-                showMeridian: 1,
-                pickerPosition: "bottom-left"
-            }).on("changeDate",function(ev){
-                /*选择的日期不能小于第一个日期控件的日期*/
-                if(ev.date){
-                    $("#datetimeStart").datetimepicker('setEndDate', null);
-                }else{
-                    $("#datetimeStart").datetimepicker('setEndDate',new Date());
-                }
-            });
 
             var today = new Date();
             today.setHours(0);
@@ -111,8 +65,8 @@
             today.setSeconds(0);
             today.setMilliseconds(0);
 
-            $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm"));
-            $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm"));
+            $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm:ss"));
+            $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm:ss"));
         });
         $('[type="button"]').click(function () {
             getData(1,10);

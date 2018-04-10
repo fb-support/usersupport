@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head >
+<head>
     <div th:include="common/head_info::head_infor"></div>
-    <script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
-    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
-    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
     <script type="text/javascript" th:src="@{../js/paging.js}"></script>
+    <script type="text/javascript" th:src="@{../js/My97DatePicker/WdatePicker.js}"></script>
     <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
 </head>
@@ -14,27 +11,27 @@
 <div class="container center" style="width: 100%;">
     <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-            <input type="text" name="mobile"  class="form-control" placeholder="手机号">
-            <select class="form-control "id="type" name="type">
+            <input type="text" name="mobile" class="form-control" placeholder="手机号">
+            <select class="form-control " id="type" name="type">
                 <option value="">所有类型</option>
                 <option value="1">汇入</option>
                 <option value="2">汇出</option>
             </select>
-                <input type="text" class="form-control" id="datetimeStart" name="startTime" readonly>
-                --
-                <input type="text" class="form-control" id="datetimeEnd" name="endTime" readonly>
+            <input id="datetimeStart" class="Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
+            --
+            <input id="datetimeEnd" class="Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
         </div>
         <button type="button" class="btn btn-default" id="moneyRecordSearch">查找</button>
     </form>
     <div class="panel panel-default" style="width:100%;height:auto;overflow:auto;">
         <!-- Table -->
-        <table class="table table-bordered table-striped" style="min-width:1020px;word-break: keep-all;" >
+        <table class="table table-bordered table-striped" style="min-width:1020px;word-break: keep-all;">
             <thead>
             <tr>
                 <th width="80px">id</th>
                 <th width="80px">资金汇入者id</th>
                 <th width="80px">资金汇入者的昵称</th>
-                <th width="80px" >资金汇出者id</th>
+                <th width="80px">资金汇出者id</th>
                 <th width="80px">资金汇出者的昵称</th>
                 <th width="80px">资金汇出者的昵称</th>
                 <th width="80px">此交易完成后的账户余额</th>
@@ -48,55 +45,13 @@
                 <th width="80px">外部序列号</th>
             </tr>
             </thead>
-            <tbody class="table table-bordered table-striped" style="word-break: keep-all" id="moneyRecordList" ></tbody>
+            <tbody class="table table-bordered table-striped" style="word-break: keep-all" id="moneyRecordList"></tbody>
         </table>
     </div>
     <div id="pageing"></div>
 </div>
 <script>
     $(function(){
-        //日期插件初始化
-        $("#datetimeStart").datetimepicker({
-            language:  'zh-CN',
-            // format:'yyyy-mm-dd',
-            format:'yyyy-mm-dd hh:ii',
-            weekStart: 1, /*以星期一为一星期开始*/
-            todayBtn:  1,
-            autoclose: 1,
-            // minView:2, /*精确到天*/
-            todayHighlight: 1,
-            startView: 2,
-            forceParse: 0,
-            showMeridian: 1,
-            pickerPosition: "bottom-left"
-        }).on("changeDate",function(ev){  //值改变事件
-            //选择的日期不能大于第二个日期控件的日期
-            if(ev.date){
-                $("#datetimeEnd").datetimepicker('setStartDate', null);
-            }else{
-                $("#datetimeEnd").datetimepicker('setStartDate',null);
-            }
-        });
-        $("#datetimeEnd").datetimepicker({
-            language:  'zh-CN',
-            format:'yyyy-mm-dd hh:ii',
-            weekStart: 1, /*以星期一为一星期开始*/
-            todayBtn:  1,
-            autoclose: 1,
-            // minView:2, /*精确到天*/
-            todayHighlight: 1,
-            startView: 2,
-            forceParse: 0,
-            showMeridian: 1,
-            pickerPosition: "bottom-left"
-        }).on("changeDate",function(ev){
-            /*选择的日期不能小于第一个日期控件的日期*/
-            if(ev.date){
-                $("#datetimeStart").datetimepicker('setEndDate', null);
-            }else{
-                $("#datetimeStart").datetimepicker('setEndDate',new Date());
-            }
-        });
 
         var today = new Date();
         today.setHours(0);
@@ -104,8 +59,8 @@
         today.setSeconds(0);
         today.setMilliseconds(0);
 
-        $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm"));
-        $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm"));
+        $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm:ss"));
+        $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm:ss"));
     });
     var counts = 6;
     //查询
@@ -113,7 +68,7 @@
         getPageAttribute(1,counts);
     });
 
-    function getPageAttribute(page,couts){
+    function getPageAttribute(page, couts) {
         $.ajax({
             url: "/money/getMoneyRecordPage",
             type: "POST",
@@ -123,8 +78,8 @@
                 type: $('[name="type"]').val(),
                 starttime: new Date($('#datetimeStart').val()).getTime(),
                 endtime: new Date($('#datetimeEnd').val()).getTime(),
-                page:page,
-                couts:couts
+                page: page,
+                couts: couts
             },
             success: function (json) {
                 if (json.code == 202) {
@@ -137,7 +92,9 @@
                     alert(json.message)
                 }
                 if (json.code == 200) {
-                    if(json.data.list==null||json.data.list==""){alert("无数据。")}
+                    if (json.data.list == null || json.data.list == "") {
+                        alert("无数据。")
+                    }
                     createPageNav({
                         $container: $("#pageing"),
                         pageCount: json.data.pages,
@@ -235,12 +192,13 @@
     };
 
 
-
-        //日期转换
+    //日期转换
     function formatDate(now) {
-        if (now==""){return "";}
+        if (now == "") {
+            return "";
+        }
         return new Date(now).toLocaleString();
     }
-    </script>
+</script>
 </body>
 </html>
