@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" style="width: 100%;">
-
+<head>
+    <meta charset="UTF-8">
 <div th:include="common/head_info::head_infor"></div>
 <script type="text/javascript" th:src="@{../js/paging.js}"></script>
 <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
 <script type="text/javascript" th:src="@{../js/My97DatePicker/WdatePicker.js}"></script>
 <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
+<script type="text/javascript" th:src="@{../js/generalJournal.js}"></script>
+<script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+<link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+</head>
+<body>
 
-
-<div class="container center" style="width:100%;">
-    <div class="container center" style="width:100%;">
+<div id="content">
+    <div class="container-fluid">
         <form class="navbar-form navbar-left" role="search" >
             <div class="form-group">
                 <input type="text" name="mobile" class="form-control" placeholder="手机号">
@@ -22,12 +28,11 @@
                     --
                     <input id="datetimeEnd" class="Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
             </div>
-            <button type="button" class="btn btn-default">查询</button>
+            <button type="button" onclick="javascript:search();" class="btn btn-primary">查询</button>
         </form>
 
-        <div class="panel panel-default" style="width:100%;height:350px;overflow:auto;">
             <!-- Table -->
-            <table class="table" style="word-break: keep-all;width: 100%;">
+        <table class="table table-bordered data-table" cellspacing="0" width="100%" id="datatables">
                 <thead>
                 <tr style="word-break: keep-all;width: 100%;">
                     <th>id</th>
@@ -47,103 +52,13 @@
                     <th>修改时间</th>
                 </tr>
                 </thead>
-                <tbody style="word-break: keep-all;width: 100%;">
-
-                </tbody>
             </table>
         </div>
-
-        <div id="paging"></div>
-    </div>
 </div>
     <script>
-        $(function(){
 
-            var today = new Date();
-            today.setHours(0);
-            today.setMinutes(0);
-            today.setSeconds(0);
-            today.setMilliseconds(0);
-
-            $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm:ss"));
-            $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm:ss"));
-        });
-        $('[type="button"]').click(function () {
-            getData(1,10);
-        })
-        var getData = function (page,pageSize) {
-            $.ajax({
-                url: "/log/generalPage",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    mobile: $('[name="mobile"]').val(),
-                    type: $('[name="type"]').val(),
-                    starttime: new Date($('#datetimeStart').val()).getTime(),
-                    endtime: new Date($('#datetimeEnd').val()).getTime(),
-                    page : page,
-                    couts : pageSize
-                },
-                success: function (sourceData) {
-                    if (sourceData.code==202){alert(sourceData.message)}
-                    if (sourceData.code==203){alert(sourceData.message)}
-                    if (sourceData.code==204){alert(sourceData.message)}
-                    if (sourceData.code == 200) {
-                        // if(sourceData.data.list==null||sourceData.data.list==""){alert("无数据。")}
-                        var str = "";
-                        var data = sourceData.data.list;
-                        createPageNav({
-                            $container: $("#paging"),
-                            pageCount: sourceData.data.pages,
-                            currentNum: sourceData.data.pageNum,
-                            afterFun: function (num) {
-                                getData(num, 10);
-                            },
-                            hasCommonPage: false
-                        });
-                        var str = "";
-                        for (var i = 0; i < data.length; i++) {
-                            var inoutString = "";
-                            if (data[i].inouttype == 0) {
-                                inoutString = "支出";
-                            } else {
-                                inoutString = "收入";
-                            }
-                            str += '<tr>'
-                                + "<td class = 'alltd'>" + validate(data[i].id) + "</td>" +
-                                "<td>" + validate(data[i].journaltype) + "</td>" +
-                                "<td>" + validate(data[i].userid) + "</td>" +
-                                "<td>" + validate(data[i].nickname) + "</td>" +
-                                "<td>" + validate(data[i].serialnumber) + "</td>" +
-                                "<td>" + formatDate(validate(data[i].starttime)) + "</td>" +
-                                "<td>" + formatDate(validate(data[i].endtime)) + "</td>" +
-                                "<td>" + validate(data[i].relationid) + "</td>" +
-                                "<td>" + inoutString + "</td>" +
-                                "<td>" + validate(data[i].amount) + "</td>" +
-                                "<td>" + validate(data[i].balance) + "</td>" +
-                                "<td>" + validate(data[i].remarks) + "</td>" +
-                                "<td>" + validate(data[i].status) + "</td>" +
-                                "<td>" + formatDate(validate(data[i].createtime)) + "</td>" +
-                                "<td>" + formatDate(validate(data[i].modifytime)) + "</td>" +
-                                +'</tr>';
-                        }
-                        $('tbody').html(str);
-                    }
-                }
-            })
-        }
-        var validate = function (data) {
-            if(data==null){
-                return "";
-            }
-            return data;
-        }
-
-        function formatDate(now) {
-            if (now==""){return "";}
-           return new Date(now).toLocaleString();
-        }
 
 
     </script>
+</body>
 </html>

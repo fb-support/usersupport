@@ -29,18 +29,15 @@ public class GeneralJournalController extends BaseController {
      * @date:
      */
     @RequestMapping("/log/generalPage")
-    public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int page,
+    public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int start,
                                     @RequestParam(required = false, defaultValue = "10") int couts,
-                                    String mobile, Integer type, Long starttime, Long endtime)  {
-        System.out.println(page+"=="+couts+"=="+mobile+"=="+type+"=="+starttime+"=="+endtime);
-
+                                    String mobile, Integer type, Long starttime, Long endtime,String draw)  {
         if (starttime==null||endtime==null){return new RestModel("203","时间不能为空");}
-
-        type = StrUtil.parseStringToInt(type,-1);
-        System.out.println(starttime+"++++++++++");
         if (mobile==""){return new RestModel("202","手机号不能为空");}
+        type = StrUtil.parseStringToInt(type,-1);
+        int pageNo = start / couts + 1;
         try{
-            return generalJournalService.selectByMobile(mobile,type,starttime,endtime,page,couts);
+            return generalJournalService.selectByMobile(mobile,type,starttime,endtime,pageNo,couts, draw);
         }catch (Exception e){
             return this.excpRestModel();
         }

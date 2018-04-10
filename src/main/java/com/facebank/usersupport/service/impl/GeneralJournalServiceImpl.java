@@ -6,6 +6,7 @@ import com.facebank.usersupport.dto.GeneralJournalDto;
 import com.facebank.usersupport.dto.PageDto;
 import com.facebank.usersupport.mapper.usersupport.p2p.GeneralJournalMapper;
 import com.facebank.usersupport.model.GeneralJournalModel;
+import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.IGeneralJournalService;
 import com.facebank.usersupport.service.base.BaseService;
@@ -33,24 +34,20 @@ public class GeneralJournalServiceImpl extends BaseService implements IGeneralJo
         return lists;
     }
 
-    @Override
-    public PageDto getGeneralJournalPage(String mobile, String type, Long starttime, Long endtime, Integer page, Integer counts) {
-        Integer totalNumber = generalJournalMapper.getPageCount(mobile,type,starttime,endtime);
-        int lastPage = PageUtil.getLastPage(counts,totalNumber);
-        int startNumber = (page-1)*counts;
-        List<CapitalDto> capitalDtos = generalJournalMapper.getGeneralJournalPage(mobile,type,starttime,endtime,startNumber,counts);
-        PageDto pageDto = new PageDto();
-        pageDto.setCurrentPage(page);
-        pageDto.setTotalPages(lastPage);
-        pageDto.setPageData(capitalDtos);
-        return pageDto;
-    }
 
     @Override
-    public RestModel selectByMobile(String mobile, Integer type, Long startTime, Long endTime, Integer page, Integer counts) {
+    public RestModel selectByMobile(String mobile, Integer type, Long startTime, Long endTime, Integer page, Integer counts, String draw) {
         PageHelper.startPage(page, counts);
         List<GeneralJournalModel> generalJournalModels= generalJournalMapper.selectByMobile(mobile,type,startTime,endTime);
         PageInfo<GeneralJournalModel> pageInfo = new PageInfo<>(generalJournalModels);
-        return new RestModel(pageInfo);
+        PageRestModel pageRestModel = new PageRestModel(
+                draw,
+                pageInfo.getTotal(),
+                pageInfo.getTotal(),
+                pageInfo.getList()
+        );
+
+
+        return new RestModel(pageRestModel);
     }
 }
