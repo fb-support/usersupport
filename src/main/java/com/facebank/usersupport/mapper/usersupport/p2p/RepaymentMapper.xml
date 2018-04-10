@@ -66,7 +66,7 @@
 
 	<select id="getOrderCreditInfoByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
 		SELECT
-			max(plan_date),
+			max(plan_date) 'plan_date',
 			fp_order_id,
 			user_id,
 			sum(plan_principal) 'cred_plan_principal',

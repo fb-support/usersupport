@@ -90,7 +90,7 @@ function search(page,pageSize){
             "searching": true, // 从结果搜索
             "bJQueryUI": true,
             "ordering" : true, // 排序
-            "aaSorting": [7, "desc"], // 按第7列倒序排列
+            "aaSorting": [1, "desc"], // 按creditId倒序排列
             "sPaginationType": "full_numbers",
             "serverSide": false, // true代表后台分页，false代表前台分页
             // 表格填充数据来源，使用ajax异步请求后台获取数据
@@ -112,8 +112,8 @@ function search(page,pageSize){
                         $("#content").hideLoading();
                         callback(result.data[0]);
 
-                        loadTable2(result.data[1].data)
-
+                        // 构建用户资产表格
+                        loadTable2(result.data[1].data);
                     },
                     error: function(err) {
                         $("#content").hideLoading();
@@ -129,8 +129,11 @@ function search(page,pageSize){
                 },*/
                 {
                     "data": null,
+                    "bSortable" : true,
                     "render": function (data, type, full, meta) {
-                        return meta.row+1;
+                        /*return meta.row+1;*/
+                        var startIndex = meta.settings._iDisplayStart;
+                        return startIndex + meta.row + 1;
                     }
                 },
                 {"data": "creditId"},
@@ -211,7 +214,11 @@ function search(page,pageSize){
                 {
                     "data": "redTermNum",
                     "render": function (data, type, full, meta) {
-                        return new Date(parseInt(data)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+                        if(data != null && data != ""){
+                            return new Date(parseInt(data)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+                        }else{
+                            return "";
+                        }
                     }
                 },
                 {
@@ -361,7 +368,7 @@ function loadTable2(data) {
                 {"data": "realName"},
                 {"data": "mobile"},
                 {"data": "cash"},
-                {"data": "frozenWithDrawCash"},
+                {"data": "frozenFpOrderCash"},
                 {"data": "frozenWithDrawCash"},
                 {"data": "totalAssets"}
             ]
@@ -380,7 +387,7 @@ function loadTable2(data) {
                 {"data": "realName"},
                 {"data": "mobile"},
                 {"data": "cash"},
-                {"data": "frozenWithDrawCash"},
+                {"data": "frozenFpOrderCash"},
                 {"data": "frozenWithDrawCash"},
                 {"data": "totalAssets"}
             ]

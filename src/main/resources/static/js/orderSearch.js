@@ -111,6 +111,7 @@ function search(page,pageSize){
                         // 关闭遮罩效果
                         $("#content").hideLoading();
                         callback(result.data[0]);
+
                         // 构建用户资产表格
                         loadTable2(result.data[1].data)
                     },
@@ -133,7 +134,11 @@ function search(page,pageSize){
                 {
                     "data": "planDate",
                     "render": function (data, type, full, meta) {
-                        return new Date(parseInt(data)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+                        if(data != null && data != ""){
+                            return new Date(parseInt(data)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+                        }else{
+                            return "";
+                        }
                     },
                     "bSortable": true
                 },
@@ -150,14 +155,86 @@ function search(page,pageSize){
                         }
                     }
                 },
-                {"data": "credRealPrincipal"},
-                {"data": "credRealInterest"},
-                {"data": "redPlanAmount"},
-                {"data": "redRealAmount"},
-                {"data": "vipPlanAmount"},
-                {"data": "vipRealAmount"},
-                {"data": "pfPlanAmount"},
-                {"data": "pfRealAmount"}
+                {
+                    "data": "credRealPrincipal",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "credRealInterest",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "redPlanAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "redRealAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "vipPlanAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "vipRealAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "pfPlanAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "pfRealAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                }
             ],
             /*是否开启主题*/
             "bJQueryUI": true,
@@ -199,7 +276,7 @@ function loadTable2(data) {
                 {"data": "realName"},
                 {"data": "mobile"},
                 {"data": "cash"},
-                {"data": "frozenWithDrawCash"},
+                {"data": "frozenFpOrderCash"},
                 {"data": "frozenWithDrawCash"},
                 {"data": "totalAssets"}
             ]
@@ -218,7 +295,7 @@ function loadTable2(data) {
                 {"data": "realName"},
                 {"data": "mobile"},
                 {"data": "cash"},
-                {"data": "frozenWithDrawCash"},
+                {"data": "frozenFpOrderCash"},
                 {"data": "frozenWithDrawCash"},
                 {"data": "totalAssets"}
             ]

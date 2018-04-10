@@ -98,10 +98,7 @@
     SELECT userId FROM user_main WHERE mobile = #{mobile}
   </select>
 
-  <resultMap id="userCapitalResult" type="com.facebank.usersupport.model.UserCapitalInfoModel">
-      <id column="userId" property="userId" />
-  </resultMap>
-  <select id="selectUserCapitalByUserId" parameterType="java.lang.Long" resultMap="userCapitalResult">
+  <select id="selectUserCapitalByUserId" parameterType="java.lang.Long" resultType="com.facebank.usersupport.model.UserCapitalInfoModel">
       SELECT userId,mobile,realName,cash,frozenWithDrawCash,frozenFpOrderCash
       FROM user_main WHERE userId = #{userId}
   </select>
