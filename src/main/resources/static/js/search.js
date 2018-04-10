@@ -41,6 +41,15 @@ $(function(){
             $("#datetimeStart").datetimepicker('setEndDate',new Date());
         }
     });
+
+    var today = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+
+    $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm"));
+    $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm"));
 });
 
 var tableNotLoad = true;
@@ -112,12 +121,12 @@ function search(page,pageSize){
                 });
             },
             "columns": [
-                {
+                /*{
                     "className": 'details-control',
                     "orderable": false,
                     "data": null,
                     "defaultContent": ''
-                },
+                },*/
                 {
                     "data": null,
                     "render": function (data, type, full, meta) {
@@ -127,8 +136,6 @@ function search(page,pageSize){
                 {"data": "creditId"},
                 {"data": "orderId"},
                 {"data": "userId"},
-                {"data": "credPlanPrincipal"},
-                {"data": "credPlanInterest"},
                 {
                     "data": "planDate",
                     "render": function (data, type, full, meta) {
@@ -149,17 +156,41 @@ function search(page,pageSize){
                         }
                     }
                 },
+                {"data": "credPlanPrincipal"},
                 {"data": "credRealPrincipal"},
-                {"data": "credRealInterest"}
-                /*,
+                {"data": "credPlanInterest"},
+                {"data": "credRealInterest"},
                 {
                     "data": "redLocalInfo",
                     "render": function (data, type, full, meta) {
-                        var localInfoJson = JSON.parse(data);
-                        return localInfoJson.model_name;
+                        if(data != null && data != ""){
+                            var localInfoJson = JSON.parse(data);
+                            return localInfoJson.model_name;
+                        }else{
+                            return "";
+                        }
                     }
                 },
-                {"data": "redPlanAmount"},
+                {
+                    "data": "redPlanAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "redRealAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
                 {
                     "data": "redPackageType",
                     "render": function (data, type, full, meta) {
@@ -171,6 +202,9 @@ function search(page,pageSize){
                             case 1010:
                                 return "返现红包";
                                 break;
+                            default:
+                                return "";
+                                break;
                         }
                     }
                 },
@@ -180,11 +214,76 @@ function search(page,pageSize){
                         return new Date(parseInt(data)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
                     }
                 },
-                {"data": "vipRate"},
-                {"data": "vipPlanAmount"},
-                {"data": "vipTermNum"},
-                {"data": "pfPlanAmount"},
-                {"data": "pfTermNum"},
+                {
+                    "data": "vipRate",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "vipPlanAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "vipRealAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "vipTermNum",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "pfPlanAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "pfRealAmount",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
+                {
+                    "data": "pfTermNum",
+                    "render": function (data, type, full, meta) {
+                        if(data != null && data != ""){
+                            return data;
+                        }else{
+                            return "";
+                        }
+                    }
+                },
                 {
                     "data": "pfType",
                     "render": function (data, type, full, meta) {
@@ -199,9 +298,12 @@ function search(page,pageSize){
                             case 300:
                                 return "项目加息";
                                 break;
+                            default:
+                                return "";
+                                break;
                         }
                     }
-                }*/
+                }
             ],
             /*是否开启主题*/
             "bJQueryUI": true,
@@ -223,7 +325,7 @@ function search(page,pageSize){
         });
 
         // Add event listener for opening and closing details
-        $('#datatable tbody').on('click', 'td.details-control', function () {
+        /*$('#datatable tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = myTable.row(tr);
             if ( row.child.isShown() ) {
@@ -235,7 +337,7 @@ function search(page,pageSize){
                 row.child( tableFormat(row.data()) ).show();
                 tr.addClass('shown');
             }
-        });
+        });*/
 
         tableNotLoad = false;
     }else {

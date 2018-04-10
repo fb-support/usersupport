@@ -31,28 +31,30 @@ public class CapitalController extends BaseController {
     @RequestMapping("/money/getMoneyRecordPage")
     public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int page,
                                     @RequestParam(required = false, defaultValue = "5") int couts,
-                                    String mobile, String type, String starttime, String endtime)  {
+                                    String mobile, String type, Long starttime, Long endtime)  {
         System.out.println(mobile+"=="+type+"=="+starttime+"=="+endtime);
         if (mobile==""){return new RestModel("202","手机号不能为空");}
-        if (starttime==""||endtime==""){return new RestModel("203","时间不能为空");}
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (starttime==null||endtime==null){return new RestModel("203","时间不能为空");}
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time1 = null;
-        if (starttime!=""&&starttime!=null){
+        String start = sdf.format(starttime);
+        if (start!=""&&start!=null){
             try {
-                time1 = sdf.parse(starttime);
+                time1 = sdf.parse(start);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
         Date time2 =null;
-        if (endtime!=""&&endtime!=null){
+        String end = sdf.format(endtime);
+        if (end!=""&&end!=null){
             try {
-                time2 = sdf.parse(endtime);
+                time2 = sdf.parse(end);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        if(time2.getTime()-time1.getTime()>432000000){return new RestModel("204","日期区间最大为5天，无法查询");}
+//        if(time2.getTime()-time1.getTime()>432000000){return new RestModel("204","日期区间最大为5天，无法查询");}
 
         try{
             RestModel restModel = iCapitalService.selectByMobile(mobile,type,time1,time2,page,couts);

@@ -7,6 +7,7 @@
     <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
     <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
     <script type="text/javascript" th:src="@{../js/paging.js}"></script>
+    <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
 </head>
 <body>
@@ -53,6 +54,59 @@
     <div id="pageing"></div>
 </div>
 <script>
+    $(function(){
+        //日期插件初始化
+        $("#datetimeStart").datetimepicker({
+            language:  'zh-CN',
+            // format:'yyyy-mm-dd',
+            format:'yyyy-mm-dd hh:ii',
+            weekStart: 1, /*以星期一为一星期开始*/
+            todayBtn:  1,
+            autoclose: 1,
+            // minView:2, /*精确到天*/
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1,
+            pickerPosition: "bottom-left"
+        }).on("changeDate",function(ev){  //值改变事件
+            //选择的日期不能大于第二个日期控件的日期
+            if(ev.date){
+                $("#datetimeEnd").datetimepicker('setStartDate', null);
+            }else{
+                $("#datetimeEnd").datetimepicker('setStartDate',null);
+            }
+        });
+        $("#datetimeEnd").datetimepicker({
+            language:  'zh-CN',
+            format:'yyyy-mm-dd hh:ii',
+            weekStart: 1, /*以星期一为一星期开始*/
+            todayBtn:  1,
+            autoclose: 1,
+            // minView:2, /*精确到天*/
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1,
+            pickerPosition: "bottom-left"
+        }).on("changeDate",function(ev){
+            /*选择的日期不能小于第一个日期控件的日期*/
+            if(ev.date){
+                $("#datetimeStart").datetimepicker('setEndDate', null);
+            }else{
+                $("#datetimeStart").datetimepicker('setEndDate',new Date());
+            }
+        });
+
+        var today = new Date();
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+        today.setMilliseconds(0);
+
+        $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm"));
+        $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm"));
+    });
     var counts = 6;
     //查询
     $('#moneyRecordSearch').click(function () {
@@ -67,8 +121,8 @@
             data: {
                 mobile: $('[name="mobile"]').val(),
                 type: $('[name="type"]').val(),
-                starttime: $('#datetimeStart').val(),
-                endtime: $('#datetimeEnd').val(),
+                starttime: new Date($('#datetimeStart').val()).getTime(),
+                endtime: new Date($('#datetimeEnd').val()).getTime(),
                 page:page,
                 couts:couts
             },
@@ -180,74 +234,8 @@
         })
     };
 
-    //日期插件初始化
-    // $('#datetimeStart').datetimepicker({
-    //     language:  'zh-CN',
-    //     format:'yyyy-mm-dd',
-    //     weekStart: 1, /*以星期一为一星期开始*/
-    //     todayBtn:  1,
-    //     autoclose: 1,
-    //     minView:2, /*精确到天*/
-    //     pickerPosition: "bottom-left"
-    // }).on("changeDate",function(ev){  //值改变事件
-    //     //选择的日期不能大于第二个日期控件的日期
-    //     if(ev.date){
-    //         $("#datetimeEnd").datetimepicker('setStartDate', new Date(ev.date.valueOf()+86400000));
-    //         $("#datetimeEnd").datetimepicker('setEndDate', new Date(ev.date.valueOf()+432000000));
-    //     }else{
-    //         $("#datetimeEnd").datetimepicker('setStartDate',null);
-    //     }
-    // });
-    // $('#datetimeEnd').datetimepicker({
-    //     language:  'zh-CN',
-    //     format:'yyyy-mm-dd',
-    //     weekStart: 1, /*以星期一为一星期开始*/
-    //     todayBtn:  1,
-    //     autoclose: 1,
-    //     minView:2, /*精确到天*/
-    //     pickerPosition: "bottom-left"
-    // }).on("changeDate",function(ev){
-    //     /*选择的日期不能小于第一个日期控件的日期*/
-    //     if(ev.date){
-    //         $("#datetimeStart").datetimepicker('setStartDate', new Date(ev.date-432000000));
-    //         $("#datetimeStart").datetimepicker('setEndDate', new Date(ev.date.valueOf()-86400000));
-    //     }else{
-    //         $("#datetimeStart").datetimepicker('setEndDate',new Date());
-    //     }
-    // });
-    //日期插件初始化
-    $('#datetimeStart').datetimepicker({
-        language:  'zh-CN',
-        format:'yyyy-mm-dd',
-        weekStart: 1, /*以星期一为一星期开始*/
-        todayBtn:  1,
-        autoclose: 1,
-        minView:2, /*精确到天*/
-        pickerPosition: "bottom-left"
-    }).on("changeDate",function(ev){  //值改变事件
-        //选择的日期不能大于第二个日期控件的日期
-        if(ev.date){
-            $("#datetimeEnd").datetimepicker('setStartDate', new Date(ev.date.valueOf()));
-        }else{
-            $("#datetimeEnd").datetimepicker('setStartDate',null);
-        }
-    });
-    $('#datetimeEnd').datetimepicker({
-        language:  'zh-CN',
-        format:'yyyy-mm-dd',
-        weekStart: 1, /*以星期一为一星期开始*/
-        todayBtn:  1,
-        autoclose: 1,
-        minView:2, /*精确到天*/
-        pickerPosition: "bottom-left"
-    }).on("changeDate",function(ev){
-        /*选择的日期不能小于第一个日期控件的日期*/
-        if(ev.date){
-            $("#datetimeStart").datetimepicker('setEndDate', new Date(ev.date.valueOf()));
-        }else{
-            $("#datetimeStart").datetimepicker('setEndDate',new Date());
-        }
-    });
+
+
         //日期转换
     function formatDate(now) {
         if (now==""){return "";}
