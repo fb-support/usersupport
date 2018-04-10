@@ -1,13 +1,13 @@
 $(function(){
-    //日期插件初始化
+    /*//日期插件初始化
     $("#datetimeStart").datetimepicker({
         language:  'zh-CN',
         // format:'yyyy-mm-dd',
         format:'yyyy-mm-dd hh:ii',
-        weekStart: 1, /*以星期一为一星期开始*/
+        weekStart: 1, /!*以星期一为一星期开始*!/
         todayBtn:  1,
         autoclose: 1,
-        // minView:2, /*精确到天*/
+        // minView:2, /!*精确到天*!/
         todayHighlight: 1,
         startView: 2,
         forceParse: 0,
@@ -24,23 +24,23 @@ $(function(){
     $("#datetimeEnd").datetimepicker({
         language:  'zh-CN',
         format:'yyyy-mm-dd hh:ii',
-        weekStart: 1, /*以星期一为一星期开始*/
+        weekStart: 1, /!*以星期一为一星期开始*!/
         todayBtn:  1,
         autoclose: 1,
-        // minView:2, /*精确到天*/
+        // minView:2, /!*精确到天*!/
         todayHighlight: 1,
         startView: 2,
         forceParse: 0,
         showMeridian: 1,
         pickerPosition: "bottom-left"
     }).on("changeDate",function(ev){
-        /*选择的日期不能小于第一个日期控件的日期*/
+        /!*选择的日期不能小于第一个日期控件的日期*!/
         if(ev.date){
             $("#datetimeStart").datetimepicker('setEndDate', null);
         }else{
             $("#datetimeStart").datetimepicker('setEndDate',new Date());
         }
-    });
+    });*/
 
     var today = new Date();
     today.setHours(0);
@@ -111,7 +111,10 @@ function search(page,pageSize){
                         // 关闭遮罩效果
                         $("#content").hideLoading();
                         callback(result.data[0]);
-
+                        if(result.data[0].recordsTotal > 0){
+                            // 显示导出按钮
+                            $("#exportExcel").removeClass("hide");
+                        }
                         // 构建用户资产表格
                         loadTable2(result.data[1].data);
                     },
@@ -180,7 +183,7 @@ function search(page,pageSize){
                         if(data != null && data != ""){
                             return data;
                         }else{
-                            return "";
+                            return "0";
                         }
                     }
                 },
@@ -190,7 +193,7 @@ function search(page,pageSize){
                         if(data != null && data != ""){
                             return data;
                         }else{
-                            return "";
+                            return "0";
                         }
                     }
                 },
@@ -212,16 +215,6 @@ function search(page,pageSize){
                     }
                 },
                 {
-                    "data": "redTermNum",
-                    "render": function (data, type, full, meta) {
-                        if(data != null && data != ""){
-                            return new Date(parseInt(data)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
-                        }else{
-                            return "";
-                        }
-                    }
-                },
-                {
                     "data": "vipRate",
                     "render": function (data, type, full, meta) {
                         if(data != null && data != ""){
@@ -237,7 +230,7 @@ function search(page,pageSize){
                         if(data != null && data != ""){
                             return data;
                         }else{
-                            return "";
+                            return "0";
                         }
                     }
                 },
@@ -247,7 +240,7 @@ function search(page,pageSize){
                         if(data != null && data != ""){
                             return data;
                         }else{
-                            return "";
+                            return "0";
                         }
                     }
                 },
@@ -255,7 +248,7 @@ function search(page,pageSize){
                     "data": "vipTermNum",
                     "render": function (data, type, full, meta) {
                         if(data != null && data != ""){
-                            return data;
+                            return data+"期";
                         }else{
                             return "";
                         }
@@ -267,7 +260,7 @@ function search(page,pageSize){
                         if(data != null && data != ""){
                             return data;
                         }else{
-                            return "";
+                            return "0";
                         }
                     }
                 },
@@ -277,7 +270,7 @@ function search(page,pageSize){
                         if(data != null && data != ""){
                             return data;
                         }else{
-                            return "";
+                            return "0";
                         }
                     }
                 },
@@ -285,7 +278,7 @@ function search(page,pageSize){
                     "data": "pfTermNum",
                     "render": function (data, type, full, meta) {
                         if(data != null && data != ""){
-                            return data;
+                            return data+"期";
                         }else{
                             return "";
                         }
@@ -370,8 +363,33 @@ function loadTable2(data) {
                 {"data": "cash"},
                 {"data": "frozenFpOrderCash"},
                 {"data": "frozenWithDrawCash"},
+                {"data": "totalCredPlanPrincipal"},
+                {"data": "totalCredRealPrincipal"},
+                {"data": "totalCredPlanInterest"},
+                {"data": "totalCredRealInterest"},
+                {"data": "totalRedPlanAmount"},
+                {"data": "totalRedRealAmount"},
+                {"data": "totalVipPlanAmount"},
+                {"data": "totalVipRealAmount"},
+                {"data": "totalPfPlanAmount"},
+                {"data": "totalPfRealAmount"},
                 {"data": "totalAssets"}
-            ]
+            ],
+            "oLanguage": {    // 语言设置
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                "sSearch": "检索:",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                }
+            }
         });
     }else{
         myTable2 = $('#datatable2').DataTable({
@@ -389,8 +407,33 @@ function loadTable2(data) {
                 {"data": "cash"},
                 {"data": "frozenFpOrderCash"},
                 {"data": "frozenWithDrawCash"},
+                {"data": "totalCredPlanPrincipal"},
+                {"data": "totalCredRealPrincipal"},
+                {"data": "totalCredPlanInterest"},
+                {"data": "totalCredRealInterest"},
+                {"data": "totalRedPlanAmount"},
+                {"data": "totalRedRealAmount"},
+                {"data": "totalVipPlanAmount"},
+                {"data": "totalVipRealAmount"},
+                {"data": "totalPfPlanAmount"},
+                {"data": "totalPfRealAmount"},
                 {"data": "totalAssets"}
-            ]
+            ],
+            "oLanguage": {    // 语言设置
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                "sSearch": "检索:",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                }
+            }
         });
     }
 }
@@ -481,8 +524,6 @@ function tableFormat ( d ) {
  */
 function reset(){
     $("#repaymentForm")[0].reset();
-    $("#datetimeStart").datepicker('clearDates');
-    $("#datetimeEnd").datepicker('clearDates');
 }
 
 /**
@@ -508,4 +549,12 @@ function getQueryCondition(data) {
     param.length = data.length;
     param.draw = data.draw;
     return param;
+}
+
+/**
+ * 将结果导出到excel
+ */
+function exportRepayment() {
+    $("#repaymentForm").attr("action","/repayment/export");
+    $("#repaymentForm").submit();
 }
