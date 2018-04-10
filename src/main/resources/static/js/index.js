@@ -3,12 +3,18 @@ $(function() {
     /**
      * 左边菜单打开二级菜单的方法
      */
-    $(".module-1").click(function() {
-        var display = $(this).find(".module-2").css("display");
+    $(".big_class").click(function() {
+
+        //关闭其他所有同级菜单项
+        $(".big_class").each(function() {
+           $(this).next().slideUp();
+        });
+        //显示或隐藏当前菜单项的子项
+        var display = $(this).next().css("display");
         if(display == "block") {
-            $(this).find(".module-2").slideUp();
+            $(this).next().slideUp();
         } else if (display == "none") {
-            $(this).find(".module-2").slideDown();
+            $(this).next().slideDown();
         }
     });
 
@@ -104,6 +110,7 @@ function addSmallCardForThisPage( page_id, page_name ) {
     li.setAttribute( "value", page_id );
     //创建页面名称标签
     var span_name = document.createElement("span");
+    span_name.className = "module_card_span";
     span_name.innerHTML = page_name;
     //设置事件监听
     span_name.onclick = function() {

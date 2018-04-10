@@ -4,8 +4,6 @@
 function runUserBaseInfo() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
-    //显示基本信息页面。
-    $("#system-base-info-page").show();
 
     //显示tab
     if ( $("li[value='system-base-info-page']").length > 0 ) {
@@ -37,14 +35,22 @@ function runChangePassword() {
 function runRepaymentSearch() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
-    //显示债权还款查询页面
-    $("#service-repayment-page").show();
 
-    //显示tab
-    if ( $("li[value='service-repayment-page']").length > 0 ) {
-        switchPage( "service-repayment-page" );
-    } else {
+    //获取当前债券还款查询卡的个数
+    var count = 0;
+    $(".module_card_span").each(function() {
+        if($(this).text() == "债券还款查询") {
+            count = count + 1;
+        }
+    });
+
+    //显示债券还款查询页面。
+    if(count == 0) {
+        $("#service-repayment-page").show();
         addSmallCardForThisPage("service-repayment-page", "债券还款查询");
+    } else {
+        $("#always-change-area").append("<iframe class='center_show_area' id='service-repayment-page"+count+"' src='/service/search' frameborder='0'></iframe>");
+        addSmallCardForThisPage("service-repayment-page"+count, "债券还款查询");
     }
 }
 
@@ -54,14 +60,22 @@ function runRepaymentSearch() {
 function runRepaymentOrderSearch() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
-    //显示订单还款查询页面
-    $("#service-repaymentOrder-page").show();
 
-    //显示tab
-    if ( $("li[value='service-repaymentOrder-page']").length > 0 ) {
-        switchPage( "service-repaymentOrder-page" );
-    } else {
+    //获取当前订单还款查询查询卡的个数
+    var count = 0;
+    $(".module_card_span").each(function() {
+        if($(this).text() == "订单还款查询") {
+            count = count + 1;
+        }
+    });
+
+    //显示订单还款查询页面。
+    if(count == 0) {
+        $("#service-repaymentOrder-page").show();
         addSmallCardForThisPage("service-repaymentOrder-page", "订单还款查询");
+    } else {
+        $("#always-change-area").append("<iframe class='center_show_area' id='service-repaymentOrder-page"+count+"' src='/service/orderSearch' frameborder='0'></iframe>");
+        addSmallCardForThisPage("service-repaymentOrder-page"+count, "订单还款查询");
     }
 }
 /**
@@ -70,12 +84,22 @@ function runRepaymentOrderSearch() {
 function moneyRecord() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
-    //显示基本信息页面。
-    $("#log-record").show();
-    if ( $("li[value='log-record']").length > 0 ) {
-        switchPage( "log-record" );
-    } else {
+
+    //获取当前资金记录卡的个数
+    var count = 0;
+    $(".module_card_span").each(function() {
+        if($(this).text() == "资金记录") {
+            count = count + 1;
+        }
+    });
+
+    //显示资金记录页面。
+    if(count == 0) {
+        $("#log-record").show();
         addSmallCardForThisPage("log-record", "资金记录");
+    } else {
+        $("#always-change-area").append("<iframe class='center_show_area' id='log-record"+count+"' src='/money/moneyRecord' frameborder='0'></iframe>");
+        addSmallCardForThisPage("log-record"+count, "资金记录");
     }
 }
 /**
@@ -84,13 +108,22 @@ function moneyRecord() {
 function generalJournal() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
-    //显示基本信息页面。
-    $("#log-journal").show();
-    //显示tab
-    if ( $("li[value='log-journal']").length > 0 ) {
-        switchPage( "log-journal" );
-    } else {
+
+    //获取当前资金流水卡的个数
+    var count = 0;
+    $(".module_card_span").each(function() {
+        if($(this).text() == "资金流水") {
+            count = count + 1;
+        }
+    });
+
+    //显示资金流水页面。
+    if(count == 0) {
+        $("#log-journal").show();
         addSmallCardForThisPage("log-journal", "资金流水");
+    } else {
+        $("#always-change-area").append("<iframe class='center_show_area' id='log-journal"+count+"' src='/log/generalJournal' frameborder='0'></iframe>");
+        addSmallCardForThisPage("log-journal"+count, "资金流水");
     }
 }
 /**
@@ -128,13 +161,13 @@ function roleManage() {
 function menuManage() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
-    //显示基本信息页面。
+    //显示菜单管理页面。
     $("#menu-manage").show();
     //显示tab
     if ( $("li[value='menu-manage']").length > 0 ) {
         switchPage( "menu-manage" );
     } else {
-        addSmallCardForThisPage("menu-manage", "资源管理");
+        addSmallCardForThisPage("menu-manage", "菜单管理");
     }
 }
 
