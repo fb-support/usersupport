@@ -13,10 +13,12 @@ public class ApplyRecordModel {
     private Date startTime;
     //结束时间
     private Date endTime;
+    //共计时长
+    private Float applyDuration;
     //申请日期
     private Date applyDate;
     //申请原因
-    private String leaveCause;
+    private String applyCause;
     //申请类型（0：加班，1：请假，2：调休）
     private Integer applyType;
     //状态（0：待审核，1：通过，2：未通过）
@@ -64,6 +66,14 @@ public class ApplyRecordModel {
         this.endTime = endTime;
     }
 
+    public Float getApplyDuration() {
+        return applyDuration;
+    }
+
+    public void setApplyDuration(Float applyDuration) {
+        this.applyDuration = applyDuration;
+    }
+
     public Date getApplyDate() {
         return applyDate;
     }
@@ -72,12 +82,12 @@ public class ApplyRecordModel {
         this.applyDate = applyDate;
     }
 
-    public String getLeaveCause() {
-        return leaveCause;
+    public String getApplyCause() {
+        return applyCause;
     }
 
-    public void setLeaveCause(String leaveCause) {
-        this.leaveCause = leaveCause == null ? null : leaveCause.trim();
+    public void setApplyCause(String applyCause) {
+        this.applyCause = applyCause;
     }
 
     public Integer getApplyType() {

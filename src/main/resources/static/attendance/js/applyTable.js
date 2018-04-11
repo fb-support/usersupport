@@ -46,9 +46,7 @@ $(document).ready(function () {
                 "sClass": "text-center",
                 "data": "userId",
                 "render": function (data, type, full, meta) {
-//                    class="btn btn-primary"
-                    return '<button type="button" onclick="showUpdateModel(' + data + ');" >修改信息</button>' +
-                        '<button type="button" onclick="showDetailModel(' + data + ');" >查看详情</button>';
+                    return '<button type="button" onclick="showDetailModel(' + data + ');" >查看详情</button>';
                 },
                 "bSortable": false
             },

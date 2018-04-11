@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.attendance.mapper.EmpMapper">
+
+    <resultMap id="empResult" type="com.facebank.usersupport.attendance.model.EmpModel">
+        <id column="id" property="id"/>
+        <result column="work_number" property="workNumber"/>
+        <result column="name" property="name"/>
+        <result column="telephone" property="telephone"/>
+        <result column="email" property="email"/>
+        <result column="dept_number" property="deptNumber"/>
+        <result column="overtime_duration" property="overtimeDuration"/>
+        <result column="rest_duration" property="restDuration"/>
+        <result column="leave_duration" property="leaveDuration"/>
+        <result column="parent_number" property="parentNumber"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_update" property="gmtUpdate"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <select id="getEmpByWorkNumber" parameterType="java.lang.Integer" resultMap="empResult">
+        SELECT
+            id,
+            work_number,
+            name,
+            telephone,
+            email,
+            dept_number,
+            overtime_duration,
+            rest_duration,
+            leave_duration,
+            parent_number,
+            gmt_create,
+            gmt_update,
+            status
+        FROM emp
+        WHERE work_number = #{workNumber}
+    </select>
+
+    <select id="getParentNumberByWorkNumber" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT parent_number FROM emp WHERE work_number = #{workNumber}
+    </select>
+
+    <select id="getEmpListByDeptNumber" parameterType="java.lang.Integer" resultMap="empResult">
+        SELECT id,work_number,name,dept_number
+        FROM emp
+        WHERE dept_number = #{deptNumber}
+    </select>
+
+</mapper>

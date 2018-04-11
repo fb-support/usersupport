@@ -14,9 +14,11 @@ public class EmpModel {
     //所属部门号
     private Integer deptNumber;
     //加班总时长（单位：小时）
-    private Integer overtimeDuration;
+    private Float overtimeDuration;
     //调休总时长（单位：小时）
-    private Integer restDuration;
+    private Float restDuration;
+    //请假总时长
+    private Float leaveDuration;
     //上级员工号
     private Integer parentNumber;
     //创建时间
@@ -74,20 +76,28 @@ public class EmpModel {
         this.deptNumber = deptNumber;
     }
 
-    public Integer getOvertimeDuration() {
+    public Float getOvertimeDuration() {
         return overtimeDuration;
     }
 
-    public void setOvertimeDuration(Integer overtimeDuration) {
+    public void setOvertimeDuration(Float overtimeDuration) {
         this.overtimeDuration = overtimeDuration;
     }
 
-    public Integer getRestDuration() {
+    public Float getRestDuration() {
         return restDuration;
     }
 
-    public void setRestDuration(Integer restDuration) {
+    public void setRestDuration(Float restDuration) {
         this.restDuration = restDuration;
+    }
+
+    public Float getLeaveDuration() {
+        return leaveDuration;
+    }
+
+    public void setLeaveDuration(Float leaveDuration) {
+        this.leaveDuration = leaveDuration;
     }
 
     public Integer getParentNumber() {

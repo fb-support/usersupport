@@ -25,7 +25,7 @@ import java.util.Properties;
  * Created by pengyuming on 2017/9/7.
  */
 @EnableTransactionManagement
-@MapperScan(basePackages = "com.facebank.usersupport.mapper.usersupport",sqlSessionTemplateRef = "sqlSessionTemplateUserSupport")
+@MapperScan(basePackages = {"com.facebank.usersupport.mapper.usersupport","com.facebank.usersupport.attendance.mapper"},sqlSessionTemplateRef = "sqlSessionTemplateUserSupport")
 @Component
 public class DataSourceUserSupportPrimary {
 
