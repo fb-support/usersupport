@@ -1,6 +1,8 @@
 package com.facebank.usersupport.controller;
 
 import com.facebank.usersupport.controller.base.BaseController;
+import com.facebank.usersupport.model.GeneralJournalModel;
+import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.IGeneralJournalService;
 import com.facebank.usersupport.util.StrUtil;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yaozun on 2018/3/9.
@@ -37,7 +40,14 @@ public class GeneralJournalController extends BaseController {
         type = StrUtil.parseStringToInt(type,-1);
         int pageNo = start / couts + 1;
         try{
-            return generalJournalService.selectByMobile(mobile,type,starttime,endtime,pageNo,couts, draw);
+            List<GeneralJournalModel>  generalJournalModels=generalJournalService.selectByMobile(mobile,type,starttime,endtime,pageNo,couts, draw);
+            PageRestModel pageRestMode = new PageRestModel(
+                    draw,
+                    new Long(generalJournalModels.size() + ""),
+                    new Long(generalJournalModels.size() + ""),
+                    generalJournalModels
+            );
+            return this.success(pageRestMode);
         }catch (Exception e){
             return this.excpRestModel();
         }

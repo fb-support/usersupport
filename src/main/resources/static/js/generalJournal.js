@@ -44,7 +44,7 @@ function search() {
             "searching": false,
             "bJQueryUI": true,
             "sPaginationType": "full_numbers",
-            "serverSide": true,
+            "serverSide":  false,
             "language": {
                 "sProcessing": "处理中...",
                 "sLengthMenu": "显示 _MENU_ 项结果",
@@ -93,7 +93,7 @@ function search() {
                         if (result.code == 204) {
                             alert(result.message)
                         }
-                        if (result.code == 200) {
+                        if (result.code == 1) {
                             callback(result.data);
                         }
                     }

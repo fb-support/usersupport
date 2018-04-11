@@ -47,15 +47,15 @@ public class CapitalServiceImpl implements ICapitalService {
     }
     @Override
     public RestModel selectByMobile(String mobile, String type, Date starttime, Date endtime, Integer page, Integer counts, String draw){
-        PageHelper.startPage(page, counts);
+//        PageHelper.startPage(page, counts);
         List<MoneyRecord> moneyRecords= moneyRecordMapper.selectByMobile(mobile,type,starttime,endtime);
 
-        PageInfo<MoneyRecord> pageInfo = new PageInfo<>(moneyRecords);
+//        PageInfo<MoneyRecord> pageInfo = new PageInfo<>(moneyRecords);
         PageRestModel pageRestModel = new PageRestModel(
                 draw,
-                pageInfo.getTotal(),
-                pageInfo.getTotal(),
-                pageInfo.getList()
+                new Long(moneyRecords.size() + ""),
+                new Long(moneyRecords.size() + ""),
+                moneyRecords
         );
         return new RestModel(pageRestModel);
     }
