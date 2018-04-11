@@ -22,5 +22,5 @@ public interface ICapitalService {
 
     public Integer getCounts(String mobile, String type, Date starttime, Date endtime);
 
-    RestModel selectByMobile(String mobile, String type, Date starttime, Date endtime, Integer page, Integer counts);
+    RestModel selectByMobile(String mobile, String type, Date starttime, Date endtime, Integer page, Integer counts, String draw);
 }

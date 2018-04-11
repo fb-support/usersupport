@@ -31,7 +31,7 @@ public class CapitalController extends BaseController {
     @RequestMapping("/money/getMoneyRecordPage")
     public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int page,
                                     @RequestParam(required = false, defaultValue = "5") int couts,
-                                    String mobile, String type, Long starttime, Long endtime)  {
+                                    String mobile, String type, Long starttime, Long endtime, String draw)  {
         System.out.println(mobile+"=="+type+"=="+starttime+"=="+endtime);
         if (mobile==""){return new RestModel("202","手机号不能为空");}
         if (starttime==null||endtime==null){return new RestModel("203","时间不能为空");}
@@ -57,7 +57,7 @@ public class CapitalController extends BaseController {
 //        if(time2.getTime()-time1.getTime()>432000000){return new RestModel("204","日期区间最大为5天，无法查询");}
 
         try{
-            RestModel restModel = iCapitalService.selectByMobile(mobile,type,time1,time2,page,couts);
+            RestModel restModel = iCapitalService.selectByMobile(mobile,type,time1,time2,page,couts,draw);
             return restModel;
         }catch (Exception e){
             e.printStackTrace();
