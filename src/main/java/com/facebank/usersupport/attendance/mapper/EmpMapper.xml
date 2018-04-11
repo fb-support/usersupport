@@ -47,4 +47,14 @@
         WHERE dept_number = #{deptNumber}
     </select>
 
+    <!--根据父级员工号获取员工信息-->
+    <select id="getEmpByParentNumber" parameterType="com.facebank.usersupport.attendance.model.EmpModel" resultMap="empResult">
+        select * FROM emp where work_number = #{parentNumber}
+    </select>
+
+    <!--更新员工信息-->
+    <update id="updateEmpInfo" parameterType="com.facebank.usersupport.attendance.model.EmpModel">
+        update emp SET leave_duration = #{leaveDuration},overtime_duration = #{overtimeDuration},rest_duration = #{restDuration} where work_number = #{workNumber}
+    </update>
+
 </mapper>

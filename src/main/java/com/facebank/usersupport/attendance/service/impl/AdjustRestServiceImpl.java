@@ -45,9 +45,10 @@ public class AdjustRestServiceImpl implements IAdjustRestService {
         Integer parentNumber2 = null;
         Integer parentNumber3 = null;
         dealRecordModel.setWorkNumber(parentNumber);
+        dealRecordModel.setStatus(0);
         dealRecordModel.setDealLevel(1);
         // 保存第一级审批记录
-        dealRecordMapper.saveDealRecord(dealRecordModel);
+        dealRecordMapper.insertApplyDealRecord(dealRecordModel);
         // 根据申请时长判断需要几级审批
         if(applyRecordModel.getApplyDuration() <= 8.0F){
             return;
@@ -55,14 +56,14 @@ public class AdjustRestServiceImpl implements IAdjustRestService {
             parentNumber2 = empMapper.getParentNumberByWorkNumber(parentNumber);
             dealRecordModel.setWorkNumber(parentNumber2);
             dealRecordModel.setDealLevel(2);
-            dealRecordMapper.saveDealRecord(dealRecordModel);
+            dealRecordMapper.insertApplyDealRecord(dealRecordModel);
             if(applyRecordModel.getApplyDuration() <= 24.0F){
                 return;
             }else{
                 parentNumber3 = empMapper.getParentNumberByWorkNumber(parentNumber2);
                 dealRecordModel.setWorkNumber(parentNumber3);
                 dealRecordModel.setDealLevel(3);
-                dealRecordMapper.saveDealRecord(dealRecordModel);
+                dealRecordMapper.insertApplyDealRecord(dealRecordModel);
             }
         }
     }

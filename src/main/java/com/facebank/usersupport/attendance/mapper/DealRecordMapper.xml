@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.facebank.usersupport.attendance.mapper.DealRecordMapper">
+  <resultMap id="BaseResultMap" type="com.facebank.usersupport.attendance.model.DealRecordModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="apply_id" jdbcType="BIGINT" property="applyId" />
+    <result column="work_number" jdbcType="INTEGER" property="workNumber" />
+    <result column="deal_level" jdbcType="INTEGER" property="dealLevel" />
+    <result column="deal_time" jdbcType="TIMESTAMP" property="dealTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="notpass_cause" jdbcType="VARCHAR" property="notpassCause" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, apply_id, work_number, deal_level, deal_time, status, notpass_cause
+  </sql>
 
-    <insert id="saveDealRecord" parameterType="com.facebank.usersupport.attendance.model.DealRecordModel">
-        INSERT INTO deal_record (apply_id,work_number,deal_level)
-        VALUES (#{applyId},#{workNumber},#{dealLevel})
-    </insert>
+  <!--添加申请处理记录-->
+  <insert id="insertApplyDealRecord" parameterType="com.facebank.usersupport.attendance.model.DealRecordModel">
+    INSERT INTO deal_record(apply_id, work_number, deal_level,status)
+    VALUES (#{applyId},#{workNumber},#{dealLevel},#{status})
+  </insert>
+
+  <!--修改申请处理记录-->
+  <update id="updateApplyDealRecord" parameterType="com.facebank.usersupport.attendance.model.DealRecordModel">
+    UPDATE deal_record set status = #{status},notpass_cause = #{notpassCause},deal_time = #{dealTime}
+    WHERE id = #{id}
+  </update>
+
+  <!--根据id获取申请处理记录-->
+  <select id="findDealRecordById" parameterType="com.facebank.usersupport.attendance.model.DealRecordModel" resultMap="BaseResultMap">
+    SELECT * FROM deal_record where id = #{id}
+  </select>
+  
+  <!--根据apply_id 获取-->
+  <select id="findDealRecordByApplyId" parameterType="java.lang.Long" resultMap="BaseResultMap" >
+    SELECT * FROM deal_record WHERE apply_id = #{applyId} AND status  &lt; 2 order by deal_level ASC
+  </select>
+
+  <delete id="deleteDealRecord" parameterType="java.lang.Long">
+    DELETE FROM deal_record where apply_id = #{applyId}
+  </delete>
 
 </mapper>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{../attendance/js/deal.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../attendance/css/apply.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}"/>
+
+    <script type="text/javascript" th:src="@{../attendance/js/My97DatePicker/WdatePicker.js}"></script>
+
+    <style type="text/css">
+        .Wdate{
+            background-image:url('../attendance/js/My97DatePicker/skin/datePicker.gif');
+        }
+    </style>
+</head>
+<body>
+
+    <div id="content">
+        <div class="container-fluid">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label class="labe_l">申请日期:</label>
+                    <!--<input type="text" class="form_datetime form-control" id="datetimeStart" name="startTime" readonly>-->
+                    <input class="Wdate form-control" type="text" id="datetimeStart" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd',readOnly:true})" readonly>
+                    --
+                    <!--<input type="text" class="form_datetime form-control" id="datetimeEnd" name="endTime" readonly>-->
+                    <!--<input class="Wdate" type="text" id="datetimeEnd" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:true})" readonly>-->
+                    <input class="Wdate form-control" type="text" id="datetimeEnd" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd',readOnly:true})" readonly>
+
+                </div>
+                <span class="btn btn-default" onclick="search(1)">请假审核</span>
+                <span class="btn btn-default" onclick="search(0)">加班审核</span>
+                <span class="btn btn-default" onclick="search(2)">调休审核</span>
+
+                <!--<div class="form-froup" style="float: right;margin-right: 50px">-->
+                    <!--<input class="btn btn-default" id="addRestApply" onclick="showAddModel()" type="button" value="添加">-->
+                <!--</div>-->
+            </form>
+
+            <table class="table table-bordered data-table" cellspacing="0" width="100%" id="datatable">
+                <thead>
+                <tr>
+                    <th>员工号</th>
+                    <th>姓名</th>
+                    <th>申请时间</th>
+                    <th>申请类型</th>
+                    <th>申请时长</th>
+                    <th>详情</th>
+                    <th>审核</th>
+                </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+
+    <!--修改信息-->
+    <div class="modal fade" id="showDetail" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">详情信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="detailForm">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="description" id="show_applyId"/>
+                            <label class="control-label">员工号:</label>
+                            <input type="text" class="form-control" name="description" readonly="readonly"  id="show_workNumber"/>
+                            <label class="control-label">员工姓名:</label>
+                            <input type="text" class="form-control" name="description" id="show_empName"/>
+                            <label class="control-label">申请类型:</label>
+                            <input type="text" class="form-control" name="description" id="show_applyType"/>
+                            <label class="control-label">请假开始时间:</label>
+                            <!--<input type="text" class="form_datetime form-control" name="description" id="show_startTime" readonly="readonly"/>-->
+                            <input class="Wdate form-control" type="text" id="show_startTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm',readOnly:true})" readonly>
+                            <label class="control-label">请假结束时间:</label>
+                            <!--<input type="text" class="form_datetime form-control" name="description" id="show_endTime" readonly="readonly"/>-->
+                            <input class="Wdate form-control" type="text" id="show_endTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm',readOnly:true})" readonly>
+                            <label class="control-label">申请日期:</label>
+                            <input type="text" class="form-control" name="description" id="show_applyDate"/>
+                            <label class="control-label">申请时长（单位：小时）:</label>
+                            <input type="text" class="form-control" name="description" id="show_duration"/>
+                            <label class="control-label">申请原因:</label>
+                            <textarea type="text" class="form-control" name="description" id="show_leaveCause"></textarea>
+                            <!--<label class="control-label">状态:</label>-->
+                            <!--<input type="text" class="form-control" name="description" id="show_dealType"/>-->
+                            <!--&lt;!&ndash;<label class="hide control-label">审批人:</label>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<input type="text" class="hide form-control" name="description" id="deal_person"/>&ndash;&gt;-->
+                            <!--<label class="control-label hide" id="notpassCause">不批准原因:</label>-->
+                            <!--<textarea type="text" class="form-control hide" name="description" id="show_notpassCause"></textarea>-->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" onclick="" id="yes" class="btn btn-primary">批准</button>-->
+                    <!--<button type="button" onclick="" id="no" class="btn btn-primary">不批准</button>-->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--不批准模态框-->
+    <div class="modal fade" id="rejectApply" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">不批准原因</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="addApplyForm">
+                        <div class="form-group">
+                            <input type="hidden" id="dealRecordId">
+                            <label class="control-label">不批准原因:</label>
+                            <textarea type="text" class="form-control" name="rejectApplyCause" id="rejectApplyCause"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="rejectApply();" class="btn btn-primary">确定</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

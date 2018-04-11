@@ -9,6 +9,15 @@ public class QueryVo {
     private Date dateStartTime;
     private Date dateEndTime;
     private Integer workNumber;
+    private Integer applyType;
+
+    public Integer getApplyType() {
+        return applyType;
+    }
+
+    public void setApplyType(Integer applyType) {
+        this.applyType = applyType;
+    }
 
     public Date getDateStartTime() {
         return dateStartTime;

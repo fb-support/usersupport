@@ -18,4 +18,18 @@ public interface EmpMapper {
 
     List<EmpModel> getEmpListByDeptNumber(Integer deptNumber);
 
+    /**
+     * 根据父级员工号
+     * @param empModel
+     * @return
+     */
+    EmpModel getEmpByParentNumber(EmpModel empModel);
+
+    /**
+     * 修改员工时长
+     * @param empModel
+     * @return
+     */
+    Integer updateEmpInfo(EmpModel empModel);
+
 }

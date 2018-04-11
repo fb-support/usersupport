@@ -3,6 +3,7 @@ package com.facebank.usersupport.attendance.service.impl;
 import com.facebank.usersupport.attendance.mapper.EmpMapper;
 import com.facebank.usersupport.attendance.model.EmpModel;
 import com.facebank.usersupport.attendance.service.IEmpService;
+import com.facebank.usersupport.model.RestModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,30 @@ public class EmpServiceImpl implements IEmpService {
     @Override
     public List<EmpModel> getEmpListByDeptNumber(Integer deptNumber) {
         return empMapper.getEmpListByDeptNumber(deptNumber);
+    }
+
+    /**
+     * 根据父级number获取信息
+     * @param empModel
+     * @return
+     */
+    @Override
+    public EmpModel getEmpByParentNumber(EmpModel empModel) {
+        return empMapper.getEmpByParentNumber(empModel);
+    }
+
+    /**
+     * 更新时长
+     * @param empModel
+     * @return
+     */
+    @Override
+    public RestModel updateEmpInfo(EmpModel empModel) {
+        int is_update = empMapper.updateEmpInfo(empModel);
+        if (is_update == 1) {
+            return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);
+        }
+        return new RestModel();
     }
 
 }
