@@ -13,6 +13,30 @@ $(function () {
 });
 
 function search() {
+    // 参数验证
+    var mobile = $("#mobile").val();
+
+    var flag = (mobile == null || mobile == "");
+    if(flag){
+        layer.msg("手机号不能都为空");
+        return;
+    }
+    if(mobile != null && mobile != ""){
+        var mobileReg=/^[1][0-9]{10}$/;
+        if(!mobileReg.test(mobile)){
+            layer.msg("手机号格式不正确");
+            return;
+        }
+    }
+    var dateStart = $("#datetimeStart").val();
+    var dateEnd = $("#datetimeEnd").val();
+    if(dateStart != null && dateStart != "" && dateEnd != null && dateEnd != ""){
+        if(new Date(dateEnd).getTime() < new Date(dateStart).getTime()){
+            layer.msg("结束时间不能大于开始时间");
+            return;
+        }
+    }
+
     if (tap != 0){
         table3.ajax.reload();
     }else {
@@ -49,7 +73,8 @@ function search() {
             ajax: function (data, callback, settings) {
                 //封装请求参数
                 var param = getQueryCondition(data);
-
+                // 开启遮罩效果
+                $("#content").showLoading();
                 $.ajax({
                     type: "GET",
                     url: '/log/generalPage',
@@ -57,6 +82,8 @@ function search() {
                     data: param,    //传入已封装的参数
                     dataType: "json",
                     success: function (result) {
+                        // 关闭遮罩效果
+                        $("#content").hideLoading();
                         if (result.code == 202) {
                             alert(result.message)
                         }

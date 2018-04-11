@@ -2,27 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:include="common/head_info::head_infor"></div>
-    <script type="text/javascript" th:src="@{../js/paging.js}"></script>
+    <script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
     <script type="text/javascript" th:src="@{../js/My97DatePicker/WdatePicker.js}"></script>
     <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
     <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/showLoading.css}">
 </head>
 <body>
-<div class="container center" style="width: 100%;">
+<div class="container center" style="width: 100%;" id="content">
     <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-            <input type="text" name="mobile" class="form-control" placeholder="手机号" id="mobile">
+            <label for="mobile">手机号</label>
+            <input type="text" class="form-control" id="mobile" name="mobile" placeholder="手机号">
+        </div>
+        <div class="form-group">
             <select class="form-control " id="type" name="type">
                 <option value="">所有类型</option>
                 <option value="1">汇入</option>
                 <option value="2">汇出</option>
             </select>
-            <input id="datetimeStart" class="Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
+            <input id="datetimeStart" class="Wdate form-control" type="text"
+                   onclick="WdatePicker({el:this,dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d',readOnly:true})" readonly/>
             --
-            <input id="datetimeEnd" class="Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
+            <input id="datetimeEnd" class="Wdate form-control" type="text"
+                   onclick="WdatePicker({el:this,dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d',readOnly:true})" readonly/>
         </div>
         <button type="button" class="btn btn-default" onclick="javascript:search();">查找</button>
     </form>
@@ -53,7 +63,6 @@
             </tbody>-->
         </table>
     </div>
-    <div id="pageing"></div>
 </div>
 <script>
 
@@ -78,7 +87,29 @@
     });
 
     function search() {
+        // 参数验证
+        var mobile = $("#mobile").val();
 
+        var flag = (mobile == null || mobile == "");
+        if(flag){
+            layer.msg("手机号不能都为空");
+            return;
+        }
+        if(mobile != null && mobile != ""){
+            var mobileReg=/^[1][0-9]{10}$/;
+            if(!mobileReg.test(mobile)){
+                layer.msg("手机号格式不正确");
+                return;
+            }
+        }
+        var dateStart = $("#datetimeStart").val();
+        var dateEnd = $("#datetimeEnd").val();
+        if(dateStart != null && dateStart != "" && dateEnd != null && dateEnd != ""){
+            if(new Date(dateEnd).getTime() < new Date(dateStart).getTime()){
+                layer.msg("结束时间不能大于开始时间");
+                return;
+            }
+        }
         if (tap != 0){
             table3.ajax.reload();
         }else{
@@ -115,7 +146,8 @@
                 ajax: function (data, callback, settings) {
                     //封装请求参数
                     var param = getQueryCondition(data);
-
+                    // 开启遮罩效果
+                    $("#content").showLoading();
                     $.ajax({
                         type: "GET",
                         url: '/money/getMoneyRecordPage',
@@ -123,6 +155,8 @@
                         data: param,    //传入已封装的参数
                         dataType: "json",
                         success: function (result) {
+                            // 关闭遮罩效果
+                            $("#content").hideLoading();
                             if (result.code==202){alert(result.message)}
                             if (result.code==203){alert(result.message)}
                             if (result.code==204){alert(result.message)}

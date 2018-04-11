@@ -3,6 +3,7 @@ package com.facebank.usersupport.controller;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.ICapitalService;
+import com.facebank.usersupport.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +30,7 @@ public class CapitalController extends BaseController {
      */
 
     @RequestMapping("/money/getMoneyRecordPage")
-    public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int page,
+    public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int start,
                                     @RequestParam(required = false, defaultValue = "5") int couts,
                                     String mobile, String type, Long starttime, Long endtime, String draw)  {
         System.out.println(mobile+"=="+type+"=="+starttime+"=="+endtime);
@@ -37,10 +38,10 @@ public class CapitalController extends BaseController {
         if (starttime==null||endtime==null){return new RestModel("203","时间不能为空");}
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time1 = null;
-        String start = sdf.format(starttime);
-        if (start!=""&&start!=null){
+        String startT = sdf.format(starttime);
+        if (startT!=""&&startT!=null){
             try {
-                time1 = sdf.parse(start);
+                time1 = sdf.parse(startT);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -54,10 +55,11 @@ public class CapitalController extends BaseController {
                 e.printStackTrace();
             }
         }
+        int pageNo = start / couts + 1;
 //        if(time2.getTime()-time1.getTime()>432000000){return new RestModel("204","日期区间最大为5天，无法查询");}
 
         try{
-            RestModel restModel = iCapitalService.selectByMobile(mobile,type,time1,time2,page,couts,draw);
+            RestModel restModel = iCapitalService.selectByMobile(mobile,type,time1,time2,pageNo,couts,draw);
             return restModel;
         }catch (Exception e){
             e.printStackTrace();
