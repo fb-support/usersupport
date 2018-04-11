@@ -5,13 +5,16 @@
     <script type="text/javascript" th:src="@{../js/paging.js}"></script>
     <script type="text/javascript" th:src="@{../js/My97DatePicker/WdatePicker.js}"></script>
     <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
 </head>
 <body>
 <div class="container center" style="width: 100%;">
     <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-            <input type="text" name="mobile" class="form-control" placeholder="手机号">
+            <input type="text" name="mobile" class="form-control" placeholder="手机号" id="mobile">
             <select class="form-control " id="type" name="type">
                 <option value="">所有类型</option>
                 <option value="1">汇入</option>
@@ -21,11 +24,11 @@
             --
             <input id="datetimeEnd" class="Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
         </div>
-        <button type="button" class="btn btn-default" id="moneyRecordSearch">查找</button>
+        <button type="button" class="btn btn-default" onclick="javascript:search();">查找</button>
     </form>
     <div class="panel panel-default" style="width:100%;height:auto;overflow:auto;">
         <!-- Table -->
-        <table class="table table-bordered table-striped" style="min-width:1020px;word-break: keep-all;">
+        <table class="table table-bordered table-striped" style="min-width:1020px;word-break: keep-all;" id="datatables">
             <thead>
             <tr>
                 <th width="80px">id</th>
@@ -45,156 +48,263 @@
                 <th width="80px">外部序列号</th>
             </tr>
             </thead>
-            <tbody class="table table-bordered table-striped" style="word-break: keep-all" id="moneyRecordList"></tbody>
+            <!--<tbody class="table table-bordered table-striped" style="word-break: keep-all" id="moneyRecordList">
+
+            </tbody>-->
         </table>
     </div>
     <div id="pageing"></div>
 </div>
 <script>
-    $(function(){
 
+
+    //分页显示DataTable
+    var table3;
+
+    var tap = 0;
+
+    $(function () {
         var today = new Date();
         today.setHours(0);
         today.setMinutes(0);
         today.setSeconds(0);
         today.setMilliseconds(0);
 
-        $("#datetimeStart").val(Format(today,"yyyy-MM-dd HH:mm:ss"));
-        $("#datetimeEnd").val(Format(new Date(),"yyyy-MM-dd HH:mm:ss"));
-    });
-    var counts = 6;
-    //查询
-    $('#moneyRecordSearch').click(function () {
-        getPageAttribute(1,counts);
+        $("#datetimeStart").val(Format(today, "yyyy-MM-dd HH:mm:ss"));
+        $("#datetimeEnd").val(Format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+
+
+
     });
 
-    function getPageAttribute(page, couts) {
-        $.ajax({
-            url: "/money/getMoneyRecordPage",
-            type: "POST",
-            dataType: "json",
-            data: {
-                mobile: $('[name="mobile"]').val(),
-                type: $('[name="type"]').val(),
-                starttime: new Date($('#datetimeStart').val()).getTime(),
-                endtime: new Date($('#datetimeEnd').val()).getTime(),
-                page: page,
-                couts: couts
-            },
-            success: function (json) {
-                if (json.code == 202) {
-                    alert(json.message)
-                }
-                if (json.code == 203) {
-                    alert(json.message)
-                }
-                if (json.code == 204) {
-                    alert(json.message)
-                }
-                if (json.code == 200) {
-                    if (json.data.list == null || json.data.list == "") {
-                        alert("无数据。")
+    function search() {
+
+        if (tap != 0){
+            table3.ajax.reload();
+        }else{
+            table3 = $('#datatables').DataTable({
+                "searching": false,
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "serverSide": true,
+                "language": {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
                     }
-                    createPageNav({
-                        $container: $("#pageing"),
-                        pageCount: json.data.pages,
-                        currentNum: json.data.pageNum,
-                        afterFun: function (num) {
-                            getPageAttribute(num, couts);
-                        },
-                        hasCommonPage: false
+                },
+
+                ajax: function (data, callback, settings) {
+                    //封装请求参数
+                    var param = getQueryCondition(data);
+
+                    $.ajax({
+                        type: "GET",
+                        url: '/money/getMoneyRecordPage',
+                        cache: false,  //禁用缓存
+                        data: param,    //传入已封装的参数
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.code==202){alert(result.message)}
+                            if (result.code==203){alert(result.message)}
+                            if (result.code==204){alert(result.message)}
+                            if (result.code == 200) {callback(result.data);}
+                        }
                     });
-                    var str = "";
-                    for (var i = 0; i < json.data.list.length; i++) {
-                        var id = json.data.list[i].id;
-                        var touserid = json.data.list[i].touserid;
-                        var tousernickname = json.data.list[i].tousernickname;
-                        var fromuserid = json.data.list[i].fromuserid;
-                        var fromusernickname = json.data.list[i].fromusernickname;
-                        var amount = json.data.list[i].amount;
-                        var accountbalance = json.data.list[i].accountbalance;
-                        var tradetype = json.data.list[i].tradetype;
-                        if(tradetype>=1000){tradetype = "汇出";}
-                        if(tradetype<1000){tradetype = "汇入";}
-                        var tradetime = json.data.list[i].tradetime;
-                        var tradechannel = json.data.list[i].tradechannel;
-                        var tradecomment = json.data.list[i].tradecomment;
-                        var loanid = json.data.list[i].loanid;
-                        var loantitle = json.data.list[i].loantitle;
-                        var loanportraitpath = json.data.list[i].loanportraitpath;
-                        var outserialno = json.data.list[i].outserialno;
-                        //为空转换
-                        if (id == null) {
-                            id = "";
-                        }
-                        if (touserid == null) {
-                            touserid = "";
-                        }
-                        if (tousernickname == null) {
-                            tousernickname = "";
-                        }
-                        if (fromuserid == null) {
-                            fromuserid = "";
-                        }
-                        if (fromusernickname == null) {
-                            fromusernickname = "";
-                        }
-                        if (amount == null) {
-                            amount = "";
-                        }
-                        if (accountbalance == null) {
-                            accountbalance = "";
-                        }
-                        if (tradetype == null) {
-                            tradetype = "";
-                        }
-                        if (tradetime == null) {
-                            tradetime = "";
-                        }
-                        if (tradechannel == null) {
-                            tradechannel = "";
-                        }
-                        if (tradecomment == null) {
-                            tradecomment = "";
-                        }
-                        if (loanid == null) {
-                            loanid = "";
-                        }
-                        if (loantitle == null) {
-                            loantitle = "";
-                        }
-                        if (loanportraitpath == null) {
-                            loanportraitpath = "";
-                        }
-                        if (outserialno == null) {
-                            outserialno = "";
-                        }
-                        str += '<tr>'
-                            + '<th>' + id + '</th>'
-                            + '<th>' + touserid + '</th>'
-                            + '<th>' + tousernickname + '</th>'
-                            + '<th>' + fromuserid + '</th>'
-                            + '<th>' + fromusernickname + '</th>'
-                            + '<th>' + amount + '</th>'
-                            + '<th>' + accountbalance + '</th>'
-                            + '<th>' + tradetype + '</th>'
-                            + '<th>' + formatDate(tradetime) + '</th>'
-                            + '<th>' + tradechannel + '</th>'
-                            + '<th>' + tradecomment + '</th>'
-                            + '<th>' + loanid + '</th>'
-                            + '<th>' + loantitle + '</th>'
-                            + '<th>' + loanportraitpath + '</th>'
-                            + '<th>' + outserialno + '</th>'
-                            + '</tr>';
-                    }
-                    $('#moneyRecordList').html(str);
-                }
-            }
-        })
-    };
+                },
+                "columns": [
+                    {
+                        "sClass": "text-center",
+                        "data": "id",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "touserid",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tousernickname",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "fromuserid",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "fromusernickname",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "amount",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "accountbalance",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tradetype",    //资金往来类型
+                        "render": function (data, type, full, meta) {
+                            var inoutString;
+                            if (data > 1000) {
+                                inoutString = "汇出";
+                            } else if(data <= 1000){
+                                inoutString = "汇入";
+                            }
+                            return inoutString;
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tradetime",   //交易时间
+                        "render": function (data, type, full, meta) {
+                            return formatDate(validate(data));
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tradechannel",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tradecomment",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "loanid",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },{
+                        "sClass": "text-center",
+                        "data": "loantitle",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "loanportraitpath",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "outserialno",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                ],
+                columnDefs: [
+                    {"orderable": false, "targets": 1},
+                    {"orderable": false, "targets": 2},
+                    {"orderable": false, "targets": 3},
+                    {"orderable": false, "targets": 4},
+                    {"orderable": false, "targets": 5},
+                    {"orderable": false, "targets": 6},
+                    {"orderable": false, "targets": 7},
+                    {"orderable": false, "targets": 8},
+                    {"orderable": false, "targets": 9},
+                    {"orderable": false, "targets": 10},
+                    {"orderable": false, "targets": 11},
+                    {"orderable": false, "targets": 12},
+                    {"orderable": false, "targets": 13},
+                    {"orderable": false, "targets": 14},
+                ],
+            });
+
+            tap++;
+        }
 
 
-    //日期转换
+
+    }
+
+    //封装查询参数
+    function getQueryCondition(data) {
+        var param = {};
+        param.mobile = $("#mobile").val();//查询条件
+        param.type = $("#type").val();//查询条件
+        param.starttime = new Date($("#datetimeStart").val()).getTime();//查询条件
+        param.endtime = new Date($("#datetimeEnd").val()).getTime();//查询条件
+        //组装分页参数
+        param.start = data.start;
+        param.length = data.length;
+        param.draw = data.draw;
+        return param;
+    }
+
+    //null处理
+    var validate = function (data) {
+        if (data == null) {
+            return "";
+        }
+        return data;
+    }
+
+    //日期处理
     function formatDate(now) {
         if (now == "") {
             return "";
