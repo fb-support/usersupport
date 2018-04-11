@@ -381,6 +381,10 @@ function getQueryCondition(data) {
     param.orderId = $("#orderId").val();
     param.bizStatus = $("#bizStatus").val();
 
+    // 获取当前iframe的id
+    var iframeId = window.frameElement && window.frameElement.id || '';
+    param.iframeId = iframeId;
+
     //组装分页参数
     param.start = data.start;
     param.length = data.length;
@@ -393,5 +397,8 @@ function getQueryCondition(data) {
  */
 function exportRepaymentOrder() {
     $("#repaymentForm").attr("action","/repaymentOrder/export");
+    // 获取当前iframe的id
+    var iframeId = window.frameElement && window.frameElement.id || '';
+    $("#iframeId").val(iframeId)
     $("#repaymentForm").submit();
 }

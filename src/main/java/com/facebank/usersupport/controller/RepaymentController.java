@@ -49,7 +49,7 @@ public class RepaymentController extends BaseController {
      */
     @PostMapping("/service/repayment")
     @ResponseBody
-    public RestModel repaymentSearch(RepaymentForm repaymentForm, String draw, HttpServletRequest request) {
+    public RestModel repaymentSearch(RepaymentForm repaymentForm, String draw, HttpServletRequest request,String iframeId) {
         try {
             // 手机号和orderId都为空
             boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getMobile());
@@ -66,7 +66,7 @@ public class RepaymentController extends BaseController {
             // 查询还款信息
             List<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm);
             // 将结果保存到session中，方便用户导出
-            request.getSession().setAttribute("repaymentList", repaymentModels);
+            request.getSession().setAttribute(iframeId + ":repaymentList", repaymentModels);
 
             // 统计用户资产信息
             List<UserCapitalInfoModel> userCapitalInfoModels = new ArrayList<>();
@@ -167,7 +167,7 @@ public class RepaymentController extends BaseController {
      */
     @PostMapping("/service/repaymentOrder")
     @ResponseBody
-    public RestModel repaymentOrderSearch(RepaymentForm repaymentForm, String draw, HttpServletRequest request) {
+    public RestModel repaymentOrderSearch(RepaymentForm repaymentForm, String draw, HttpServletRequest request,String iframeId) {
         try {
             // 手机号和orderId都为空
             boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getMobile());
@@ -184,7 +184,7 @@ public class RepaymentController extends BaseController {
             // 查询还款信息
             List<RepaymentModel> repaymentModels = repaymentService.getRepaymentOrderByRepaymentForm(repaymentForm);
             // 将结果保存到session中，方便用户导出
-            request.getSession().setAttribute("repaymentOrderList", repaymentModels);
+            request.getSession().setAttribute(iframeId + ":repaymentOrderList", repaymentModels);
 
             // 统计用户资产信息
             List<UserCapitalInfoModel> userCapitalInfoModels = new ArrayList<>();
@@ -277,9 +277,9 @@ public class RepaymentController extends BaseController {
     }
 
     @PostMapping("/repayment/export")
-    public void exportRepayment(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void exportRepayment(HttpServletRequest request, HttpServletResponse response,String iframeId) throws Exception {
         // 从session中获取数据
-        List<RepaymentModel> repaymentModels = (List<RepaymentModel>) request.getSession().getAttribute("repaymentList");
+        List<RepaymentModel> repaymentModels = (List<RepaymentModel>) request.getSession().getAttribute(iframeId + ":repaymentList");
         if (repaymentModels != null && repaymentModels.size() > 0) {
             // 生成Excel文件
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -448,9 +448,9 @@ public class RepaymentController extends BaseController {
     }
 
     @PostMapping("/repaymentOrder/export")
-    public void exportRepaymentOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void exportRepaymentOrder(HttpServletRequest request, HttpServletResponse response,String iframeId) throws Exception {
         // 从session中获取数据
-        List<RepaymentModel> repaymentModels = (List<RepaymentModel>) request.getSession().getAttribute("repaymentOrderList");
+        List<RepaymentModel> repaymentModels = (List<RepaymentModel>) request.getSession().getAttribute(iframeId + ":repaymentOrderList");
         if (repaymentModels != null && repaymentModels.size() > 0) {
             // 生成Excel文件
             XSSFWorkbook workbook = new XSSFWorkbook();
