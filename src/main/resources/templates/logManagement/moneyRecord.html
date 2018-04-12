@@ -7,6 +7,7 @@
     <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
     <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
     <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{../js/moneyRecord.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/showLoading.css}">
@@ -61,11 +62,8 @@
     </div>
 </div>
 <script>
-
-
     //分页显示DataTable
     var table3;
-
     var tap = 0;
 
     $(function () {
@@ -77,8 +75,6 @@
 
         $("#datetimeStart").val(Format(today, "yyyy-MM-dd HH:mm:ss"));
         $("#datetimeEnd").val(Format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-
-
 
     });
 
@@ -343,6 +339,8 @@
         }
         return new Date(now).toLocaleString();
     }
+
+
 </script>
 </body>
 </html>

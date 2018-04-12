@@ -28,26 +28,16 @@ public class GeneralJournalServiceImpl extends BaseService implements IGeneralJo
     @Autowired
     GeneralJournalMapper generalJournalMapper;
 
-    @Override
-    public List<GeneralJournalDto> getGeneralJournal(String modile, String type, Long startTime, Long endTime) {
-        List lists = generalJournalMapper.getGeneralJournal(modile, type, startTime, endTime);
-        return lists;
-    }
-
 
     @Override
-    public List<GeneralJournalModel> selectByMobile(String mobile, Integer type, Long startTime, Long endTime, Integer page, Integer counts, String draw) {
-//        PageHelper.startPage(page, counts);
+    public RestModel selectByMobile(String mobile, Integer type, Long startTime, Long endTime, String draw) {
         List<GeneralJournalModel> generalJournalModels= generalJournalMapper.selectByMobile(mobile,type,startTime,endTime);
-//        PageInfo<GeneralJournalModel> pageInfo = new PageInfo<>(generalJournalModels);
-//        PageRestModel pageRestModel = new PageRestModel(
-//                draw,
-//                pageInfo.getTotal(),
-//                pageInfo.getTotal(),
-//                pageInfo.getList()
-//        );
-
-
-        return generalJournalModels;
+        PageRestModel pageRestModel = new PageRestModel(
+                draw,
+                new Long(generalJournalModels.size() + ""),
+                new Long(generalJournalModels.size() + ""),
+                generalJournalModels
+        );
+        return new RestModel(pageRestModel);
     }
 }

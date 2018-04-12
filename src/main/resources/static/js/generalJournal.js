@@ -95,7 +95,7 @@ function search() {
                         if (result.code == 204) {
                             alert(result.message)
                         }
-                        if (result.code == 1) {
+                        if (result.code == 200) {
                             callback(result.data);
                         }
                     }

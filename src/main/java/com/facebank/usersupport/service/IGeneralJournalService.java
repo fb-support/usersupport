@@ -16,16 +16,10 @@ import java.util.List;
 public interface IGeneralJournalService {
 
     /**
-     * 根据电话号码，业务类型，开始以及结束时间查询
-     * @param
-     * @return
-     */
-    List<GeneralJournalDto> getGeneralJournal(String modile, String type, Long startTime, Long endTime);
-    /**
      * 根据电话号码，业务类型，分页查询
      * @param
      * @return
      */
 
-    List<GeneralJournalModel> selectByMobile(String mobile, Integer type, Long startTime, Long endTime, Integer page, Integer counts, String draw);
+    RestModel selectByMobile(String mobile, Integer type, Long startTime, Long endTime, String draw);
 }

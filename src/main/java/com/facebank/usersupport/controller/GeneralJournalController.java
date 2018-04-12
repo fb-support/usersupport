@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 public class GeneralJournalController extends BaseController {
     @Autowired
-    IGeneralJournalService generalJournalService;
+    private IGeneralJournalService generalJournalService;
 
     /**
      * 功能描述: 获取资金流水查询分页
@@ -32,22 +32,13 @@ public class GeneralJournalController extends BaseController {
      * @date:
      */
     @RequestMapping("/log/generalPage")
-    public RestModel getMoneyRecord(@RequestParam(required = false, defaultValue = "1") int start,
-                                    @RequestParam(required = false, defaultValue = "10") int couts,
-                                    String mobile, Integer type, Long starttime, Long endtime,String draw)  {
+    public RestModel getMoneyRecord(String mobile, Integer type, Long starttime, Long endtime,String draw)  {
         if (starttime==null||endtime==null){return new RestModel("203","时间不能为空");}
         if (mobile==""){return new RestModel("202","手机号不能为空");}
+        //type为空转-1
         type = StrUtil.parseStringToInt(type,-1);
-        int pageNo = start / couts + 1;
         try{
-            List<GeneralJournalModel>  generalJournalModels=generalJournalService.selectByMobile(mobile,type,starttime,endtime,pageNo,couts, draw);
-            PageRestModel pageRestMode = new PageRestModel(
-                    draw,
-                    new Long(generalJournalModels.size() + ""),
-                    new Long(generalJournalModels.size() + ""),
-                    generalJournalModels
-            );
-            return this.success(pageRestMode);
+            return generalJournalService.selectByMobile(mobile,type,starttime,endtime,draw);
         }catch (Exception e){
             return this.excpRestModel();
         }
