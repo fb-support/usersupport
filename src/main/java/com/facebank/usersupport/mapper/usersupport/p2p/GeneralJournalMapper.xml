@@ -27,7 +27,7 @@
   <select id="selectByMobile" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    FROM general_journal
+    FROM p2p.general_journal
     <where>
       <if test="mobile != null and mobile != ''">
         nickName = #{mobile}
