@@ -4,14 +4,22 @@
     <div th:include="common/head_info::head_infor"></div>
     <script type="text/javascript" th:src="@{../js/layer.js}"></script>
     <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
-    <script type="text/javascript" th:src="@{../attendance/js/rest.js}"></script>
-    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
-    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <!--<script type="text/javascript" th:src="@{../attendance/js/rest.js}"></script>-->
     <script type="text/javascript" th:src="@{../js/layer.js}"></script>
     <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
+    <script type="text/javascript" th:src="@{../attendance/js/My97DatePicker/WdatePicker.js}"></script>
+    <script type="text/javascript" th:src="@{../attendance/js/applyRecord.js}"></script>
+
+    <style type="text/css">
+        .Wdate{
+            background-image:url('../attendance/js/My97DatePicker/skin/datePicker.gif');
+        }
+        .hide{
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -21,12 +29,16 @@
         <form class="form-inline">
             <div class="form-group">
                 <label class="labe_l">申请日期:</label>
-                <input type="text" class="form_datetime form-control" id="datetimeStart" name="startTime" readonly>
+                <!--<input type="text" class="form_datetime form-control" id="datetimeStart" name="startTime" readonly>-->
+                <!--&#45;&#45;-->
+                <!--<input type="text" class="form_datetime form-control" id="datetimeEnd" name="endTime" readonly>-->
+
+                <input class="Wdate form-control" type="text" id="datetimeStart" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" readonly>
                 --
-                <input type="text" class="form_datetime form-control" id="datetimeEnd" name="endTime" readonly>
+                <input class="Wdate form-control" type="text" id="datetimeEnd" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" readonly>
 
             </div>
-            <span class="btn btn-default" onclick="search()">查询</span>
+            <span class="btn btn-default" onclick="search(2)">查询</span>
 
             <div class="form-froup" style="float: right;margin-right: 50px">
                 <input class="btn btn-default" id="addRestApply" onclick="showAddModel()" type="button" value="添加">
@@ -42,6 +54,7 @@
                     <th>开始时间</th>
                     <th>结束时间</th>
                     <th>申请时间</th>
+                    <th>时长</th>
                     <th>状态</th>
                     <th>操作</th>
                 </tr>
@@ -68,10 +81,14 @@
                         <input type="text" class="form-control" name="workNumber" id="show_workNumber" disabled="disabled"/>
                         <label class="control-label">员工姓名:</label>
                         <input type="text" class="form-control" name="empName" id="show_empName" disabled="disabled"/>
+                        <!--<label class="control-label">调休开始时间:</label>-->
+                        <!--<input type="text" class="form_datetime form-control" name="startTime" id="show_startTime" readonly="readonly"/>-->
+                        <!--<label class="control-label">调休结束时间:</label>-->
+                        <!--<input type="text" class="form_datetime form-control" name="endTime" id="show_endTime" readonly="readonly"/>-->
                         <label class="control-label">调休开始时间:</label>
-                        <input type="text" class="form_datetime form-control" name="startTime" id="show_startTime" readonly="readonly"/>
+                        <input class="Wdate form-control" type="text" id="show_startTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm'})" readonly>
                         <label class="control-label">调休结束时间:</label>
-                        <input type="text" class="form_datetime form-control" name="endTime" id="show_endTime" readonly="readonly"/>
+                        <input class="Wdate form-control" type="text" id="show_endTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm'})" readonly>
                         <label class="control-label">申请日期:</label>
                         <input type="text" class="form-control" id="show_applyDate" disabled="disabled"/>
                         <label class="control-label">共计时长:</label>
@@ -79,14 +96,14 @@
                         <label class="control-label">申请原因:</label>
                         <textarea type="text" class="form-control" name="applyCause" id="show_applyCause"></textarea>
                         <label class="control-label">状态:</label>
-                        <input type="text" class="form-control" name="status" id="show_status" disabled="disabled"/>
+                        <input type="text" class="form-control" name="status" id="show_dealType" disabled="disabled"/>
                         <label class="control-label hide" id="notpassCause">未通过原因:</label>
                         <textarea type="text" class="form-control hide" name="notpassCause" id="show_notpassCause" disabled="disabled"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button id="updateApply" type="button" onclick="updateRestApply();" class="btn btn-primary">修改</button>
+                <button id="updateApplyDetail" type="button" onclick="updateApplyDetail();" class="btn btn-primary">修改</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
@@ -95,7 +112,7 @@
 
 
 <!--添加申请信息-->
-<div class="modal fade" id="addRestModel" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+<div class="modal fade" id="addApply" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -106,20 +123,24 @@
             <div class="modal-body">
                 <form id="addRestForm">
                     <div class="form-group">
+                        <!--<label class="control-label">调休开始时间:</label>-->
+                        <!--<input type="text" class="form_datetime form-control" id="addRestStartTime" name="startTime" readonly="readonly"/>-->
+                        <!--<label class="control-label">调休结束时间:</label>-->
+                        <!--<input type="text" class="form_datetime form-control" id="addRestEndTime" name="endTime" readonly="readonly"/>-->
                         <label class="control-label">调休开始时间:</label>
-                        <input type="text" class="form_datetime form-control" id="addRestStartTime" name="startTime" readonly="readonly"/>
-                        <label class="control-label">调休结束时间:</label>
-                        <input type="text" class="form_datetime form-control" id="addRestEndTime" name="endTime" readonly="readonly"/>
+                        <input class="Wdate form-control" type="text" id="add_startTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm'})" readonly>
+                        <label class="control-label">调休开始时间:</label>
+                        <input class="Wdate form-control" type="text" id="add_endTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm'})" readonly>
                         <label class="control-label">共计时长:</label>
-                        <input type="text" class="form_datetime form-control" id="applyDuration" name="applyDuration"/>
+                        <input type="text" class="form_datetime form-control" id="add_applyDuration" name="applyDuration"/>
                         <label class="control-label">申请原因:</label>
-                        <textarea type="text" class="form-control" name="applyCause" id="applyCause"></textarea>
+                        <textarea type="text" class="form-control" name="applyCause" id="add_applyCause"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" onclick="addApply();" class="btn btn-primary">保存</button>
-                <button type="button" onclick="resetAddForm()" class="btn btn-default">清空</button>
+                <button type="button" onclick="addApply(2);" class="btn btn-primary">保存</button>
+                <!--<button type="button" onclick="resetAddForm()" class="btn btn-default">清空</button>-->
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>

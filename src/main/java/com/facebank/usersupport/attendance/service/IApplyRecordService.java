@@ -7,16 +7,15 @@ import com.github.pagehelper.PageInfo;
 
 /**
  * @author zhanguo.huang
- * @date 2018-03-27
+ * @date 2018-04-12
  */
-public interface ILeaveService {
-
+public interface IApplyRecordService {
     /**
-     * 添加请假申请
+     * 添加申请
      * @param applyRecordModel
      * @return
      */
-    RestModel addLeaveApply(ApplyRecordModel applyRecordModel);
+    RestModel addApplyRecord(ApplyRecordModel applyRecordModel);
 
     /**
      * 分页，以及申请时间查询
@@ -28,23 +27,23 @@ public interface ILeaveService {
     PageInfo selectByPage(int pageSize, int pageNumber, QueryVo queryVo);
 
     /**
-     * 更新请假记录
-     * @param applyRecordModel
-     * @return
-     */
-    RestModel updateLeaveApply(ApplyRecordModel applyRecordModel);
-
-    /**
-     * 更新状态
-     * @param applyRecordModel
-     * @return
-     */
-    RestModel updateApplyRecordStatus(ApplyRecordModel applyRecordModel);
-
-    /**
      * 根据id获取apply
      * @param id
      * @return
      */
     ApplyRecordModel getApplyRecordById(Long id);
+
+    /**
+     * 更新申请记录
+     * @param applyRecordModel
+     * @return
+     */
+    RestModel updateApplyRecord(ApplyRecordModel applyRecordModel);
+
+    /**
+     * 更新申请记录
+     * @param applyRecordModel
+     * @return
+     */
+    RestModel updateApplyRecordStatus(ApplyRecordModel applyRecordModel);
 }

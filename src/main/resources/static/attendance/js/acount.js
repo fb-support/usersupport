@@ -1,3 +1,20 @@
+$(document).ready(function () {
+    // 初始化部门
+    $.ajax({
+        async: false,
+        url: "/dept/getAllDept",
+        type: "get",
+        dataType: "json",
+        success: function (result) {
+            var depts = result.data;
+            var str = "";
+            for(var i = 0; i < depts.length; i++){
+                str += "<option value='"+depts[i].deptNumber+"'>"+depts[i].deptName+"</option>"
+            }
+            $("#companySelect").append(str);
+        }
+    });
+})
 var searchType = null;
 var flag = true;
 function search(type) {
