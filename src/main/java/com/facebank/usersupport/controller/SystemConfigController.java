@@ -7,15 +7,13 @@ import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.UserModel;
 import com.facebank.usersupport.service.IUserService;
-import org.apache.catalina.User;
+import com.facebank.usersupport.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import javax.servlet.http.HttpSession;
 
 /**
  * 系统设置Controller
@@ -34,9 +32,10 @@ public class SystemConfigController extends BaseController {
      * @return
      */
     @GetMapping("/sc/getByUserId")
-    public RestModel getByUserId() {
-
+    public RestModel getByUserId(HttpSession session) {
+        
         Long userId = userService.getActiveUserId();
+        SessionUtil.setUser(session,userService.getByUserId(userId));
 
         try{
             UserModel model = userService.getByUserId(userId);

@@ -125,10 +125,15 @@
 	display: none;
 }
 
-#service-repaymentOrder-page {
+#service-b-page {
 	display: none;
 }
-
+#customer_record {
+	display: none;
+}
+#customer_service {
+	display: none;
+}
 #permission-page {
 	display: none;
 	width: 1260px;
@@ -162,24 +167,4 @@
 
 .mainPage_init_option:hover {
 	transform: rotate(720deg);
-}
-
-#attendance-overtime-page{
-	display: none;
-}
-
-#attendance-rest-page{
-	display: none;
-}
-
-#attendance-leave-page{
-	display: none;
-}
-
-#attendance-attendance-page{
-	display: none;
-}
-
-#attendance-acount-page{
-	display: none;
 }

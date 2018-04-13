@@ -1,0 +1,174 @@
+package com.facebank.usersupport.dto;
+
+/**
+ * @Auther: quanli
+ * @Date: 2018/3/27 11:58
+ * @Description:
+ */
+public class ServiceJournalDto {
+
+    private Long id;
+
+    private Long serviceNo;
+
+    private String phoneNumber;
+
+    private String name;
+
+    private Integer typeId;
+
+    private Integer workerNumber;
+
+    private Byte isSatisfied;
+
+    private Integer userComment;
+
+    private String commentContent;
+
+    private Integer status;
+
+    private String note;
+
+    private Long gmtCreate;
+
+    private Long gmtModified;
+
+    private Long beginTime;
+
+    private Long endTime;
+
+    private String phoneType;
+
+    public String getPhoneType() {
+        return phoneType;
+    }
+
+    public ServiceJournalDto setPhoneType(String phoneType) {
+        this.phoneType = phoneType;
+        return this;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public ServiceJournalDto setEndTime(Long endTime) {
+        this.endTime = endTime;
+        return this;
+    }
+
+    public Long getBeginTime() {
+        return beginTime;
+    }
+
+    public ServiceJournalDto setBeginTime(Long beginTime) {
+        this.beginTime = beginTime;
+        return this;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getServiceNo() {
+        return serviceNo;
+    }
+
+    public void setServiceNo(Long serviceNo) {
+        this.serviceNo = serviceNo;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
+    }
+
+    public Integer getWorkerNumber() {
+        return workerNumber;
+    }
+
+    public void setWorkerNumber(Integer workerNumber) {
+        this.workerNumber = workerNumber;
+    }
+
+    public Byte getIsSatisfied() {
+        return isSatisfied;
+    }
+
+    public void setIsSatisfied(Byte isSatisfied) {
+        this.isSatisfied = isSatisfied;
+    }
+
+    public Integer getUserComment() {
+        return userComment;
+    }
+
+    public void setUserComment(Integer userComment) {
+        this.userComment = userComment;
+    }
+
+    public String getCommentContent() {
+        return commentContent;
+    }
+
+    public void setCommentContent(String commentContent) {
+        this.commentContent = commentContent == null ? null : commentContent.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note == null ? null : note.trim();
+    }
+
+    public Long getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Long gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Long getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Long gmtModified) {
+        this.gmtModified = gmtModified;
+    }
+
+
+}

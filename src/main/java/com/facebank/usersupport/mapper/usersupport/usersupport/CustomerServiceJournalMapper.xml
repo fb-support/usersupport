@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.mapper.usersupport.usersupport.CustomerServiceJournalMapper">
+  <resultMap id="BaseResultMap" type="com.facebank.usersupport.model.CustomerServiceJournalModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="service_id" jdbcType="BIGINT" property="serviceId" />
+    <result column="worker_number" jdbcType="INTEGER" property="workerNumber" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="begin_time" jdbcType="BIGINT" property="beginTime" />
+    <result column="end_time" jdbcType="BIGINT" property="endTime" />
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, service_id, worker_number, name, phone_number, type_id, note, begin_time, end_time, 
+    gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_service_journal
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_service_journal
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.facebank.usersupport.model.CustomerServiceJournalModel">
+    insert into customer_service_journal (id, service_id, worker_number, 
+      name, phone_number, type_id, 
+      note, begin_time, end_time, 
+      gmt_create, gmt_modified)
+    values (#{id,jdbcType=BIGINT}, #{serviceId,jdbcType=BIGINT}, #{workerNumber,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{typeId,jdbcType=INTEGER}, 
+      #{note,jdbcType=VARCHAR}, #{beginTime,jdbcType=BIGINT}, #{endTime,jdbcType=BIGINT}, 
+      #{gmtCreate,jdbcType=BIGINT}, #{gmtModified,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.facebank.usersupport.model.CustomerServiceJournalModel">
+    insert into customer_service_journal
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="serviceId != null">
+        service_id,
+      </if>
+      <if test="workerNumber != null">
+        worker_number,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="beginTime != null">
+        begin_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="serviceId != null">
+        #{serviceId,jdbcType=BIGINT},
+      </if>
+      <if test="workerNumber != null">
+        #{workerNumber,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null">
+        #{beginTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.facebank.usersupport.model.CustomerServiceJournalModel">
+    update customer_service_journal
+    <set>
+      <if test="serviceId != null">
+        service_id = #{serviceId,jdbcType=BIGINT},
+      </if>
+      <if test="workerNumber != null">
+        worker_number = #{workerNumber,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null">
+        begin_time = #{beginTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.facebank.usersupport.model.CustomerServiceJournalModel">
+    update customer_service_journal
+    set service_id = #{serviceId,jdbcType=BIGINT},
+      worker_number = #{workerNumber,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR},
+      begin_time = #{beginTime,jdbcType=BIGINT},
+      end_time = #{endTime,jdbcType=BIGINT},
+      gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      gmt_modified = #{gmtModified,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByServiceId" parameterType="com.facebank.usersupport.model.CustomerServiceJournalModel">
+    update customer_service_journal
+    <set>
+      <if test="workerNumber != null">
+        worker_number = #{workerNumber,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null">
+        begin_time = #{beginTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=BIGINT},
+      </if>
+    </set>
+    where service_id = #{serviceId,jdbcType=BIGINT}
+  </update>
+</mapper>

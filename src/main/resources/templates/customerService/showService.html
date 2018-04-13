@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" style="width: 100%;">
+
+<div th:include="common/head_info::head_infor"></div>
+<link rel="stylesheet" type="text/css" th:href="@{../css/uploadImg.css}">
+<script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
+<script type="text/javascript" th:src="@{../js/showService.js}"></script>
+<script type="text/javascript" th:src="@{../js/My97DatePicker/WdatePicker.js}"></script>
+<script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+<link rel="stylesheet" type="text/css" th:href="@{../css/showLoading.css}">
+<style>
+    td.details-control {
+        background: url('../images/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('../images/details_close.png') no-repeat center center;
+    }
+    .Wdate{
+        background-image:url('../My97DatePicker/skin/datePicker.gif');
+    }
+</style>
+<div class="container center" style="width:100%;">
+    <div class="container center" style="width:100%;">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input type="text" name="phoneNumber" class="form-control" placeholder="手机号">
+                <input type="text" name="workNumber" class="form-control" placeholder="工号">
+                <select id="status" class="form-control">
+                    <option value="0">草稿</option>
+                    <option value="1">待处理</option>
+                    <option value="2">已处理</option>
+                    <option value="3">待评价</option>
+                    <option value="4">已完成</option>
+                </select>
+                <input id="datetimeStart" class="Wdate form-control" type="text"
+                       onclick="WdatePicker({el:this,dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d',readOnly:true})" readonly/>
+                --
+                <input id="datetimeEnd" class="Wdate form-control" type="text"
+                       onclick="WdatePicker({el:this,dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d',readOnly:true})" readonly/>
+            </div>
+            <button type="button" class="btn btn-default" onclick="search()">查询</button>
+        </form>
+
+        <div class="panel panel-default" style="width:100%;height:350px;overflow:auto;" id="content">
+            <!-- Table -->
+            <table class="table table-bordered table-striped" style="min-width:1020px;word-break: keep-all;" id="datatables">
+                <thead>
+                <tr style="word-break: keep-all;width: 100%;">
+                    <th>id</th>
+                    <th>服务单号</th>
+                    <th>电话号码</th>
+                    <th>客户姓名</th>
+                    <!--<th >服务类型</th>
+                    <th >客服工号</th>-->
+                    <th>客户是否满意</th>
+                    <th>客户评价</th>
+                    <th>评价内容</th>
+                    <th>服务状态</th>
+                    <!--<th >备注</th>
+                    <th >创建时间</th>
+                    <th >修改时间</th>-->
+                    <th>操作</th>
+
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="paging"></div>
+</div>
+
+<div class="modal fade modal-lg" id="exampleModal" tabindex="-1" role="dialog" style="width: auto;height: auto;"
+     aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-lg" role="document" style="width:100%;">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">查看/修改</h4>
+
+            </div>
+            <div class="modal-body ">
+                <div class="container center">
+                    <!--计时-->
+                    <div class="container center">
+                        <div class="container center">
+                            <table class="table">
+
+
+                                <form class="navbar-form navbar-left" role="search">
+
+                                    <div class="form-group">
+                                        电话：<input type="text" class="form-control" id="phoneNumber" style="width:50%;">
+                                        手机类型：<input type="text" class="form-control" id="phoneType"
+                                                    placeholder="不是手机类问题" style="width:50%;">
+                                        客户名：<input type="text" class="form-control" id="realName" style="width:50%;">
+                                    </div>
+                                    <label>类别</label>
+                                    <div class="form-group">
+                                        <select class="form-control " id="typeShows" style="width:20%;float:left;">
+                                            <option value="0" id="aa">---请选择---</option>
+                                        </select>
+                                        <select class="form-control " id="typeShows1" style="width:20%;float:left;">
+                                            <option value="0">---请选择---</option>
+                                        </select>
+                                        <select class="form-control " id="typeShows2" style="width:20%;float:left;">
+                                            <option value="0">---请选择---</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <h2>问题反馈</h2>
+                                    <div class="form-group">
+                                        <label for="title">问题标题</label>
+                                        <input type="text" class="form-control" id="title" placeholder="请输入问题标题"
+                                               style="width:70%;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">问题详情</label>
+                                        <textarea class="form-control" rows="3" id="description"
+                                                  style="width:70%;"></textarea>
+                                    </div>
+                                    <div class="form-group" id="solve">
+                                        <label id="solvelable">问题处理</label>
+                                        <div id="solvebox" ></div></div>
+                                    <div class="form-group" id="newsolveShow">
+                                        <textarea class="form-control" rows="3" id="newsolve" style="width:70%;"
+                                                  placeholder="问题处理补充，无则不填写"></textarea>
+                                    </div>
+                                    <div class="form-group" style="width:80%;" id="pic"></div>
+                                    <div class="form-group" id="updateimage">
+                                        <label for="file">上传图片</label>
+                                        <input type="file" id="file" multiple="multiple"
+                                               accept="image/png,image/jpg,image/gif,image/JPEG">
+                                        <div id="imgBox" style="padding-bottom:15px; "></div>
+                                    </div>
+                                </form>
+                            </table>
+                        </div>
+                    </div>
+                    <!--客户信息-->
+
+                    <!--问题详情-->
+                    <!--问题详情结束-->
+                </div>
+            </div>
+
+            <div class="modal-footer" id="">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="search(sta)">取消</button>
+                <button type="button" class="btn btn-primary" onclick="updateService(1)" id="waitdeal">提交为待处理</button>
+                <button type="button" class="btn btn-primary" onclick="updateServiceNewSolve(2)" id="finishdeal">完成处理</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</html>
