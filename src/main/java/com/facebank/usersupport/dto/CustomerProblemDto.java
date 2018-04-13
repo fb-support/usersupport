@@ -5,7 +5,9 @@ import com.facebank.usersupport.model.CustomerProblemDescriptionModel;
 import com.facebank.usersupport.model.CustomerProblemSolveModel;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author JJ
@@ -13,7 +15,7 @@ import java.util.List;
  **/
 public class CustomerProblemDto {
 
-    private List<CustomerPictureModel> customerPictureModels = new ArrayList<>();
+    private Set<CustomerPictureModel> customerPictureModels = new HashSet<>();
 
     private List<CustomerProblemDescriptionModel> customerProblemDescriptionModels = new ArrayList<>();
 
@@ -35,11 +37,12 @@ public class CustomerProblemDto {
         this.id = id;
     }
 
-    public List<CustomerPictureModel> getCustomerPictureModels() {
+
+    public Set<CustomerPictureModel> getCustomerPictureModels() {
         return customerPictureModels;
     }
 
-    public void setCustomerPictureModels(List<CustomerPictureModel> customerPictureModels) {
+    public void setCustomerPictureModels(Set<CustomerPictureModel> customerPictureModels) {
         this.customerPictureModels = customerPictureModels;
     }
 
