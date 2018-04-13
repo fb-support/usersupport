@@ -17,6 +17,23 @@
     <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
     <result column="phone_type" jdbcType="VARCHAR" property="phoneType" />
   </resultMap>
+  <resultMap id="CustomerServiceListItem" type="com.facebank.usersupport.dto.CustomerServiceShowDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="service_no" jdbcType="BIGINT" property="serviceNo" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="worker_number" jdbcType="INTEGER" property="workerNumber" />
+    <result column="is_ satisfied" jdbcType="TINYINT" property="isSatisfied" />
+    <result column="user_comment" jdbcType="INTEGER" property="userComment" />
+    <result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
+    <result column="phone_type" jdbcType="VARCHAR" property="phoneType" />
+    <result column="username" jdbcType="VARCHAR" property="workName"/>
+  </resultMap>
   <resultMap id="ServiceResult" type="com.facebank.usersupport.dto.ServiceJournalDto">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="service_no" jdbcType="BIGINT" property="serviceNo" />
@@ -130,27 +147,31 @@
     </if>
     order by cp.gmt_create desc
   </select>
-  <select id="selectServiceByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
-    SELECT
+  <select id="selectServiceByCondition" parameterType="java.util.Map" resultMap="CustomerServiceListItem">
+    select A.*,B.username from (SELECT
     *
     FROM  customer_service_phone_record
     <where>
-    <if test="phoneNumber != null and phoneNumber != ''">
-      AND phone_number = #{phoneNumber}
-    </if>
-    <if test="workerNumber != null and workerNumber != ''">
-      AND worker_number = #{workerNumber}
-    </if>
-    <if test="status != -1">
-      AND status = #{status}
-    </if>
-    <if test="beginTime != null and beginTime != '' ">
-      and gmt_create&gt;#{beginTime}
-    </if>
-    <if test="endTime != null and endTime != ''">
-      and gmt_create&lt;#{endTime}
-    </if>
+      <if test="phoneNumber != null and phoneNumber != ''">
+        AND phone_number = #{phoneNumber}
+      </if>
+      <if test="status != -1">
+        AND status = #{status}
+      </if>
+      <if test="beginTime != null and beginTime != '' ">
+        and gmt_create&gt;#{beginTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and gmt_create&lt;#{endTime}
+      </if>
     </where>
+    ) as A inner join (select * from user
+        <where>
+          <if test="workName != null and workName != ''">
+            AND username = #{workName}
+          </if>
+        </where>
+    )As B on A.worker_number = B.work_number
     order by gmt_create desc
   </select>
 

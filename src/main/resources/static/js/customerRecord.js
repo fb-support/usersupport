@@ -12,13 +12,15 @@ $(function () {
     })
     //图片容初始化
     imgUpload({
-        inputId: 'file', //input框id
-        imgBox: 'imgBox', //图片容器id
+        inputId: 'fileN', //input框id
+        imgBox: 'imgBoxN', //图片容器id
         buttonId: 'btn', //提交按钮id
         upUrl: '/test/controlller',  //提交地址
         data: 'file', //参数名
         num: "9",//最多上传图片个数
     })
+
+    $('#startServer').on('show.bs.modal', function (event) {});
 })
 
 //获取表单数据
@@ -26,13 +28,13 @@ function getData() {
     var formdata = new FormData();
     formdata.append("beginTime", startTime);
     formdata.append("endTime", getNowTime());
-    formdata.append("phoneNumber", $("#phoneNumber").val());
+    formdata.append("phoneNumber", $("#phoneNumberN").val());
     formdata.append("phoneType", $("#phoneType").val());
-    formdata.append("name", $("#name").val());
+    formdata.append("name", $("#nameN").val());
     formdata.append("typeId", $("#type2").val());
-    formdata.append("title", $("#title").val());
-    formdata.append("description", $("#description").val());
-    formdata.append("solve", $("#solve").val());
+    formdata.append("title", $("#titleN").val());
+    formdata.append("description", $("#descriptionN").val());
+    formdata.append("solve", $("#solveN").val());
     //将文件流循环添加到FormData对象中
     for (var i = 0; i < imgFile.length; i++) {
         formdata.append("file", imgFile[i]);
@@ -42,9 +44,11 @@ function getData() {
 
 //插入服务
 function insertService(status) {
+    startTime = getNowTime();
 // 参数验证
-    var phoneNumber = $("#phoneNumber").val();
-    var name = $("#name").val();
+
+    var phoneNumber = $("#phoneNumberN").val();
+    var name = $("#nameN").val();
     var type = $("#type").val();
     var type1 = $("#type1").val();
     var type2 = $("#type2").val();
@@ -67,7 +71,7 @@ function insertService(status) {
         return;
     }
     var dataform = getData();
-    dataform.append("staats", status);
+    dataform.append("status", status);
     $.ajax({
         url: "/customer/add",
         type: "post",
@@ -77,8 +81,9 @@ function insertService(status) {
         contentType: false,
         success: function (json) {
             layer.alert(json.message);
-            $("#formData")[0].reset();
-            startServer("solveProblem");
+            $("#NewSe")[0].reset();
+
+            $("#startServer").modal("hide");
         },
         error: function () {
             alert("请求失败")
@@ -324,4 +329,10 @@ function startServer(a) {
 function getNowTime() {
     var now = new Date().getTime();
     return (now);
+}
+//新增服务提交
+function putService(status){
+    insertService(status);
+
+    search(status);
 }

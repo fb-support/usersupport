@@ -62,6 +62,7 @@ $(document).ready(function () {
                     $("#newsolve").show();
                     $("#newsolve").val("");
                     $("#finishdeal").show();
+                    $("#updateimage").hide();
                 }
                 if (status == 2) {
                     blockedit();
@@ -69,6 +70,7 @@ $(document).ready(function () {
                     $("#waitdeal").hide();
                     $("#finishdeal").hide();
                     $("#newsolve").hide();
+
                 }
 
                 $("#phoneNumber").val(data[0].customerServiceDto.phoneNumber);
@@ -82,7 +84,7 @@ $(document).ready(function () {
                     var solvehead = "";
 
                     for (var i = 0; i < data[0].customerProblemSolves.length; i++) {
-                        solvehead += "<div id='solvedetail' class='solvedetail'>处理时间：<span >" + formatDate(data[0].customerProblemSolves[i].gmtCreate) + "</span>--处理人工号：<span >" + data[0].customerServiceDto.workerNumber + "</span></div>" +
+                        solvehead += "<div id='solvedetail' class='solvedetail'>处理时间：<span >" + formatDate(data[0].customerProblemSolves[i].gmtCreate) + "</span>--处理人：<span >" + data[0].customerServiceDto.username + "</span></div>" +
                             "<textarea class='form-control' rows='3'   style='width:70%;' readonly id='solvedata'>" + data[0].customerProblemSolves[i].description + "</textarea>"
                     }
                     $("#solvebox").html(solvehead);
@@ -92,7 +94,6 @@ $(document).ready(function () {
                     if(sll == ""){
                         $("#solve").hide();
                     }
-
                 }
                 //遍历图片
                 var str = "<div >图片：</div>";
@@ -140,7 +141,7 @@ var search =  function (status) {
             "searching": false, // 从结果搜索
             "bJQueryUI": true,
             "ordering" : true, // 排序
-            "aaSorting": [0, "desc"], // 按creditId倒序排列
+            "aaSorting": [0, "desc"], // 按Id倒序排列
             "sPaginationType": "full_numbers",
             "serverSide": false, // true代表后台分页，false代表前台分页
             "language": {
@@ -228,7 +229,7 @@ var search =  function (status) {
                 },
                 {
                     "sClass": "text-center",
-                    "data": "isSatisfied",
+                    "data": "workName",
                     "render": function (data, type, full, meta) {
                         return validate(data);
                     },
@@ -236,17 +237,17 @@ var search =  function (status) {
                 },
                 {
                     "sClass": "text-center",
-                    "data": "userComment",
+                    "data": "gmtCreate",
                     "render": function (data, type, full, meta) {
-                        return validate(data);
+                        return formatDate(validate(data));
                     },
                     "bSortable": false
                 },
                 {
                     "sClass": "text-center",
-                    "data": "commentContent",
+                    "data": "gmtModified",
                     "render": function (data, type, full, meta) {
-                        return validate(data);
+                        return formatDate(validate(data));
                     },
                     "bSortable": false
                 },
@@ -276,7 +277,7 @@ var search =  function (status) {
                 },
                 {
                     "sClass": "text-center",
-                        "data": null,
+                    "data": null,
                     "bSortable": false
                 },
 
@@ -714,7 +715,5 @@ function updateServiceNewSolve(status) {
         error:function () {
             alert("请求失败")
         }
-
     })
-
 }

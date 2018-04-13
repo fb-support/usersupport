@@ -5,6 +5,8 @@
 <link rel="stylesheet" type="text/css" th:href="@{../css/uploadImg.css}">
 <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
 <script type="text/javascript" th:src="@{../js/showService.js}"></script>
+<script type="text/javascript" th:src="@{../js/customerRecord.js}"></script>
+<script type="text/javascript" th:src="@{../js/layer.js}"></script>
 <script type="text/javascript" th:src="@{../js/My97DatePicker/WdatePicker.js}"></script>
 <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
 <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
@@ -27,7 +29,7 @@
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
                 <input type="text" name="phoneNumber" class="form-control" placeholder="手机号">
-                <input type="text" name="workNumber" class="form-control" placeholder="工号">
+                <input type="text" name="workName" class="form-control" placeholder="客服名称">
                 <select id="status" class="form-control">
                     <option value="0">草稿</option>
                     <option value="1">待处理</option>
@@ -40,6 +42,7 @@
                 --
                 <input id="datetimeEnd" class="Wdate form-control" type="text"
                        onclick="WdatePicker({el:this,dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d',readOnly:true})" readonly/>
+                <button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#startServer" >开始服务</button>
             </div>
             <button type="button" class="btn btn-default" onclick="search()">查询</button>
         </form>
@@ -55,9 +58,9 @@
                     <th>客户姓名</th>
                     <!--<th >服务类型</th>
                     <th >客服工号</th>-->
-                    <th>客户是否满意</th>
-                    <th>客户评价</th>
-                    <th>评价内容</th>
+                    <th>处理人</th>
+                    <th>提交时间</th>
+                    <th>处理时间</th>
                     <th>服务状态</th>
                     <!--<th >备注</th>
                     <th >创建时间</th>
@@ -155,6 +158,73 @@
         </div>
     </div>
 </div>
+<!--//新增服务弹窗-->
+<div class="modal fade modal-lg" id="startServer" tabindex="-1" role="dialog" style="width: auto;height: auto;"
+     aria-labelledby="startServerLabel">
+    <div class="modal-dialog modal-lg" role="document" style="width:100%;">
+        <div class="modal-content" id="solveProblem">
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="startServerLabel">查看/修改</h4>
 
+            </div>
+            <div class="modal-body ">
+                <div class="container center">
+                    <!--计时-->
+                    <div class="container center">
+                        <div class="container center">
+                            <table class="table">
+                                <form class="navbar-form navbar-left" role="search" id="NewSe">
+                                    <h2>客户信息</h2>
+                                    <div class="form-group">
+                                        电话：<input type="text" class="form-control" name="phoneNumber"  id="phoneNumberN" placeholder="请输入电话号码">
+                                        客户姓名：<input type="text" class="form-control"  name="name" id="nameN" placeholder="请输入客户姓名">
+                                    </div>
+                                    <div class="container center" style="width:100%;">
+                                        <div class="form-group" id="sanji">
+                                            问题类型：<select class="form-control" id="type" ></select>
+                                            &#45;&#45;<select class="form-control" id="type1"><option value="-1" id="-2">-&#45;&#45;请选择-&#45;&#45;</option></select>
+                                            &#45;&#45;<select class="form-control" id="type2"><option value="-1" id="-3">-&#45;&#45;请选择-&#45;&#45;</option></select>
+                                        </div></div>
+
+                                    <br>
+                                    <h2>问题反馈</h2>
+                                    <div class="form-group">
+                                        <label for="titleN">问题标题</label>
+                                        <input type="text" class="form-control" id="titleN" name="title" placeholder="请输入问题标题">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="descriptionN">问题详情</label>
+                                        <textarea class="form-control" rows="3" id="descriptionN" name="description"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="solveN">问题处理</label>
+                                        <textarea class="form-control" rows="3" id="solveN" name="solve"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fileN">图片</label>
+                                        <input type="file" id="fileN"  multiple="multiple" accept="image/png,image/jpg,image/gif,image/JPEG">
+                                    </div>
+                                    <div id="imgBoxN" style="padding-bottom:15px; "></div>
+                                </form>
+                            </table>
+                        </div>
+                    </div>
+                    <!--客户信息-->
+
+                    <!--问题详情-->
+                    <!--问题详情结束-->
+                </div>
+            </div>
+
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="search(0)">取消</button>
+                <button type="button" class="btn btn-info" onclick="putService(0)">草稿</button>
+                <button type="button"  class="btn btn-success" onclick="putService(1)">待处理</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </html>

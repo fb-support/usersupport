@@ -21,7 +21,7 @@ public interface ICustomerService {
     List<CustomerServiceModel> getService(String phoneNumber, Integer workerNumber, Integer status, Long gmtCreate);
 
     List<ServiceJournalDto> getServicePhone(String phoneNumber, Integer workerNumber, Integer status, Long beginTime, Long endTime);
-    RestModel selectServiceByCondition(String phoneNumber, Integer workerNumber, Integer status, Long beginTime, Long endTime, String draw);
+    RestModel selectServiceByCondition(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw);
     List<ServiceShowDto> getServiceShow(Long id);
 
     RestModel insertService(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[],

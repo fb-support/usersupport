@@ -1,5 +1,6 @@
 package com.facebank.usersupport.mapper.usersupport.usersupport;
 
+import com.facebank.usersupport.dto.CustomerServiceShowDto;
 import com.facebank.usersupport.dto.ServiceJournalDto;
 import com.facebank.usersupport.dto.ServiceShowDto;
 import com.facebank.usersupport.model.CustomerServiceModel;
@@ -25,9 +26,9 @@ public interface CustomerServiceMapper {
     int updateByPrimaryKey(CustomerServiceModel record);
 
 
-    List<CustomerServiceModel> selectServiceByCondition(@Param("phoneNumber") String phoneNumber, @Param("workerNumber") Integer workNumber,
-                                                        @Param("status") Integer status,
-                                                        @Param("beginTime") Long beginTime, @Param("endTime") Long endTime);
+    List<CustomerServiceShowDto> selectServiceByCondition(@Param("phoneNumber") String phoneNumber, @Param("workName") String workName,
+                                                          @Param("status") Integer status,
+                                                          @Param("beginTime") Long beginTime, @Param("endTime") Long endTime);
     Integer selectCountByCondition(@Param("phoneNumber") String phoneNumber, @Param("workerNumber") Integer workNumber,
                                    @Param("status") Integer status,
                                    @Param("beginTime") Long beginTime, @Param("endTime") Long endTime);

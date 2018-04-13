@@ -13,7 +13,7 @@ public class CustomerServiceDto {
 
     private Integer typeId;
 
-    private Integer workerNumber;
+    private String username;
 
     private Byte isSatisfied;
 
@@ -23,6 +23,14 @@ public class CustomerServiceDto {
 
     public Long getId() {
         return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setId(Long id) {
@@ -53,13 +61,7 @@ public class CustomerServiceDto {
         this.typeId = typeId;
     }
 
-    public Integer getWorkerNumber() {
-        return workerNumber;
-    }
 
-    public void setWorkerNumber(Integer workerNumber) {
-        this.workerNumber = workerNumber;
-    }
 
     public String getPhoneType() {
         return phoneType;

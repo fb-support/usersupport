@@ -22,7 +22,7 @@
             <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
             <result column="name" jdbcType="VARCHAR" property="name"/>
             <result column="ctype_id" jdbcType="INTEGER" property="typeId"/>
-            <result column="worker_number" jdbcType="INTEGER" property="workerNumber"/>
+            <result column="username" jdbcType="VARCHAR" property="username"/>
             <result column="status" jdbcType="INTEGER" property="status"/>
             <result column="phone_type" jdbcType="VARCHAR" property="phoneType"/>
             <result column="phone_type" jdbcType="TINYINT" property="phoneType"/>
@@ -167,10 +167,11 @@
     <select id="findProblemById" parameterType="java.lang.Long" resultMap="ResultMap">
 SELECT cspr.id service_id,csp.id problem_id,cspd.id question_id,cps.id solve_id,
         csp.type_id,csp.title,cspr.status,cspr.is_satisfied,cspr.phone_type,
-         cspr.worker_number,cspr.type_id ctype_id,cspr.phone_number,cspr.name,
+         usr.username,cspr.type_id ctype_id,cspr.phone_number,cspr.name,
        cspic.pic_url,cspd.description,cps.description cdescription,cps.gmt_create
-FROM ( customer_service_phone_record AS cspr,customer_service_problem AS csp,customer_service_problem_description AS cspd,customer_problem_solve AS cps )LEFT JOIN customer_problem_picture AS cspic ON csp.id=cspic.problem_id
-WHERE  cspr.id= #{id} AND csp.service_id=cspr.id AND csp.id = cspd.problem_id AND csp.id=cps.problem_id
+FROM ( customer_service_phone_record AS cspr,customer_service_problem AS csp,customer_service_problem_description AS cspd,customer_problem_solve AS cps,user as usr )LEFT JOIN customer_problem_picture AS cspic ON csp.id=cspic.problem_id
+WHERE  cspr.id= #{id} AND csp.service_id=cspr.id AND csp.id = cspd.problem_id AND csp.id=cps.problem_id and
+usr.work_number = cspr.worker_number;
 </select>
 
 

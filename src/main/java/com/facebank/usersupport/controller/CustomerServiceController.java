@@ -70,7 +70,8 @@ public class CustomerServiceController extends BaseController {
     }
 
     @RequestMapping("/customer/getServiceByCondition")
-    public RestModel getServiceByPhone(String phoneNumber, Integer workerNumber, Integer status, String beginTime, String endTime, String draw){
+    public RestModel getServiceByPhone(String phoneNumber, String workName, Integer status, String beginTime, String endTime, String draw){
+        System.out.println(beginTime+"   "+endTime);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date time1 = null;
         Date time2 = null;
@@ -92,13 +93,18 @@ public class CustomerServiceController extends BaseController {
                 e.printStackTrace();
             }
         }
+        System.out.println(workName+"   "+begintime+"  "+endtime);
       /*  if(endtime-begintime>432000000){return new RestModel("日期有误，无法查询");}*/
         try{
-            RestModel restModel = iCustomerService.selectServiceByCondition(phoneNumber,workerNumber,status,begintime,endtime,draw);
+            RestModel restModel = iCustomerService.selectServiceByCondition(phoneNumber,workName,status,begintime,endtime,draw);
+            System.out.println(restModel.toString());
             return restModel;
         }catch (Exception e){
+            e.printStackTrace();
             return this.excpRestModel();
         }
+       /* System.out.println(workerNumber);
+        return this.success(iCustomerService.selectServiceByCondition(phoneNumber,workerNumber,status,beginTime,endTime,page,couts));*/
     }
 
     @RequestMapping("/customer/getServiceShow")

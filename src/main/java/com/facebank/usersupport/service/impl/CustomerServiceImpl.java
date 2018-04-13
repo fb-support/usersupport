@@ -1,13 +1,13 @@
 package com.facebank.usersupport.service.impl;
 
-import com.facebank.usersupport.dto.CustomerIdDto;
-import com.facebank.usersupport.dto.ServiceJournalDto;
-import com.facebank.usersupport.dto.ServiceShowDto;
+import com.facebank.usersupport.dto.*;
 import com.facebank.usersupport.mapper.usersupport.usersupport.*;
 import com.facebank.usersupport.model.*;
 import com.facebank.usersupport.service.ICustomerService;
 import com.facebank.usersupport.util.ImgSaveUtil;
+import com.facebank.usersupport.util.PageUtil;
 import com.facebank.usersupport.util.StrUtil;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +78,7 @@ public class CustomerServiceImpl implements ICustomerService {
         customerServiceJournalMapper.insertSelective(customerServiceJournal);
         //问题表插入
         customerProblem.setServiceId(customerService.getId());
+        customerProblem.setGmtModified(System.currentTimeMillis());
         customerProblem.setGmtCreate(System.currentTimeMillis());
         customerProblemMapper.insertSelective(customerProblem);
         //问题详情表插入
@@ -112,6 +113,7 @@ public class CustomerServiceImpl implements ICustomerService {
         customerService.setGmtCreate(System.currentTimeMillis());
 //        customerService.setStatus(0);
         customerService.setId(customerIdDto.getServiceId());
+        customerService.setGmtModified(System.currentTimeMillis());
         customerServiceMapper.updateByPrimaryKeySelective(customerService);
         //服务流水表
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -142,32 +144,28 @@ public class CustomerServiceImpl implements ICustomerService {
         customerServiceJournal.setWorkerNumber(customerService.getWorkerNumber());
         customerServiceJournal.setServiceId(customerService.getId());
         customerServiceJournal.setName(customerService.getName());
+        customerProblem.setGmtModified(System.currentTimeMillis());
         customerServiceJournalMapper.insertSelective(customerServiceJournal);
         //问题表更新
         customerProblem.setId(customerIdDto.getProblemId());
         customerProblemDescription.setProblemId(customerProblem.getId());
-        customerProblem.setGmtModified(System.currentTimeMillis());
         customerProblemMapper.updateByPrimaryKeySelective(customerProblem);
         //问题详情表更新
         customerProblemDescription.setId(customerIdDto.getQuestionId());
         customerProblemDescription.setGmtModified(System.currentTimeMillis());
-
         customerProblemDescriptionMapper.updateByPrimaryKeySelective(customerProblemDescription);
         // 插入图片
-        if (file.length!=0){
-            String path = "static/images/upload/";
-            for (MultipartFile f : file) {
-                if (f != null) {
-                    String targetImgName = ImgSaveUtil.uploadImg(f, path);
-                    CustomerPictureModel customerPicture = new CustomerPictureModel();
-                    customerPicture.setPicUrl("/images/upload/" + targetImgName);
-                    customerPicture.setGmtCreate(System.currentTimeMillis());
-                    customerPicture.setProblemId(customerProblem.getId());
-                    customerPictureMapper.insertSelective(customerPicture);
-                }
+        String path = "static/images/upload/";
+        for (MultipartFile f : file) {
+            if (f != null) {
+                String targetImgName = ImgSaveUtil.uploadImg(f, path);
+                CustomerPictureModel customerPicture = new CustomerPictureModel();
+                customerPicture.setPicUrl("/images/upload/" + targetImgName);
+                customerPicture.setGmtCreate(System.currentTimeMillis());
+                customerPicture.setProblemId(customerProblem.getId());
+                customerPictureMapper.insertSelective(customerPicture);
             }
         }
-
         //更新问题解决
         CustomerProblemSolveModel customerProblemSolve = new CustomerProblemSolveModel();
         if (customerService.getStatus() != 2) {
@@ -252,11 +250,9 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public RestModel selectServiceByCondition(String phoneNumber, Integer workerNumber, Integer status, Long beginTime, Long endTime, String draw) {
+    public RestModel selectServiceByCondition(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw) {
         status = StrUtil.parseStringToInt(status, -1);
-
-
-        List<CustomerServiceModel> serviceJournalDtos = customerServiceMapper.selectServiceByCondition(phoneNumber, workerNumber, status, beginTime, endTime);
+        List<CustomerServiceShowDto> serviceJournalDtos = customerServiceMapper.selectServiceByCondition(phoneNumber, workName, status, beginTime, endTime);
         PageRestModel pageRestModel = new PageRestModel(
                 draw,
                 new Long(serviceJournalDtos.size() + ""),
