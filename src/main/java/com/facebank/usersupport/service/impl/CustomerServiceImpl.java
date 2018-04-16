@@ -149,6 +149,7 @@ public class CustomerServiceImpl implements ICustomerService {
         //问题表更新
         customerProblem.setId(customerIdDto.getProblemId());
         customerProblemDescription.setProblemId(customerProblem.getId());
+        customerProblemDescription.setGmtModified(System.currentTimeMillis());
         customerProblemMapper.updateByPrimaryKeySelective(customerProblem);
         //问题详情表更新
         customerProblemDescription.setId(customerIdDto.getQuestionId());
@@ -174,6 +175,7 @@ public class CustomerServiceImpl implements ICustomerService {
         customerProblemSolve.setDescription(solve);
         customerProblemSolve.setGmtModified(System.currentTimeMillis());
         customerProblemSolve.setProblemId(customerProblem.getId());
+        customerProblemSolve.setGmtModified(System.currentTimeMillis());
         customerProblemSolveMapper.updateByPrimaryKeySelective(customerProblemSolve);
         return new RestModel("更新成功");
     }
@@ -184,6 +186,7 @@ public class CustomerServiceImpl implements ICustomerService {
         customerService.setGmtCreate(System.currentTimeMillis());
 //        customerService.setStatus(0);
         customerService.setId(customerIdDto.getServiceId());
+        customerService.setGmtModified(System.currentTimeMillis());
         customerServiceMapper.updateByPrimaryKeySelective(customerService);
         //服务流水表
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -214,6 +217,7 @@ public class CustomerServiceImpl implements ICustomerService {
         customerServiceJournal.setWorkerNumber(customerService.getWorkerNumber());
         customerServiceJournal.setServiceId(customerService.getId());
         customerServiceJournal.setName(customerService.getName());
+        customerServiceJournal.setGmtModified(System.currentTimeMillis());
         customerServiceJournalMapper.insertSelective(customerServiceJournal);
         //问题表更新
         customerProblem.setId(customerIdDto.getProblemId());
@@ -245,6 +249,7 @@ public class CustomerServiceImpl implements ICustomerService {
         customerProblemSolve.setDescription(solve);
         customerProblemSolve.setGmtCreate(System.currentTimeMillis());
         customerProblemSolve.setProblemId(customerProblem.getId());
+        customerProblemSolve.setGmtModified(System.currentTimeMillis());
         customerProblemSolveMapper.insertSelective(customerProblemSolve);
         return new RestModel("更新成功");
     }
