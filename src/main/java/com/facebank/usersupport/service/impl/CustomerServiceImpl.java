@@ -172,11 +172,14 @@ public class CustomerServiceImpl implements ICustomerService {
         if (customerService.getStatus() != 2) {
             customerProblemSolve.setId(customerIdDto.getSolveId());
         }
+
         customerProblemSolve.setDescription(solve);
         customerProblemSolve.setGmtModified(System.currentTimeMillis());
         customerProblemSolve.setProblemId(customerProblem.getId());
         customerProblemSolve.setGmtModified(System.currentTimeMillis());
-        customerProblemSolveMapper.updateByPrimaryKeySelective(customerProblemSolve);
+
+            customerProblemSolveMapper.updateByPrimaryKeySelective(customerProblemSolve);
+
         return new RestModel("更新成功");
     }
 
@@ -250,7 +253,9 @@ public class CustomerServiceImpl implements ICustomerService {
         customerProblemSolve.setGmtCreate(System.currentTimeMillis());
         customerProblemSolve.setProblemId(customerProblem.getId());
         customerProblemSolve.setGmtModified(System.currentTimeMillis());
-        customerProblemSolveMapper.insertSelective(customerProblemSolve);
+        if (solve != null && solve.equals("")==false) {
+            customerProblemSolveMapper.insertSelective(customerProblemSolve);
+        }
         return new RestModel("更新成功");
     }
 
