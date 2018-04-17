@@ -46,6 +46,9 @@ public class CustomerServiceImpl implements ICustomerService {
     public RestModel insertService(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile[] file, CustomerProblemDescriptionModel customerProblemDescription, Long beginTime, Long endTime, String solve) {
         //服务总表插入
         customerService.setGmtCreate(System.currentTimeMillis());
+        if (customerService.getStatus().equals(1)){
+            customerService.setGmtModified(System.currentTimeMillis());
+        }
         long serviceNo = Long.parseLong(getNum19());
         customerService.setServiceNo(serviceNo);
         customerServiceMapper.insertSelective(customerService);

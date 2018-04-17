@@ -2,6 +2,8 @@ var recipient;
 var typeid;
 var sll = "";
 var sta = 0;
+var startTime;//服务开始时间
+var endTime;//服务结束时间
 $(document).ready(function () {
     search();
     $("#typeShows").change(function () {
@@ -14,6 +16,21 @@ $(document).ready(function () {
     $("#typeShows2").change(function () {
         Second2Type();
     });
+
+
+    TypeBind();
+    $("#type").change(function () {
+        firstTypeNewService();
+        SecondTypeNewService();
+    })
+    $("#type1").change(function () {
+        SecondTypeNewService();
+    })
+
+    //图片容初始化
+
+
+    $('#startServer').on('show.bs.modal', function (event) {});
     //图片初始化
     imgUpload({
         inputId: 'file', //input框id
@@ -23,6 +40,16 @@ $(document).ready(function () {
         data: 'file', //参数名
         num: "9",//最多上传图片个数
     })
+    imgUpload({
+        inputId: 'fileN', //input框id
+        imgBox: 'imgBoxN', //图片容器id
+        buttonId: 'btnN', //提交按钮id
+        upUrl: '/test/controlller',  //提交地址
+        data: 'file', //参数名
+        num: "9",//最多上传图片个数
+    })
+
+
     //弹窗初始化
     $('#exampleModal').on('show.bs.modal', function (event) {
         console.log("开始---"+sll);
@@ -437,10 +464,10 @@ function imgUpload(obj) {
 
 //图片展示
 function addNewContent(obj) {
-    $(imgBox).html("");
+    $(obj).html("");
     for (var a = 0; a < imgSrc.length; a++) {
         var oldBox = $(obj).html();
-        $(obj).html(oldBox + '<div class="imgContainer"><img width="300" height="300" title=' + imgName[a] + ' alt=' + imgName[a] + ' src=' + imgSrc[a] + ' onclick="imgDisplay(this)"><p onclick="removeImg(this,' + a + ')" class="imgDelete">删除</p></div>');
+        $(obj).html(oldBox + '<div class="imgContainer"><img width="300" height="300" title=' + imgName[a] + ' alt=' + imgName[a] + ' src=' + imgSrc[a] + ' onclick="imgDisplay(this)"><p onclick="removeImg(this,' + a + ');closePicture(this)" class="imgDelete">删除</p></div>');
     }
 }
 
@@ -716,4 +743,183 @@ function updateServiceNewSolve(status) {
             alert("请求失败")
         }
     })
+}
+
+//获取表单数据
+function getData() {
+    var formdata = new FormData();
+    formdata.append("beginTime", startTime);
+    formdata.append("endTime", getNowTime());
+    formdata.append("phoneNumber", $("#phoneNumberN").val());
+    formdata.append("phoneType", $("#phoneType").val());
+    formdata.append("name", $("#nameN").val());
+    formdata.append("typeId", $("#type2").val());
+    formdata.append("title", $("#titleN").val());
+    formdata.append("description", $("#descriptionN").val());
+    formdata.append("solve", $("#solveN").val());
+    //将文件流循环添加到FormData对象中
+    for (var i = 0; i < imgFile.length; i++) {
+        formdata.append("file", imgFile[i]);
+    }
+    return formdata;
+}
+
+//插入服务
+function insertService(status) {
+    startTime = getNowTime();
+// 参数验证
+
+    var phoneNumber = $("#phoneNumberN").val();
+    var name = $("#nameN").val();
+    var type = $("#type").val();
+    var type1 = $("#type1").val();
+    var type2 = $("#type2").val();
+
+    // 当userId都为空时flag==true
+    var flag = (phoneNumber == null || phoneNumber == "");
+    if (flag) {
+        layer.msg("手机号不能都为空");
+        return;
+    }
+    if (phoneNumber != null && phoneNumber != "") {
+        var mobileReg = /^[1][0-9]{10}$/;
+        if (!mobileReg.test(phoneNumber)) {
+            layer.msg("手机号格式不正确");
+            return;
+        }
+    }
+    if (name == null || name == "") {
+        layer.msg("客户名不能为空");
+        return;
+    }
+    var dataform = getData();
+    dataform.append("status", status);
+    console.log(status);
+    $.ajax({
+        url: "/customer/add",
+        type: "post",
+        dataType: "json",
+        data: dataform,
+        processData: false,
+        contentType: false,
+        success: function (json) {
+            layer.alert(json.message);
+            $("#NewSe")[0].reset();
+            $("#imgBoxN").val("");
+            $("#startServer").modal("hide");
+            search(status);
+        },
+        error: function () {
+            alert("请求失败")
+        }
+    })
+}
+
+
+
+var type_json = "";
+
+function TypeBind() {
+    $("#type").html("");
+
+    var str = "<option value='" + -1 + "' id='" + -1 + "'>---请选择---</option>";
+    $.ajax({
+        type: "post",
+        url: "/customer/type?parentId=0",
+        async: false,
+        typedata: "json",
+        success: function (json) {
+            type_json = json;
+            //从服务器获取数据进行绑定
+            for (var i = 0; i < json.data.length; i++) {
+                str += "<option  id='" + json.data[i].id + "'  value='" + json.data[i].id + "'>" + json.data[i].problemType + "</option>";
+            }
+            $("#type").append(str);
+        }
+    })
+
+}
+
+function firstTypeNewService() {
+    var type = $("#type").attr("value");
+    //判断一级菜单这个下拉框选中的值是否为空
+    if (type == "") {
+        $("#type1").empty();
+    }
+    $("#type1").html("");
+    var r = $("#type option:selected").attr("id");
+    console.log(r);
+    /* console.log(r);*/
+    var str = "<option value='" + -1 + "' id='" + -1 + "'>---请选择---</option>";
+    $.ajax({
+        type: "post",
+        url: "/customer/type",
+        typedata: "json",
+        async: false,
+        data: {parentId: r},
+        success: function (json) {
+            /* console.log(json.data);
+             console.log(json.data[0].problemType);*/
+            //从服务器获取数据进行绑定
+            for (var i = 0; i < json.data.length; i++) {
+                str += "<option id='" + json.data[i].id + "'  value='" + json.data[i].id + "'>" + json.data[i].problemType + "</option>";
+                /*console.log("aaa");
+                console.log(json.data[i].problemType);*/
+            }
+            $("#type1").append(str);
+        }
+    })
+
+}
+
+function SecondTypeNewService() {
+    $("#type2").html("");
+    var r = $("#type1 option:selected").attr("id");
+    /* console.log("bbb");
+     console.log(r);*/
+    if (r == 0) {
+        r = r - 1;
+    }
+
+    var str = "<option>---请选择---</option>";
+
+    $.ajax({
+        type: "post",
+        url: "/customer/type",
+        typedata: "json",
+        async: false,
+        data: {parentId: r},
+        success: function (json) {
+            /*  console.log(json.data);
+              console.log(json.data[0].problemType);*/
+            //从服务器获取数据进行绑定
+            for (var i = 0; i < json.data.length; i++) {
+                str += "<option value='" + json.data[i].id + "' >" + json.data[i].problemType + "</option>";
+            }
+            $("#type2").html(str);
+        }
+    })
+}
+
+//开始服务
+function startServer(a) {
+    var obj = document.getElementById(a);
+    if (obj.style.display == "") {
+        obj.style.display = "none";
+    } else {
+        obj.style.display = "";
+        startTime = getNowTime();
+    }
+}
+
+//获取当前时间戳
+function getNowTime() {
+    var now = new Date().getTime();
+    return (now);
+}
+//新增服务提交
+function putService(status){
+    insertService(status);
+
+    search(status);
 }

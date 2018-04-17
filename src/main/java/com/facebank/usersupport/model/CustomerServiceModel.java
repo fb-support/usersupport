@@ -141,4 +141,24 @@ public class CustomerServiceModel {
     public void setGmtModified(Long gmtModified) {
         this.gmtModified = gmtModified;
     }
+
+    @Override
+    public String toString() {
+        return "CustomerServiceModel{" +
+                "id=" + id +
+                ", serviceNo=" + serviceNo +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", typeId=" + typeId +
+                ", workerNumber=" + workerNumber +
+                ", isSatisfied=" + isSatisfied +
+                ", userComment=" + userComment +
+                ", commentContent='" + commentContent + '\'' +
+                ", status=" + status +
+                ", note='" + note + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", phoneType='" + phoneType + '\'' +
+                '}';
+    }
 }

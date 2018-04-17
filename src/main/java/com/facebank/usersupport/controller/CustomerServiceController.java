@@ -44,8 +44,9 @@ public class CustomerServiceController extends BaseController {
      */
     @RequestMapping("/customer/add")
     public RestModel customAdd(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[], HttpSession session,
-                               CustomerProblemDescriptionModel customerProblemDescription, Long beginTime, Long endTime, Integer staats, String solve){
+                               CustomerProblemDescriptionModel customerProblemDescription, Long beginTime, Long endTime,@RequestParam(name="status") Integer staats, String solve){
         customerService.setStatus(staats);
+        System.out.println(customerService.toString());
         customerService.setWorkerNumber(SessionUtil.getUser(session).getWorkNumber());
         return iCustomerService.insertService(customerService,customerProblem,file,customerProblemDescription,beginTime,endTime,solve);
     }
