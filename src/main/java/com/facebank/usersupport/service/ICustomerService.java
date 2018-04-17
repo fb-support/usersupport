@@ -18,11 +18,8 @@ import java.util.List;
  */
 public interface ICustomerService {
 
-    List<CustomerServiceModel> getService(String phoneNumber, Integer workerNumber, Integer status, Long gmtCreate);
 
-    List<ServiceJournalDto> getServicePhone(String phoneNumber, Integer workerNumber, Integer status, Long beginTime, Long endTime);
     RestModel selectServiceByCondition(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw);
-    List<ServiceShowDto> getServiceShow(Long id);
 
     RestModel insertService(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[],
                             CustomerProblemDescriptionModel customerProblemDescription, Long beginTime, Long endTime, String solve);
@@ -33,7 +30,6 @@ public interface ICustomerService {
     RestModel updateServiceByNewSolve(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[],
                                       CustomerProblemDescriptionModel customerProblemDescription, String beginTime, String endTime, String solve, CustomerIdDto customerIdDto);
 
-    int updateServiceProblem(Long id, Long problemId, String phoneNumber, String phoneType, String name, Long problemType, String title, String description, Integer Status);
 
     RestModel findProblemById(Long id);
 }

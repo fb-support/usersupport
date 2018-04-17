@@ -39,26 +39,8 @@ public class CustomerServiceImpl implements ICustomerService {
     @Autowired
     private CustomerProblemSolveMapper customerProblemSolveMapper;
 
-    @Override
-    public List<CustomerServiceModel> getService(String phoneNumber, Integer workerNumber, Integer status, Long gmtCreate) {
 
-        CustomerServiceModel customerServiceModel = new CustomerServiceModel();
-        customerServiceModel.setPhoneNumber(phoneNumber);
-        customerServiceModel.setWorkerNumber(workerNumber);
-        customerServiceModel.setStatus(status);
-        customerServiceModel.setGmtCreate(gmtCreate);
-        return customerServiceMapper.selectService(customerServiceModel);
-    }
 
-    @Override
-    public List<ServiceJournalDto> getServicePhone(String phoneNumber, Integer workerNumber, Integer status, Long beginTime, Long endTime) {
-        return customerServiceMapper.selectServicePhone(phoneNumber, workerNumber, status, beginTime, endTime);
-    }
-
-    @Override
-    public List<ServiceShowDto> getServiceShow(Long id) {
-        return customerServiceMapper.selectServiceShow(id);
-    }
 
     @Override
     public RestModel insertService(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile[] file, CustomerProblemDescriptionModel customerProblemDescription, Long beginTime, Long endTime, String solve) {
@@ -109,9 +91,8 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     public RestModel updateService(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile[] file, CustomerProblemDescriptionModel customerProblemDescription, String beginTime, String endTime, String solve, CustomerIdDto customerIdDto) {
 
-        //服务总表更新
+        //服务总表更新，草稿状态提交至待处理状态
         customerService.setGmtCreate(System.currentTimeMillis());
-//        customerService.setStatus(0);
         customerService.setId(customerIdDto.getServiceId());
         customerService.setGmtModified(System.currentTimeMillis());
         customerServiceMapper.updateByPrimaryKeySelective(customerService);
@@ -185,9 +166,8 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public RestModel updateServiceByNewSolve(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile[] file, CustomerProblemDescriptionModel customerProblemDescription, String beginTime, String endTime, String solve, CustomerIdDto customerIdDto) {
-        //服务总表待处理状态更新
+        //服务总表更新，待处理状态提交至已处理状态
         customerService.setGmtCreate(System.currentTimeMillis());
-//        customerService.setStatus(0);
         customerService.setId(customerIdDto.getServiceId());
         customerService.setGmtModified(System.currentTimeMillis());
         customerServiceMapper.updateByPrimaryKeySelective(customerService);
@@ -204,6 +184,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 e.printStackTrace();
             }
         }
+
         Date time2 = null;
         if (endTime != "" && endTime != null) {
             try {
@@ -261,6 +242,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public RestModel selectServiceByCondition(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw) {
+        //获取服务列表
         status = StrUtil.parseStringToInt(status, -1);
         List<CustomerServiceShowDto> serviceJournalDtos = customerServiceMapper.selectServiceByCondition(phoneNumber, workName, status, beginTime, endTime);
         PageRestModel pageRestModel = new PageRestModel(
@@ -274,6 +256,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
 
     public String getNum19() {
+        //生成服务单号
         String numStr = "";
         String trandStr = String.valueOf((Math.random() * 9 + 1) * 1000000);
         String dataStr = new SimpleDateFormat("yyyyMMddHHMMSS").format(new Date());
@@ -283,41 +266,8 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public int updateServiceProblem(Long id, Long problemId, String phoneNumber, String phoneType, String name, Long problemType, String title, String description, Integer status) {
-        //服务总表
-        CustomerServiceModel customerServiceModel = new CustomerServiceModel();
-        customerServiceModel.setId(id);
-        customerServiceModel.setPhoneNumber(phoneNumber);
-        customerServiceModel.setName(name);
-        customerServiceModel.setPhoneType(phoneType);
-        customerServiceModel.setStatus(status);
-        customerServiceModel.setGmtModified(System.currentTimeMillis());
-        customerServiceMapper.updateByPrimaryKeySelective(customerServiceModel);
-        //服务问题总表
-        CustomerProblemModel customerProblemModel = new CustomerProblemModel();
-        customerProblemModel.setId(problemId);
-        customerProblemModel.setTypeId(problemType);
-        customerProblemModel.setTitle(title);
-        customerServiceModel.setGmtModified(System.currentTimeMillis());
-        customerProblemMapper.updateByPrimaryKeySelective(customerProblemModel);
-        //问题描述表
-        CustomerProblemDescriptionModel customerProblemDescriptionModel = new CustomerProblemDescriptionModel();
-        customerProblemDescriptionModel.setProblemId(problemId);
-        customerProblemDescriptionModel.setDescription(description);
-        customerProblemDescriptionModel.setGmtModified(System.currentTimeMillis());
-        customerProblemDescriptionMapper.updateByPrimaryKeyByProblemId(customerProblemDescriptionModel);
-        //服务通话流水表
-        CustomerServiceJournalModel customerServiceJournalModel = new CustomerServiceJournalModel();
-        customerServiceJournalModel.setServiceId(id);
-        customerServiceJournalModel.setPhoneNumber(phoneNumber);
-        customerServiceJournalModel.setName(name);
-        customerServiceJournalModel.setGmtModified(System.currentTimeMillis());
-        customerServiceJournalMapper.updateByServiceId(customerServiceJournalModel);
-        return 1;
-    }
-
-    @Override
     public RestModel findProblemById(Long id) {
+        //根据id查看单个服务
         return new RestModel(customerProblemMapper.findProblemById(id));
     }
 }

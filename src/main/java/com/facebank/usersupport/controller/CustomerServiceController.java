@@ -34,6 +34,14 @@ public class CustomerServiceController extends BaseController {
     @Autowired
     ICustomerProblemTypeService customerProblemTypeService;
 
+
+    /**
+     * 功能描述: 新增服务
+     * @param:
+     * @return:
+     * @auther:
+     * @date:
+     */
     @RequestMapping("/customer/add")
     public RestModel customAdd(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[], HttpSession session,
                                CustomerProblemDescriptionModel customerProblemDescription, Long beginTime, Long endTime, Integer staats, String solve){
@@ -41,6 +49,13 @@ public class CustomerServiceController extends BaseController {
         customerService.setWorkerNumber(SessionUtil.getUser(session).getWorkNumber());
         return iCustomerService.insertService(customerService,customerProblem,file,customerProblemDescription,beginTime,endTime,solve);
     }
+    /**
+     * 功能描述: 服务修改，草稿状态提交至待处理状态
+     * @param:
+     * @return:
+     * @auther:
+     * @date:
+     */
     @RequestMapping("/customer/update")
     public RestModel customUpdate(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[], HttpSession session,
                                   CustomerProblemDescriptionModel customerProblemDescription, String beginTime, String endTime, Integer staats, String solve, CustomerIdDto customerIdDto){
@@ -48,7 +63,13 @@ public class CustomerServiceController extends BaseController {
         customerService.setWorkerNumber(SessionUtil.getUser(session).getWorkNumber());
         return iCustomerService.updateService(customerService,customerProblem,file,customerProblemDescription,beginTime,endTime,solve,customerIdDto);
     }
-
+    /**
+     * 功能描述: 服务修改，待处理状态提交至已处理状态
+     * @param:
+     * @return:
+     * @auther:
+     * @date:
+     */
     @RequestMapping("/customer/updateSolve")
     public RestModel customUpdateNewSolve(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[], HttpSession session,
                                           CustomerProblemDescriptionModel customerProblemDescription, String beginTime, String endTime, Integer staats, String solve, CustomerIdDto customerIdDto){
@@ -56,19 +77,15 @@ public class CustomerServiceController extends BaseController {
         customerService.setWorkerNumber(SessionUtil.getUser(session).getWorkNumber());
         return iCustomerService.updateServiceByNewSolve(customerService,customerProblem,file,customerProblemDescription,beginTime,endTime,solve,customerIdDto);
     }
-
-    @RequestMapping("/customer/getService")
-    public RestModel getService(String phoneNumber, Integer workerNumber, Integer status, Long gmtCreate){
-            List<CustomerServiceModel> customerServiceModels = iCustomerService.getService(phoneNumber,workerNumber,status,gmtCreate);
-            return this.success(customerServiceModels);
-    }
-
-    @RequestMapping("/customer/getServicePhone")
-    public RestModel getServicePhone(String phoneNumber, Integer workerNumber, Integer status, Long beginTime, Long endTime){
-        List<ServiceJournalDto> customerServiceModels = iCustomerService.getServicePhone(phoneNumber,workerNumber,status,beginTime,endTime);
-        return this.success(customerServiceModels);
-    }
-
+    /**
+     *
+     * 功能描述: 根据电话号码，客服名称，处理状态以及时间段获取服务列表
+     *
+     * @param:
+     * @return:
+     * @auther:
+     * @date:
+     */
     @RequestMapping("/customer/getServiceByCondition")
     public RestModel getServiceByPhone(String phoneNumber, String workName, Integer status, String beginTime, String endTime, String draw){
         System.out.println(beginTime+"   "+endTime);
@@ -103,22 +120,14 @@ public class CustomerServiceController extends BaseController {
             e.printStackTrace();
             return this.excpRestModel();
         }
-       /* System.out.println(workerNumber);
-        return this.success(iCustomerService.selectServiceByCondition(phoneNumber,workerNumber,status,beginTime,endTime,page,couts));*/
     }
-
-    @RequestMapping("/customer/getServiceShow")
-    public RestModel getServiceShow(Long id){
-        List<ServiceShowDto> customerServiceModels = iCustomerService.getServiceShow(id);
-        return this.success(customerServiceModels);
-    }
-
-    @RequestMapping("/customer/updateService")
-    public RestModel updateService(Long id, Long problemId, String phoneNumber, String phoneType, String name, Long problemType, String title, String description, Integer status){
-        iCustomerService.updateServiceProblem(id,problemId,phoneNumber,phoneType,name,problemType,title,description,status);
-        return new RestModel();
-    }
-
+    /**
+     * 功能描述: 根据服务id获取单个服务信息
+     * @param:
+     * @return:
+     * @auther:
+     * @date:
+     */
     @RequestMapping("/customer/detail")
     public RestModel detail(Long id){
         return iCustomerService.findProblemById(id);
