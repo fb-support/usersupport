@@ -58,6 +58,7 @@ $(document).ready(function () {
         var button = $(event.relatedTarget) // 触发事件的按钮
         recipient = button.data('whatever') // 解析出data-whatever内容
         console.log(recipient);
+
         $.ajax({
             url: "/customer/detail",
             type: "POST",
@@ -208,15 +209,7 @@ var search =  function (status) {
                     data: pa,    //传入已封装的参数
                     dataType: "json",
                     success: function (result) {
-                        //$("#content").hideLoading();
                         callback(result.data);
-                        /*var
-                            // 关闭遮罩效果
-                            $("#content").hideLoading();*/
-                        /*if (result.code==202){alert(result.message)}
-                        if (result.code==203){alert(result.message)}
-                        if (result.code==204){alert(result.message)}
-                        if (result.code == 200) {callback(result.data);}*/
                     }
                 });
             },
@@ -333,13 +326,9 @@ var search =  function (status) {
         pa = null;
     }
 }
-/*
-phoneNumber: $('[name="phoneNumber"]').val(),
-                        workerNumber: $('[name="workNumber"]').val(),
-                        status: statusV,
-                        beginTime: $('#datetimeBegin').val(),
-                        endTime: $('#datetimeEnd').val(),
-                        */
+var cancel = function(){
+    $("#imgBox").html("");
+}
 function getQueryCondition(data,a) {
     var param = {};
     param.phoneNumber = $('[name="phoneNumber"]').val();
@@ -703,6 +692,12 @@ function getParam(status) {
 
     return formdata;
 }
+function clearData(){
+    $("#imgBox").removeAll();
+    // $("#imgBox").remove
+
+
+}
 function updateService(status) {
     var dataform = getParam(status);
     $.ajax({
@@ -715,6 +710,7 @@ function updateService(status) {
         success:function (json) {
             alert(json.message);
             $("#exampleModal").modal("hide");
+            $("#imgBox").val("");
             search(status);
         },
         error:function () {
@@ -737,6 +733,7 @@ function updateServiceNewSolve(status) {
         success:function (json) {
             alert(json.message);
             $("#exampleModal").modal("hide");
+            $("#imgBox").val("");
             search(status);
         },
         error:function () {

@@ -149,9 +149,8 @@
                     <!--问题详情结束-->
                 </div>
             </div>
-
             <div class="modal-footer" id="">
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="search(sta)">取消</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clearData()">取消</button>
                 <button type="button" class="btn btn-primary" onclick="updateService(1)" id="waitdeal">提交为待处理</button>
                 <button type="button" class="btn btn-primary" onclick="updateServiceNewSolve(2)" id="finishdeal">完成处理</button>
             </div>
@@ -206,7 +205,7 @@
                                         <label for="fileN">图片</label>
                                         <input type="file" id="fileN"  multiple="multiple" accept="image/png,image/jpg,image/gif,image/JPEG">
                                     </div>
-                                    <div id="imgBoxN" style="padding-bottom:15px; "></div>
+                                    <div id="imgBoxN" style="padding-bottom:15px; " ></div>
                                 </form>
                             </table>
                         </div>
@@ -219,7 +218,7 @@
             </div>
 
             <div class="modal-footer" >
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="">取消</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel()">取消</button>
                 <button type="button" class="btn btn-info" onclick="putService(0)">草稿</button>
                 <button type="button"  class="btn btn-success" onclick="putService(1)">待处理</button>
             </div>
