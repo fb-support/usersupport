@@ -323,3 +323,35 @@ function runAttendanceAcount() {
         addSmallCardForThisPage("attendance-acount-page", "统计");
     }
 }
+/**
+ * 客服服务--电话来电
+ */
+function customer_record() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示用户管理界面
+    $("#customer_record").show();
+
+    //显示tab
+    if ( $("li[value='customer_record']").length > 0 ) {
+        switchPage( "customer_record" );
+    } else {
+        addSmallCardForThisPage("customer_record", "来电问题记录");
+    }
+}
+/**
+ * 客服服务--服务列表
+ */
+function customer_service() {
+    //隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    //显示用服务列表
+    $("#customer_service").show();
+
+    //显示tab
+    if ( $("li[value='customer_service']").length > 0 ) {
+        switchPage( "customer_service" );
+    } else {
+        addSmallCardForThisPage("customer_service", "服务列表");
+    }
+}
