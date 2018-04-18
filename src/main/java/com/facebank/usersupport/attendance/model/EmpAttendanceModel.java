@@ -9,6 +9,8 @@ public class EmpAttendanceModel {
     private Integer workNumber;
     //员工姓名
     private String empName;
+    //所属部门
+    private String deptName;
     //考勤日期
     private Date attendanceDate;
     //上班打卡时间
@@ -40,6 +42,14 @@ public class EmpAttendanceModel {
 
     public void setEmpName(String empName) {
         this.empName = empName == null ? null : empName.trim();
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 
     public Date getAttendanceDate() {

@@ -274,6 +274,23 @@ function runLeaveManage() {
 }
 
 /**
+ * 前往考勤系统--审核管理页面
+ */
+function runDealManage() {
+    // 隐藏主页中部内容区的默认内容
+    $(".center_show_area").hide();
+    // 展示考勤管理页面
+    $("#attendance-deal-page").show();
+
+    //显示tab
+    if ( $("li[value='attendance-deal-page']").length > 0 ) {
+        switchPage( "attendance-deal-page" );
+    } else {
+        addSmallCardForThisPage("attendance-deal-page", "审核管理");
+    }
+}
+
+/**
  * 前往考勤系统--考勤管理页面
  */
 function runAttendanceManage() {

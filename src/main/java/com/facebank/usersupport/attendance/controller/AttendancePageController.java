@@ -1,6 +1,6 @@
 package com.facebank.usersupport.attendance.controller;
 
-import com.facebank.usersupport.attendance.controller.base.BaseController;
+import com.facebank.usersupport.controller.base.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

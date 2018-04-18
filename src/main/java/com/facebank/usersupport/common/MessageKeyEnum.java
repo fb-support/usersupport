@@ -59,6 +59,8 @@ public enum MessageKeyEnum {
     PARAM_ILLEGAL("-902","请求参数不正确"),
     PARAM_EXPIRED("-903","参数码值已过期"),
     PARAM_FORM_SUMIT("-904","表单重复提交"),
+    FILE_SIZE_ERROR("-905","文件内容过大"),
+    FILE_TYPE_ERROR("-906","文件格式不正确"),
 
 
     //依赖服务异常定义
