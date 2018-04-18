@@ -20,13 +20,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
-        @Autowired
-        private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
 
-        @Bean
-    UserDetailsService customUserService(){ //注册UserDetailsService 的bean
+    @Bean
+    UserDetailsService customUserService() { //注册UserDetailsService 的bean
         return new CustomUserService();
     }
 
@@ -36,13 +36,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         auth.userDetailsService(customUserService())
                 .passwordEncoder(new MyPasswordEncoder());
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 //static resources configuration
-                .antMatchers("/resources/**", "/webjars/**", "/img/**","/css/**","/js/**","/fonts/**","/lang/**","/plugins/**").permitAll()
+                .antMatchers("/resources/**", "/webjars/**", "/img/**", "/css/**", "/js/**", "/fonts/**", "/lang/**", "/plugins/**").permitAll()
                 //login page and registration end-point
-                .antMatchers("/login", "/register","/verity/**").permitAll()
+                .antMatchers("/login", "/register", "/verity/**").permitAll()
                 //all other requests
                 .anyRequest().authenticated()
                 .and()

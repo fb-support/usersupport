@@ -40,10 +40,11 @@ public class TestFormController extends BaseController {
             model.setCreateUsername("冯宝宝");
             model.setFormStatus(0);
             int i = testFormService.insertForm(model);
-            if (i > 0)
+            if (i > 0) {
                 return this.success(MessageKeyEnum.SUCCESS);
-            else
+            } else {
                 return this.excpRestModel(MessageKeyEnum.ERROR);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
@@ -61,10 +62,11 @@ public class TestFormController extends BaseController {
         //TODO ②插入流水表
         try {
             int i = testFormService.updateTestForm(model);
-            if (i > 0)
+            if (i > 0) {
                 return this.success(MessageKeyEnum.SUCCESS);
-            else
+            } else {
                 return this.excpRestModel(MessageKeyEnum.ERROR);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);

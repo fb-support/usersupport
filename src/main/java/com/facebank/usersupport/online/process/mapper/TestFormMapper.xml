@@ -87,8 +87,11 @@
 
     <select id="selectSuccessTestForm" resultMap="ResultMapWithBLOBs">
         SELECT form_id,form_service, form_branch,is_test,influence_scope,is_review,other_change,sql_change,configure_change,mq_change,
-        form_status,create_username,create_user,accept_username,accept_user
+        form_status,create_username,create_user,accept_username,accept_user,gmt_create,project_id
         FROM test_form
-        WHERE form_status = 3 and project_id = #{projectId,jdbcType=BIGINT}
+        WHERE form_status = 3
+        <if test="projectId !=null">
+            and project_id = #{projectId,jdbcType=BIGINT}
+        </if>
     </select>
 </mapper>

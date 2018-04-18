@@ -1,6 +1,8 @@
 package com.facebank.usersupport.online.process.model;
 
-public class LaunchFormModel {
+import java.io.Serializable;
+
+public class LaunchFormModel implements Serializable {
     private Long formId;
 
     private Long projectId;

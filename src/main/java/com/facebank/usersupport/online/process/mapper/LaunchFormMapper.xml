@@ -1,23 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.facebank.usersupport.online.process.mapper.LaunchFormMapper">
-  <resultMap id="BaseResultMap" type="com.facebank.usersupport.online.process.model.LaunchFormModel">
-    <id column="form_id" jdbcType="BIGINT" property="formId" />
-    <result column="project_id" jdbcType="BIGINT" property="projectId" />
-    <result column="test_form_id" jdbcType="BIGINT" property="testFormId" />
-    <result column="create_username" jdbcType="VARCHAR" property="createUsername" />
-    <result column="create_user" jdbcType="BIGINT" property="createUser" />
-    <result column="accept_develop_user" jdbcType="BIGINT" property="acceptDevelopUser" />
-    <result column="accept_develop_username" jdbcType="VARCHAR" property="acceptDevelopUsername" />
-    <result column="accept_test_user" jdbcType="BIGINT" property="acceptTestUser" />
-    <result column="accept_test_username" jdbcType="VARCHAR" property="acceptTestUsername" />
-    <result column="form_status" jdbcType="INTEGER" property="formStatus" />
-    <result column="note" jdbcType="VARCHAR" property="note" />
-    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
-    <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.facebank.usersupport.online.process.model.LaunchFormModel">
-    <result column="form_content" jdbcType="LONGVARCHAR" property="formContent" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.facebank.usersupport.online.process.model.LaunchFormModel">
+        <id column="form_id" jdbcType="BIGINT" property="formId"/>
+        <result column="project_id" jdbcType="BIGINT" property="projectId"/>
+        <result column="test_form_id" jdbcType="BIGINT" property="testFormId"/>
+        <result column="create_username" jdbcType="VARCHAR" property="createUsername"/>
+        <result column="create_user" jdbcType="BIGINT" property="createUser"/>
+        <result column="accept_develop_user" jdbcType="BIGINT" property="acceptDevelopUser"/>
+        <result column="accept_develop_username" jdbcType="VARCHAR" property="acceptDevelopUsername"/>
+        <result column="accept_test_user" jdbcType="BIGINT" property="acceptTestUser"/>
+        <result column="accept_test_username" jdbcType="VARCHAR" property="acceptTestUsername"/>
+        <result column="form_status" jdbcType="INTEGER" property="formStatus"/>
+        <result column="note" jdbcType="VARCHAR" property="note"/>
+        <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
+        <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.facebank.usersupport.online.process.model.LaunchFormModel">
+        <result column="form_content" jdbcType="LONGVARCHAR" property="formContent"/>
+    </resultMap>
+
+    <select id="selectAllLaunchForm" parameterType="com.facebank.usersupport.online.process.model.LaunchFormModel"
+            resultMap="ResultMapWithBLOBs">
+        select form_id,
+        project_id,
+        test_form_id,
+        create_username,
+        create_user,
+        accept_develop_user,
+        accept_develop_username,
+        accept_test_user,
+        accept_test_username,
+        form_status,
+        gmt_create,
+        gmt_modify,
+        form_content,
+        note
+        from launch_form
+        where 1 = 1
+        <if test="projectId!=null">
+            and project_id like CONCAT(CONCAT( #{projectId,jdbcType=BIGINT}),'%')
+        </if>
+        <if test="testFormId!=null">
+            and test_form_id like CONCAT(CONCAT(#{testFormId,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="formStatus!=null">
+            and form_status = #{formStatus,jdbcType=INT}
+        </if>
+        <!--<if test="beginTime != null ">
+            and begin_time > #{beginTime}
+        </if>
+        <if test="endTime != null ">
+            and #{endTime} > end_time
+        </if>-->
+    </select>
+
+    <insert id="insert" parameterType="com.facebank.usersupport.online.process.model.LaunchFormModel">
+        INSERT INTO launch_form (project_id,
+        test_form_id,
+        create_username,
+        create_user,
+        form_status,
+        gmt_create,
+        gmt_modify,
+        form_content)
+        VALUES (#{projectId,jdbcType=BIGINT},
+        #{testFormId,jdbcType=BIGINT},
+        #{createUsername,jdbcType=VARCHAR},
+        #{createUser,jdbcType=BIGINT},
+        #{formStatus,jdbcType=INTEGER},
+        #{gmtCreate,jdbcType=BIGINT},
+        #{gmtModify,jdbcType=BIGINT},
+        #{formContent,jdbcType=LONGVARCHAR})
+    </insert>
+
+    <select id="selectByFormId" parameterType="Long" resultMap="ResultMapWithBLOBs">
+        select form_id,
+        project_id,
+        test_form_id,
+        create_username,
+        create_user,
+        accept_develop_user,
+        accept_develop_username,
+        accept_test_user,
+        accept_test_username,
+        form_status,
+        gmt_create,
+        gmt_modify,
+        form_content,
+        note
+        from launch_form
+        WHERE form_id = #{formId,jdbcType=BIGINT}
+    </select>
+
+    <update id="updateByFormId" parameterType="com.facebank.usersupport.online.process.model.LaunchFormModel">
+        UPDATE launch_form
+        SET
+        <if test="acceptDevelopUser!=null">
+            accept_develop_user = #{acceptDevelopUser,jdbcType=BIGINT},
+            accept_develop_username = #{acceptDevelopUsername,jdbcType=VARCHAR},
+        </if>
+        <if test="acceptTestUser!=null">
+            accept_test_user = #{acceptTestUser,jdbcType=BIGINT},
+            accept_test_username = #{acceptTestUsername,jdbcType=VARCHAR},
+        </if>
+        <if test="formContent!=null">
+            project_id = #{projectId,jdbcType=BIGINT},
+            test_form_id = #{testFormId,jdbcType=BIGINT},
+            form_content = #{formContent,jdbcType=LONGVARCHAR},
+        </if>
+        <if test="formStatus!=null">
+            form_status = #{formStatus,jdbcType=INTEGER} ,
+        </if>
+        gmt_modify = #{gmtCreate,jdbcType=BIGINT}
+        WHERE
+        form_id = #{formId,jdbcType=BIGINT}
+    </update>
 
 </mapper>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html th:fragment="launch_form_page" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{../online-process/js/launchForm.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+</head>
+<body>
+<div id="content">
+    <div class="container-fluid">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>项目ID:</label>
+                <input type="text" class="form-control" id="projectIdSearch" placeholder="请输入项目ID"/>
+            </div>
+            <div class="form-group">
+                <label>测试ID:</label>
+                <input type="text" class="form-control" id="testFormSearch" placeholder="请输入测试ID"/>
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="javascript:search();" class="btn btn-primary">查询</button>
+                <button type="button" onclick="javascript:getTestForm();" data-toggle="modal"
+                        data-target="#createLaunchForm" class="btn btn-primary">新建工单
+                </button>
+            </div>
+        </form>
+        <table class="table table-bordered data-table" cellspacing="0" width="100%" id="launchTable">
+            <thead>
+            <tr>
+                <th>工单ID</th>
+                <th>上线内容</th>
+                <th>日期时间</th>
+                <th>创建人</th>
+                <th>开发验证人</th>
+                <th>测试验证人</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<!--新建上线工单-->
+<div class="modal fade" id="createLaunchForm" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">新建上线工单</h4>
+            </div>
+            <div class="modal-body">
+                <form id="roleForm">
+                    <div class="form-group">
+                        <label class="control-label">对应测试工单（项目ID，测试ID，提测服务，创建时间）:</label>
+                        <select class="form-control" id="testForm">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">上线内容:</label>
+                        <textarea rows="7" class="form-control" name="formContent" id="formContent"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" onclick="createForm();" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 修改上线工单 -->
+<div class="modal fade" id="updateLaunchForm" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">修改上线工单</h4>
+            </div>
+            <div class="modal-body">
+                <form id="updateForm">
+                    <div class="form-group">
+                        <label class="control-label">上线内容:</label>
+                        <textarea rows="7" class="form-control" name="formContent" id="formContent2"></textarea>
+                        <input id="formId" type="hidden"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">上线工单状态:</label>
+                        <select class="form-control" id="launchFormStatus">
+                            <option>不变更</option>
+                            <option>运维人员接单</option>
+                            <option>运维部署完成</option>
+                            <option>开发人员验证不通过</option>
+                            <option>开发人员验证通过</option>
+                            <option>测试人员验证不通过</option>
+                            <option>测试人员验证通过</option>
+                            <option>关闭工单</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" onclick="updateForm();" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
