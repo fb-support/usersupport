@@ -22,10 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author HuBiao
@@ -188,24 +185,22 @@ public class EmpAttendanceController extends BaseController {
     public void output(HttpServletRequest request,HttpServletResponse response,GetAttendanceForm attendanceForm) throws Exception {
         // 从session中取出考勤信息
         List<EmpAttendanceModel> list = (List<EmpAttendanceModel>) request.getSession().getAttribute("attendanceRecord");
-        // 遍历集合，将集合中的数据根据员工号进行分组
+        // 遍历集合，将集合中的数据根据员工号进行分组，并保持到map中
+        Map<Integer,List<EmpAttendanceModel>> map = new HashMap<>();
         for (EmpAttendanceModel empAttendanceModel : list) {
-
+            Integer workNumber = empAttendanceModel.getWorkNumber();
+            if(map.containsKey(workNumber)){
+                map.get(workNumber).add(empAttendanceModel);
+            }else{
+                List<EmpAttendanceModel> subList = new ArrayList<>();
+                subList.add(empAttendanceModel);
+                map.put(workNumber,subList);
+            }
         }
+
         // 生成Excel文件
         XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
         XSSFSheet sheet = xssfWorkbook.createSheet("考勤记录");
-
-        // 表头
-        XSSFRow headRow = sheet.createRow(3);
-        XSSFRow dataRow = sheet.createRow(4);
-        XSSFRow dataRow1 = sheet.createRow(5);
-        dataRow.createCell(0).setCellValue("工 号：");
-        dataRow.createCell(2).setCellValue(list.get(0).getWorkNumber());
-        dataRow.createCell(8).setCellValue("姓 名：");
-        dataRow.createCell(10).setCellValue(list.get(0).getEmpName());
-        dataRow.createCell(18).setCellValue("部 门：");
-        dataRow.createCell(20).setCellValue(list.get(0).getDeptName());
 
         Calendar calendar = Calendar.getInstance();
         Date attenDate = list.get(0).getAttendanceDate();
@@ -225,6 +220,7 @@ public class EmpAttendanceController extends BaseController {
         CellRangeAddress cellRangeAddress = new CellRangeAddress(0,1,0,lastDay-1);
         sheet.addMergedRegion(cellRangeAddress);
 
+        // 第三行
         XSSFRow titleRow = sheet.createRow(2);
         titleRow.createCell(0).setCellValue("考勤日期 :");
         CellRangeAddress cellRangeAddress2 = new CellRangeAddress(2,2,0,1);
@@ -241,52 +237,71 @@ public class EmpAttendanceController extends BaseController {
         CellRangeAddress cellRangeAddress5 = new CellRangeAddress(2,2,lastDay-3,lastDay-1);
         sheet.addMergedRegion(cellRangeAddress5);
 
+        // 显示天数那一行（第4行）
+        XSSFRow headRow = sheet.createRow(3);
         // 根据当月最大天数确认有多少列
         for(int x = 1; x <= lastDay; x++){
             headRow.createCell(x-1).setCellValue(x);
         }
 
-        // 定义需要的变量
-        int index;
-        Date startTime;
-        Date attendanceDate;
-        Date endTime;
-        String startTimeStr = null;
-        String endTimeStr = null;
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+        int rowNum = 4;
 
-        // 设置为自动换行
-        XSSFCellStyle cellStyle = xssfWorkbook.createCellStyle();
-        cellStyle.setWrapText(true);
+        // 根据map中的数据生成对应的员工考勤信息
+        for (Map.Entry<Integer, List<EmpAttendanceModel>> entry : map.entrySet()) {
+            List<EmpAttendanceModel> empList = entry.getValue();
 
-        for(int i=0;i<list.size();i++){
-            startTime = list.get(i).getStartTime();
-            attendanceDate = list.get(i).getAttendanceDate();
-            endTime = list.get(i).getEndTime();
+            XSSFRow dataRow = sheet.createRow(rowNum++);
+            XSSFRow dataRow1 = sheet.createRow(rowNum++);
+            dataRow.createCell(0).setCellValue("工 号：");
+            dataRow.createCell(2).setCellValue(empList.get(0).getWorkNumber());
+            dataRow.createCell(8).setCellValue("姓 名：");
+            dataRow.createCell(10).setCellValue(empList.get(0).getEmpName());
+            dataRow.createCell(18).setCellValue("部 门：");
+            dataRow.createCell(20).setCellValue(empList.get(0).getDeptName());
 
-            // 根据日期中的日确认单元格列的索引
-            calendar.setTime(attendanceDate);
-            index = calendar.get(Calendar.DAY_OF_MONTH)-1;
+            // 定义需要的变量
+            int index;
+            Date startTime;
+            Date attendanceDate;
+            Date endTime;
+            String startTimeStr = null;
+            String endTimeStr = null;
+            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 
-            // 将打卡时间转换为:HH:mm格式的字符串
-            if (startTime!=null){
-                startTimeStr = df.format(startTime);
+            // 设置为自动换行
+            XSSFCellStyle cellStyle = xssfWorkbook.createCellStyle();
+            cellStyle.setWrapText(true);
+
+            for(int i=0;i<empList.size();i++){
+                startTime = empList.get(i).getStartTime();
+                attendanceDate = empList.get(i).getAttendanceDate();
+                endTime = empList.get(i).getEndTime();
+
+                // 根据日期中的日确认单元格列的索引
+                calendar.setTime(attendanceDate);
+                index = calendar.get(Calendar.DAY_OF_MONTH)-1;
+
+                // 将打卡时间转换为:HH:mm格式的字符串
+                if (startTime!=null){
+                    startTimeStr = df.format(startTime);
+                }
+                if(endTime!=null){
+                    endTimeStr= df.format(endTime);
+                }
+
+                if(startTime==null&&endTime!=null){
+                    dataRow1.createCell(index).setCellValue(endTimeStr);
+                }else if (startTime!=null&&endTime==null){
+                    dataRow1.createCell(index).setCellValue(startTimeStr);
+                }else {
+                    XSSFCell cell = dataRow1.createCell(index);
+                    cell.setCellStyle(cellStyle);
+                    cell.setCellValue(new XSSFRichTextString(startTimeStr+" "+endTimeStr));
+                }
+
             }
-            if(endTime!=null){
-                endTimeStr= df.format(endTime);
-            }
-
-            if(startTime==null&&endTime!=null){
-                dataRow1.createCell(index).setCellValue(endTimeStr);
-            }else if (startTime!=null&&endTime==null){
-                dataRow1.createCell(index).setCellValue(startTimeStr);
-            }else {
-                XSSFCell cell = dataRow1.createCell(index);
-                cell.setCellStyle(cellStyle);
-                cell.setCellValue(new XSSFRichTextString(startTimeStr+" "+endTimeStr));
-            }
-
         }
+
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
         response.setHeader("Content-disposition", "attachment;filename=attendance.xls");//默认Excel名称
         response.flushBuffer();
