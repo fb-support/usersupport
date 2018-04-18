@@ -63,12 +63,9 @@ public class PageController extends BaseController {
 
     @RequestMapping("/ul/{pageName}")
     public String showUserLoginPage(@PathVariable String pageName){
-        return "userLoginManagerment/"+pageName;
-    }
+        return "userLoginManagerment/"+pageName; }
 
     @RequestMapping("/customer/{pageName}")
-    public String showCustomerPage(@PathVariable String pageName){
-        return "customerService/"+pageName;
-    }
+    public String showCustomerPage(@PathVariable String pageName){ return "customerService/"+pageName; }
 
 }

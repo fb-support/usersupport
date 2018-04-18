@@ -154,7 +154,7 @@ var tap = 0;
 var pa;
 //获取列表信息
 var idButton;
-var statusV
+var statusV;
 var search =  function (status) {
 
     statusV = status;
@@ -209,6 +209,7 @@ var search =  function (status) {
                     data: pa,    //传入已封装的参数
                     dataType: "json",
                     success: function (result) {
+                        $("#status").val(statusV);
                         callback(result.data);
                     }
                 });
