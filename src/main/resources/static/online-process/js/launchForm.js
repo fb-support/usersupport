@@ -151,6 +151,7 @@ function createForm() {
     });
 }
 
+var status;
 //获取上线工单详情
 function showLaunchForm(id) {
     var formId = {"formId": id}
@@ -164,15 +165,16 @@ function showLaunchForm(id) {
             if (result.code == 1) {
                 $("#formContent2").val(result.data.formContent);
                 $("#formId").val(result.data.formId);
+                status = result.data.formStatus;
             } else {
                 layer.msg(result.error);
             }
         }
     });
 }
-var status = $("#launchFormStatus").val();
-function updateStatus2(status) {
-    status = code;
+
+function updateStatus(statusCode) {
+    status = statusCode;
 }
 
 
@@ -185,11 +187,12 @@ function updateForm() {
     param.testFormId = arr[1];*/
     param.formId = $("#formId").val();
     param.formStatus = status;
+    param.formContent = $("#formContent2").val();
     $.ajax({
         type: "POST",
         url: '/online-process/updateLaunchForm',
         cache: false,  //禁用缓存
-        data: param,
+        data: $("#updateForm").serialize(),
         dataType: 'json',
         success: function (result) {
             if (result.code == 1) {

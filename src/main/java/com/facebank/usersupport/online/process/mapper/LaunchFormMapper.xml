@@ -106,8 +106,6 @@
             accept_test_username = #{acceptTestUsername,jdbcType=VARCHAR},
         </if>
         <if test="formContent!=null">
-            project_id = #{projectId,jdbcType=BIGINT},
-            test_form_id = #{testFormId,jdbcType=BIGINT},
             form_content = #{formContent,jdbcType=LONGVARCHAR},
         </if>
         <if test="formStatus!=null">
