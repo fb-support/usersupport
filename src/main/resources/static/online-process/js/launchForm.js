@@ -27,7 +27,14 @@ $(document).ready(function () {
         "columns": [
             {"data": "formId"},
             {"data": "formContent"},
-            {"data": "gmtCreate"},
+            {
+                "sClass": "text-center",
+                "data": "gmtCreate",
+                "render": function (data, type, full, meta) {
+                    return formatDate(validate(data));
+                },
+                "bSortable": false
+            },
             {"data": "createUsername"},
             {"data": "acceptDevelopUsername"},
             {"data": "acceptTestUsername"},
@@ -90,6 +97,20 @@ $(document).ready(function () {
 
 function search() {
     table.ajax.reload();
+}
+
+var validate = function (data) {
+    if (data == null) {
+        return "";
+    }
+    return data;
+}
+
+function formatDate(now) {
+    if (now == "") {
+        return "";
+    }
+    return new Date(now).toLocaleString();
 }
 
 //封装查询参数
