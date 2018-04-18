@@ -173,21 +173,8 @@ function showLaunchForm(id) {
     });
 }
 
-function updateStatus(statusCode) {
-    status = statusCode;
-}
-
-
 //修改上线工单
 function updateForm() {
-    var param = {};
-   /* var arr = $("#testForm2").val().split(",");
-    param.formContent = $("#formContent2").val();
-    param.projectId = arr[0];
-    param.testFormId = arr[1];*/
-    param.formId = $("#formId").val();
-    param.formStatus = status;
-    param.formContent = $("#formContent2").val();
     $.ajax({
         type: "POST",
         url: '/online-process/updateLaunchForm',
