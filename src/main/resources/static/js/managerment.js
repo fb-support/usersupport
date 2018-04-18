@@ -51,10 +51,10 @@ $(document).ready(function () {
                 "render": function (data, type, full, meta) {
                     if(data == 0) {
                         console.log("启用");
-                        return "<span style='color: #72fc9c;'>启用中</span>"
+                        return "<span class='status_enable'>启用中</span>"
                     } else if(data == 1) {
                         console.log("禁用");
-                        return "<span style='color: red;'>禁用</span>"
+                        return "<span class='status_ban'>禁用</span>"
                     }
                 },
                 "bSortable": false

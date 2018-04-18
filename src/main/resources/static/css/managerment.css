@@ -32,3 +32,14 @@
 .btn_veritySingleUser:hover {
     background-color: #2b1f4c;
 }
+
+.status_enable {
+    color: deepskyblue;
+    font-weight: bold;
+
+}
+
+.status_ban {
+    color: red;
+    font-weight: bold;
+}
