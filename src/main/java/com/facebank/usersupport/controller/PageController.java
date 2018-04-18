@@ -60,10 +60,4 @@ public class PageController extends BaseController {
     public String showSystemConfigPage(@PathVariable String pageName){
         return "systemConfig/"+pageName;
     }
-
-    @RequestMapping("/ul/{pageName}")
-    public String showUserLoginPage(@PathVariable String pageName){
-        return "userLoginManagerment/"+pageName;
-    }
-
 }

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <!--<script type="text/javascript" th:src="@{../attendance/js/leaveSearch.js}"></script>-->
+    <!--<script type="text/javascript" th:src="@{../attendance/js/leaveApply.js}"></script>-->
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../attendance/css/apply.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
+
+    <script type="text/javascript" th:src="@{../My97DatePicker/WdatePicker.js}"></script>
+    <script type="text/javascript" th:src="@{../attendance/js/applyRecord.js}"></script>
+
+    <style type="text/css">
+        .Wdate{
+            background-image:url('../My97DatePicker/skin/datePicker.gif');
+        }
+        .hide{
+            display: none;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div id="content">
+        <div class="container-fluid">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label class="labe_l">申请日期:</label>
+                    <!--<input type="text" class="form_datetime form-control" id="datetimeStart" name="startTime" readonly>-->
+                    <input class="Wdate form-control" type="text" id="datetimeStart" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" readonly>
+                    --
+                    <!--<input type="text" class="form_datetime form-control" id="datetimeEnd" name="endTime" readonly>-->
+                    <input class="Wdate form-control" type="text" id="datetimeEnd" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" readonly>
+
+                </div>
+                <span class="btn btn-default" onclick="search(1)">查询</span>
+
+                <div class="form-froup" style="float: right;margin-right: 50px">
+                    <input class="btn btn-default" id="addRestApply" onclick="showAddModel()" type="button" value="添加">
+                </div>
+            </form>
+
+            <table class="table table-bordered data-table" cellspacing="0" width="100%" id="datatable">
+                <thead>
+                <tr>
+                    <!--<th>-->
+                        <!--<input type="checkbox" class="checkall"/>-->
+                    <!--</th>-->
+                    <th>编号</th>
+                    <th>员工号</th>
+                    <th>姓名</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>申请时间</th>
+                    <th>时长</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+
+    <!--修改信息-->
+    <div class="modal fade" id="showDetail" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">详情信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="detailForm">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="description" id="show_applyId"/>
+                            <label class="control-label">员工号:</label>
+                            <input type="text" class="form-control" name="description" readonly="readonly"  id="show_workNumber"/>
+                            <label class="control-label">员工姓名:</label>
+                            <input type="text" class="form-control" name="description" id="show_empName"/>
+                            <label class="control-label">请假开始时间:</label>
+                            <!--<input type="text" class="form_datetime form-control" name="description" id="show_startTime" readonly="readonly"/>-->
+                            <input class="Wdate form-control" type="text" id="show_startTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm'})" readonly>
+                            <label class="control-label">请假结束时间:</label>
+                            <!--<input type="text" class="form_datetime form-control" name="description" id="show_endTime" readonly="readonly"/>-->
+                            <input class="Wdate form-control" type="text" id="show_endTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm'})" readonly>
+                            <label class="control-label">申请日期:</label>
+                            <input type="text" class="form-control" name="description" id="show_applyDate"/>
+                            <label class="control-label">申请时长（单位：小时）:</label>
+                            <input type="text" class="form-control" name="description" id="show_applyDuration"/>
+                            <label class="control-label">申请原因:</label>
+                            <textarea type="text" class="form-control" name="description" id="show_applyCause"></textarea>
+                            <label class="control-label">状态:</label>
+                            <input type="text" class="form-control" name="description" id="show_dealType"/>
+                            <!--<label class="hide control-label">审批人:</label>-->
+                            <!--<input type="text" class="hide form-control" name="description" id="deal_person"/>-->
+                            <label class="control-label hide" id="notpassCause">未通过原因:</label>
+                            <textarea type="text" class="form-control hide" name="description" id="show_notpassCause"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="updateApplyDetail()" id="updateApplyDetail" class="btn btn-primary">修改</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--添加申请信息-->
+    <div class="modal fade" id="addApply" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">添加申请</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="addApplyForm">
+                        <div class="form-group">
+                            <label class="control-label">请假开始时间:</label>
+                            <!--<input type="text" class="form_datetime form-control" id="add_startTime" name="startTime" readonly="readonly"/>-->
+                            <input class="Wdate form-control" type="text" id="add_startTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm'})" readonly>
+                            <label class="control-label">请假结束时间:</label>
+                            <!--<input type="text" class="form_datetime form-control" id="add_endTime" name="endTime" readonly="readonly"/>-->
+                            <input class="Wdate form-control" type="text" id="add_endTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm'})" readonly>
+                            <label class="control-label">请假时长(小时):</label>
+                            <input type="text" class="form_datetime form-control" id="add_applyDuration" name="leaveLength" />
+                            <!--<label class="control-label">申请日期:</label>-->
+                            <!--<input type="text" class="form-control" name="description" id="add_applyDate"/>-->
+                            <label class="control-label">申请原因:</label>
+                            <textarea type="text" class="form-control" name="leaveCause" id="add_applyCause"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addApply(1);" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html>
