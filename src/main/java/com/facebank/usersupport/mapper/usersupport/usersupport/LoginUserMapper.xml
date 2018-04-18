@@ -55,5 +55,6 @@
         <if test="logoutTime != null ">
             and #{logoutTime} > logout_time
         </if>
+        order by login_time DESC
     </select>
 </mapper>

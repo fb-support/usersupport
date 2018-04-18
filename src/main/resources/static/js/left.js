@@ -4,6 +4,7 @@
 function runUserBaseInfo() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    $("#system-base-info-page").show();
 
     //显示tab
     if ( $("li[value='system-base-info-page']").length > 0 ) {
