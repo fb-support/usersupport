@@ -4,6 +4,8 @@
 function runUserBaseInfo() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#system-base-info-page").attr("src", "/sc/base_infomation");
     $("#system-base-info-page").show();
 
     //显示tab
@@ -20,6 +22,8 @@ function runUserBaseInfo() {
 function runChangePassword() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#system-change-password-page").attr("src", "/sc/reset_password");
     $("#system-change-password-page").show();
 
     //显示tab
@@ -47,6 +51,8 @@ function runRepaymentSearch() {
 
     //显示债券还款查询页面。
     if(count == 0) {
+        //设置指定到的src值
+        $("#service-repayment-page").attr("src", "/service/search");
         $("#service-repayment-page").show();
         addSmallCardForThisPage("service-repayment-page", "债券还款查询");
     } else {
@@ -72,6 +78,8 @@ function runRepaymentOrderSearch() {
 
     //显示订单还款查询页面。
     if(count == 0) {
+        //设置指定到的src值
+        $("#service-repaymentOrder-page").attr("src", "/service/orderSearch" );
         $("#service-repaymentOrder-page").show();
         addSmallCardForThisPage("service-repaymentOrder-page", "订单还款查询");
     } else {
@@ -96,6 +104,8 @@ function moneyRecord() {
 
     //显示资金记录页面。
     if(count == 0) {
+        //设置指定到的src值
+        $("#log-record").attr("src", "/money/moneyRecord");
         $("#log-record").show();
         addSmallCardForThisPage("log-record", "资金记录");
     } else {
@@ -120,6 +130,8 @@ function generalJournal() {
 
     //显示资金流水页面。
     if(count == 0) {
+        //设置指定到的src值
+        $("#log-journal").attr("src", "/log/generalJournal");
         $("#log-journal").show();
         addSmallCardForThisPage("log-journal", "资金流水");
     } else {
@@ -133,6 +145,8 @@ function generalJournal() {
 function run_addUserManeger() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#userPermission-manage").attr("src", "/role/userManage");
     $("#userPermission-manage").show();
 
     //显示tab
@@ -148,7 +162,9 @@ function run_addUserManeger() {
 function roleManage() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
-    //显示基本信息页面。
+    //设置指定到的src值
+    $("#role-manage").attr("src", "/role/userManage");
+    //显示角色管理页面。
     $("#role-manage").show();
     if ( $("li[value='role-manage']").length > 0 ) {
         switchPage( "role-manage" );
@@ -162,6 +178,8 @@ function roleManage() {
 function menuManage() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#menu-manage").attr("src", "/menu/menuManage");
     //显示菜单管理页面。
     $("#menu-manage").show();
     //显示tab
@@ -179,6 +197,8 @@ moneyRecord()
 function run_addUser() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#userManager-add-user-page").attr("src", "/um/addUser");
     $("#userManager-add-user-page").show();
 
     //显示tab
@@ -195,6 +215,8 @@ function run_addUser() {
 function runOperaUser() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#userManager-opera-user-page").attr("src", "/um/managerment" );
     //显示用户管理界面
     $("#userManager-opera-user-page").show();
 
@@ -212,6 +234,8 @@ function runOperaUser() {
 function runUserLog() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#userManager-login-page").attr("src", "/um/loginRecord" );
     //显示用户管理界面
     $("#userManager-login-page").show();
 
@@ -229,6 +253,8 @@ function runUserLog() {
 function runOvertimeManage() {
     // 隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#attendance-overtime-page").attr("src", "/attendance/overtime" );
     // 展示加班管理页面
     $("#attendance-overtime-page").show();
 
@@ -246,6 +272,8 @@ function runOvertimeManage() {
 function runRestManage() {
     // 隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#attendance-rest-page").attr("src", "/attendance/rest");
     // 展示调休管理页面
     $("#attendance-rest-page").show();
 
@@ -263,6 +291,8 @@ function runRestManage() {
 function runLeaveManage() {
     // 隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#attendance-leave-page").attr("src", "/attendance/leave");
     // 展示请假管理页面
     $("#attendance-leave-page").show();
 
@@ -280,6 +310,8 @@ function runLeaveManage() {
 function runDealManage() {
     // 隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#attendance-deal-page").attr("src", "/attendance/deal");
     // 展示考勤管理页面
     $("#attendance-deal-page").show();
 
@@ -297,6 +329,8 @@ function runDealManage() {
 function runAttendanceManage() {
     // 隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#attendance-attendance-page").attr("src", "/attendance/attendance");
     // 展示考勤管理页面
     $("#attendance-attendance-page").show();
 
@@ -314,6 +348,8 @@ function runAttendanceManage() {
 function runAttendanceAcount() {
     // 隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#attendance-acount-page").attr("src", "/attendance/acount" );
     // 展示统计页面
     $("#attendance-acount-page").show();
 
@@ -330,6 +366,8 @@ function runAttendanceAcount() {
 function customer_record() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#customer_record").attr("src", "/customer/customerRecord");
     //显示用户管理界面
     $("#customer_record").show();
 
@@ -346,6 +384,8 @@ function customer_record() {
 function customer_service() {
     //隐藏主页中部内容区的默认内容
     $(".center_show_area").hide();
+    //设置指定到的src值
+    $("#customer_service").attr("src", "/customer/showService");
     //显示用服务列表
     $("#customer_service").show();
 
