@@ -45,13 +45,25 @@ $(document).ready(function () {
             {"data": "username"},
             {"data": "email"},
             {"data": "phone"},
-            {"data": "status"},
+            {
+                "sClass": "text-center",
+                "data": "status",
+                "render": function (data, type, full, meta) {
+                    if(data == 0) {
+                        console.log("启用");
+                        return "<span style='color: #72fc9c;'>启用中</span>"
+                    } else if(data == 1) {
+                        console.log("禁用");
+                        return "<span style='color: red;'>禁用</span>"
+                    }
+                },
+                "bSortable": false
+            },
             {
                 "sClass": "text-center",
                 "data": "userId",
                 "render": function (data, type, full, meta) {
-//                    class="btn btn-primary"
-                    return '<button type="button" onclick="showModel(' + data + ');" >修改信息</button>';
+                    return '<button type="button" onclick="showModel(' + data + ');" class="btn_veritySingleUser" >修改信息</button>';
                 },
                 "bSortable": false
             },
@@ -80,6 +92,7 @@ function getQueryCondition(data) {
     param.username = $("#name-search").val();//查询条件
     param.workNumber = $("#work-search").val();//查询条件
     param.phone = $("#phone-search").val();//查询条件
+    param.status = $("#status-search").val();//查询条件
     //组装分页参数
     param.start = data.start;
     param.length = data.length;
@@ -121,8 +134,96 @@ function deleteUser() {
             }
         });
     });
-
 }
+
+
+/**
+ * 禁止用户
+ */
+function banUser() {
+    var id = [];
+    $(".checkchild:checked").each(function () {
+        id.push($(this).val());
+    });
+
+    if ($(".checkchild:checked").length < 1) {
+        layer.msg('请选择一条数据');
+        return;
+    }
+
+    var parm = {"id": id};
+    layer.confirm('您确定要禁止这些客服用户吗？', {
+        btn: ['确认', '取消'] //按钮
+    }, function () {
+        $.ajax({
+            type: "POST",
+            url: '/um/banUserByIds',
+            cache: false,  //禁用缓存
+            data: parm,
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == 1) {
+                    layer.msg('操作成功');
+                    table.ajax.reload();
+                } else {
+                    layer.msg(data.error);
+                }
+            }
+        });
+    });
+}
+
+
+/**
+ * 启用用户
+ */
+function enableUser() {
+    var id = [];
+    $(".checkchild:checked").each(function () {
+        id.push($(this).val());
+    });
+
+    if ($(".checkchild:checked").length < 1) {
+        layer.msg('请选择一条数据');
+        return;
+    }
+
+    var parm = {"id": id};
+    layer.confirm('您确定要启用这些用户吗？', {
+        btn: ['确认', '取消'] //按钮
+    }, function () {
+        $.ajax({
+            type: "POST",
+            url: '/um/enableUserByIds',
+            cache: false,  //禁用缓存
+            data: parm,
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == 1) {
+                    layer.msg('操作成功');
+                    table.ajax.reload();
+                } else {
+                    layer.msg(data.error);
+                }
+            }
+        });
+    });
+}
+
+
+// 全选/取消全选监听
+function toggleSelectAll() {
+    if ($(".checkchild:checked").length < $(".checkchild").length) {
+        $(".checkchild").each(function () {
+            this.checked = true;
+        });
+    } else {
+        $(".checkchild:checked").each(function () {
+            this.checked = false;
+        });
+    }
+}
+
 
 /**
  * 显示模态框
@@ -174,50 +275,53 @@ function updateUser() {
         return;
     }
 
-        $.ajax({
-            type: "GET",
-            url: '/um/check',
-            cache: false,  //禁用缓存
-            data: param,
-            dataType: 'json',
-            success: function (result) {
-                var toast = "";
-                if (result.code == 1) {
-                    if(result.data.phoneRepeat==true){
-                        toast += "手机号码重复！";}
-                    if(result.data.emailRepeat==true){
-                        toast += "邮箱号码重复！";}
-                    if(result.data.workNumberRepeat==true){
-                        toast += "工号重复！";}
-                    if(result.data.usernameRepeat==true){
-                        toast += "用户名重复！";
-                    }
-
-                    if (toast.length>1){
-                        layer.msg(toast);
-                        return;
-                    }
-                    else{
-                        $.ajax({
-                            type: "POST",
-                            url: '/um/updateBaseInfoMationById',
-                            cache: false,  //禁用缓存
-                            data: param,
-                            dataType: 'json',
-                            success: function (result) {
-                                if (result.code == 1) {
-                                    $('#updateUser').modal('hide');
-                                    layer.msg('操作成功');
-                                    table.ajax.reload();
-                                } else {
-                                    layer.msg(result.error);
-                                }
-                            }
-                        });
-                    }
-                } else {
-                    layer.msg(result.error);
+    $.ajax({
+        type: "GET",
+        url: '/um/check',
+        cache: false,  //禁用缓存
+        data: param,
+        dataType: 'json',
+        success: function (result) {
+            var toast = "";
+            if (result.code == 1) {
+                if (result.data.phoneRepeat == true) {
+                    toast += "手机号码重复！";
                 }
+                if (result.data.emailRepeat == true) {
+                    toast += "邮箱号码重复！";
+                }
+                if (result.data.workNumberRepeat == true) {
+                    toast += "工号重复！";
+                }
+                if (result.data.usernameRepeat == true) {
+                    toast += "用户名重复！";
+                }
+
+                if (toast.length > 1) {
+                    layer.msg(toast);
+                    return;
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: '/um/updateBaseInfoMationById',
+                        cache: false,  //禁用缓存
+                        data: param,
+                        dataType: 'json',
+                        success: function (result) {
+                            if (result.code == 1) {
+                                $('#updateUser').modal('hide');
+                                layer.msg('操作成功');
+                                table.ajax.reload();
+                            } else {
+                                layer.msg(result.error);
+                            }
+                        }
+                    });
+                }
+            } else {
+                layer.msg(result.error);
             }
-        })
+        }
+    })
 }

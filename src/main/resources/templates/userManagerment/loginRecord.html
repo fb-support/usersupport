@@ -21,18 +21,16 @@
     <div class="container-fluid">
         <form class="form-inline">
             <div class="form-group">
-                <label>工号:</label>
                 <input type="text" class="form-control" id="work-search" placeholder="请输入工号"/>
             </div>
             <div class="form-group">
-                <label>姓名:</label>
                 <input type="text" class="form-control" id="name-search" placeholder="请输入姓名"/>
             </div>
             <div class="form-group">
-                <label>登录时间:</label>
-                <input type="text" class="form-control" id="datetimeStart" name="startTime" readonly>
-                <label>登出时间:</label>
-                <input type="text" class="form-control" id="datetimeEnd" name="endTime" readonly>
+                <!--<label>登录时间:</label>-->
+                <input type="text" class="form-control" id="datetimeStart" name="startTime" placeholder="登录时间" readonly>
+                <!--<label>登出时间:</label>-->
+                <input type="text" class="form-control" id="datetimeEnd" name="endTime" placeholder="登出时间" readonly>
                 <button type="button" onclick="javascript:search();" class="btn btn-primary">查询</button>
             </div>
         </form>

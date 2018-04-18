@@ -118,6 +118,24 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     /**
+     * 根据id禁止指定用户
+     * @param ids 用户id array
+     */
+    @Override
+    public void banByUserIds(Integer[] ids) {
+        userMapper.updateStatusForBanUser(ids);
+    }
+
+    /**
+     * 根据id启用指定用户
+     * @param ids 用户id array
+     */
+    @Override
+    public void enableUserByIds(Integer[] ids) {
+        userMapper.updateStatusForEnableUser(ids);
+    }
+
+    /**
      * 获取当前正在登录用户的ID
      * @return
      */

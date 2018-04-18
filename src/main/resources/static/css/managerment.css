@@ -1,0 +1,34 @@
+#content {
+    margin-top: 20px;
+}
+
+#work-search {
+    margin-right: 15px;
+}
+
+#name-search {
+    margin-right: 15px;
+}
+
+#phone-search {
+    margin-right: 15px;
+}
+
+.btn_mycss {
+    width: 80px;
+}
+
+.form-inline {
+    margin-bottom: 10px;
+}
+
+.btn_veritySingleUser {
+    border: none;
+    background-color: #2aabd2;
+    color: #FFFFFF;
+    padding: 6px 12px;
+}
+
+.btn_veritySingleUser:hover {
+    background-color: #2b1f4c;
+}

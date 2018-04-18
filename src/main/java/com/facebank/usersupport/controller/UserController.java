@@ -104,6 +104,10 @@ public class UserController extends BaseController {
                                         String draw, UserModel model){
         try {
             int pageNo = start / length + 1;
+            //判断状态并规范
+            if(model.getStatus() == -1) {
+                model.setStatus(null);
+            }
             PageInfo pageInfo = userService.selectByPage(length, pageNo, model);
             PageRestModel pageRestModel = new PageRestModel(
                     draw,
@@ -134,6 +138,39 @@ public class UserController extends BaseController {
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
         }
     }
+
+    /**
+     * 批量禁止用户
+     * @param id id数组
+     * @return
+     */
+    @PostMapping("um/banUserByIds")
+    public RestModel banUserByIds(@RequestParam(value = "id[]") Integer[] id){
+        try{
+            userService.banByUserIds(id);
+            return this.success(MessageKeyEnum.SUCCESS);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
+    }
+
+    /**
+     * 批量启用用户
+     * @param id id数组
+     * @return
+     */
+    @PostMapping("um/enableUserByIds")
+    public RestModel enableUserByIds(@RequestParam(value = "id[]") Integer[] id){
+        try{
+            userService.enableUserByIds(id);
+            return this.success(MessageKeyEnum.SUCCESS);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
+    }
+
 
     /**
      * 进行用户字段校验

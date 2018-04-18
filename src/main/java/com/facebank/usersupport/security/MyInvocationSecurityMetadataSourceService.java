@@ -30,9 +30,6 @@ public class MyInvocationSecurityMetadataSourceService  implements FilterInvocat
         Collection<ConfigAttribute> array;
         ConfigAttribute cfg;
         List<MenuModel> permissions = menuMapper.queryAllMenu();
-//        List<RoleModel> roles = roleMapper.findAll();
-        System.out.println("所有权限");
-        System.out.println(permissions.toString());
         for(MenuModel permission : permissions) {
             array = new ArrayList<>();
             cfg = new SecurityConfig(permission.getMenuName());

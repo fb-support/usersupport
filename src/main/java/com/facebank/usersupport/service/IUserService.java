@@ -65,6 +65,18 @@ public interface IUserService {
     void deleteByUserIds(Integer[] ids);
 
     /**
+     * 批量禁止用户
+     * @param ids 用户id array
+     */
+    void banByUserIds(Integer[] ids);
+
+    /**
+     * 批量启用用户
+     * @param ids 用户id array
+     */
+    void enableUserByIds(Integer[] ids);
+
+    /**
      * 获取当前用户id
      * @return
      */
