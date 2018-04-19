@@ -198,7 +198,7 @@ public class CustomerServiceImpl implements ICustomerService {
         }
         //插入问题解决
         String solve = customerServiceForm.getSolve();
-        if (solve!=null&&solve!="") {
+        if (solve != null && solve.equals("")==false) {
             CustomerProblemSolveModel customerProblemSolve = new CustomerProblemSolveModel();
             customerProblemSolve.setProblemId(customerServiceForm.getProblemId());//插入问题id
             customerProblemSolve.setDescription(customerServiceForm.getSolve());//插入问题处理内容
