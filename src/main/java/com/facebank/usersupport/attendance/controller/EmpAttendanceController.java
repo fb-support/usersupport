@@ -157,14 +157,21 @@ public class EmpAttendanceController extends BaseController {
         }
     }
 
+    /**
+     * 查询考勤信息
+     * @param attendanceForm
+     * @param draw
+     * @param request
+     * @return
+     */
     @PostMapping("/attendance/getAttendanceRecord")
     @ResponseBody
     public RestModel getAttendanceRecord(GetAttendanceForm attendanceForm, String draw, HttpServletRequest request){
         try {
             // 根据页面传递参数组合查询考勤信息
             List<EmpAttendanceModel> attendanceRecord = empAttendanceService.getAttendanceRecordByForm(attendanceForm);
-            // 将考勤信息存入session中方便导出
-            request.getSession().setAttribute("attendanceRecord",attendanceRecord);
+            // 将考勤信息查询参数存入session中，方便导出时使用
+            request.getSession().setAttribute("attendanceForm",attendanceForm);
             PageRestModel pageRestModel = new PageRestModel(
                     draw,
                     new Long(attendanceRecord.size()+""),
@@ -179,12 +186,14 @@ public class EmpAttendanceController extends BaseController {
     }
 
     /**
-     * 导出操作
+     * 将考勤信息导出Excel
      */
     @PostMapping("/attendance/export")
-    public void output(HttpServletRequest request,HttpServletResponse response,GetAttendanceForm attendanceForm) throws Exception {
+    public void output(HttpServletRequest request,HttpServletResponse response) throws Exception {
         // 从session中取出考勤信息
-        List<EmpAttendanceModel> list = (List<EmpAttendanceModel>) request.getSession().getAttribute("attendanceRecord");
+        GetAttendanceForm attendanceForm = (GetAttendanceForm) request.getSession().getAttribute("attendanceForm");
+        // 从数据库中查询考勤信息
+        List<EmpAttendanceModel> list = empAttendanceService.getAttendanceRecordByForm(attendanceForm);
         // 遍历集合，将集合中的数据根据员工号进行分组，并保持到map中
         Map<Integer,List<EmpAttendanceModel>> map = new HashMap<>();
         for (EmpAttendanceModel empAttendanceModel : list) {

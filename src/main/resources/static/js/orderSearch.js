@@ -90,7 +90,7 @@ function search(page,pageSize){
             "searching": true, // 从结果搜索
             "bJQueryUI": true,
             "ordering" : true, // 排序
-            "aaSorting": [5, "desc"], // 按第7列倒序排列
+            "aaSorting": [3, "desc"], // 按第4列倒序排列
             "sPaginationType": "full_numbers",
             "serverSide": false, // true代表后台分页，false代表前台分页
             // 表格填充数据来源，使用ajax异步请求后台获取数据
