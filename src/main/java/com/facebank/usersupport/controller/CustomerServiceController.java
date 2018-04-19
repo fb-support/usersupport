@@ -87,31 +87,9 @@ public class CustomerServiceController extends BaseController {
      * @date:
      */
     @RequestMapping("/customer/getServiceByCondition")
-    public RestModel getServiceByPhone(String phoneNumber, String workName, Integer status, String beginTime, String endTime, String draw){
-        System.out.println(beginTime+"   "+endTime);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date time1 = null;
-        Date time2 = null;
-        long begintime = 0;
-        long endtime = 0;
-        if(beginTime != "" && beginTime != null){
-            try{
-                time1 = sdf.parse(beginTime);
-                begintime = time1.getTime();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        if(endTime != "" && endTime != null){
-            try {
-                time2 = sdf.parse(endTime);
-                endtime = time2.getTime();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+    public RestModel getServiceByPhone(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw){
         try{
-            RestModel restModel = iCustomerService.selectServiceByCondition(phoneNumber,workName,status,begintime,endtime,draw);
+            RestModel restModel = iCustomerService.selectServiceByCondition(phoneNumber,workName,status,beginTime,endTime,draw);
             System.out.println(restModel.toString());
             return restModel;
         }catch (Exception e){
