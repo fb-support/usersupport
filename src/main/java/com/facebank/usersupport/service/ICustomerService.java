@@ -1,11 +1,14 @@
 package com.facebank.usersupport.service;
 
 import com.facebank.usersupport.dto.CustomerIdDto;
+import com.facebank.usersupport.dto.reqDto.CustomerServiceForm;
 import com.facebank.usersupport.model.CustomerProblemDescriptionModel;
 import com.facebank.usersupport.model.CustomerProblemModel;
 import com.facebank.usersupport.model.CustomerServiceModel;
 import com.facebank.usersupport.model.RestModel;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @Auther: quanli
@@ -17,15 +20,11 @@ public interface ICustomerService {
 
     RestModel selectServiceByCondition(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw);
 
-    RestModel insertService(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[],
-                            CustomerProblemDescriptionModel customerProblemDescription, Long beginTime, Long endTime, String solve);
+    RestModel insertService(CustomerServiceForm customerServiceForm, HttpSession session);
 
-    RestModel updateService(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[],
-                            CustomerProblemDescriptionModel customerProblemDescription, String beginTime, String endTime, String solve, CustomerIdDto customerIdDto);
+    RestModel updateService(CustomerServiceForm customerServiceForm,HttpSession session);
 
-    RestModel updateServiceByNewSolve(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[],
-                                      CustomerProblemDescriptionModel customerProblemDescription, String beginTime, String endTime, String solve, CustomerIdDto customerIdDto);
-
+    RestModel updateServiceByNewSolve(CustomerServiceForm customerServiceForm,HttpSession session);
 
     RestModel findProblemById(Long id);
 }
