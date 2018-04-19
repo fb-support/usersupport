@@ -154,7 +154,7 @@ var tap = 0;
 var pa;
 //获取列表信息
 var idButton;
-var statusV
+var statusV;
 var search =  function (status) {
 
     statusV = status;
@@ -198,8 +198,8 @@ var search =  function (status) {
             },
 
             ajax: function (data, callback, settings) {
-                pa = getQueryCondition(data,statusV);
-                console.log(pa);
+                    pa = getQueryCondition(data,statusV);
+
                 // 开启遮罩效果
                 //$("#content").showLoading();
                 $.ajax({
@@ -209,6 +209,7 @@ var search =  function (status) {
                     data: pa,    //传入已封装的参数
                     dataType: "json",
                     success: function (result) {
+                        $("#status").val(statusV);
                         callback(result.data);
                     }
                 });
@@ -334,17 +335,11 @@ function getQueryCondition(data,a) {
     param.phoneNumber = $('[name="phoneNumber"]').val();
     param.workerNumber = $('[name="workNumber"]').val();
     param.status = a;
-    param.beginTime = new Date($("#datetimeStart").val()).getTime();//$('[name="datetimeBegin"]').val();
-    param.endTime = new Date($("#datetimeEnd").val()).getTime();// $('[name="datetimeEnd"]').val();
+    param.beginTime = $('[name="datetimeBegin"]').val();
+    param.endTime = $('[name="datetimeEnd"]').val();
     param.start = data.start;
     param.length = data.length;
     param.draw = data.draw;
-    if(!param.beginTime){
-        param.beginTime=null;
-    }
-    if(!param.endTime){
-        param.endTime=null;
-    }
     return param;
 }
 
@@ -716,6 +711,7 @@ function updateService(status) {
         success:function (json) {
             alert(json.message);
             $("#exampleModal").modal("hide");
+            $("#status").val(status);
             $("#imgBox").val("");
             search(status);
         },
@@ -739,6 +735,7 @@ function updateServiceNewSolve(status) {
         success:function (json) {
             alert(json.message);
             $("#exampleModal").modal("hide");
+            $("#status").val(status);
             $("#imgBox").val("");
             search(status);
         },
@@ -795,10 +792,6 @@ function insertService(status) {
         layer.msg("客户名不能为空");
         return;
     }
-    if (type == -1 || type1 == -1 || type2 ==-1) {
-        layer.msg("问题类型必须全部填写");
-        return;
-    }
     var dataform = getData();
     dataform.append("status", status);
     console.log(status);
@@ -829,7 +822,7 @@ var type_json = "";
 function TypeBind() {
     $("#type").html("");
 
-    var str = "<option value='-1' id='" + -1 + "'>---请选择---</option>";
+    var str = "<option value='" + -1 + "' id='" + -1 + "'>---请选择---</option>";
     $.ajax({
         type: "post",
         url: "/customer/type?parentId=0",
@@ -880,6 +873,7 @@ function firstTypeNewService() {
 }
 
 function SecondTypeNewService() {
+    $("#type2").html("");
     var r = $("#type1 option:selected").attr("id");
     /* console.log("bbb");
      console.log(r);*/
