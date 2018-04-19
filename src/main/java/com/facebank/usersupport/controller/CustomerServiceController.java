@@ -11,6 +11,7 @@ import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.ICustomerProblemTypeService;
 import com.facebank.usersupport.service.ICustomerService;
 import com.facebank.usersupport.util.SessionUtil;
+import com.facebank.usersupport.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -88,12 +89,26 @@ public class CustomerServiceController extends BaseController {
      * @date:
      */
     @RequestMapping("/customer/getServiceByCondition")
-    public RestModel getServiceByPhone(String phoneNumber, String workName, Integer status, String beginTime, String endTime, String draw){
+    public RestModel getServiceByPhone(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw){
         System.out.println(beginTime+"   "+endTime);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date time1 = null;
-        Date time2 = null;
-        long begintime = 0;
+        Date time1 = null; //TimeUtil.LongToDate(beginTime,sdf);
+        Date time2 = null; //TimeUtil.LongToDate(endTime,sdf);
+        if(beginTime != null){
+            try{
+                time1 = TimeUtil.LongToDate(beginTime,sdf);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        if(endTime != null){
+            try {
+                time2 = TimeUtil.LongToDate(endTime,sdf);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        /*long begintime = 0;
         long endtime = 0;
         if(beginTime != "" && beginTime != null){
             try{
@@ -111,10 +126,10 @@ public class CustomerServiceController extends BaseController {
                 e.printStackTrace();
             }
         }
-        System.out.println(workName+"   "+begintime+"  "+endtime);
+        System.out.println(workName+"   "+begintime+"  "+endtime);*/
       /*  if(endtime-begintime>432000000){return new RestModel("日期有误，无法查询");}*/
         try{
-            RestModel restModel = iCustomerService.selectServiceByCondition(phoneNumber,workName,status,begintime,endtime,draw);
+            RestModel restModel = iCustomerService.selectServiceByCondition(phoneNumber,workName,status,time1,time2,draw);
             System.out.println(restModel.toString());
             return restModel;
         }catch (Exception e){

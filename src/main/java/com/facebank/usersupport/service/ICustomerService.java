@@ -9,6 +9,7 @@ import com.facebank.usersupport.model.CustomerServiceModel;
 import com.facebank.usersupport.model.RestModel;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
 public interface ICustomerService {
 
 
-    RestModel selectServiceByCondition(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw);
+    RestModel selectServiceByCondition(String phoneNumber, String workName, Integer status, Date beginTime, Date endTime, String draw);
 
     RestModel insertService(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[],
                             CustomerProblemDescriptionModel customerProblemDescription, Long beginTime, Long endTime, String solve);

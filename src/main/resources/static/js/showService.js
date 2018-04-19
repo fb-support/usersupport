@@ -199,7 +199,7 @@ var search =  function (status) {
 
             ajax: function (data, callback, settings) {
                     pa = getQueryCondition(data,statusV);
-
+                console.log(pa);
                 // 开启遮罩效果
                 //$("#content").showLoading();
                 $.ajax({
@@ -334,11 +334,17 @@ function getQueryCondition(data,a) {
     param.phoneNumber = $('[name="phoneNumber"]').val();
     param.workerNumber = $('[name="workNumber"]').val();
     param.status = a;
-    param.beginTime = $('[name="datetimeBegin"]').val();
-    param.endTime = $('[name="datetimeEnd"]').val();
+    param.beginTime = new Date($("#datetimeStart").val()).getTime();//$('[name="datetimeBegin"]').val();
+    param.endTime = new Date($("#datetimeEnd").val()).getTime();// $('[name="datetimeEnd"]').val();
     param.start = data.start;
     param.length = data.length;
     param.draw = data.draw;
+    if(!param.beginTime){
+        param.beginTime=null;
+    }
+    if(!param.endTime){
+        param.endTime=null;
+    }
     return param;
 }
 

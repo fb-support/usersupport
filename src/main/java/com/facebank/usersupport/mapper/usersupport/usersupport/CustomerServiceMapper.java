@@ -7,6 +7,7 @@ import com.facebank.usersupport.model.CustomerServiceModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -28,7 +29,7 @@ public interface CustomerServiceMapper {
 
     List<CustomerServiceShowDto> selectServiceByCondition(@Param("phoneNumber") String phoneNumber, @Param("workName") String workName,
                                                           @Param("status") Integer status,
-                                                          @Param("beginTime") Long beginTime, @Param("endTime") Long endTime);
+                                                          @Param("beginTime") Date beginTime, @Param("endTime") Date endTime);
     Integer selectCountByCondition(@Param("phoneNumber") String phoneNumber, @Param("workerNumber") Integer workNumber,
                                    @Param("status") Integer status,
                                    @Param("beginTime") Long beginTime, @Param("endTime") Long endTime);

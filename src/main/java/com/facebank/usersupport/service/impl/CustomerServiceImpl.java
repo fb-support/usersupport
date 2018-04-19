@@ -244,7 +244,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public RestModel selectServiceByCondition(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw) {
+    public RestModel selectServiceByCondition(String phoneNumber, String workName, Integer status, Date beginTime, Date endTime, String draw) {
         //获取服务列表
         status = StrUtil.parseStringToInt(status, -1);
         List<CustomerServiceShowDto> serviceJournalDtos = customerServiceMapper.selectServiceByCondition(phoneNumber, workName, status, beginTime, endTime);
