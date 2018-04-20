@@ -542,6 +542,7 @@ function getQueryCondition(data) {
     }
     param.mobile = $("#mobile").val();
     param.orderId = $("#orderId").val();
+    param.creditId = $("#creditId").val();
     param.bizStatus = $("#bizStatus").val();
 
     // 获取当前iframe的id

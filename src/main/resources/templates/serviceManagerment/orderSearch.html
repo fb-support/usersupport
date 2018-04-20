@@ -106,6 +106,9 @@
                 <span style="float: right">
                     <input type="button" class="form-control hide" onclick="exportRepaymentOrder()" value="导出查询结果" id="exportExcel"/>
                 </span>
+                <span style="float: right">
+                    <input type="button" class="form-control hide" onclick="searchRepaymentDetail()" value="查询债权还款明细" id="getRepaymentDetail"/>
+                </span>
             </div>
             <table id="datatable" class="table table-bordered data-table display" cellspacing="0" style="width:100%;word-break: keep-all;white-space:nowrap">
                 <thead>
@@ -147,6 +150,68 @@
                     </tr>
                 </tfoot>
             </table>
+
+            <div class="hide" id="repaymentDetailDiv">
+                <div style="margin-top: 20px">
+                    <label>用户债权还款明细信息：</label>
+                    <span style="float: right">
+                    <input type="button" class="form-control hide" onclick="exportRepaymentDetail()" value="导出查询结果" id="exportExcel2"/>
+                </span>
+                </div>
+                <table id="datatable3" class="table table-bordered data-table display" cellspacing="0" style="width:100%;word-break: keep-all;white-space:nowrap">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>债权ID</th>
+                        <th>订单ID</th>
+                        <th>用户ID</th>
+                        <th>计划还款时间</th>
+                        <th>是否还款</th>
+                        <th>债权计划本金</th>
+                        <th>债权实收本金</th>
+                        <th>债权计划利息</th>
+                        <th>债权实收利息</th>
+                        <th>期数</th>
+                        <th>红包信息</th>
+                        <th>应收红包金额</th>
+                        <th>实收红包金额</th>
+                        <th>红包类型</th>
+                        <th>vip利率</th>
+                        <th>应收vip收益</th>
+                        <th>实收vip收益</th>
+                        <th>应收加息金额</th>
+                        <th>实收加息金额</th>
+                        <th>加息类型</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>编号</th>
+                        <th>债权ID</th>
+                        <th>订单ID</th>
+                        <th>用户ID</th>
+                        <th>计划还款时间</th>
+                        <th>是否还款</th>
+                        <th>债权计划本金</th>
+                        <th>债权实收本金</th>
+                        <th>债权计划利息</th>
+                        <th>债权实收利息</th>
+                        <th>期数</th>
+                        <th>红包信息</th>
+                        <th>应收红包金额</th>
+                        <th>实收红包金额</th>
+                        <th>红包类型</th>
+                        <th>vip利率</th>
+                        <th>应收vip收益</th>
+                        <th>实收vip收益</th>
+                        <th>应收加息金额</th>
+                        <th>实收加息金额</th>
+                        <th>加息类型</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+
         </div>
     </div>
 

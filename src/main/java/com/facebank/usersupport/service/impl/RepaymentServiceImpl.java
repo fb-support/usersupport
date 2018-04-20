@@ -87,6 +87,16 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
     }
 
     /**
+     * 多条件组合查询债权还款明细信息
+     * @param repaymentForm
+     * @return
+     */
+    @Override
+    public List<RepaymentModel> getRepaymentDetailByRepaymentForm(RepaymentForm repaymentForm) {
+        return repaymentMapper.getRepaymentDetailByRepaymentForm(repaymentForm);
+    }
+
+    /**
      * 根据手机号、用户名、还款日期组合条件查询订单还款信息
      *
      * @return

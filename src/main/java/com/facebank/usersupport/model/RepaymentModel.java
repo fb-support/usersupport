@@ -42,6 +42,10 @@ public class RepaymentModel implements Serializable {
      */
     private BigDecimal credRealInterest;
     /**
+     * 期数
+     */
+    private Integer credTermNum;
+    /**
      * 还款状态，100：未还，200：已还
      */
     private Integer bizStatus;
@@ -160,6 +164,14 @@ public class RepaymentModel implements Serializable {
 
     public void setCredRealInterest(BigDecimal credRealInterest) {
         this.credRealInterest = credRealInterest;
+    }
+
+    public Integer getCredTermNum() {
+        return credTermNum;
+    }
+
+    public void setCredTermNum(Integer credTermNum) {
+        this.credTermNum = credTermNum;
     }
 
     public Integer getBizStatus() {

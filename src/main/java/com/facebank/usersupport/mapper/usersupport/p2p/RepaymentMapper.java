@@ -25,6 +25,8 @@ public interface RepaymentMapper extends BaseReadMapper<RepaymentModel,Long> {
     List<RepaymentModel> getPfInterestInfoByRepaymentForm(RepaymentForm repaymentForm);
     // List<RepaymentModel> getRepaymentModelListByRepaymentForm(RepaymentForm repaymentForm);
 
+    List<RepaymentModel> getRepaymentDetailByRepaymentForm(RepaymentForm repaymentForm);
+
     /**
      * 根据手机号、用户名、还款日期组合条件查询订单还款相关信息
      * @return

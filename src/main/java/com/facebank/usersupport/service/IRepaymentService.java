@@ -20,6 +20,13 @@ public interface IRepaymentService {
     List<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm);
 
     /**
+     * 根据组合条件查询债券还款明细
+     * @param repaymentForm
+     * @return
+     */
+    List<RepaymentModel> getRepaymentDetailByRepaymentForm(RepaymentForm repaymentForm);
+
+    /**
      * 根据手机号、用户名、还款日期组合条件查询订单还款信息
      * @return
      */
