@@ -711,6 +711,7 @@ function updateService(status) {
         success:function (json) {
             alert(json.message);
             $("#exampleModal").modal("hide");
+            $("#status").val(status);
             $("#imgBox").val("");
             search(status);
         },
@@ -734,6 +735,7 @@ function updateServiceNewSolve(status) {
         success:function (json) {
             alert(json.message);
             $("#exampleModal").modal("hide");
+            $("#status").val(status);
             $("#imgBox").val("");
             search(status);
         },

@@ -1,7 +1,9 @@
 package com.facebank.usersupport.controller;
 
+import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.CustomerIdDto;
+import com.facebank.usersupport.dto.reqDto.CustomerServiceForm;
 import com.facebank.usersupport.model.CustomerProblemDescriptionModel;
 import com.facebank.usersupport.model.CustomerProblemModel;
 import com.facebank.usersupport.model.CustomerServiceModel;
@@ -40,12 +42,13 @@ public class CustomerServiceController extends BaseController {
      * @date:
      */
     @RequestMapping("/customer/add")
-    public RestModel customAdd(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[], HttpSession session,
-                               CustomerProblemDescriptionModel customerProblemDescription, Long beginTime, Long endTime, @RequestParam(name="status") Integer staats, String solve){
-        customerService.setStatus(staats);
-
-        customerService.setWorkerNumber(SessionUtil.getUser(session).getWorkNumber());
-        return iCustomerService.insertService(customerService,customerProblem,file,customerProblemDescription,beginTime,endTime,solve);
+    public RestModel customerAddServer(CustomerServiceForm customerServiceForm,HttpSession session){
+        try{
+        return iCustomerService.insertService(customerServiceForm,session);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
+        }
     }
     /**
      * 功能描述: 服务修改，草稿状态提交至待处理状态
@@ -55,11 +58,13 @@ public class CustomerServiceController extends BaseController {
      * @date:
      */
     @RequestMapping("/customer/update")
-    public RestModel customUpdate(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[], HttpSession session,
-                                  CustomerProblemDescriptionModel customerProblemDescription, String beginTime, String endTime, Integer staats, String solve, CustomerIdDto customerIdDto){
-        customerService.setStatus(staats);
-        customerService.setWorkerNumber(SessionUtil.getUser(session).getWorkNumber());
-        return iCustomerService.updateService(customerService,customerProblem,file,customerProblemDescription,beginTime,endTime,solve,customerIdDto);
+    public RestModel customUpdate(CustomerServiceForm customerServiceForm,HttpSession session){
+        try{
+        return iCustomerService.updateService(customerServiceForm,session);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
+        }
     }
     /**
      * 功能描述: 服务修改，待处理状态提交至已处理状态
@@ -69,11 +74,8 @@ public class CustomerServiceController extends BaseController {
      * @date:
      */
     @RequestMapping("/customer/updateSolve")
-    public RestModel customUpdateNewSolve(CustomerServiceModel customerService, CustomerProblemModel customerProblem, MultipartFile file[], HttpSession session,
-                                          CustomerProblemDescriptionModel customerProblemDescription, String beginTime, String endTime, Integer staats, String solve, CustomerIdDto customerIdDto){
-        customerService.setStatus(staats);
-        customerService.setWorkerNumber(SessionUtil.getUser(session).getWorkNumber());
-        return iCustomerService.updateServiceByNewSolve(customerService,customerProblem,file,customerProblemDescription,beginTime,endTime,solve,customerIdDto);
+    public RestModel customUpdateNewSolve(CustomerServiceForm customerServiceForm,HttpSession session){
+        return iCustomerService.updateServiceByNewSolve(customerServiceForm,session);
     }
     /**
      *
@@ -85,33 +87,9 @@ public class CustomerServiceController extends BaseController {
      * @date:
      */
     @RequestMapping("/customer/getServiceByCondition")
-    public RestModel getServiceByPhone(String phoneNumber, String workName, Integer status, String beginTime, String endTime, String draw){
-        System.out.println(beginTime+"   "+endTime);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date time1 = null;
-        Date time2 = null;
-        long begintime = 0;
-        long endtime = 0;
-        if(beginTime != "" && beginTime != null){
-            try{
-                time1 = sdf.parse(beginTime);
-                begintime = time1.getTime();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        if(endTime != "" && endTime != null){
-            try {
-                time2 = sdf.parse(endTime);
-                endtime = time2.getTime();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        System.out.println(workName+"   "+begintime+"  "+endtime);
-      /*  if(endtime-begintime>432000000){return new RestModel("日期有误，无法查询");}*/
+    public RestModel getServiceByPhone(String phoneNumber, String workName, Integer status, Long beginTime, Long endTime, String draw){
         try{
-            RestModel restModel = iCustomerService.selectServiceByCondition(phoneNumber,workName,status,begintime,endtime,draw);
+            RestModel restModel = iCustomerService.selectServiceByCondition(phoneNumber,workName,status,beginTime,endTime,draw);
             System.out.println(restModel.toString());
             return restModel;
         }catch (Exception e){

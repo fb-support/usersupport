@@ -25,8 +25,9 @@ public class CustomerProblemTypeServiceImpl implements ICustomerProblemTypeServi
     }
 
     @Override
-    @Cacheable(key="#parentId",value="userCache")
+    @Cacheable(key="#parentId",value="typeCache")
     public List<CustomerProblemTypeModel> findTypeByParentId(Long parentId) {
+        System.out.println(parentId);
         return customerProblemTypeMapper.findTypeByParentId(parentId);
     }
 

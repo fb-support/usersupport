@@ -29,7 +29,29 @@ public class SystemConfigController extends BaseController {
 
     @Autowired
     IUserService userService;
-
+    /**
+     *
+     * 功能描述: 初始化session
+     *
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
+    @GetMapping("/sc/setSession")
+    public RestModel SetSession(HttpSession session) {
+        try{
+            Long userId = userService.getActiveUserId();
+            SessionUtil.setUser(session,userService.getByUserId(userId));
+            UserModel model = userService.getByUserId(userId);
+            model.setPassword("");
+            SessionUtil.setUser(session,model);
+            return this.success(MessageKeyEnum.SUCCESS);
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
+        }
+    }
     /**
      * 根据用户ID获取信息
      * @param
@@ -40,8 +62,12 @@ public class SystemConfigController extends BaseController {
 
         Long userId = userService.getActiveUserId();
         SessionUtil.setUser(session,userService.getByUserId(userId));
+        System.out.println(userId);
         try{
             UserModel model = userService.getByUserId(userId);
+            model.setPassword("");
+            SessionUtil.setUser(session,model);
+            System.out.println(model.getWorkNumber());
             return this.success(JSONObject.parseObject(JSON.toJSONString(model)));
         }catch (Exception e){
             e.printStackTrace();

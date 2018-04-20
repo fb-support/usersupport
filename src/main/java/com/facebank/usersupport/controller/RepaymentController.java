@@ -65,8 +65,8 @@ public class RepaymentController extends BaseController {
             }
             // 查询还款信息
             List<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm);
-            // 将结果保存到session中，方便用户导出
-            request.getSession().setAttribute(iframeId + ":repaymentList", repaymentModels);
+            // 查询参数保存到session，方便用于导出数据
+            request.getSession().setAttribute(iframeId + ":repaymentForm", repaymentForm);
 
             // 统计用户资产信息
             List<UserCapitalInfoModel> userCapitalInfoModels = new ArrayList<>();
@@ -183,8 +183,8 @@ public class RepaymentController extends BaseController {
             }
             // 查询还款信息
             List<RepaymentModel> repaymentModels = repaymentService.getRepaymentOrderByRepaymentForm(repaymentForm);
-            // 将结果保存到session中，方便用户导出
-            request.getSession().setAttribute(iframeId + ":repaymentOrderList", repaymentModels);
+            // 查询参数保存到session，方便用于导出数据
+            request.getSession().setAttribute(iframeId + ":repaymentOrderForm", repaymentForm);
 
             // 统计用户资产信息
             List<UserCapitalInfoModel> userCapitalInfoModels = new ArrayList<>();
@@ -278,8 +278,10 @@ public class RepaymentController extends BaseController {
 
     @PostMapping("/repayment/export")
     public void exportRepayment(HttpServletRequest request, HttpServletResponse response,String iframeId) throws Exception {
-        // 从session中获取数据
-        List<RepaymentModel> repaymentModels = (List<RepaymentModel>) request.getSession().getAttribute(iframeId + ":repaymentList");
+        // 从session中获取查询参数
+        RepaymentForm repaymentForm = (RepaymentForm) request.getSession().getAttribute(iframeId + ":repaymentForm");
+        // 从数据库中查询要导出的数据
+        List<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm);
         if (repaymentModels != null && repaymentModels.size() > 0) {
             // 生成Excel文件
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -449,8 +451,10 @@ public class RepaymentController extends BaseController {
 
     @PostMapping("/repaymentOrder/export")
     public void exportRepaymentOrder(HttpServletRequest request, HttpServletResponse response,String iframeId) throws Exception {
-        // 从session中获取数据
-        List<RepaymentModel> repaymentModels = (List<RepaymentModel>) request.getSession().getAttribute(iframeId + ":repaymentOrderList");
+        // 从session中获取查询参数
+        RepaymentForm repaymentForm = (RepaymentForm) request.getSession().getAttribute(iframeId + ":repaymentOrderForm");
+        // 从数据库中查询要导出的数据
+        List<RepaymentModel> repaymentModels = repaymentService.getRepaymentOrderByRepaymentForm(repaymentForm);
         if (repaymentModels != null && repaymentModels.size() > 0) {
             // 生成Excel文件
             XSSFWorkbook workbook = new XSSFWorkbook();
