@@ -331,14 +331,10 @@ public class RepaymentController extends BaseController {
             headCell8.setCellValue("债权计划利息");
             XSSFCell headCell9 = headRow.createCell(8);
             headCell9.setCellValue("债权实收利息");
-            XSSFCell headCell10 = headRow.createCell(9);
-            headCell10.setCellValue("红包信息");
             XSSFCell headCell11 = headRow.createCell(10);
             headCell11.setCellValue("应收红包金额");
             XSSFCell headCell12 = headRow.createCell(11);
             headCell12.setCellValue("实收红包金额");
-            XSSFCell headCell13 = headRow.createCell(12);
-            headCell13.setCellValue("红包类型");
             XSSFCell headCell14 = headRow.createCell(13);
             headCell14.setCellValue("vip利率");
             XSSFCell headCell15 = headRow.createCell(14);
@@ -387,80 +383,80 @@ public class RepaymentController extends BaseController {
                 dateCell9.setCellValue(repaymentModels.get(i).getCredRealInterest().doubleValue());
 
 
-                XSSFCell dateCell10 = dateRow.createCell(9);
+                /*XSSFCell dateCell10 = dateRow.createCell(9);
                 String redLocalInfo = repaymentModels.get(i).getRedLocalInfo();
                 if (!StringUtils.isEmpty(redLocalInfo)) {
                     Map<String, Object> parse = (Map<String, Object>) JSONObject.parse(redLocalInfo);
                     dateCell10.setCellValue(parse.get("model_name").toString());
+                }*/
+                XSSFCell dateCell10 = dateRow.createCell(9);
+                if(repaymentModels.get(i).getRedPlanAmount() != null){
+                    dateCell10.setCellValue(repaymentModels.get(i).getRedPlanAmount().doubleValue());
+                }else {
+                    dateCell10.setCellValue(0);
                 }
                 XSSFCell dateCell11 = dateRow.createCell(10);
-                if(repaymentModels.get(i).getRedPlanAmount() != null){
-                    dateCell11.setCellValue(repaymentModels.get(i).getRedPlanAmount().doubleValue());
+                if(repaymentModels.get(i).getRedRealAmount() != null){
+                    dateCell11.setCellValue(repaymentModels.get(i).getRedRealAmount().doubleValue());
                 }else {
                     dateCell11.setCellValue(0);
                 }
-                XSSFCell dateCell12 = dateRow.createCell(11);
-                if(repaymentModels.get(i).getRedRealAmount() != null){
-                    dateCell12.setCellValue(repaymentModels.get(i).getRedRealAmount().doubleValue());
-                }else {
-                    dateCell12.setCellValue(0);
-                }
-                XSSFCell dateCell13 = dateRow.createCell(12);
+                /*XSSFCell dateCell13 = dateRow.createCell(12);
                 if(repaymentModels.get(i).getRedPackageType() != null){
                     if(repaymentModels.get(i).getRedPackageType() == 1000){
                         dateCell13.setCellValue("加息红包");
                     }else if(repaymentModels.get(i).getRedPackageType() == 1010){
                         dateCell13.setCellValue("返现红包");
                     }
-                }
+                }*/
 
 
-                XSSFCell dateCell14 = dateRow.createCell(13);
+                XSSFCell dateCell12 = dateRow.createCell(11);
                 if(repaymentModels.get(i).getVipRate() != null){
-                    dateCell14.setCellValue(repaymentModels.get(i).getVipRate().doubleValue());
+                    dateCell12.setCellValue(repaymentModels.get(i).getVipRate().doubleValue());
+                }
+                XSSFCell dateCell13 = dateRow.createCell(12);
+                if(repaymentModels.get(i).getVipPlanAmount() != null){
+                    dateCell13.setCellValue(repaymentModels.get(i).getVipPlanAmount().doubleValue());
+                }else {
+                    dateCell13.setCellValue(0);
+                }
+                XSSFCell dateCell14 = dateRow.createCell(13);
+                if(repaymentModels.get(i).getVipRealAmount() != null){
+                    dateCell14.setCellValue(repaymentModels.get(i).getVipRealAmount().doubleValue());
+                }else {
+                    dateCell14.setCellValue(0);
                 }
                 XSSFCell dateCell15 = dateRow.createCell(14);
-                if(repaymentModels.get(i).getVipPlanAmount() != null){
-                    dateCell15.setCellValue(repaymentModels.get(i).getVipPlanAmount().doubleValue());
-                }else {
-                    dateCell15.setCellValue(0);
+                if(repaymentModels.get(i).getVipTermNum() != null){
+                    dateCell15.setCellValue(repaymentModels.get(i).getVipTermNum());
                 }
+
+
                 XSSFCell dateCell16 = dateRow.createCell(15);
-                if(repaymentModels.get(i).getVipRealAmount() != null){
-                    dateCell16.setCellValue(repaymentModels.get(i).getVipRealAmount().doubleValue());
+                if(repaymentModels.get(i).getPfPlanAmount() != null){
+                    dateCell16.setCellValue(repaymentModels.get(i).getPfPlanAmount().doubleValue());
                 }else {
                     dateCell16.setCellValue(0);
                 }
                 XSSFCell dateCell17 = dateRow.createCell(16);
-                if(repaymentModels.get(i).getVipTermNum() != null){
-                    dateCell17.setCellValue(repaymentModels.get(i).getVipTermNum());
-                }
-
-
-                XSSFCell dateCell18 = dateRow.createCell(17);
-                if(repaymentModels.get(i).getPfPlanAmount() != null){
-                    dateCell18.setCellValue(repaymentModels.get(i).getPfPlanAmount().doubleValue());
+                if(repaymentModels.get(i).getPfRealAmount() != null){
+                    dateCell17.setCellValue(repaymentModels.get(i).getPfRealAmount().doubleValue());
                 }else {
-                    dateCell18.setCellValue(0);
+                    dateCell17.setCellValue(0);
+                }
+                XSSFCell dateCell18 = dateRow.createCell(17);
+                if(repaymentModels.get(i).getPfTermNum() != null){
+                    dateCell18.setCellValue(repaymentModels.get(i).getPfTermNum());
                 }
                 XSSFCell dateCell19 = dateRow.createCell(18);
-                if(repaymentModels.get(i).getPfRealAmount() != null){
-                    dateCell19.setCellValue(repaymentModels.get(i).getPfRealAmount().doubleValue());
-                }else {
-                    dateCell19.setCellValue(0);
-                }
-                XSSFCell dateCell20 = dateRow.createCell(19);
-                if(repaymentModels.get(i).getPfTermNum() != null){
-                    dateCell20.setCellValue(repaymentModels.get(i).getPfTermNum());
-                }
-                XSSFCell dateCell21 = dateRow.createCell(20);
                 if(repaymentModels.get(i).getPfType() != null){
                     if(repaymentModels.get(i).getPfType() == 100){
-                        dateCell21.setCellValue("首购加息");
+                        dateCell19.setCellValue("首购加息");
                     }else if(repaymentModels.get(i).getPfType() == 200){
-                        dateCell21.setCellValue("限时加息");
+                        dateCell19.setCellValue("限时加息");
                     }else if(repaymentModels.get(i).getPfType() == 300){
-                        dateCell21.setCellValue("项目加息");
+                        dateCell19.setCellValue("项目加息");
                     }
                 }
             }

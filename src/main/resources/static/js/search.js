@@ -166,7 +166,7 @@ function search(page,pageSize){
                 {"data": "credRealPrincipal"},
                 {"data": "credPlanInterest"},
                 {"data": "credRealInterest"},
-                {
+                /*{
                     "data": "redLocalInfo",
                     "render": function (data, type, full, meta) {
                         if(data != null && data != ""){
@@ -176,7 +176,7 @@ function search(page,pageSize){
                             return "";
                         }
                     }
-                },
+                },*/
                 {
                     "data": "redPlanAmount",
                     "render": function (data, type, full, meta) {
@@ -197,7 +197,7 @@ function search(page,pageSize){
                         }
                     }
                 },
-                {
+                /*{
                     "data": "redPackageType",
                     "render": function (data, type, full, meta) {
                         // 红包类型：1000加息红包；1010返现红包。
@@ -213,7 +213,7 @@ function search(page,pageSize){
                                 break;
                         }
                     }
-                },
+                },*/
                 {
                     "data": "vipRate",
                     "render": function (data, type, full, meta) {
