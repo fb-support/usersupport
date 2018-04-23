@@ -42,6 +42,6 @@
         and startTime &gt;= #{startTime}
       </if>
     </where>
-    ORDER BY endTime
+    ORDER BY endTime DESC
   </select>
 </mapper>

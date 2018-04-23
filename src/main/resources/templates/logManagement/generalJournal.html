@@ -9,6 +9,7 @@
     <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
     <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
     <script type="text/javascript" th:src="@{../js/generalJournal.js}"></script>
+    <script type="text/javascript" th:src="@{../js/clipboard.min.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/showLoading.css}">
@@ -21,9 +22,14 @@
         tr.shown td.details-control {
             background: url('../images/details_close.png') no-repeat center center;
         }
-
         .Wdate {
             background-image: url('../My97DatePicker/skin/datePicker.gif');
+        }
+        .copy {
+            cursor:pointer;
+        }
+        .copy:hover{
+            color:#2aabd2;
         }
     </style>
 </head>
@@ -60,14 +66,14 @@
                 <th>账户id</th>
                 <th>账户名</th>
                 <th>流水号</th>
-                <th>动作发起时间</th>
-                <th>资金到账时间</th>
+                <!--<th>动作发起时间</th>-->
+                <!--<th>资金到账时间</th>-->
                 <th>关联id</th>
                 <th>收入支出</th>
                 <th>金额</th>
                 <th>余额</th>
                 <th>备注</th>
-                <th>状态</th>
+                <!--<th>状态</th>-->
                 <th>创建时间</th>
                 <th>修改时间</th>
             </tr>

@@ -8,9 +8,15 @@
     <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
     <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
     <script type="text/javascript" th:src="@{../js/moneyRecord.js}"></script>
+    <script type="text/javascript" th:src="@{../js/clipboard.min.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/showLoading.css}">
+    <style>
+        .copy {
+            cursor:pointer;
+        }
+    </style>
 </head>
 <body>
 <div class="container center" style="width: 100%;" id="content">
@@ -39,19 +45,19 @@
             <thead>
             <tr>
                 <th width="80px">id</th>
-                <th width="80px">资金汇入者id</th>
-                <th width="80px">资金汇入者的昵称</th>
-                <th width="80px">资金汇出者id</th>
-                <th width="80px">资金汇出者的昵称</th>
-                <th width="80px">资金汇出者的昵称</th>
-                <th width="80px">此交易完成后的账户余额</th>
+                <th width="80px">汇入者id</th>
+                <th width="80px">汇入者的昵称</th>
+                <th width="80px">汇出者id</th>
+                <th width="80px">汇出者的昵称</th>
+                <th width="80px">汇出者的昵称</th>
+                <th width="80px">交易后账户余额</th>
                 <th width="80px">资金来往类型</th>
-                <th width="80px">交易发生时间</th>
+                <th width="80px">交易时间</th>
                 <th width="80px">交易渠道</th>
                 <th width="80px">交易备注</th>
                 <th width="80px">关联的loanId</th>
                 <th width="80px">借款标题</th>
-                <th width="80px">标头像图片的路径</th>
+                <th width="80px">标头像的路径</th>
                 <th width="80px">外部序列号</th>
             </tr>
             </thead>
@@ -249,7 +255,8 @@
                         "sClass": "text-center",
                         "data": "tradecomment",
                         "render": function (data, type, full, meta) {
-                            return validate(data);
+                            return "<div style='overflow:hidden;width:70px;white-space:nowrap;text-overflow:ellipsis;'><a title='"+validate(data)+"'>" + validate(data) + "</ a></div>";
+
                         },
                         "bSortable": false
                     },
@@ -277,10 +284,10 @@
                         "bSortable": false
                     },
                     {
-                        "sClass": "text-center",
+                        "sClass": "text-center copy",
                         "data": "outserialno",
                         "render": function (data, type, full, meta) {
-                            return validate(data);
+                                return  "<div style='overflow:hidden;width:50px;white-space:nowrap;text-overflow:ellipsis;'><a title='"+validate(data)+"'>" + validate(data) + "</ a></div>";
                         },
                         "bSortable": false
                     },
@@ -304,11 +311,29 @@
             });
 
             tap++;
+            copy();
         }
 
 
 
     }
+
+    //部分备注信息
+    function getPartialRemarksHtml(remarks){
+        return remarks.substr(0,10) ;
+    }
+    var copy = function(){
+        var clipboard = new Clipboard('#datatables tbody tr td:nth-child(15)',{
+            text:function (e) {
+                var data =e.innerText;
+                console.log(data);
+                alert("复制成功！");
+                return data;
+            }
+
+        });
+    }
+
 
     //封装查询参数
     function getQueryCondition(data) {

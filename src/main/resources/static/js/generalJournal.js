@@ -43,8 +43,8 @@ function search() {
         table3 = $('#datatables').DataTable({
             "searching": true, // 从结果搜索
             "bJQueryUI": true,
-            "ordering" : true, // 排序
-            "aaSorting": [1, "desc"], // 按creditId倒序排列
+            // "ordering" : true, // 排序
+            // "aaSorting": [1, "desc"], // 按creditId倒序排列
             "sPaginationType": "full_numbers",
             "serverSide": false, // true代表后台分页，false代表前台分页
             "language": {
@@ -135,29 +135,29 @@ function search() {
                     "bSortable": false
                 },
                 {
-                    "sClass": "text-center",
+                    "sClass": "text-center copy",
                     "data": "serialnumber",
                     "render": function (data, type, full, meta) {
-                        return validate(data);
+                        return "<div style='overflow:hidden;width:70px;white-space:nowrap;text-overflow:ellipsis;'><a title='"+validate(data)+"'>" + validate(data) + "</ a></div>";
                     },
                     "bSortable": false
                 },
-                {
-                    "sClass": "text-center",
-                    "data": "starttime",
-                    "render": function (data, type, full, meta) {
-                        return formatDate(validate(data));
-                    },
-                    "bSortable": false
-                },
-                {
-                    "sClass": "text-center",
-                    "data": "endtime",
-                    "render": function (data, type, full, meta) {
-                        return formatDate(validate(data));
-                    },
-                    "bSortable": false
-                },
+                // {
+                //     "sClass": "text-center",
+                //     "data": "starttime",
+                //     "render": function (data, type, full, meta) {
+                //         return formatDate(validate(data));
+                //     },
+                //     "bSortable": false
+                // },
+                // {
+                //     "sClass": "text-center",
+                //     "data": "endtime",
+                //     "render": function (data, type, full, meta) {
+                //         return formatDate(validate(data));
+                //     },
+                //     "bSortable": false
+                // },
                 {
                     "sClass": "text-center",
                     "data": "relationid",
@@ -200,17 +200,19 @@ function search() {
                     "sClass": "text-center",
                     "data": "remarks",
                     "render": function (data, type, full, meta) {
-                        return validate(data);
-                    },
-                    "bSortable": false
-                }, {
-                    "sClass": "text-center",
-                    "data": "status",
-                    "render": function (data, type, full, meta) {
-                        return validate(data);
+                        //备注
+                        return "<div style='overflow:hidden;width:70px;white-space:nowrap;text-overflow:ellipsis;'><a title='"+validate(data)+"'>" + validate(data) + "</ a></div>";
                     },
                     "bSortable": false
                 },
+                // {
+                //     "sClass": "text-center",
+                //     "data": "status",
+                //     "render": function (data, type, full, meta) {
+                //         return validate(data);
+                //     },
+                //     "bSortable": false
+                // },
                 {
                     "sClass": "text-center",
                     "data": "createtime",
@@ -240,12 +242,13 @@ function search() {
                 {"orderable": false, "targets": 9},
                 {"orderable": false, "targets": 10},
                 {"orderable": false, "targets": 11},
-                {"orderable": false, "targets": 12},
-                {"orderable": false, "targets": 13},
-                {"orderable": false, "targets": 14},
+                // {"orderable": false, "targets": 12},
+                // {"orderable": false, "targets": 13},
+                // {"orderable": false, "targets": 14},
             ],
         });
         tap++;
+        copy();
     }
 }
 
@@ -277,4 +280,17 @@ function formatDate(now) {
         return "";
     }
     return new Date(now).toLocaleString();
+}
+//复制流水
+var copy = function(){
+    var clipboard = new Clipboard('#datatables tbody tr td:nth-child(5)',{
+        text:function (e) {
+            var data =e.innerText;
+            // console.log(data);
+            layer.msg("流水号已添加到复制面板。");
+            return data;
+
+        }
+
+    });
 }
