@@ -4,6 +4,9 @@ var sll = "";
 var sta = 0;
 var startTime;//服务开始时间
 var endTime;//服务结束时间
+var imgSrc = [];  //存放图片路径
+var imgFile = []; //存放文件流
+var imgName = []; //存放图片名字
 $(document).ready(function () {
     search();
     $("#typeShows").change(function () {
@@ -65,6 +68,7 @@ $(document).ready(function () {
             dataType: "json",
             data: {id: recipient},
             success: function (json) {
+                clearData();
                 $("#file").val("");
                 serviceId = json.data[0].customerServiceDto.id;
                 questionId = json.data[0].customerProblemDescriptionModels[0].id;
@@ -408,9 +412,7 @@ function formatDate(now) {
 
 //上传图片处理
 
-var imgSrc = [];  //存放图片路径
-var imgFile = []; //存放文件流
-var imgName = []; //存放图片名字
+
 //选择图片的操作
 function imgUpload(obj) {
     var oInput = '#' + obj.inputId;
@@ -699,9 +701,13 @@ function getParam(status) {
     return formdata;
 }
 function clearData(){
-    $("#imgBox").removeAll();
+    imgSrc = [];
+    imgFile = [];
+    imgName = [];
+    console.log( $("#imgBox"));
+    $("#imgBox").empty();
     // $("#imgBox").remove
-
+    console.log("aaaa");
 
 }
 function updateService(status) {
@@ -714,7 +720,9 @@ function updateService(status) {
         processData:false,
         contentType:false,
         success:function (json) {
-            alert(json.message);
+            layer.alert(json.message);
+            $("#status").val(status);
+            imgFile = [];
             $("#exampleModal").modal("hide");
             $("#imgBox").val("");
             search(status);
@@ -737,7 +745,8 @@ function updateServiceNewSolve(status) {
         processData:false,
         contentType:false,
         success:function (json) {
-            alert(json.message);
+            layer.alert(json.message);
+            $("#status").val(status);
             $("#exampleModal").modal("hide");
             $("#imgBox").val("");
             search(status);
