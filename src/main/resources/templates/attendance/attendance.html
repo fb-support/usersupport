@@ -6,12 +6,19 @@
     <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
     <script type="text/javascript" th:src="@{../attendance/js/attendance.js}"></script>
     <script type="text/javascript" th:src="@{../attendance/js/jquery.ocupload-1.1.2.js}"></script>
-    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
-    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <!--<script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>-->
+    <!--<script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>-->
     <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
     <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
+    <!--<link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">-->
+    <script type="text/javascript" th:src="@{../My97DatePicker/WdatePicker.js}"></script>
+
+    <style type="text/css">
+        .Wdate{
+            background-image:url('../My97DatePicker/skin/datePicker.gif');
+        }
+    </style>
     <style type="text/css">
         .exportHide{
             display: none;
@@ -35,7 +42,8 @@
                         <option value="">--请选择--</option>
                     </select>
                     <label class="labe_l" for="attendanceDate">考勤时间:</label>
-                    <input type="text" class="form_datetime form-control" id="attendanceDate" readonly>
+                    <!--<input type="text" class="form_datetime form-control" id="attendanceDate" readonly>-->
+                    <input class="Wdate form-control" type="text" id="attendanceDate" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM',readOnly:true})" readonly>
                     <input type="hidden" id="attendanceDateInput" name="attendanceDate" value="">
                 </div>
                 <span class="btn btn-default" onclick="searchAttendance()">查询</span>

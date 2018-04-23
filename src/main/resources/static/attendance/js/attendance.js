@@ -1,14 +1,14 @@
 $(function () {
     //日期插件初始化
-    $("#attendanceDate").datetimepicker({
-        language:  'zh-CN',
-        format: 'yyyy-mm',
-        autoclose: true,
-        todayBtn: false,
-        startView: 'year',
-        minView:'year',
-        maxView:'decade'
-    });
+    // $("#attendanceDate").datetimepicker({
+    //     language:  'zh-CN',
+    //     format: 'yyyy-mm',
+    //     autoclose: true,
+    //     todayBtn: false,
+    //     startView: 'year',
+    //     minView:'year',
+    //     maxView:'decade'
+    // });
 
     //一键上传
     $("#importExcel").upload({
