@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/paging.js}"></script>
+    <script type="text/javascript" th:src="@{../js/userManage.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
+</head>
+<body>
+<div class="container center" style="margin-top: 20px;">
+    <div class="panel panel-default ">
+        <!-- Default panel contents -->
+        <div class="panel-heading">用户管理</div>
+
+        <!-- Table -->
+        <table class="table">
+            <thead>
+            <tr>
+                <th>用户id</th>
+                <th>用户名称</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="roleList">
+            </tbody>
+
+        </table>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>授权</th>
+                                <th>角色名</th>
+                                <th>描述</th>
+                            </tr>
+                            </thead>
+                            <tbody id="permission">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="updataDate()">修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pageing"></div>
+</div>
+<script>
+    var recipient="";
+    function updataDate  () {
+        var ids = new Array();
+        $("input:checkbox:checked").each(function () {
+            ids.push($(this).val());
+        });
+        $.ajax({
+            url:"/role/updateRole",
+            type:"POST",
+            dataType:"json",
+            data:{ids:ids,id:recipient},
+            success:function (json) {
+                alert("提交成功")
+                $("#exampleModal").modal("hide");
+                getDate(1,10);
+            },error:function () {
+                alert("提交失败")
+                $("#exampleModal").modal("hide");
+            }
+        })
+    }
+
+
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // 触发事件的按钮
+        var ids=new Array();
+        var modal = $(this);
+        recipient = button.data('whatever') // 解析出data-whatever内容
+        $.ajax({
+            url:"/role/findRoleBegin",
+            type: "POST",
+            dataType: "json",
+            data:{userId:recipient},
+            success:function (json) {
+                var str = "";
+                for (var i = 0; i < json.data.length; i++) {
+                    var checked ="";
+                    if (json.data[i].userId!=null){
+                           checked = "checked='checked'";
+                    }
+                    str += "<tr class='success'>" +
+                        " <td><input type='checkbox' "+checked+"id='"+json.data[i].roleId+"'value='"+json.data[i].roleId+"'></td>"+
+                        " <td>"+json.data[i].roleName+"</td>" +
+                        " <td>"+json.data[i].description+"</td></tr>";
+
+                    ids[i] = json.data[i].roleId;
+                }
+                $('#permission').html(str);
+            }
+        })
+        modal.find('.modal-title').text('菜单选择')
+        // modal.find('[type="checkbox"]').attr("checked","checked");
+    });
+
+
+
+</script>
+</body>
+</html>

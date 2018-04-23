@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.mapper.usersupport.p2p.RepaymentMapper">
+
+    <resultMap id="repaymentResultMap" type="com.facebank.usersupport.model.RepaymentModel">
+		<result column="credit_id" property="creditId"/>
+        <result column="fp_order_id" property="orderId"/>
+        <result column="user_id" property="userId"/>
+		<result column="plan_date" property="planDate"/>
+        <result column="cred_plan_principal" property="credPlanPrincipal"/>
+        <result column="cred_plan_interest" property="credPlanInterest"/>
+		<result column="cred_real_principal" property="credRealPrincipal"/>
+		<result column="cred_real_interest" property="credRealInterest"/>
+		<result column="cred_term_num" property="credTermNum"/>
+		<result column="biz_status" property="bizStatus"/>
+        <result column="red_local_Info" property="redLocalInfo"/>
+        <result column="red_plan_amount" property="redPlanAmount"/>
+        <result column="red_real_amount" property="redRealAmount"/>
+        <result column="red_package_type" property="redPackageType"/>
+        <result column="red_term_num" property="redTermNum"/>
+        <result column="vip_rate" property="vipRate"/>
+        <result column="vip_plan_amount" property="vipPlanAmount"/>
+        <result column="vip_real_amount" property="vipRealAmount"/>
+        <result column="vip_term_num" property="vipTermNum"/>
+        <result column="pf_plan_amount" property="pfPlanAmount"/>
+        <result column="pf_real_amount" property="pfRealAmount"/>
+        <result column="pf_term_num" property="pfTermNum"/>
+        <result column="pf_type" property="pfType"/>
+    </resultMap>
+
+	<select id="getCreditInfoByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+		credit_id,
+		max(fp_order_id) 'fp_order_id',
+		max(user_id) 'user_id',
+		max(plan_date) 'plan_date',
+		sum(plan_principal) 'cred_plan_principal',
+		sum(plan_interest) 'cred_plan_interest',
+		sum(real_principal) 'cred_real_principal',
+		sum(real_interest) 'cred_real_interest',
+		biz_status
+		FROM
+		fp_main.credit_repayment
+		<where>
+			<if test="userId != null and userId != ''">
+				user_id = #{userId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND fp_order_id = #{orderId}
+			</if>
+			<if test="creditId != null and creditId != ''">
+				AND credit_id = #{creditId}
+			</if>
+			<if test="bizStatus != null and bizStatus != ''">
+				AND biz_status = #{bizStatus}
+			</if>
+			<if test="bizStatus == null or bizStatus == ''">
+				AND biz_status IN (100,200)
+			</if>
+			<if test="startTime != null and startTime != ''">
+				AND plan_date &gt;= #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				AND plan_date &lt;= #{endTime}
+			</if>
+		</where>
+		GROUP BY credit_id,biz_status
+	</select>
+
+	<select id="getRedPackageInfoByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+		credit_id,
+		max(user_id) 'user_id',
+		max(fp_order_id) 'fp_order_id',
+		sum(plan_amount) red_plan_amount,
+		sum(real_amount) red_real_amount,
+		max(term_num) 'red_term_num',
+		biz_status
+		FROM
+		fp_main.red_package_repayment
+		<where>
+			<if test="userId != null and userId != ''">
+				AND user_id = #{userId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND fp_order_id = #{orderId}
+			</if>
+			<if test="creditId != null and creditId != ''">
+				AND credit_id = #{creditId}
+			</if>
+			<if test="bizStatus != null and bizStatus != ''">
+				AND biz_status = #{bizStatus}
+			</if>
+			<if test="bizStatus == null or bizStatus == ''">
+				AND biz_status IN (100,200)
+			</if>
+		</where>
+		GROUP BY credit_id,biz_status
+	</select>
+
+	<select id="getVipInfoByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+		b.credit_id,
+		max(a.fp_order_id) 'fp_order_id',
+		max(a.user_id) 'user_id',
+		max(a.rate) 'vip_rate',
+		sum(b.plan_amount) 'vip_plan_amount',
+		sum(b.real_amount) 'vip_real_amount',
+		max(b.term_num) 'vip_term_num',
+		b.biz_status
+		FROM
+		fp_main.vip_interest_rec AS a ,
+		fp_main.vip_interest_repayment AS b
+		<where>
+			a.fp_order_id = b.fp_order_id
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND a.fp_order_id = #{orderId}
+			</if>
+			<if test="creditId != null and creditId != ''">
+				AND b.credit_id = #{creditId}
+			</if>
+			<if test="bizStatus != null and bizStatus != ''">
+				AND b.biz_status = #{bizStatus}
+			</if>
+			<if test="bizStatus == null or bizStatus == ''">
+				AND b.biz_status IN (100,200)
+			</if>
+		</where>
+		GROUP BY b.credit_id,b.biz_status
+	</select>
+
+	<select id="getPfInterestInfoByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+		b.credit_id,
+		max(a.invest_id) 'fp_order_id',
+		max(b.invest_user) 'user_id',
+		max(b.type) 'pf_type',
+		max(b.term_num) 'pf_term_num',
+		sum(b.plan_amount) 'pf_plan_amount',
+		sum(b.real_amount) 'pf_real_amount',
+		b.biz_status
+		FROM
+		pf_interest.record AS a ,
+		pf_interest.repayment AS b
+		<where>
+			a.record_id = b.record_id
+			<if test="userId != null and userId != ''">
+				AND a.invest_user = #{userId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND a.invest_id = #{orderId}
+			</if>
+			<if test="creditId != null and creditId != ''">
+				AND b.credit_id = #{creditId}
+			</if>
+			<if test="bizStatus != null and bizStatus != ''">
+				AND b.biz_status = #{bizStatus}
+			</if>
+			<if test="bizStatus == null or bizStatus == ''">
+				AND b.biz_status IN (100,200)
+			</if>
+		</where>
+		GROUP BY b.credit_id,b.biz_status
+	</select>
+
+	<!--<select id="getRepaymentModelListByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+			cred.credit_id,
+			cred.fp_order_id,
+			cred.user_id,
+			cred.plan_date,
+			cred.cred_plan_principal,
+			cred.cred_real_principal,
+			cred.cred_plan_interest,
+			cred.cred_real_interest,
+			cred.biz_status,
+			red.red_plan_amount,
+			red.red_real_amount,
+			red.red_term_num,
+			red.red_local_Info,
+			red.red_package_type,
+			vip.vip_rate,
+			vip.vip_plan_amount,
+			vip.vip_real_amount,
+			vip.vip_term_num,
+			pf_intere.pf_type,
+			pf_intere.pf_term_num,
+			pf_intere.pf_plan_amount,
+			pf_intere.pf_real_amount
+		FROM(
+			SELECT
+				credit_id,
+				fp_order_id,
+				user_id,
+				plan_date,
+				sum(plan_principal) 'cred_plan_principal',
+				sum(real_principal) 'cred_real_principal',
+				sum(plan_interest) 'cred_plan_interest',
+				sum(real_interest) 'cred_real_interest',
+				biz_status
+			FROM
+				fp_main.credit_repayment
+			<where>
+				<if test="userId != null and userId != ''">
+					user_id = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND fp_order_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND biz_status IN (100,200)
+				</if>
+				<if test="startTime != null and startTime != ''">
+					AND plan_date &gt;= #{startTime}
+				</if>
+				<if test="endTime != null and endTime != ''">
+					AND plan_date &lt;= #{endTime}
+				</if>
+			</where>
+			GROUP BY credit_id,biz_status
+		) AS cred LEFT JOIN(
+			SELECT
+				a.credit_id,
+				a.red_plan_amount,
+				a.red_real_amount,
+				a.term_num 'red_term_num',
+				b.local_Info 'red_local_Info',
+				b.red_package_type 'red_package_type',
+				a.biz_status
+			FROM
+			(
+				SELECT
+					credit_id,
+					user_id,
+					fp_order_id,
+					sum(plan_amount) red_plan_amount,
+					sum(real_amount) red_real_amount,
+					term_num,
+					biz_status
+				FROM
+					fp_main.red_package_repayment
+				<where>
+					<if test="userId != null and userId != ''">
+						AND user_id = #{userId}
+					</if>
+					<if test="orderId != null and orderId != ''">
+						AND fp_order_id = #{orderId}
+					</if>
+					<if test="bizStatus != null and bizStatus != ''">
+						AND biz_status = #{bizStatus}
+					</if>
+					<if test="bizStatus == null or bizStatus == ''">
+						AND biz_status IN (100,200)
+					</if>
+				</where>
+			) AS a INNER JOIN fp_main.red_package_rec AS b ON a.fp_order_id = b.fp_order_id
+			GROUP BY a.credit_id,a.biz_status
+		) AS red ON cred.credit_id = red.credit_id AND cred.biz_status = red.biz_status LEFT JOIN(
+			SELECT
+				b.credit_id,
+				a.rate 'vip_rate',
+				sum(b.plan_amount) 'vip_plan_amount',
+				sum(b.real_amount) 'vip_real_amount',
+				b.term_num 'vip_term_num',
+				b.biz_status
+			FROM
+				fp_main.vip_interest_rec AS a ,
+				fp_main.vip_interest_repayment AS b
+			<where>
+				a.fp_order_id = b.fp_order_id
+				<if test="userId != null and userId != ''">
+					AND a.user_id = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND a.fp_order_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND b.biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND b.biz_status IN (100,200)
+				</if>
+			</where>
+			GROUP BY b.credit_id,b.biz_status
+		) AS vip ON cred.credit_id = vip.credit_id AND cred.biz_status = vip.biz_status LEFT JOIN(
+			SELECT
+				b.credit_id,
+				b.type 'pf_type',
+				b.term_num 'pf_term_num',
+				sum(b.plan_amount) 'pf_plan_amount',
+				sum(b.real_amount) 'pf_real_amount',
+				b.biz_status
+			FROM
+				pf_interest.record AS a ,
+				pf_interest.repayment AS b
+			<where>
+				a.record_id = b.record_id
+				<if test="userId != null and userId != ''">
+					AND a.invest_user = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND a.invest_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND b.biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND b.biz_status IN (100,200)
+				</if>
+			</where>
+			GROUP BY b.credit_id,b.biz_status
+		) AS pf_intere ON cred.credit_id = pf_intere.credit_id AND cred.biz_status = pf_intere.biz_status
+	</select>-->
+
+
+
+
+
+
+	<select id="getOrderCreditInfoByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+			fp_order_id,
+			max(user_id) 'user_id',
+			max(plan_date) 'plan_date',
+			sum(plan_principal) 'cred_plan_principal',
+			sum(plan_interest) 'cred_plan_interest',
+			sum(real_principal) 'cred_real_principal',
+			sum(real_interest) 'cred_real_interest',
+			biz_status
+		FROM
+			fp_main.credit_repayment
+		<where>
+			<if test="userId != null and userId != ''">
+				user_id = #{userId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND fp_order_id = #{orderId}
+			</if>
+			<if test="bizStatus != null and bizStatus != ''">
+				AND biz_status = #{bizStatus}
+			</if>
+			<if test="bizStatus == null or bizStatus == ''">
+				AND biz_status IN (100,200)
+			</if>
+			<if test="startTime != null and startTime != ''">
+				AND plan_date &gt;= #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				AND plan_date &lt;= #{endTime}
+			</if>
+		</where>
+		GROUP BY fp_order_id,biz_status
+	</select>
+
+	<select id="getOrderRedPackageInfoByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+			fp_order_id,
+			max(user_id) 'user_id',
+			sum(plan_amount) red_plan_amount,
+			sum(real_amount) red_real_amount,
+			biz_status
+		FROM
+			fp_main.red_package_repayment
+		<where>
+			<if test="userId != null and userId != ''">
+				AND user_id = #{userId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND fp_order_id = #{orderId}
+			</if>
+			<if test="bizStatus != null and bizStatus != ''">
+				AND biz_status = #{bizStatus}
+			</if>
+			<if test="bizStatus == null or bizStatus == ''">
+				AND biz_status IN (100,200)
+			</if>
+		</where>
+		GROUP BY fp_order_id,biz_status
+	</select>
+
+	<select id="getOrderVipInfoByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+			a.fp_order_id,
+			max(a.user_id) 'user_id',
+			sum(b.plan_amount) 'vip_plan_amount',
+			sum(b.real_amount) 'vip_real_amount',
+			b.biz_status
+		FROM
+			fp_main.vip_interest_rec AS a ,
+			fp_main.vip_interest_repayment AS b
+		<where>
+			a.fp_order_id = b.fp_order_id
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND a.fp_order_id = #{orderId}
+			</if>
+			<if test="bizStatus != null and bizStatus != ''">
+				AND b.biz_status = #{bizStatus}
+			</if>
+			<if test="bizStatus == null or bizStatus == ''">
+				AND b.biz_status IN (100,200)
+			</if>
+		</where>
+		GROUP BY a.fp_order_id,b.biz_status
+	</select>
+
+	<select id="getOrderPfInterestInfoByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+			a.invest_id 'fp_order_id',
+			max(b.invest_user) 'user_id',
+			sum(b.plan_amount) 'pf_plan_amount',
+			sum(b.real_amount) 'pf_real_amount',
+			b.biz_status
+		FROM
+			pf_interest.record AS a ,
+			pf_interest.repayment AS b
+		<where>
+			a.record_id = b.record_id
+			<if test="userId != null and userId != ''">
+				AND a.invest_user = #{userId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND a.invest_id = #{orderId}
+			</if>
+			<if test="bizStatus != null and bizStatus != ''">
+				AND b.biz_status = #{bizStatus}
+			</if>
+			<if test="bizStatus == null or bizStatus == ''">
+				AND b.biz_status IN (100,200)
+			</if>
+		</where>
+		GROUP BY a.invest_id,b.biz_status
+	</select>
+
+	<!--<select id="getOrderRepaymentModelListByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+			cred.fp_order_id,
+			cred.user_id,
+			cred.plan_date,
+			cred.cred_plan_principal,
+			cred.cred_plan_interest,
+			cred.cred_real_principal,
+			cred.cred_real_interest,
+			cred.biz_status
+			red.red_plan_amount,
+			red.red_real_amount,
+			vip.vip_plan_amount,
+			vip.vip_real_amount,
+			pf_intere.pf_plan_amount,
+			pf_intere.pf_real_amount
+		FORM(
+			SELECT
+				fp_order_id,
+				user_id,
+				max(plan_date) 'plan_date',
+				sum(plan_principal) 'cred_plan_principal',
+				sum(real_principal) 'cred_real_principal',
+				sum(plan_interest) 'cred_plan_interest',
+				sum(real_interest) 'cred_real_interest',
+				biz_status
+			FROM
+				fp_main.credit_repayment
+			<where>
+				<if test="userId != null and userId != ''">
+					user_id = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND fp_order_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND biz_status IN (100,200)
+				</if>
+				<if test="startTime != null and startTime != ''">
+					AND plan_date &gt;= #{startTime}
+				</if>
+				<if test="endTime != null and endTime != ''">
+					AND plan_date &lt;= #{endTime}
+				</if>
+			</where>
+			GROUP BY fp_order_id,biz_status
+		) AS cred LEFT JOIN(
+			SELECT
+				fp_order_id,
+				sum(plan_amount) red_plan_amount,
+				sum(real_amount) red_real_amount,
+				biz_status
+			FROM
+				fp_main.red_package_repayment
+			<where>
+				<if test="userId != null and userId != ''">
+					AND user_id = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND fp_order_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND biz_status IN (100,200)
+				</if>
+			</where>
+			GROUP BY fp_order_id,biz_status
+		)AS red ON cred.fp_order_id = red.fp_order_id AND cred.biz_status = red.biz_status LEFT JOIN(
+			SELECT
+				a.fp_order_id,
+				sum(b.plan_amount) 'vip_plan_amount',
+				sum(b.real_amount) 'vip_real_amount',
+				b.biz_status
+			FROM
+				fp_main.vip_interest_rec AS a ,
+				fp_main.vip_interest_repayment AS b
+			<where>
+				a.fp_order_id = b.fp_order_id
+				<if test="userId != null and userId != ''">
+					AND a.user_id = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND a.fp_order_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND b.biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND b.biz_status IN (100,200)
+				</if>
+			</where>
+			GROUP BY a.fp_order_id,b.biz_status
+		) AS vip ON cred.fp_order_id = vip.fp_order_id AND cred.biz_status = vip.biz_status LEFT JOIN(
+			SELECT
+				a.invest_id fp_order_id,
+				sum(b.plan_amount) 'pf_plan_amount',
+				sum(b.real_amount) 'pf_real_amount',
+				b.biz_status
+			FROM
+				pf_interest.record AS a ,
+				pf_interest.repayment AS b
+			<where>
+				a.record_id = b.record_id
+				<if test="userId != null and userId != ''">
+					AND a.invest_user = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND a.invest_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND b.biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND b.biz_status IN (100,200)
+				</if>
+			</where>
+			GROUP BY a.invest_id,b.biz_status
+		) AS pf_intere ON cred.fp_order_id = pf_intere.fp_order_id AND cred.biz_status = pf_intere.biz_status
+	</select>-->
+
+
+	<select id="getRepaymentDetailByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+		SELECT
+			cred.credit_id,
+			cred.fp_order_id,
+			cred.user_id,
+			cred.plan_date,
+			cred.cred_plan_principal,
+			cred.cred_real_principal,
+			cred.cred_plan_interest,
+			cred.cred_real_interest,
+			cred.term_num 'cred_term_num',
+			cred.biz_status,
+			red.red_plan_amount,
+			red.red_real_amount,
+			red.red_local_Info,
+			red.red_package_type,
+			vip.vip_rate,
+			vip.vip_plan_amount,
+			vip.vip_real_amount,
+			pf_intere.pf_type,
+			pf_intere.pf_plan_amount,
+			pf_intere.pf_real_amount
+		FROM(
+			SELECT
+				credit_id,
+				fp_order_id,
+				user_id,
+				plan_date,
+				plan_principal 'cred_plan_principal',
+				real_principal 'cred_real_principal',
+				plan_interest 'cred_plan_interest',
+				real_interest 'cred_real_interest',
+				term_num,
+				biz_status
+			FROM
+				fp_main.credit_repayment
+			<where>
+				<if test="userId != null and userId != ''">
+					user_id = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND fp_order_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND biz_status IN (100,200)
+				</if>
+				<if test="startTime != null and startTime != ''">
+					AND plan_date &gt;= #{startTime}
+				</if>
+				<if test="endTime != null and endTime != ''">
+					AND plan_date &lt;= #{endTime}
+				</if>
+			</where>
+		) AS cred LEFT JOIN(
+			SELECT
+				a.credit_id,
+				a.red_plan_amount,
+				a.red_real_amount,
+				a.term_num 'red_term_num',
+				b.local_Info 'red_local_Info',
+				b.red_package_type 'red_package_type',
+				a.biz_status
+			FROM
+			(
+				SELECT
+					credit_id,
+					user_id,
+					fp_order_id,
+					plan_amount 'red_plan_amount',
+					real_amount 'red_real_amount',
+					term_num,
+					biz_status
+				FROM
+					fp_main.red_package_repayment
+				<where>
+					<if test="userId != null and userId != ''">
+						AND user_id = #{userId}
+					</if>
+					<if test="orderId != null and orderId != ''">
+						AND fp_order_id = #{orderId}
+					</if>
+					<if test="bizStatus != null and bizStatus != ''">
+						AND biz_status = #{bizStatus}
+					</if>
+					<if test="bizStatus == null or bizStatus == ''">
+						AND biz_status IN (100,200)
+					</if>
+				</where>
+			) AS a INNER JOIN fp_main.red_package_rec AS b ON a.fp_order_id = b.fp_order_id
+		) AS red ON cred.credit_id = red.credit_id AND cred.term_num = red.red_term_num LEFT JOIN(
+			SELECT
+				b.credit_id,
+				a.rate 'vip_rate',
+				b.plan_amount 'vip_plan_amount',
+				b.real_amount 'vip_real_amount',
+				b.term_num 'vip_term_num',
+				b.biz_status
+			FROM
+				fp_main.vip_interest_rec AS a ,
+				fp_main.vip_interest_repayment AS b
+			<where>
+				a.fp_order_id = b.fp_order_id
+				<if test="userId != null and userId != ''">
+					AND a.user_id = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND a.fp_order_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND b.biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND b.biz_status IN (100,200)
+				</if>
+			</where>
+		) AS vip ON cred.credit_id = vip.credit_id AND cred.term_num = vip.vip_term_num LEFT JOIN(
+			SELECT
+				b.credit_id,
+				b.type 'pf_type',
+				b.term_num 'pf_term_num',
+				b.plan_amount 'pf_plan_amount',
+				b.real_amount 'pf_real_amount',
+				b.biz_status
+			FROM
+				pf_interest.record AS a ,
+				pf_interest.repayment AS b
+			<where>
+				a.record_id = b.record_id
+				<if test="userId != null and userId != ''">
+					AND a.invest_user = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND a.invest_id = #{orderId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND b.biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND b.biz_status IN (100,200)
+				</if>
+			</where>
+		) AS pf_intere ON cred.credit_id = pf_intere.credit_id AND cred.term_num = pf_intere.pf_term_num
+	</select>
+
+</mapper>
