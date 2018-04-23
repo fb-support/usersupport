@@ -4,15 +4,15 @@
   <select id="acountAll" parameterType="com.facebank.usersupport.attendance.dto.reqDto.AcountVo" resultType="com.facebank.usersupport.attendance.dto.AcountDto">
     select
         a.work_number as workNumber,
-        a.emp_name as empName,
+        ANY_VALUE(a.emp_name) as empName,
         sum(a.status=1) as late,
         sum(a.status=2) as early,
         sum(a.status=3) as lateAndEarly,
         sum(a.status=4) as absent,
         sum(a.status=5) as exp,
-        b.overtime_duration as overtimeDuration,
-        b.rest_duration as restDuration,
-        b.leave_duration as leaveDuration
+        ANY_VALUE(b.overtime_duration) as overtimeDuration,
+        ANY_VALUE(b.rest_duration) as restDuration,
+        ANY_VALUE(b.leave_duration) as leaveDuration
         from emp_attendance as a inner join emp as b
         on a.work_number=b.work_number
             <if test="workNumber != null">

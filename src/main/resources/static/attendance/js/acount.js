@@ -30,7 +30,9 @@ function search(type) {
                 // var param = getQueryCondition(data);
                 //
                 var startTime = $("#datetimeStart").val();
-                var workNumber = $("#work_Number").val();
+                var workNumber = $("#empSelect option:selected").val();
+                var deptNumber = $("#companySelect option:selected").val();
+                // var workNumber = $("#work_Number").val();
                 if(startTime != null && startTime != ""){
                     var dateStartTime = new Date(startTime);
                 }
@@ -54,6 +56,7 @@ function search(type) {
                         length:length,
                         draw:draw,
                         workNumber:workNumber,
+                        deptNumber:deptNumber,
                         year:year,
                         month:month
                     },

@@ -36,9 +36,9 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         ...
         PageInfo<RepaymentModel> pageInfo=new PageInfo<RepaymentModel>(repaymentModels);*/
 
-        // List<RepaymentModel> repaymentModels = repaymentMapper.getRepaymentModelListByRepaymentForm(repaymentForm);
+        List<RepaymentModel> repaymentModels = repaymentMapper.getRepaymentModelListByRepaymentForm(repaymentForm);
 
-        List<RepaymentModel> repaymentModelList1 = repaymentMapper.getCreditInfoByRepaymentForm(repaymentForm);
+        /*List<RepaymentModel> repaymentModelList1 = repaymentMapper.getCreditInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList2 = repaymentMapper.getRedPackageInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList3 = repaymentMapper.getVipInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList4 = repaymentMapper.getPfInterestInfoByRepaymentForm(repaymentForm);
@@ -82,7 +82,7 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         List<RepaymentModel> repaymentModels = new ArrayList<>();
         for (Map.Entry<String, RepaymentModel> RepaymentModelEntry : entrySet) {
             repaymentModels.add(RepaymentModelEntry.getValue());
-        }
+        }*/
         return repaymentModels;
     }
 
@@ -103,9 +103,9 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
      */
     @Override
     public List<RepaymentModel> getRepaymentOrderByRepaymentForm(RepaymentForm repaymentForm) {
-        //List<RepaymentModel> repaymentModels = repaymentMapper.getOrderRepaymentModelListByRepaymentForm(repaymentForm);
+        List<RepaymentModel> repaymentModels = repaymentMapper.getOrderRepaymentModelListByRepaymentForm(repaymentForm);
 
-        List<RepaymentModel> repaymentModelList1 = repaymentMapper.getOrderCreditInfoByRepaymentForm(repaymentForm);
+        /*List<RepaymentModel> repaymentModelList1 = repaymentMapper.getOrderCreditInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList2 = repaymentMapper.getOrderRedPackageInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList3 = repaymentMapper.getOrderVipInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList4 = repaymentMapper.getOrderPfInterestInfoByRepaymentForm(repaymentForm);
@@ -142,7 +142,7 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         List<RepaymentModel> repaymentModels = new ArrayList<>();
         for (Map.Entry<String, RepaymentModel> RepaymentModelEntry : entrySet) {
             repaymentModels.add(RepaymentModelEntry.getValue());
-        }
+        }*/
 
         return repaymentModels;
     }
