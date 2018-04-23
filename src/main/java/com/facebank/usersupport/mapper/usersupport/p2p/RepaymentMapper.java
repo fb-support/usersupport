@@ -23,8 +23,13 @@ public interface RepaymentMapper extends BaseReadMapper<RepaymentModel,Long> {
     List<RepaymentModel> getRedPackageInfoByRepaymentForm(RepaymentForm repaymentForm);
     List<RepaymentModel> getVipInfoByRepaymentForm(RepaymentForm repaymentForm);
     List<RepaymentModel> getPfInterestInfoByRepaymentForm(RepaymentForm repaymentForm);
-    // List<RepaymentModel> getRepaymentModelListByRepaymentForm(RepaymentForm repaymentForm);
+    List<RepaymentModel> getRepaymentModelListByRepaymentForm(RepaymentForm repaymentForm);
 
+    /**
+     *
+     * @param repaymentForm
+     * @return
+     */
     List<RepaymentModel> getRepaymentDetailByRepaymentForm(RepaymentForm repaymentForm);
 
     /**
@@ -35,6 +40,6 @@ public interface RepaymentMapper extends BaseReadMapper<RepaymentModel,Long> {
     List<RepaymentModel> getOrderRedPackageInfoByRepaymentForm(RepaymentForm repaymentForm);
     List<RepaymentModel> getOrderVipInfoByRepaymentForm(RepaymentForm repaymentForm);
     List<RepaymentModel> getOrderPfInterestInfoByRepaymentForm(RepaymentForm repaymentForm);
-    // List<RepaymentModel> getOrderRepaymentModelListByRepaymentForm(RepaymentForm repaymentForm);
+    List<RepaymentModel> getOrderRepaymentModelListByRepaymentForm(RepaymentForm repaymentForm);
 
 }

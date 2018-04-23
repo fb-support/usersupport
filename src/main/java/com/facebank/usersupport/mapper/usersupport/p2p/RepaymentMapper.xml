@@ -166,7 +166,7 @@
 		GROUP BY b.credit_id,b.biz_status
 	</select>
 
-	<!--<select id="getRepaymentModelListByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+	<select id="getRepaymentModelListByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
 		SELECT
 			cred.credit_id,
 			cred.fp_order_id,
@@ -180,8 +180,6 @@
 			red.red_plan_amount,
 			red.red_real_amount,
 			red.red_term_num,
-			red.red_local_Info,
-			red.red_package_type,
 			vip.vip_rate,
 			vip.vip_plan_amount,
 			vip.vip_real_amount,
@@ -193,12 +191,12 @@
 		FROM(
 			SELECT
 				credit_id,
-				fp_order_id,
-				user_id,
-				plan_date,
+				max(fp_order_id) 'fp_order_id',
+				max(user_id) 'user_id',
+				max(plan_date) 'plan_date',
 				sum(plan_principal) 'cred_plan_principal',
-				sum(real_principal) 'cred_real_principal',
 				sum(plan_interest) 'cred_plan_interest',
+				sum(real_principal) 'cred_real_principal',
 				sum(real_interest) 'cred_real_interest',
 				biz_status
 			FROM
@@ -209,6 +207,9 @@
 				</if>
 				<if test="orderId != null and orderId != ''">
 					AND fp_order_id = #{orderId}
+				</if>
+				<if test="creditId != null and creditId != ''">
+					AND credit_id = #{creditId}
 				</if>
 				<if test="bizStatus != null and bizStatus != ''">
 					AND biz_status = #{bizStatus}
@@ -226,48 +227,42 @@
 			GROUP BY credit_id,biz_status
 		) AS cred LEFT JOIN(
 			SELECT
-				a.credit_id,
-				a.red_plan_amount,
-				a.red_real_amount,
-				a.term_num 'red_term_num',
-				b.local_Info 'red_local_Info',
-				b.red_package_type 'red_package_type',
-				a.biz_status
+				credit_id,
+				max(user_id) 'user_id',
+				max(fp_order_id) 'fp_order_id',
+				sum(plan_amount) red_plan_amount,
+				sum(real_amount) red_real_amount,
+				max(term_num) 'red_term_num',
+				biz_status
 			FROM
-			(
-				SELECT
-					credit_id,
-					user_id,
-					fp_order_id,
-					sum(plan_amount) red_plan_amount,
-					sum(real_amount) red_real_amount,
-					term_num,
-					biz_status
-				FROM
-					fp_main.red_package_repayment
-				<where>
-					<if test="userId != null and userId != ''">
-						AND user_id = #{userId}
-					</if>
-					<if test="orderId != null and orderId != ''">
-						AND fp_order_id = #{orderId}
-					</if>
-					<if test="bizStatus != null and bizStatus != ''">
-						AND biz_status = #{bizStatus}
-					</if>
-					<if test="bizStatus == null or bizStatus == ''">
-						AND biz_status IN (100,200)
-					</if>
-				</where>
-			) AS a INNER JOIN fp_main.red_package_rec AS b ON a.fp_order_id = b.fp_order_id
-			GROUP BY a.credit_id,a.biz_status
+				fp_main.red_package_repayment
+			<where>
+				<if test="userId != null and userId != ''">
+					AND user_id = #{userId}
+				</if>
+				<if test="orderId != null and orderId != ''">
+					AND fp_order_id = #{orderId}
+				</if>
+				<if test="creditId != null and creditId != ''">
+					AND credit_id = #{creditId}
+				</if>
+				<if test="bizStatus != null and bizStatus != ''">
+					AND biz_status = #{bizStatus}
+				</if>
+				<if test="bizStatus == null or bizStatus == ''">
+					AND biz_status IN (100,200)
+				</if>
+			</where>
+			GROUP BY credit_id,biz_status
 		) AS red ON cred.credit_id = red.credit_id AND cred.biz_status = red.biz_status LEFT JOIN(
 			SELECT
 				b.credit_id,
-				a.rate 'vip_rate',
+				max(a.fp_order_id) 'fp_order_id',
+				max(a.user_id) 'user_id',
+				max(a.rate) 'vip_rate',
 				sum(b.plan_amount) 'vip_plan_amount',
 				sum(b.real_amount) 'vip_real_amount',
-				b.term_num 'vip_term_num',
+				max(b.term_num) 'vip_term_num',
 				b.biz_status
 			FROM
 				fp_main.vip_interest_rec AS a ,
@@ -280,6 +275,9 @@
 				<if test="orderId != null and orderId != ''">
 					AND a.fp_order_id = #{orderId}
 				</if>
+				<if test="creditId != null and creditId != ''">
+					AND b.credit_id = #{creditId}
+				</if>
 				<if test="bizStatus != null and bizStatus != ''">
 					AND b.biz_status = #{bizStatus}
 				</if>
@@ -291,8 +289,10 @@
 		) AS vip ON cred.credit_id = vip.credit_id AND cred.biz_status = vip.biz_status LEFT JOIN(
 			SELECT
 				b.credit_id,
-				b.type 'pf_type',
-				b.term_num 'pf_term_num',
+				max(a.invest_id) 'fp_order_id',
+				max(b.invest_user) 'user_id',
+				max(b.type) 'pf_type',
+				max(b.term_num) 'pf_term_num',
 				sum(b.plan_amount) 'pf_plan_amount',
 				sum(b.real_amount) 'pf_real_amount',
 				b.biz_status
@@ -307,6 +307,9 @@
 				<if test="orderId != null and orderId != ''">
 					AND a.invest_id = #{orderId}
 				</if>
+				<if test="creditId != null and creditId != ''">
+					AND b.credit_id = #{creditId}
+				</if>
 				<if test="bizStatus != null and bizStatus != ''">
 					AND b.biz_status = #{bizStatus}
 				</if>
@@ -316,7 +319,7 @@
 			</where>
 			GROUP BY b.credit_id,b.biz_status
 		) AS pf_intere ON cred.credit_id = pf_intere.credit_id AND cred.biz_status = pf_intere.biz_status
-	</select>-->
+	</select>
 
 
 
@@ -440,7 +443,7 @@
 		GROUP BY a.invest_id,b.biz_status
 	</select>
 
-	<!--<select id="getOrderRepaymentModelListByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
+	<select id="getOrderRepaymentModelListByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
 		SELECT
 			cred.fp_order_id,
 			cred.user_id,
@@ -449,21 +452,21 @@
 			cred.cred_plan_interest,
 			cred.cred_real_principal,
 			cred.cred_real_interest,
-			cred.biz_status
+			cred.biz_status,
 			red.red_plan_amount,
 			red.red_real_amount,
 			vip.vip_plan_amount,
 			vip.vip_real_amount,
 			pf_intere.pf_plan_amount,
 			pf_intere.pf_real_amount
-		FORM(
+		FROM(
 			SELECT
 				fp_order_id,
-				user_id,
+				max(user_id) 'user_id',
 				max(plan_date) 'plan_date',
 				sum(plan_principal) 'cred_plan_principal',
-				sum(real_principal) 'cred_real_principal',
 				sum(plan_interest) 'cred_plan_interest',
+				sum(real_principal) 'cred_real_principal',
 				sum(real_interest) 'cred_real_interest',
 				biz_status
 			FROM
@@ -492,6 +495,7 @@
 		) AS cred LEFT JOIN(
 			SELECT
 				fp_order_id,
+				max(user_id) 'user_id',
 				sum(plan_amount) red_plan_amount,
 				sum(real_amount) red_real_amount,
 				biz_status
@@ -512,9 +516,10 @@
 				</if>
 			</where>
 			GROUP BY fp_order_id,biz_status
-		)AS red ON cred.fp_order_id = red.fp_order_id AND cred.biz_status = red.biz_status LEFT JOIN(
+		) AS red ON cred.fp_order_id = red.fp_order_id AND cred.biz_status = red.biz_status LEFT JOIN(
 			SELECT
 				a.fp_order_id,
+				max(a.user_id) 'user_id',
 				sum(b.plan_amount) 'vip_plan_amount',
 				sum(b.real_amount) 'vip_real_amount',
 				b.biz_status
@@ -539,12 +544,13 @@
 			GROUP BY a.fp_order_id,b.biz_status
 		) AS vip ON cred.fp_order_id = vip.fp_order_id AND cred.biz_status = vip.biz_status LEFT JOIN(
 			SELECT
-				a.invest_id fp_order_id,
+				a.invest_id 'fp_order_id',
+				max(b.invest_user) 'user_id',
 				sum(b.plan_amount) 'pf_plan_amount',
 				sum(b.real_amount) 'pf_real_amount',
 				b.biz_status
 			FROM
-				pf_interest.record AS a ,
+				pf_interest.record AS a,
 				pf_interest.repayment AS b
 			<where>
 				a.record_id = b.record_id
@@ -563,7 +569,7 @@
 			</where>
 			GROUP BY a.invest_id,b.biz_status
 		) AS pf_intere ON cred.fp_order_id = pf_intere.fp_order_id AND cred.biz_status = pf_intere.biz_status
-	</select>-->
+	</select>
 
 
 	<select id="getRepaymentDetailByRepaymentForm" parameterType="com.facebank.usersupport.dto.reqDto.RepaymentForm" resultMap="repaymentResultMap">
