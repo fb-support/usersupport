@@ -8,6 +8,8 @@ package com.facebank.usersupport.dto.reqDto;
  **/
 public class RepaymentForm {
 
+    private Long creditId;
+
     private Long userId;
 
     private String mobile;
@@ -23,6 +25,14 @@ public class RepaymentForm {
     private Integer start = 1;
 
     private Integer length = 10;
+
+    public Long getCreditId() {
+        return creditId;
+    }
+
+    public void setCreditId(Long creditId) {
+        this.creditId = creditId;
+    }
 
     public String getMobile() {
         return mobile;

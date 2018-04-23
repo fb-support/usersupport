@@ -49,15 +49,15 @@ function runRepaymentSearch() {
         }
     });
 
-    //显示债券还款查询页面。
+    //显示债权还款查询页面。
     if(count == 0) {
         //设置指定到的src值
         $("#service-repayment-page").attr("src", "/service/search");
         $("#service-repayment-page").show();
-        addSmallCardForThisPage("service-repayment-page", "债券还款查询");
+        addSmallCardForThisPage("service-repayment-page", "债权还款查询");
     } else {
         $("#always-change-area").append("<iframe class='center_show_area' id='service-repayment-page"+count+"' src='/service/search' frameborder='0'></iframe>");
-        addSmallCardForThisPage("service-repayment-page"+count, "债券还款查询");
+        addSmallCardForThisPage("service-repayment-page"+count, "债权还款查询");
     }
 }
 

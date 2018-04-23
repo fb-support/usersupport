@@ -61,6 +61,7 @@ public enum MessageKeyEnum {
     PARAM_FORM_SUMIT("-904","表单重复提交"),
     FILE_SIZE_ERROR("-905","文件内容过大"),
     FILE_TYPE_ERROR("-906","文件格式不正确"),
+    ORDERID_EMPTY("-907","订单ID为空，请重新查询"),
 
 
     //依赖服务异常定义

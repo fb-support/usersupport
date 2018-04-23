@@ -3,3 +3,11 @@
     background-color: #FFFFFF;
     width: 100%;
 }
+
+.index_left_page {
+    width: 12%;
+}
+
+.index_content_page {
+    width: 88%;
+}

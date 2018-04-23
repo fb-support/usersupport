@@ -35,17 +35,20 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         PageHelper.startPage(page, repaymentForm.getLength());
         ...
         PageInfo<RepaymentModel> pageInfo=new PageInfo<RepaymentModel>(repaymentModels);*/
+
+        // List<RepaymentModel> repaymentModels = repaymentMapper.getRepaymentModelListByRepaymentForm(repaymentForm);
+
         List<RepaymentModel> repaymentModelList1 = repaymentMapper.getCreditInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList2 = repaymentMapper.getRedPackageInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList3 = repaymentMapper.getVipInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList4 = repaymentMapper.getPfInterestInfoByRepaymentForm(repaymentForm);
-        // 根据第一个list构建一个Map<creditId,RepaymentModel>
+        // 根据第一个list构建一个Map<String,RepaymentModel>
         Map<String,RepaymentModel> repaymentModelMap = new HashMap<>();
         for (RepaymentModel repaymentModel1 : repaymentModelList1) {
             String key = repaymentModel1.getCreditId() + ":" + repaymentModel1.getBizStatus();
             repaymentModelMap.put(key,repaymentModel1);
         }
-        // 根据creditId设置RepaymentModel中的剩余属性
+        // 根据key设置RepaymentModel中的剩余属性
         for (RepaymentModel repaymentModel2 : repaymentModelList2) {
             String key = repaymentModel2.getCreditId() + ":" + repaymentModel2.getBizStatus();
             if(repaymentModelMap.containsKey(key)){
@@ -84,12 +87,24 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
     }
 
     /**
+     * 多条件组合查询债权还款明细信息
+     * @param repaymentForm
+     * @return
+     */
+    @Override
+    public List<RepaymentModel> getRepaymentDetailByRepaymentForm(RepaymentForm repaymentForm) {
+        return repaymentMapper.getRepaymentDetailByRepaymentForm(repaymentForm);
+    }
+
+    /**
      * 根据手机号、用户名、还款日期组合条件查询订单还款信息
      *
      * @return
      */
     @Override
     public List<RepaymentModel> getRepaymentOrderByRepaymentForm(RepaymentForm repaymentForm) {
+        //List<RepaymentModel> repaymentModels = repaymentMapper.getOrderRepaymentModelListByRepaymentForm(repaymentForm);
+
         List<RepaymentModel> repaymentModelList1 = repaymentMapper.getOrderCreditInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList2 = repaymentMapper.getOrderRedPackageInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList3 = repaymentMapper.getOrderVipInfoByRepaymentForm(repaymentForm);
@@ -100,7 +115,7 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
             String key = repaymentModel1.getOrderId() + ":" + repaymentModel1.getBizStatus();
             repaymentModelMap.put(key,repaymentModel1);
         }
-        // 根据creditId设置RepaymentModel中的剩余属性
+        // 根据key设置RepaymentModel中的剩余属性
         for (RepaymentModel repaymentModel2 : repaymentModelList2) {
             String key = repaymentModel2.getOrderId() + ":" + repaymentModel2.getBizStatus();
             if(repaymentModelMap.containsKey(key)){
@@ -122,12 +137,13 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
                 repaymentModelMap.get(key).setPfRealAmount(repaymentModel4.getPfRealAmount());
             }
         }
-        // 将Map<creditId,RepaymentModel>转换为List<RepaymentModel>
+        // 将Map<String,RepaymentModel>转换为List<RepaymentModel>
         Set<Map.Entry<String, RepaymentModel>> entrySet = repaymentModelMap.entrySet();
         List<RepaymentModel> repaymentModels = new ArrayList<>();
         for (Map.Entry<String, RepaymentModel> RepaymentModelEntry : entrySet) {
             repaymentModels.add(RepaymentModelEntry.getValue());
         }
+
         return repaymentModels;
     }
 
