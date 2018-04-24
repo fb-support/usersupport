@@ -87,20 +87,36 @@
                     <div class="form-group">
                         <label class="control-label">上线内容:</label>
                         <textarea rows="7" class="form-control" name="formContent" id="formContent2"></textarea>
-                        <input id="formId" type="hidden"/>
+                        <input name="formId" id="formId" type="hidden"/>
                     </div>
                     <div class="form-group">
                         <label class="control-label">上线工单状态:</label>
-                        <select class="form-control" id="launchFormStatus">
-                            <option>不变更</option>
-                            <option>运维人员接单</option>
-                            <option>运维部署完成</option>
-                            <option>开发人员验证不通过</option>
-                            <option>开发人员验证通过</option>
-                            <option>测试人员验证不通过</option>
-                            <option>测试人员验证通过</option>
-                            <option>关闭工单</option>
-                        </select>
+                        <div>
+                            <label class="radio-inline">
+                                <input type="radio" name="formStatus" id="noChange" value="" checked>不变更
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="formStatus" id="status01" value="1">运维人员接单
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="formStatus" id="status02" value="2">运维部署完成
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="formStatus" id="status03" value="3">开发人员验证不通过
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="formStatus" id="status04" value="4">开发人员验证通过
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="formStatus" id="status05" value="5">测试人员验证不通过
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="formStatus" id="status06" value="6">测试人员验证通过
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="formStatus" id="status07" value="7">关闭工单
+                            </label>
+                        </div>
                     </div>
                 </form>
             </div>

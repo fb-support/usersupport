@@ -27,7 +27,14 @@ $(document).ready(function () {
         "columns": [
             {"data": "formId"},
             {"data": "formContent"},
-            {"data": "gmtCreate"},
+            {
+                "sClass": "text-center",
+                "data": "gmtCreate",
+                "render": function (data, type, full, meta) {
+                    return formatDate(validate(data));
+                },
+                "bSortable": false
+            },
             {"data": "createUsername"},
             {"data": "acceptDevelopUsername"},
             {"data": "acceptTestUsername"},
@@ -92,6 +99,20 @@ function search() {
     table.ajax.reload();
 }
 
+var validate = function (data) {
+    if (data == null) {
+        return "";
+    }
+    return data;
+}
+
+function formatDate(now) {
+    if (now == "") {
+        return "";
+    }
+    return new Date(now).toLocaleString();
+}
+
 //封装查询参数
 function getQueryCondition(data) {
     var param = {};
@@ -151,6 +172,7 @@ function createForm() {
     });
 }
 
+var status;
 //获取上线工单详情
 function showLaunchForm(id) {
     var formId = {"formId": id}
@@ -164,32 +186,21 @@ function showLaunchForm(id) {
             if (result.code == 1) {
                 $("#formContent2").val(result.data.formContent);
                 $("#formId").val(result.data.formId);
+                status = result.data.formStatus;
             } else {
                 layer.msg(result.error);
             }
         }
     });
 }
-var status = $("#launchFormStatus").val();
-function updateStatus2(status) {
-    status = code;
-}
-
 
 //修改上线工单
 function updateForm() {
-    var param = {};
-   /* var arr = $("#testForm2").val().split(",");
-    param.formContent = $("#formContent2").val();
-    param.projectId = arr[0];
-    param.testFormId = arr[1];*/
-    param.formId = $("#formId").val();
-    param.formStatus = status;
     $.ajax({
         type: "POST",
         url: '/online-process/updateLaunchForm',
         cache: false,  //禁用缓存
-        data: param,
+        data: $("#updateForm").serialize(),
         dataType: 'json',
         success: function (result) {
             if (result.code == 1) {
