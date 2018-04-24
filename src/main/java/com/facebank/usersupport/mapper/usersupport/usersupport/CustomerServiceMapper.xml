@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.mapper.usersupport.usersupport.CustomerServiceMapper">
+  <resultMap id="BaseResultMap" type="com.facebank.usersupport.model.CustomerServiceModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="service_no" jdbcType="BIGINT" property="serviceNo" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="worker_number" jdbcType="INTEGER" property="workerNumber" />
+    <result column="is_ satisfied" jdbcType="TINYINT" property="isSatisfied" />
+    <result column="user_comment" jdbcType="INTEGER" property="userComment" />
+    <result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
+    <result column="phone_type" jdbcType="VARCHAR" property="phoneType" />
+  </resultMap>
+  <resultMap id="CustomerServiceListItem" type="com.facebank.usersupport.dto.CustomerServiceShowDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="service_no" jdbcType="BIGINT" property="serviceNo" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="worker_number" jdbcType="INTEGER" property="workerNumber" />
+    <result column="is_ satisfied" jdbcType="TINYINT" property="isSatisfied" />
+    <result column="user_comment" jdbcType="INTEGER" property="userComment" />
+    <result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
+    <result column="phone_type" jdbcType="VARCHAR" property="phoneType" />
+    <result column="username" jdbcType="VARCHAR" property="workName"/>
+  </resultMap>
+  <resultMap id="ServiceResult" type="com.facebank.usersupport.dto.ServiceJournalDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="service_no" jdbcType="BIGINT" property="serviceNo" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="worker_number" jdbcType="INTEGER" property="workerNumber" />
+    <result column="is_ satisfied" jdbcType="TINYINT" property="isSatisfied" />
+    <result column="user_comment" jdbcType="INTEGER" property="userComment" />
+    <result column="comment_content" jdbcType="VARCHAR" property="commentContent" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
+    <result column="phone_type" jdbcType="VARCHAR" property="phoneType" />
+    <result column="begin_time" jdbcType="BIGINT" property="beginTime" />
+    <result column="end_time" jdbcType="BIGINT" property="endTime" />
+  </resultMap>
+  <resultMap id="ServiceShowResult" type="com.facebank.usersupport.dto.ServiceShowDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="worker_number" jdbcType="INTEGER" property="workerNumber" />
+    <result column="phone_type" jdbcType="VARCHAR" property="phoneType" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="type_id" jdbcType="VARCHAR" property="problemType" />
+    <result column="begin_time" jdbcType="BIGINT" property="beginTime" />
+    <result column="end_time" jdbcType="BIGINT" property="endTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, service_no, phone_number, name, type_id, worker_number, "is_ satisfied", user_comment, 
+    comment_content, status, note, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_service_phone_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByServiceNo" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from customer_service_phone_record
+    where service_no = #{serviceNo,jdbcType=BIGINT}
+  </select>
+  <select id="selectService" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    *
+    from customer_service_phone_record
+    where 1=1
+    <if test="phoneNumber != null and phoneNumber != ''">
+      AND phone_number = #{phoneNumber}
+    </if>
+    <if test="workerNumber != null and workerNumber != ''">
+      AND worker_number = #{workerNumber}
+    </if>
+    <if test="status != null and status != ''">
+      AND status = #{status}
+    </if>
+    <if test="gmtCreate != null ">
+      and #{gmtCreate}&lt;gmtCreate
+    </if>
+
+
+  </select>
+  <select id="selectServicePhone" parameterType="java.lang.Long" resultMap="ServiceResult">
+    SELECT
+    cp.*,cj.begin_time,cj.end_time
+    FROM customer_service_phone_record AS cp
+    LEFT JOIN customer_service_journal AS cj ON cp.id= cj.service_id
+    WHERE 1=1
+    <if test="phoneNumber != null and phoneNumber != ''">
+      AND cp.phone_number = #{phoneNumber}
+    </if>
+    <if test="workerNumber != null and workerNumber != ''">
+      AND cp.worker_number = #{workerNumber}
+    </if>
+    <if test="status != -1">
+      AND cp.status = #{status}
+    </if>
+    <if test="beginTime != null ">
+      and #{gmtCreate}&lt;beginTime
+    </if>
+    <if test="endTime != null ">
+      and #{gmtCreate}>endTime
+    </if>
+    order by cp.gmt_create desc
+
+  </select>
+  <select id="selectCountByCondition" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT
+    count(*)
+    FROM customer_service_phone_record AS cp
+    WHERE 1=1
+    <if test="phoneNumber != null and phoneNumber != ''">
+      AND cp.phone_number = #{phoneNumber}
+    </if>
+    <if test="workerNumber != null and workerNumber != ''">
+      AND cp.worker_number = #{workerNumber}
+    </if>
+    <if test="status != null and status != ''">
+      AND cp.status = #{status}
+    </if>
+    <if test="beginTime != null ">
+      and cp.gmt_create&gt;#{beginTime}
+    </if>
+    <if test="endTime != null ">
+      and cp.gmt_create&lt;#{endTime}
+    </if>
+    order by cp.gmt_create desc
+  </select>
+  <select id="selectServiceByCondition" parameterType="java.util.Map" resultMap="CustomerServiceListItem">
+    select A.*,B.username from (SELECT
+    *
+    FROM  customer_service_phone_record
+    <where>
+      <if test="phoneNumber != null and phoneNumber != ''">
+        AND phone_number = #{phoneNumber}
+      </if>
+      <if test="status != -1">
+        AND status = #{status}
+      </if>
+      <if test="beginTime != null and beginTime != '' ">
+        and gmt_create&gt;#{beginTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and gmt_create&lt;#{endTime}
+      </if>
+    </where>
+    ) as A inner join (select * from user
+        <where>
+          <if test="workName != null and workName != ''">
+            AND username = #{workName}
+          </if>
+        </where>
+    )As B on A.worker_number = B.work_number
+    order by gmt_create desc
+  </select>
+
+
+  <select id="selectServiceShow" parameterType="java.lang.Long" resultMap="ServiceShowResult">
+    SELECT cspr.id,cspr.phone_number,cspr.name,cspr.phone_type,cspr.status,
+    csj.worker_number,csj.begin_time,csj.end_time,
+    csp.id AS problem_id,csp.title,csp.type_id,
+    cspd.description,
+    cpp.pic_url
+    FROM customer_service_phone_record AS cspr
+    LEFT JOIN customer_service_journal AS csj ON cspr.id= csj.service_id
+    LEFT JOIN customer_service_problem AS csp ON csj.service_id = csp.service_id
+    LEFT JOIN customer_problem_type AS cpt ON csp.type_id = cpt.id
+    LEFT JOIN customer_service_problem_description AS cspd ON csp.id = cspd.problem_id
+    LEFT JOIN customer_problem_picture AS cpp ON csp.id = cpp.problem_id
+    WHERE cspr.id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_service_phone_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.facebank.usersupport.model.CustomerServiceModel">
+    insert into customer_service_phone_record (id, service_no, phone_number, 
+      name, type_id, worker_number, 
+      "is_ satisfied", user_comment, comment_content, 
+      status, note, gmt_create, 
+      gmt_modified)
+    values (#{id,jdbcType=BIGINT}, #{serviceNo,jdbcType=BIGINT}, #{phoneNumber,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{typeId,jdbcType=INTEGER}, #{workerNumber,jdbcType=INTEGER}, 
+      #{isSatisfied,jdbcType=TINYINT}, #{userComment,jdbcType=INTEGER}, #{commentContent,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=BIGINT}, 
+      #{gmtModified,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.facebank.usersupport.model.CustomerServiceModel">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+    insert into customer_service_phone_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="serviceNo != null">
+        service_no,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="workerNumber != null">
+        worker_number,
+      </if>
+      <if test="isSatisfied != null">
+        "is_ satisfied",
+      </if>
+      <if test="userComment != null">
+        user_comment,
+      </if>
+      <if test="commentContent != null">
+        comment_content,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="serviceNo != null">
+        #{serviceNo,jdbcType=BIGINT},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="workerNumber != null">
+        #{workerNumber,jdbcType=INTEGER},
+      </if>
+      <if test="isSatisfied != null">
+        #{isSatisfied,jdbcType=TINYINT},
+      </if>
+      <if test="userComment != null">
+        #{userComment,jdbcType=INTEGER},
+      </if>
+      <if test="commentContent != null">
+        #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.facebank.usersupport.model.CustomerServiceModel">
+    update customer_service_phone_record
+    <set>
+      <if test="serviceNo != null">
+        service_no = #{serviceNo,jdbcType=BIGINT},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="workerNumber != null">
+        worker_number = #{workerNumber,jdbcType=INTEGER},
+      </if>
+      <if test="isSatisfied != null">
+        "is_ satisfied" = #{isSatisfied,jdbcType=TINYINT},
+      </if>
+      <if test="userComment != null">
+        user_comment = #{userComment,jdbcType=INTEGER},
+      </if>
+      <if test="commentContent != null">
+        comment_content = #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=BIGINT},
+      </if>
+      <if test="phoneType != null">
+        phone_Type = #{phoneType,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.facebank.usersupport.model.CustomerServiceModel">
+    update customer_service_phone_record
+    set service_no = #{serviceNo,jdbcType=BIGINT},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=INTEGER},
+      worker_number = #{workerNumber,jdbcType=INTEGER},
+      "is_ satisfied" = #{isSatisfied,jdbcType=TINYINT},
+      user_comment = #{userComment,jdbcType=INTEGER},
+      comment_content = #{commentContent,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      gmt_modified = #{gmtModified,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

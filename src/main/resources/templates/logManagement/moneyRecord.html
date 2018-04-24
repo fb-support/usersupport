@@ -1,35 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head >
+<head>
     <div th:include="common/head_info::head_infor"></div>
-    <script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
-    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
-    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
-    <script type="text/javascript" th:src="@{../js/paging.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{../css/paging.css}">
+    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+    <script type="text/javascript" th:src="@{../js/My97DatePicker/WdatePicker.js}"></script>
+    <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{../js/moneyRecord.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/showLoading.css}">
 </head>
 <body>
-<div class="container center" style="width: 100%;">
+<div class="container center" style="width: 100%;" id="content">
     <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-            <input type="text" name="mobile"  class="form-control" placeholder="手机号">
-            <input type="text" name="type" class="form-control" placeholder="类型">
-                <input type="text" class="form-control" id="datetimeStart" name="startTime" readonly>
-                --
-                <input type="text" class="form-control" id="datetimeEnd" name="endTime" readonly>
+            <label for="mobile">手机号</label>
+            <input type="text" class="form-control" id="mobile" name="mobile" placeholder="手机号">
         </div>
-        <button type="button" class="btn btn-default" id="moneyRecordSearch">查找</button>
+        <div class="form-group">
+            <select class="form-control " id="type" name="type">
+                <option value="">所有类型</option>
+                <option value="1">汇入</option>
+                <option value="2">汇出</option>
+            </select>
+            <input id="datetimeStart" class="Wdate form-control" type="text"
+                   onclick="WdatePicker({el:this,dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d',readOnly:true})" readonly/>
+            --
+            <input id="datetimeEnd" class="Wdate form-control" type="text"
+                   onclick="WdatePicker({el:this,dateFmt:'yyyy-M-d H:mm:ss',skin:'whyGreen',maxDate:'%y-%M-%d',readOnly:true})" readonly/>
+        </div>
+        <button type="button" class="btn btn-default" onclick="javascript:search();">查找</button>
     </form>
     <div class="panel panel-default" style="width:100%;height:auto;overflow:auto;">
         <!-- Table -->
-        <table class="table table-bordered table-striped" style="min-width:1020px;word-break: keep-all;" >
+        <table class="table table-bordered table-striped" style="min-width:1020px;word-break: keep-all;" id="datatables">
             <thead>
             <tr>
                 <th width="80px">id</th>
                 <th width="80px">资金汇入者id</th>
                 <th width="80px">资金汇入者的昵称</th>
-                <th width="80px" >资金汇出者id</th>
+                <th width="80px">资金汇出者id</th>
                 <th width="80px">资金汇出者的昵称</th>
                 <th width="80px">资金汇出者的昵称</th>
                 <th width="80px">此交易完成后的账户余额</th>
@@ -41,151 +53,294 @@
                 <th width="80px">借款标题</th>
                 <th width="80px">标头像图片的路径</th>
                 <th width="80px">外部序列号</th>
-                <th width="60px">真名</th>
-                <th width="110px">手机号</th>
             </tr>
             </thead>
-            <tbody class="table table-bordered table-striped" style="word-break: keep-all" id="moneyRecordList" ></tbody>
+            <!--<tbody class="table table-bordered table-striped" style="word-break: keep-all" id="moneyRecordList">
+
+            </tbody>-->
         </table>
     </div>
-    <div id="pageing"></div>
 </div>
 <script>
-    var counts = 6;
-    $(document).ready(function () {
-        getPageAttribute(1,counts);
-    })
-    //查询
-    $('#moneyRecordSearch').click(function () {
-        getPageAttribute(1,counts);
+    //分页显示DataTable
+    var table3;
+    var tap = 0;
+
+    $(function () {
+        var today = new Date();
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+        today.setMilliseconds(0);
+
+        $("#datetimeStart").val(Format(today, "yyyy-MM-dd HH:mm:ss"));
+        $("#datetimeEnd").val(Format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+
     });
 
-    function getPageAttribute(page,couts){
-        $.ajax({
-            url: "/money/getMoneyRecordPage",
-            type: "POST",
-            dataType: "json",
-            data: {
-                mobile: $('[name="mobile"]').val(),
-                type: $('[name="type"]').val(),
-                starttime: $('#datetimeStart').val(),
-                endtime: $('#datetimeEnd').val(),
-                page:page,
-                couts:couts
-            },
-            success: function (json) {
-                console.log(json);
-                var resdata = json.data;
-                createPageNav({
-                    $container : $("#pageing"),
-                    pageCount : resdata.totalPages,
-                    currentNum : resdata.currentPage,
-                    afterFun : function(num){
-                        getPageAttribute(num,couts);
+    function search() {
+        // 参数验证
+        var mobile = $("#mobile").val();
+
+        var flag = (mobile == null || mobile == "");
+        if(flag){
+            layer.msg("手机号不能都为空");
+            return;
+        }
+        if(mobile != null && mobile != ""){
+            var mobileReg=/^[1][0-9]{10}$/;
+            if(!mobileReg.test(mobile)){
+                layer.msg("手机号格式不正确");
+                return;
+            }
+        }
+        var dateStart = $("#datetimeStart").val();
+        var dateEnd = $("#datetimeEnd").val();
+        if(dateStart != null && dateStart != "" && dateEnd != null && dateEnd != ""){
+            if(new Date(dateEnd).getTime() < new Date(dateStart).getTime()){
+                layer.msg("结束时间不能大于开始时间");
+                return;
+            }
+        }
+        if (tap != 0){
+            table3.ajax.reload();
+        }else{
+            table3 = $('#datatables').DataTable({
+                "searching": true, // 从结果搜索
+                "bJQueryUI": true,
+                "ordering" : true, // 排序
+                "aaSorting": [1, "desc"], // 按creditId倒序排列
+                "sPaginationType": "full_numbers",
+                "serverSide": false, // true代表后台分页，false代表前台分页
+                "language": {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
                     },
-                    hasCommonPage:false
-                });
-                var str = "";
-                for (var i =0;i<json.data.pageData.length;i++){
-                    var id = json.data.pageData[i].id;
-                    var touserid = json.data.pageData[i].touserid;
-                    var tousernickname = json.data.pageData[i].tousernickname;
-                    var fromuserid = json.data.pageData[i].fromuserid;
-                    var fromusernickname = json.data.pageData[i].fromusernickname;
-                    var amount = json.data.pageData[i].amount;
-                    var accountbalance = json.data.pageData[i].accountbalance;
-                    var tradetype = json.data.pageData[i].tradetype;
-                    var tradetime = json.data.pageData[i].tradetime;
-                    var tradechannel = json.data.pageData[i].tradechannel;
-                    var tradecomment = json.data.pageData[i].tradecomment;
-                    var loanid = json.data.pageData[i].loanid;
-                    var loantitle = json.data.pageData[i].loantitle;
-                    var loanportraitpath = json.data.pageData[i].loanportraitpath;
-                    var outserialno = json.data.pageData[i].outserialno;
-                    var realname =json.data.pageData[i].realname;
-                    var mobile = json.data.pageData[i].mobile;
-                    //为空转换
-                    if(id == null){id = "";}
-                    if(touserid == null){touserid = "";}
-                    if(tousernickname == null){tousernickname = "";}
-                    if(fromuserid == null){fromuserid = "";}
-                    if(fromusernickname == null){fromusernickname = "";}
-                    if(amount == null){amount = "";}
-                    if(accountbalance == null){accountbalance = "";}
-                    if(tradetype == null){tradetype = "";}
-                    if(tradetime == null){tradetime = "";}
-                    if(tradechannel == null){tradechannel = "";}
-                    if(tradecomment == null){tradecomment = "";}
-                    if(loanid == null){loanid = "";}
-                    if(loantitle == null){loantitle = "";}
-                    if(loanportraitpath == null){loanportraitpath = "";}
-                    if(outserialno == null){outserialno = "";}
-                    if(realname == null){realname = "";}
-                    if(mobile == null){mobile = "";}
-                    str += '<tr>'
-                        +'<th>'+id+'</th>'
-                        +'<th>'+touserid+'</th>'
-                        +'<th>'+tousernickname+'</th>'
-                        +'<th>'+fromuserid+'</th>'
-                        +'<th>'+fromusernickname+'</th>'
-                        +'<th>'+amount+'</th>'
-                        +'<th>'+accountbalance+'</th>'
-                        +'<th>'+tradetype+'</th>'
-                        +'<th>'+formatDate(tradetime)+'</th>'
-                        +'<th>'+tradechannel+'</th>'
-                        +'<th>'+tradecomment+'</th>'
-                        +'<th>'+loanid+'</th>'
-                        +'<th>'+loantitle+'</th>'
-                        +'<th>'+loanportraitpath+'</th>'
-                        +'<th>'+outserialno+'</th>'
-                        +'<th>'+realname+'</th>'
-                        +'<th>'+mobile+'</th>'
-                        +'</tr>';
-                }
-                $('#moneyRecordList').html(str);
-            }
-        })
-    };
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
 
-        //日期插件初始化
-        $('#datetimeStart').datetimepicker({
-            language:  'zh-CN',
-            format:'yyyy-mm-dd',
-            weekStart: 1, /*以星期一为一星期开始*/
-            todayBtn:  1,
-            autoclose: 1,
-            minView:2, /*精确到天*/
-            pickerPosition: "bottom-left"
-        }).on("changeDate",function(ev){  //值改变事件
-            //选择的日期不能大于第二个日期控件的日期
-            if(ev.date){
-                $("#datetimeEnd").datetimepicker('setStartDate', new Date(ev.date.valueOf()));
-            }else{
-                $("#datetimeEnd").datetimepicker('setStartDate',null);
-            }
-        });
-        $('#datetimeEnd').datetimepicker({
-            language:  'zh-CN',
-            format:'yyyy-mm-dd',
-            weekStart: 1, /*以星期一为一星期开始*/
-            todayBtn:  1,
-            autoclose: 1,
-            minView:2, /*精确到天*/
-            pickerPosition: "bottom-left"
-        }).on("changeDate",function(ev){
-            /*选择的日期不能小于第一个日期控件的日期*/
-            if(ev.date){
-                $("#datetimeStart").datetimepicker('setEndDate', new Date(ev.date.valueOf()));
-            }else{
-                $("#datetimeStart").datetimepicker('setEndDate',new Date());
-            }
-        });
+                ajax: function (data, callback, settings) {
+                    //封装请求参数
+                    var param = getQueryCondition(data);
+                    // 开启遮罩效果
+                    $("#content").showLoading();
+                    $.ajax({
+                        type: "GET",
+                        url: '/money/getMoneyRecordPage',
+                        cache: false,  //禁用缓存
+                        data: param,    //传入已封装的参数
+                        dataType: "json",
+                        success: function (result) {
+                            // 关闭遮罩效果
+                            $("#content").hideLoading();
+                            if (result.code==202){alert(result.message)}
+                            if (result.code==203){alert(result.message)}
+                            if (result.code==204){alert(result.message)}
+                            if (result.code == 200) {callback(result.data);}
+                        }
+                    });
+                },
+                "columns": [
+                    {
+                        "sClass": "text-center",
+                        "data": "id",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "touserid",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tousernickname",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "fromuserid",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "fromusernickname",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "amount",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "accountbalance",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tradetype",    //资金往来类型
+                        "render": function (data, type, full, meta) {
+                            var inoutString;
+                            if (data > 1000) {
+                                inoutString = "汇出";
+                            } else if(data <= 1000){
+                                inoutString = "汇入";
+                            }
+                            return inoutString;
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tradetime",   //交易时间
+                        "render": function (data, type, full, meta) {
+                            return formatDate(validate(data));
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tradechannel",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "tradecomment",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "loanid",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },{
+                        "sClass": "text-center",
+                        "data": "loantitle",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "loanportraitpath",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                    {
+                        "sClass": "text-center",
+                        "data": "outserialno",
+                        "render": function (data, type, full, meta) {
+                            return validate(data);
+                        },
+                        "bSortable": false
+                    },
+                ],
+                columnDefs: [
+                    {"orderable": false, "targets": 1},
+                    {"orderable": false, "targets": 2},
+                    {"orderable": false, "targets": 3},
+                    {"orderable": false, "targets": 4},
+                    {"orderable": false, "targets": 5},
+                    {"orderable": false, "targets": 6},
+                    {"orderable": false, "targets": 7},
+                    {"orderable": false, "targets": 8},
+                    {"orderable": false, "targets": 9},
+                    {"orderable": false, "targets": 10},
+                    {"orderable": false, "targets": 11},
+                    {"orderable": false, "targets": 12},
+                    {"orderable": false, "targets": 13},
+                    {"orderable": false, "targets": 14},
+                ],
+            });
 
-        //日期转换
+            tap++;
+        }
+
+
+
+    }
+
+    //封装查询参数
+    function getQueryCondition(data) {
+        var param = {};
+        param.mobile = $("#mobile").val();//查询条件
+        param.type = $("#type").val();//查询条件
+        param.starttime = new Date($("#datetimeStart").val()).getTime();//查询条件
+        param.endtime = new Date($("#datetimeEnd").val()).getTime();//查询条件
+        //组装分页参数
+        param.start = data.start;
+        param.length = data.length;
+        param.draw = data.draw;
+        return param;
+    }
+
+    //null处理
+    var validate = function (data) {
+        if (data == null) {
+            return "";
+        }
+        return data;
+    }
+
+    //日期处理
     function formatDate(now) {
-        if (now==""){return "";}
+        if (now == "") {
+            return "";
+        }
         return new Date(now).toLocaleString();
     }
-    </script>
+
+
+</script>
 </body>
 </html>

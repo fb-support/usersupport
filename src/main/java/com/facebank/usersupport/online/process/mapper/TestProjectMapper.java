@@ -1,7 +1,6 @@
 package com.facebank.usersupport.online.process.mapper;
 
 import com.facebank.usersupport.mapper.usersupport.base.BaseWriteMapper;
-import com.facebank.usersupport.model.LoginUserModel;
 import com.facebank.usersupport.online.process.model.TestProjectModel;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +10,7 @@ import java.util.List;
  * @author ningkui
  */
 @Component
-public interface TestProjectMapper extends BaseWriteMapper{
+public interface TestProjectMapper extends BaseWriteMapper {
 
     /**
      * 分页，多条件模糊查询

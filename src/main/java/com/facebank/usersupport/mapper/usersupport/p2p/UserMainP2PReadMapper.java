@@ -1,6 +1,7 @@
 package com.facebank.usersupport.mapper.usersupport.p2p;
 
 import com.facebank.usersupport.mapper.usersupport.base.BaseReadMapper;
+import com.facebank.usersupport.model.UserCapitalInfoModel;
 import com.facebank.usersupport.model.UserMainModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -20,4 +21,8 @@ public interface UserMainP2PReadMapper extends BaseReadMapper<UserMainModel,Long
     List<UserMainModel> selectByUserIds(List<Long> userIds);
 
     List<UserMainModel> selectByMobiles(@Param("list") List<String> mobiles, @Param("userType") Integer userType);
+
+    Long selectUserIdByMobile(String mobile);
+
+    UserCapitalInfoModel selectUserCapitalByUserId(Long userId);
 }

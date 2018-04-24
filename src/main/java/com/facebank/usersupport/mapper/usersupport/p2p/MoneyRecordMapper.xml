@@ -18,115 +18,35 @@
   <result column="loanPortraitPath" jdbcType="VARCHAR" property="loanportraitpath" />
   <result column="outSerialNo" jdbcType="VARCHAR" property="outserialno" />
 </resultMap>
-  <resultMap id="ResultMap" type="com.facebank.usersupport.dto.CapitalDto">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="toUserId" jdbcType="INTEGER" property="touserid" />
-    <result column="toUserNickname" jdbcType="VARCHAR" property="tousernickname" />
-    <result column="fromUserId" jdbcType="INTEGER" property="fromuserid" />
-    <result column="fromUserNickname" jdbcType="VARCHAR" property="fromusernickname" />
-    <result column="amount" jdbcType="DECIMAL" property="amount" />
-    <result column="accountBalance" jdbcType="DECIMAL" property="accountbalance" />
-    <result column="tradeType" jdbcType="SMALLINT" property="tradetype" />
-    <result column="tradeTime" jdbcType="TIMESTAMP" property="tradetime" />
-    <result column="tradeChannel" jdbcType="SMALLINT" property="tradechannel" />
-    <result column="tradeComment" jdbcType="VARCHAR" property="tradecomment" />
-    <result column="loanId" jdbcType="INTEGER" property="loanid" />
-    <result column="loanTitle" jdbcType="VARCHAR" property="loantitle" />
-    <result column="loanPortraitPath" jdbcType="VARCHAR" property="loanportraitpath" />
-    <result column="outSerialNo" jdbcType="VARCHAR" property="outserialno" />
-    <result column="realName" jdbcType="VARCHAR" property="realname" />
-    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
-  </resultMap>
+
   <sql id="Base_Column_List">
     id, toUserId, toUserNickname, fromUserId, fromUserNickname, amount, accountBalance, 
     tradeType, tradeTime, tradeChannel, tradeComment, loanId, loanTitle, loanPortraitPath, 
     outSerialNo
   </sql>
-  <sql id="Column_List">
-    id, toUserId, toUserNickname, fromUserId, fromUserNickname, amount, accountBalance,
-    tradeType, tradeTime, tradeChannel, tradeComment, loanId, loanTitle, loanPortraitPath,
-    outSerialNo, realName,mobile
-  </sql>
 
-  <select id="getMoneyRecord" parameterType="java.util.Map" resultMap="ResultMap">
+  <select id="selectByMobile" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
-    <include refid="Column_List" />
-    from (select userId,realName,mobile from user_main
+    <include refid="Base_Column_List" />
+    from p2p.money_record
     <where>
-      <if test="mobile != null and mobile != ''">
-        mobile = #{mobile}
+      <if test="mobile != null and mobile != '' ">
+        toUserNickname = #{mobile}
       </if>
-    </where>
-    ) as u
-    left join
-    (select * from money_record
-    <where>
-      <if test="type != null and type != ''">
-        tradeType = #{type}
+      <if test="type == 1">
+        and   tradeType&lt;1000
+      </if>
+      <if test="type == 2">
+        and   tradeType&gt;=1000
       </if>
       <if test="starttime != null ">
-        and #{starttime}&lt;tradeTime
+        and #{starttime}&lt;=tradeTime
       </if>
       <if test="endtime != null ">
-        and tradeTime&lt;#{endtime}
+        and tradeTime&lt;=#{endtime}
       </if>
     </where>
-    )as r
-    on r.toUserId=u.userId
-    ORDER BY tradeTime DESC LIMIT 10;
+     ORDER BY tradeTime DESC
   </select>
 
-  <select id="getMoneyRecordPage" parameterType="java.util.Map" resultMap="ResultMap">
-    select
-    <include refid="Column_List" />
-    from (select userId,realName,mobile from user_main
-    <where>
-      <if test="mobile != null and mobile != ''">
-        mobile = #{mobile}
-      </if>
-    </where>
-    ) as u
-    left join
-    (select * from money_record
-    <where>
-      <if test="type != null and type != ''">
-        tradeType = #{type}
-      </if>
-      <if test="starttime != null ">
-        and #{starttime}&lt;tradeTime
-      </if>
-      <if test="endtime != null ">
-        and tradeTime&lt;#{endtime}
-      </if>
-    </where>
-    )as r
-    on r.toUserId=u.userId  ORDER BY tradeTime DESC LIMIT #{pagestart},#{pagecount};
-  </select>
-
-  <select id="getPageCount" parameterType="java.util.Map" resultType="int">
-    select
-    count(*)
-    from (select userId from user_main
-    <where>
-      <if test="mobile != null and mobile != ''">
-        mobile = #{mobile}
-      </if>
-    </where>
-    ) as u
-    INNER join
-    (select toUserId from money_record
-    <where>
-      <if test="type != null and type != ''">
-        tradeType = #{type}
-      </if>
-      <if test="starttime != null ">
-        and #{starttime}&lt;tradeTime
-      </if>
-      <if test="endtime != null ">
-        and tradeTime&lt;#{endtime}
-      </if>
-    </where>
-    )as r
-    on r.toUserId=u.userId;
-  </select>
 </mapper>

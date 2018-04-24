@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface TestProjectRecordMapper extends BaseWriteMapper<TestProjectRecordModel,Long>{
+public interface TestProjectRecordMapper extends BaseWriteMapper<TestProjectRecordModel,Long> {
 
     /**
      * 分页，多条件模糊查询

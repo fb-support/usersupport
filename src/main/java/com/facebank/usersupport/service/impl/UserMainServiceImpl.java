@@ -3,7 +3,9 @@ package com.facebank.usersupport.service.impl;
 import com.facebank.usersupport.mapper.usersupport.p2p.UserMainP2PReadMapper;
 import com.facebank.usersupport.mapper.usersupport.usersupport.USUserMainMapper;
 import com.facebank.usersupport.model.UserMainModel;
+import com.facebank.usersupport.service.IUserMainService;
 import com.facebank.usersupport.service.base.BaseService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

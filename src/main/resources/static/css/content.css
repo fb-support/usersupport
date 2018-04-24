@@ -125,7 +125,7 @@
 	display: none;
 }
 
-#service-b-page {
+#service-repaymentOrder-page {
 	display: none;
 }
 
@@ -150,7 +150,8 @@
 
 #userManager-opera-user-page {
 	display: none;
-	margin-top: 20px;
+	margin-bottom: 25px;
+	padding-bottom: 20px;
 }
 
 #userManager-login-page{
@@ -162,6 +163,36 @@
 
 .mainPage_init_option:hover {
 	transform: rotate(720deg);
+}
+
+#attendance-overtime-page{
+	display: none;
+}
+
+#attendance-rest-page{
+	display: none;
+}
+
+#attendance-leave-page{
+	display: none;
+}
+
+#attendance-deal-page{
+	display: none;
+}
+
+#attendance-attendance-page{
+	display: none;
+}
+
+#attendance-acount-page{
+	display: none;
+}
+#customer_record {
+	display: none;
+}
+#customer_service {
+	display: none;
 }
 
 #test-project-manager-page {

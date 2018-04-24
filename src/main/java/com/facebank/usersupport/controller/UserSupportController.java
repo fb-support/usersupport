@@ -7,12 +7,15 @@ import com.facebank.usersupport.dto.reqDto.UserForm;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.UserMainModel;
 import com.facebank.usersupport.model.UserModel;
-import com.facebank.usersupport.service.impl.IUserMainService;
+import com.facebank.usersupport.service.IUserMainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 测试类
@@ -37,6 +40,7 @@ public class UserSupportController extends BaseController {
          */
         return this.success(JSON.toJSONString(model));
     }
+
 
     @PostMapping("/user/postUserMainByUserId，")
     public RestModel getUserMainByUserId(@RequestBody UserForm userForm){

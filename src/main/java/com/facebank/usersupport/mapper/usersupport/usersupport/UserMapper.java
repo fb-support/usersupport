@@ -4,6 +4,7 @@ import com.facebank.usersupport.dto.UserRoleDO;
 import com.facebank.usersupport.mapper.usersupport.base.BaseWriteMapper;
 import com.facebank.usersupport.model.UserModel;
 import org.apache.catalina.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -71,4 +72,18 @@ public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
      * @return
      */
     UserRoleDO selectBySelectiveForPermission(String loginName);
+
+    /**
+     * 禁用用户
+     * @param ids
+     * @return
+     */
+    int updateStatusForBanUser(Integer[] ids);
+
+    /**
+     * 启用用户
+     * @param ids
+     * @return
+     */
+    int updateStatusForEnableUser(Integer[] ids);
 }

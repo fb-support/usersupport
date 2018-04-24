@@ -10,16 +10,28 @@ public class RepaymentForm {
 
     private Long userId;
 
+    private String mobile;
+
     private Long orderId;
+
+    private Integer bizStatus;
 
     private Long startTime;
 
     private Long endTime;
 
-    private Integer page = 1;
+    private Integer start = 1;
 
-    private Integer pageSize = 10;
-	
+    private Integer length = 10;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -44,6 +56,14 @@ public class RepaymentForm {
         this.endTime = endTime;
     }
 
+    public Integer getBizStatus() {
+        return bizStatus;
+    }
+
+    public void setBizStatus(Integer bizStatus) {
+        this.bizStatus = bizStatus;
+    }
+
     public Long getOrderId() {
         return orderId;
     }
@@ -52,19 +72,19 @@ public class RepaymentForm {
         this.orderId = orderId;
     }
 
-    public Integer getPage() {
-        return page;
+    public Integer getStart() {
+        return start;
     }
 
-    public void setPage(Integer page) {
-        this.page = page;
+    public void setStart(Integer start) {
+        this.start = start;
     }
 
-    public Integer getPageSize() {
-        return pageSize;
+    public Integer getLength() {
+        return length;
     }
 
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
+    public void setLength(Integer length) {
+        this.length = length;
     }
 }

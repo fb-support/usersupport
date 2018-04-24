@@ -12,31 +12,51 @@ public class RepaymentModel implements Serializable {
     /**
      * 订单号
      */
-    private Long credOrderId;
+    private Long orderId;
     /**
      * 用户id
      */
-    private Long credUserId;
+    private Long userId;
+    /**
+     * 债权id
+     */
+    private Long creditId;
+    /**
+     * 计划时间
+     */
+    private Long planDate;
     /**
      * 债权计划本金
      */
     private BigDecimal credPlanPrincipal;
     /**
-     * 计划利息
+     * 债权计划利息
      */
     private BigDecimal credPlanInterest;
     /**
-     * 计划时间
+     * 债权实收本金
      */
-    private Long credPlanDate;
+    private BigDecimal credRealPrincipal;
+    /**
+     * 债权实收利息
+     */
+    private BigDecimal credRealInterest;
+    /**
+     * 还款状态，100：未还，200：已还
+     */
+    private Integer bizStatus;
     /**
      * 红包信息
      */
     private String redLocalInfo;
     /**
-     * 红包金额
+     * 应收红包金额
      */
     private BigDecimal redPlanAmount;
+    /**
+     * 实收红包金额
+     */
+    private BigDecimal redRealAmount;
     /**
      * 加息红包/返现红包
      */
@@ -50,17 +70,25 @@ public class RepaymentModel implements Serializable {
      */
     private BigDecimal vipRate;
     /**
-     * vip收益
+     * 应收vip收益
      */
     private BigDecimal vipPlanAmount;
+    /**
+     * 实收vip收益
+     */
+    private BigDecimal vipRealAmount;
     /**
      * VIP期数
      */
     private Integer vipTermNum;
     /**
-     * 加息金额
+     * 应收加息金额
      */
     private BigDecimal pfPlanAmount;
+    /**
+     * 实收加息金额
+     */
+    private BigDecimal pfRealAmount;
     /**
      * 加息期数
      */
@@ -70,20 +98,36 @@ public class RepaymentModel implements Serializable {
      */
     private Integer pfType;
 
-    public Long getCredOrderId() {
-        return credOrderId;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setCredOrderId(Long credOrderId) {
-        this.credOrderId = credOrderId;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
-    public Long getCredUserId() {
-        return credUserId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setCredUserId(Long credUserId) {
-        this.credUserId = credUserId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getCreditId() {
+        return creditId;
+    }
+
+    public void setCreditId(Long creditId) {
+        this.creditId = creditId;
+    }
+
+    public Long getPlanDate() {
+        return planDate;
+    }
+
+    public void setPlanDate(Long planDate) {
+        this.planDate = planDate;
     }
 
     public BigDecimal getCredPlanPrincipal() {
@@ -102,12 +146,28 @@ public class RepaymentModel implements Serializable {
         this.credPlanInterest = credPlanInterest;
     }
 
-    public Long getCredPlanDate() {
-        return credPlanDate;
+    public BigDecimal getCredRealPrincipal() {
+        return credRealPrincipal;
     }
 
-    public void setCredPlanDate(Long credPlanDate) {
-        this.credPlanDate = credPlanDate;
+    public void setCredRealPrincipal(BigDecimal credRealPrincipal) {
+        this.credRealPrincipal = credRealPrincipal;
+    }
+
+    public BigDecimal getCredRealInterest() {
+        return credRealInterest;
+    }
+
+    public void setCredRealInterest(BigDecimal credRealInterest) {
+        this.credRealInterest = credRealInterest;
+    }
+
+    public Integer getBizStatus() {
+        return bizStatus;
+    }
+
+    public void setBizStatus(Integer bizStatus) {
+        this.bizStatus = bizStatus;
     }
 
     public String getRedLocalInfo() {
@@ -188,5 +248,29 @@ public class RepaymentModel implements Serializable {
 
     public void setPfType(Integer pfType) {
         this.pfType = pfType;
+    }
+
+    public BigDecimal getRedRealAmount() {
+        return redRealAmount;
+    }
+
+    public void setRedRealAmount(BigDecimal redRealAmount) {
+        this.redRealAmount = redRealAmount;
+    }
+
+    public BigDecimal getVipRealAmount() {
+        return vipRealAmount;
+    }
+
+    public void setVipRealAmount(BigDecimal vipRealAmount) {
+        this.vipRealAmount = vipRealAmount;
+    }
+
+    public BigDecimal getPfRealAmount() {
+        return pfRealAmount;
+    }
+
+    public void setPfRealAmount(BigDecimal pfRealAmount) {
+        this.pfRealAmount = pfRealAmount;
     }
 }

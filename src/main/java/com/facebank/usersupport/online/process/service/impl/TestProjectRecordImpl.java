@@ -30,7 +30,7 @@ public class TestProjectRecordImpl implements ITestProjectRecordService {
         testProjectRecordModel.setGmtModify(System.currentTimeMillis());
         int is_insert = testProjectRecordMapper.insertRecord(testProjectRecordModel);
         if (is_insert == 1) {
-            return new RestModel(RestModel.CODE_SUCCESS,RestModel.MESSAGE_SUCCESS);
+            return new RestModel(RestModel.CODE_SUCCESS, RestModel.MESSAGE_SUCCESS);
         }
         return new RestModel();
 

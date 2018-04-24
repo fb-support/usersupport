@@ -15,10 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * 用户表操作service实现类
@@ -120,6 +118,24 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     /**
+     * 根据id禁止指定用户
+     * @param ids 用户id array
+     */
+    @Override
+    public void banByUserIds(Integer[] ids) {
+        userMapper.updateStatusForBanUser(ids);
+    }
+
+    /**
+     * 根据id启用指定用户
+     * @param ids 用户id array
+     */
+    @Override
+    public void enableUserByIds(Integer[] ids) {
+        userMapper.updateStatusForEnableUser(ids);
+    }
+
+    /**
      * 获取当前正在登录用户的ID
      * @return
      */
@@ -135,39 +151,5 @@ public class UserServiceImpl extends BaseService implements IUserService {
         return userRoleDO.getUserId();
     }
 
-    /**
-     * 查询所有用户（指定技术部）
-     * @param query 查询内容
-     * @return 用户集合
-     */
-    @Override
-    public List<UserModel> getUserForOnlineProcess(String query) {
 
-        UserModel model = new UserModel();
-
-        if(query == null || "".equals(query)) {
-            return userMapper.selectAllByCondition(model);
-        }
-
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-        boolean isNumber = pattern.matcher(query).matches();
-
-        // 根据用户姓名查询
-        model.setUsername(query);
-        List<UserModel> userList_username = userMapper.selectAllByCondition(model);
-
-        List<UserModel> userList_workNumber = new ArrayList<>();
-        // 根据用户工号查
-        if(isNumber) {
-            model.setUsername(null);
-            model.setWorkNumber(Integer.parseInt(query));
-            userList_workNumber = userMapper.selectAllByCondition(model);
-        }
-
-        // 合并两个集合
-        userList_username.addAll(userList_workNumber);
-
-        // 返回
-        return userList_username;
-    }
 }
