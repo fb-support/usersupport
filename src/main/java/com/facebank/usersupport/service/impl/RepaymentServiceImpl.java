@@ -43,15 +43,15 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         List<RepaymentModel> repaymentModelList3 = repaymentMapper.getVipInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList4 = repaymentMapper.getPfInterestInfoByRepaymentForm(repaymentForm);
         // 根据第一个list构建一个Map<String,RepaymentModel>
-        Map<String,RepaymentModel> repaymentModelMap = new HashMap<>();
+        Map<String, RepaymentModel> repaymentModelMap = new HashMap<>();
         for (RepaymentModel repaymentModel1 : repaymentModelList1) {
             String key = repaymentModel1.getCreditId() + ":" + repaymentModel1.getBizStatus();
-            repaymentModelMap.put(key,repaymentModel1);
+            repaymentModelMap.put(key, repaymentModel1);
         }
         // 根据key设置RepaymentModel中的剩余属性
         for (RepaymentModel repaymentModel2 : repaymentModelList2) {
             String key = repaymentModel2.getCreditId() + ":" + repaymentModel2.getBizStatus();
-            if(repaymentModelMap.containsKey(key)){
+            if (repaymentModelMap.containsKey(key)) {
                 repaymentModelMap.get(key).setRedPlanAmount(repaymentModel2.getRedPlanAmount());
                 repaymentModelMap.get(key).setRedRealAmount(repaymentModel2.getRedRealAmount());
                 repaymentModelMap.get(key).setRedLocalInfo(repaymentModel2.getRedLocalInfo());
@@ -61,7 +61,7 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         }
         for (RepaymentModel repaymentModel3 : repaymentModelList3) {
             String key = repaymentModel3.getCreditId() + ":" + repaymentModel3.getBizStatus();
-            if(repaymentModelMap.containsKey(key)){
+            if (repaymentModelMap.containsKey(key)) {
                 repaymentModelMap.get(key).setVipPlanAmount(repaymentModel3.getVipPlanAmount());
                 repaymentModelMap.get(key).setVipRealAmount(repaymentModel3.getVipRealAmount());
                 repaymentModelMap.get(key).setVipRate(repaymentModel3.getVipRate());
@@ -70,7 +70,7 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         }
         for (RepaymentModel repaymentModel4 : repaymentModelList4) {
             String key = repaymentModel4.getCreditId() + ":" + repaymentModel4.getBizStatus();
-            if(repaymentModelMap.containsKey(key)){
+            if (repaymentModelMap.containsKey(key)) {
                 repaymentModelMap.get(key).setPfPlanAmount(repaymentModel4.getPfPlanAmount());
                 repaymentModelMap.get(key).setPfRealAmount(repaymentModel4.getPfRealAmount());
                 repaymentModelMap.get(key).setPfTermNum(repaymentModel4.getPfTermNum());
@@ -88,12 +88,58 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
 
     /**
      * 多条件组合查询债权还款明细信息
+     *
      * @param repaymentForm
      * @return
      */
     @Override
     public List<RepaymentModel> getRepaymentDetailByRepaymentForm(RepaymentForm repaymentForm) {
-        return repaymentMapper.getRepaymentDetailByRepaymentForm(repaymentForm);
+        // List<RepaymentModel> repaymentModels = repaymentMapper.getRepaymentDetailByRepaymentForm(repaymentForm);
+
+        List<RepaymentModel> repaymentModelList1 = repaymentMapper.getCreditDetailByRepaymentForm(repaymentForm);
+        List<RepaymentModel> repaymentModelList2 = repaymentMapper.getRedPackageDetailByRepaymentForm(repaymentForm);
+        List<RepaymentModel> repaymentModelList3 = repaymentMapper.getVipDetailByRepaymentForm(repaymentForm);
+        List<RepaymentModel> repaymentModelList4 = repaymentMapper.getPfInterestDetailByRepaymentForm(repaymentForm);
+        // 根据第一个list构建一个Map<String,RepaymentModel>
+        Map<String, RepaymentModel> repaymentModelMap = new HashMap<>();
+        for (RepaymentModel repaymentModel1 : repaymentModelList1) {
+            String key = repaymentModel1.getCreditId() + ":" + repaymentModel1.getCredTermNum();
+            repaymentModelMap.put(key, repaymentModel1);
+        }
+        // 根据key设置RepaymentModel中的剩余属性
+        for (RepaymentModel repaymentModel2 : repaymentModelList2) {
+            String key = repaymentModel2.getCreditId() + ":" + repaymentModel2.getRedTermNum();
+            if (repaymentModelMap.containsKey(key)) {
+                repaymentModelMap.get(key).setRedPlanAmount(repaymentModel2.getRedPlanAmount());
+                repaymentModelMap.get(key).setRedRealAmount(repaymentModel2.getRedRealAmount());
+                repaymentModelMap.get(key).setRedLocalInfo(repaymentModel2.getRedLocalInfo());
+                repaymentModelMap.get(key).setRedPackageType(repaymentModel2.getRedPackageType());
+            }
+        }
+        for (RepaymentModel repaymentModel3 : repaymentModelList3) {
+            String key = repaymentModel3.getCreditId() + ":" + repaymentModel3.getVipTermNum();
+            if (repaymentModelMap.containsKey(key)) {
+                repaymentModelMap.get(key).setVipPlanAmount(repaymentModel3.getVipPlanAmount());
+                repaymentModelMap.get(key).setVipRealAmount(repaymentModel3.getVipRealAmount());
+                repaymentModelMap.get(key).setVipRate(repaymentModel3.getVipRate());
+            }
+        }
+        for (RepaymentModel repaymentModel4 : repaymentModelList4) {
+            String key = repaymentModel4.getCreditId() + ":" + repaymentModel4.getPfTermNum();
+            if (repaymentModelMap.containsKey(key)) {
+                repaymentModelMap.get(key).setPfPlanAmount(repaymentModel4.getPfPlanAmount());
+                repaymentModelMap.get(key).setPfRealAmount(repaymentModel4.getPfRealAmount());
+                repaymentModelMap.get(key).setPfType(repaymentModel4.getPfType());
+            }
+        }
+        // 将Map<creditId,RepaymentModel>转换为List<RepaymentModel>
+        Set<Map.Entry<String, RepaymentModel>> entrySet = repaymentModelMap.entrySet();
+        List<RepaymentModel> repaymentModels = new ArrayList<>();
+        for (Map.Entry<String, RepaymentModel> RepaymentModelEntry : entrySet) {
+            repaymentModels.add(RepaymentModelEntry.getValue());
+        }
+
+        return repaymentModels;
     }
 
     /**
@@ -110,29 +156,29 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         List<RepaymentModel> repaymentModelList3 = repaymentMapper.getOrderVipInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList4 = repaymentMapper.getOrderPfInterestInfoByRepaymentForm(repaymentForm);
         // 根据第一个list构建一个Map<String,RepaymentModel>
-        Map<String,RepaymentModel> repaymentModelMap = new HashMap<>();
+        Map<String, RepaymentModel> repaymentModelMap = new HashMap<>();
         for (RepaymentModel repaymentModel1 : repaymentModelList1) {
             String key = repaymentModel1.getOrderId() + ":" + repaymentModel1.getBizStatus();
-            repaymentModelMap.put(key,repaymentModel1);
+            repaymentModelMap.put(key, repaymentModel1);
         }
         // 根据key设置RepaymentModel中的剩余属性
         for (RepaymentModel repaymentModel2 : repaymentModelList2) {
             String key = repaymentModel2.getOrderId() + ":" + repaymentModel2.getBizStatus();
-            if(repaymentModelMap.containsKey(key)){
+            if (repaymentModelMap.containsKey(key)) {
                 repaymentModelMap.get(key).setRedPlanAmount(repaymentModel2.getRedPlanAmount());
                 repaymentModelMap.get(key).setRedRealAmount(repaymentModel2.getRedRealAmount());
             }
         }
         for (RepaymentModel repaymentModel3 : repaymentModelList3) {
             String key = repaymentModel3.getOrderId() + ":" + repaymentModel3.getBizStatus();
-            if(repaymentModelMap.containsKey(key)){
+            if (repaymentModelMap.containsKey(key)) {
                 repaymentModelMap.get(key).setVipPlanAmount(repaymentModel3.getVipPlanAmount());
                 repaymentModelMap.get(key).setVipRealAmount(repaymentModel3.getVipRealAmount());
             }
         }
         for (RepaymentModel repaymentModel4 : repaymentModelList4) {
             String key = repaymentModel4.getOrderId() + ":" + repaymentModel4.getBizStatus();
-            if(repaymentModelMap.containsKey(key)){
+            if (repaymentModelMap.containsKey(key)) {
                 repaymentModelMap.get(key).setPfPlanAmount(repaymentModel4.getPfPlanAmount());
                 repaymentModelMap.get(key).setPfRealAmount(repaymentModel4.getPfRealAmount());
             }

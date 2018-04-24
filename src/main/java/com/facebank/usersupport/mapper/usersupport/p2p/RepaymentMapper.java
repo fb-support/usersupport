@@ -26,10 +26,14 @@ public interface RepaymentMapper extends BaseReadMapper<RepaymentModel,Long> {
     List<RepaymentModel> getRepaymentModelListByRepaymentForm(RepaymentForm repaymentForm);
 
     /**
-     *
+     * 组合条件查询债权明细信息
      * @param repaymentForm
      * @return
      */
+    List<RepaymentModel> getCreditDetailByRepaymentForm(RepaymentForm repaymentForm);
+    List<RepaymentModel> getRedPackageDetailByRepaymentForm(RepaymentForm repaymentForm);
+    List<RepaymentModel> getVipDetailByRepaymentForm(RepaymentForm repaymentForm);
+    List<RepaymentModel> getPfInterestDetailByRepaymentForm(RepaymentForm repaymentForm);
     List<RepaymentModel> getRepaymentDetailByRepaymentForm(RepaymentForm repaymentForm);
 
     /**
