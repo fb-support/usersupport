@@ -1,6 +1,7 @@
 package com.facebank.usersupport.online.process.service.impl;
 
 import com.facebank.usersupport.online.process.mapper.TestFormMapper;
+import com.facebank.usersupport.online.process.model.TestFormModel;
 import com.facebank.usersupport.online.process.model.TestFormWithBLOBsModel;
 import com.facebank.usersupport.online.process.service.ITestFormService;
 import com.facebank.usersupport.service.base.BaseService;
@@ -23,12 +24,12 @@ public class TestFormServiceImpl extends BaseService implements ITestFormService
     private TestFormMapper testFormMapper;
 
     @Override
-    public int insertForm(TestFormWithBLOBsModel testFormModel) {
+    public Long insertForm(TestFormWithBLOBsModel testFormModel) {
         testFormModel.setGmtCreate(System.currentTimeMillis());
         testFormModel.setGmtModify(System.currentTimeMillis());
 
-        int is_insert = testFormMapper.insert(testFormModel);
-        return is_insert;
+        Long formId = testFormMapper.insertGetKey(testFormModel);
+        return formId;
     }
 
     @Override
@@ -43,16 +44,16 @@ public class TestFormServiceImpl extends BaseService implements ITestFormService
     }
 
     @Override
-    public PageInfo selectByPage(int pageSize, int pageNumber, String formService,Integer formStatus) {
+    public PageInfo selectByPage(int pageSize, int pageNumber, TestFormModel testFormModel) {
         PageHelper.startPage(pageNumber,pageSize);
-        List<TestFormWithBLOBsModel> models = testFormMapper.selectAllByCondition(formService,formStatus);
+        List<TestFormWithBLOBsModel> models = testFormMapper.selectAllByCondition(testFormModel);
         PageInfo<TestFormWithBLOBsModel> pageInfo =new PageInfo<>(models);
         return pageInfo;
     }
 
     @Override
-    public int updateTestFormStatus(Long formId, Integer formStatus) {
-        return testFormMapper.updateTestFormStatus(formId,formStatus);
+    public int updateTestFormStatus(TestFormModel testFormModel) {
+        return testFormMapper.updateTestFormStatus(testFormModel);
     }
 
     @Override

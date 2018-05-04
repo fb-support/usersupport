@@ -217,6 +217,7 @@ function parseData(str) {
 function lookProjectDetail(obj) {
     // 获取当前想要查看详情的项目编号
     var projectId = obj.parentElement.parentElement.children[0];
+
     window.parent.runTestProjectDetail(projectId);
 }
 
@@ -341,10 +342,12 @@ function saveTestProject() {
         data: $("#newTestProjectForm").serialize(),    //传入已封装的参数
         dataType: "json",
         success: function (data) {
-            if(data.code == 1) {
+            if(data != null && data.code == 1) {
                 layer.msg("新建成功");
                 // 隐藏项目列表model
                 $('#createNewProject').modal('hide');
+                //刷新页面
+                searchAllProject();
             } else {
                 layer.msg("创建失败。请重新尝试！");
             }

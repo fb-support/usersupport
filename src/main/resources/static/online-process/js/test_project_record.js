@@ -1,3 +1,26 @@
+$(function() {
+
+    //日期插件初始化
+    $('#datetimeStart').datetimepicker({
+        language: 'zh-CN',
+        format: 'yyyy-mm-dd hh:ii',
+        autoclose: true,
+        minView: 0,
+        minuteStep:1
+    }).on('changeDate',function(ev){
+        var starttime=$("#datetimeStart").val();
+        $("#datetimeEnd").datetimepicker('setStartDate',starttime);
+        $("#datetimeStart").datetimepicker('hide');
+    });
+    $('#datetimeEnd').datetimepicker({
+        language: 'zh-CN',
+        format: 'yyyy-mm-dd hh:ii',
+        autoclose: true,
+        minView: 0,
+        minuteStep:1
+    });
+});
+
 //分页显示DataTable
 var table;
 $(document).ready(function () {
@@ -22,16 +45,16 @@ $(document).ready(function () {
             });
         },
         "columns": [
-            {"data": "projectId"},
             {"data": "formId"},
             {
                 "data": "formType",
                 "render":function (formType,type,full,meta) {
-                    if(formType==1){
-                        return "上线工单"
-                    }
                     if(formType==0){
-                        return "测试工单"
+                        return "项目";
+                    }else if(formType==1){
+                        return "测试工单";
+                    } else {
+                        return "上线工单";
                     }
                 },
                 "bSortable": false
@@ -53,28 +76,35 @@ $(document).ready(function () {
             {"orderable": false, "targets": 2},
             {"orderable": false, "targets": 3},
             {"orderable": false, "targets": 4},
-            {"orderable": false, "targets": 5},
         ],
     });
 });
-function search(data) {
-    console.log("成功调用search方法");
-    console.log(data);
+function search() {
     table.ajax.reload();
 }
 //封装查询参数
 function getQueryCondition(data) {
+    var projectId;
+    if(window.document.location.href.split("?") != null) {
+        projectId = window.document.location.href.split("?")[1].split("=")[1];
+    }
+
     var param = {};
-    param.projectId = $("#project-search").val();//查询条件
+    $("#project-search").val(projectId);
+    param.projectId = projectId;//查询条件
     param.operatingPeople = $("#people-search").val();//查询条件
     param.formType = $("#record_form_type").val();//查询条件
-    if(param.formType == 2){
+    if(param.formType == -1){
         param.formType = null;
     }
-    // if(param.formType == "上线工单"){
-    //     param.formType = 1;
-    // }
-    if(param.formType =="")
+    //查询时间
+    if ($('#datetimeStart').val() != null && $('#datetimeStart').val().length > 0) {
+        param.gmtCreate = parseData($('#datetimeStart').val());
+    }
+    //查询结束时间
+    if ($('#datetimeEnd').val() != null && $('#datetimeEnd').val().length > 0) {
+        param.gmtModify = parseData($('#datetimeEnd').val());
+    }
     //组装分页参数
     param.start = data.start;
     param.length = data.length;

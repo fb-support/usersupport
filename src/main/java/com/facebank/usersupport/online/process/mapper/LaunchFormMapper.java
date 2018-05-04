@@ -11,8 +11,7 @@ public interface LaunchFormMapper extends BaseWriteMapper<LaunchFormModel, Long>
 
     List<LaunchFormModel> selectAllLaunchForm(LaunchFormModel launchFormModel);
 
-    @Override
-    int insert(LaunchFormModel launchFormModel);
+    Long insertGetKey(LaunchFormModel launchFormModel);
 
     LaunchFormModel selectByFormId(Long formId);
 

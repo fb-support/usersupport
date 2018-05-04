@@ -1,5 +1,6 @@
 package com.facebank.usersupport.online.process.service;
 
+import com.facebank.usersupport.online.process.model.TestFormModel;
 import com.facebank.usersupport.online.process.model.TestFormWithBLOBsModel;
 import com.github.pagehelper.PageInfo;
 
@@ -21,7 +22,7 @@ public interface ITestFormService {
      * @param testFormModel
      * @return
      */
-    int insertForm(TestFormWithBLOBsModel testFormModel);
+    Long insertForm(TestFormWithBLOBsModel testFormModel);
 
     /**
      * 根据测试工单id获取测试工单信息
@@ -41,18 +42,17 @@ public interface ITestFormService {
      * 分页查询
      * @param pageSize
      * @param pageNumber
-     * @param formService
+     * @param testFormModel
      * @return
      */
-    PageInfo selectByPage(int pageSize, int pageNumber, String formService, Integer formStatus);
+    PageInfo selectByPage(int pageSize, int pageNumber, TestFormModel testFormModel);
 
     /**
      * 修改测试工单状态
-     * @param formId
-     * @param formStatus
+     * @param testFormModel
      * @return
      */
-    int updateTestFormStatus(Long formId, Integer formStatus);
+    int updateTestFormStatus(TestFormModel testFormModel);
 
     /**
      * 根据projectId 查询测试通过的工单

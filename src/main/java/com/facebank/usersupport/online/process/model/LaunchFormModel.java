@@ -21,6 +21,10 @@ public class LaunchFormModel implements Serializable {
 
     private String acceptTestUsername;
 
+    private Long operationsUser;
+
+    private String operationsUsername;
+
     private Integer formStatus;
 
     private String note;
@@ -141,5 +145,21 @@ public class LaunchFormModel implements Serializable {
 
     public void setFormContent(String formContent) {
         this.formContent = formContent == null ? null : formContent.trim();
+    }
+
+    public Long getOperationsUser() {
+        return operationsUser;
+    }
+
+    public void setOperationsUser(Long operationsUser) {
+        this.operationsUser = operationsUser;
+    }
+
+    public String getOperationsUsername() {
+        return operationsUsername;
+    }
+
+    public void setOperationsUsername(String operationsUsername) {
+        this.operationsUsername = operationsUsername;
     }
 }

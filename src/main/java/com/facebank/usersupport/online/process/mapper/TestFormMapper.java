@@ -16,8 +16,7 @@ public interface TestFormMapper extends BaseWriteMapper<TestFormWithBLOBsModel,L
      * @param model
      * @return
      */
-    @Override
-    int insert(TestFormWithBLOBsModel model);
+    Long insertGetKey(TestFormWithBLOBsModel model);
 
     /**
      * 根据工单id修改工单信息
@@ -27,18 +26,17 @@ public interface TestFormMapper extends BaseWriteMapper<TestFormWithBLOBsModel,L
 
     /**
      * 分页，模糊查询
+     * @param testFormModel 提测服务对象
      * @return
      */
-    List<TestFormWithBLOBsModel> selectAllByCondition(@Param("formService") String formService
-            , @Param("formStatus") Integer formStatus);
+    List<TestFormWithBLOBsModel> selectAllByCondition(TestFormModel testFormModel);
 
     /**
      * 修改当前工单状态
-     * @param formId
-     * @param formStatus
+     * @param testFormModel
      * @return
      */
-    int updateTestFormStatus(@Param("formId") Long formId, @Param("formStatus") Integer formStatus);
+    int updateTestFormStatus(TestFormModel testFormModel);
 
     /**
      * 查询测试通过的测试工单

@@ -1,29 +1,24 @@
 <!DOCTYPE html>
-<html th:fragment="launch_form_page" xmlns:th="http://www.thymeleaf.org">
+<html th:fragment="launchFormer" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:include="common/head_info::head_infor"></div>
-    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
-    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../online-process/css/launchForm.css}">
     <script type="text/javascript" th:src="@{../online-process/js/launchForm.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
 </head>
 <body>
-<div id="content">
     <div class="container-fluid">
         <form class="form-inline">
-            <div class="form-group">
+            <div class="form-group div_launchForm_projectId">
                 <label>项目ID:</label>
-                <input type="text" class="form-control" id="projectIdSearch" placeholder="请输入项目ID"/>
+                <input type="text" class="form-control" id="launchForm_projectId" placeholder="请输入项目ID"/>
             </div>
             <div class="form-group">
                 <label>测试ID:</label>
-                <input type="text" class="form-control" id="testFormSearch" placeholder="请输入测试ID"/>
+                <input type="text" class="form-control" id="testFormSearch" placeholder="请输入测试工单ID"/>
             </div>
             <div class="form-group">
-                <button type="button" onclick="javascript:search();" class="btn btn-primary">查询</button>
-                <button type="button" onclick="javascript:getTestForm();" data-toggle="modal"
-                        data-target="#createLaunchForm" class="btn btn-primary">新建工单
+                <button type="button" onclick="javascript:launchForm_search();" class="btn btn-primary">查询</button>
+                <button type="button" onclick="javascript:getTestForm();" class="btn btn-primary">新建工单</button>
                 </button>
             </div>
         </form>
@@ -42,89 +37,89 @@
             </thead>
         </table>
     </div>
-</div>
 
-<!--新建上线工单-->
-<div class="modal fade" id="createLaunchForm" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">新建上线工单</h4>
-            </div>
-            <div class="modal-body">
-                <form id="roleForm">
-                    <div class="form-group">
-                        <label class="control-label">对应测试工单（项目ID，测试ID，提测服务，创建时间）:</label>
-                        <select class="form-control" id="testForm">
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">上线内容:</label>
-                        <textarea rows="7" class="form-control" name="formContent" id="formContent"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" onclick="createForm();" class="btn btn-primary">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 修改上线工单 -->
-<div class="modal fade" id="updateLaunchForm" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">修改上线工单</h4>
-            </div>
-            <div class="modal-body">
-                <form id="updateForm">
-                    <div class="form-group">
-                        <label class="control-label">上线内容:</label>
-                        <textarea rows="7" class="form-control" name="formContent" id="formContent2"></textarea>
-                        <input name="formId" id="formId" type="hidden"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">上线工单状态:</label>
-                        <div>
-                            <label class="radio-inline">
-                                <input type="radio" name="formStatus" id="noChange" value="" checked>不变更
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="formStatus" id="status01" value="1">运维人员接单
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="formStatus" id="status02" value="2">运维部署完成
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="formStatus" id="status03" value="3">开发人员验证不通过
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="formStatus" id="status04" value="4">开发人员验证通过
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="formStatus" id="status05" value="5">测试人员验证不通过
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="formStatus" id="status06" value="6">测试人员验证通过
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="formStatus" id="status07" value="7">关闭工单
-                            </label>
+    <!--新建上线工单-->
+    <div class="modal fade" id="createLaunchForm" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">新建上线工单</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="roleForm">
+                        <div class="form-group">
+                            <label class="control-label">对应测试工单（项目ID，测试ID，提测服务，创建时间）:</label>
+                            <select class="form-control" id="testForm">
+                            </select>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" onclick="updateForm();" class="btn btn-primary">Save</button>
+                        <div class="form-group">
+                            <label class="control-label">上线内容:</label>
+                            <textarea rows="7" class="form-control" name="formContent" id="formContent"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="createForm();" class="btn btn-primary">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- 修改上线工单 -->
+    <div class="modal fade" id="updateLaunchForm" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">修改上线工单</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="updateForm">
+                        <div class="form-group">
+                            <label class="control-label">上线内容:</label>
+                            <textarea rows="7" class="form-control" name="formContent" id="formContent2"></textarea>
+                            <input name="formId" id="formId" type="hidden"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">上线工单状态:</label>
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" name="formStatus" id="noChange" value="" checked>不变更
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="formStatus" id="status01" value="1">运维人员接单
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="formStatus" id="status02" value="2">运维部署完成
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="formStatus" id="status03" value="3">开发人员验证不通过
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="formStatus" id="status04" value="4">开发人员验证通过
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="formStatus" id="status05" value="5">测试人员验证不通过
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="formStatus" id="status06" value="6">测试人员验证通过
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="formStatus" id="status07" value="7">关闭工单
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="updateForm();" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+</html>

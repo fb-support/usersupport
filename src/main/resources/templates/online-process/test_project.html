@@ -3,17 +3,6 @@
 	<meta charset="UTF-8">
 	<title>提测模块——项目页面</title>
 	<div th:include="common/head_info::head_infor"></div>
-	<script type="text/javascript" th:src="@{../js/layer.js}"></script>
-	<script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
-	<link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
-
-	<!--日期-->
-	<script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
-	<link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
-	<script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
-	<script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
-
 	<script type="text/javascript" th:src="@{../online-process/js/test_project.js}"></script>
 	<link rel="stylesheet" type="text/css" th:href="@{../online-process/css/test_project.css}">
 
@@ -23,16 +12,6 @@
 	<div id="project_main_body">
 		<div class="test_project_meun">
 			<ul class="ul_menu">
-				<!--<li>-->
-					<!--<select id="test_project_select">-->
-						<!--<option value="123456">项目1</option>-->
-						<!--<option value="123456">项目2</option>-->
-						<!--<option value="123456">项目3</option>-->
-						<!--<option value="123456" selected="selected">项目4</option>-->
-						<!--<option value="123456">项目5</option>-->
-						<!--<option value="123456">项目6</option>-->
-					<!--</select>-->
-				<!--</li>-->
 				<li class="all_test_project">
 					<a href="javascript:searchAllProject();">所有项目</a>
 				</li>

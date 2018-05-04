@@ -52,58 +52,53 @@ public class TestProjectServiceImpl implements ITestProjectService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int insertProject(TestProjectModel model,
+    public Long insertProject(TestProjectModel model,
                              String[] developPeople,
                              String[] testPeople,
                              String[] operationsPeople) {
 
-        try{
-            // 1.新增项目（插入项目表）
-            model.setGmtCreate(System.currentTimeMillis());
-            model.setGmtModify(System.currentTimeMillis());
-            Long projectId = testProjectMapper.insert(model);
+        // 1.新增项目（插入项目表）
+        model.setGmtCreate(System.currentTimeMillis());
+        model.setGmtModify(System.currentTimeMillis());
+        testProjectMapper.insert(model);
+        //获取插入项目时的编号
+        Long projectId = model.getProjectId();
+        // 2.批量添加项目用户关联表信息记录
+        List<TestProjectUserModel> projectUserRecordlist = new ArrayList<>();
 
-            // 2.批量添加项目用户关联表信息记录
-            List<TestProjectUserModel> projectUserRecordlist = new ArrayList<>();
-
-            //批量创建角色为“开发”的项目用户关联pojo对象，并添加到集合中
-            for (int i=0; i<developPeople.length; i++) {
-                TestProjectUserModel relativeModel = new TestProjectUserModel();
-                relativeModel.setProjectId(projectId);
-                relativeModel.setUserId(Long.parseLong(developPeople[i]));
-                relativeModel.setUserRole(1);
-                relativeModel.setGmtCreate(System.currentTimeMillis());
-                relativeModel.setGmtModify(System.currentTimeMillis());
-                projectUserRecordlist.add(relativeModel);
-            }
-
-            //批量创建角色为“测试”的项目用户关联pojo对象，并添加到集合中
-            for (int i=0; i<testPeople.length; i++) {
-                TestProjectUserModel relativeModel = new TestProjectUserModel();
-                relativeModel.setProjectId(projectId);
-                relativeModel.setUserId(Long.parseLong(testPeople[i]));
-                relativeModel.setUserRole(2);
-                relativeModel.setGmtCreate(System.currentTimeMillis());
-                relativeModel.setGmtModify(System.currentTimeMillis());
-                projectUserRecordlist.add(relativeModel);
-            }
-
-            //批量创建角色为“运维”的项目用户关联pojo对象，并添加到集合中
-            for (int i=0; i<operationsPeople.length; i++) {
-                TestProjectUserModel relativeModel = new TestProjectUserModel();
-                relativeModel.setProjectId(projectId);
-                relativeModel.setUserId(Long.parseLong(operationsPeople[i]));
-                relativeModel.setUserRole(3);
-                relativeModel.setGmtCreate(System.currentTimeMillis());
-                relativeModel.setGmtModify(System.currentTimeMillis());
-                projectUserRecordlist.add(relativeModel);
-            }
-            testProjectUserMapper.batchInsert(projectUserRecordlist);
-
-        }catch (Exception e) {
-            e.printStackTrace();
-            return 0;
+        //批量创建角色为“开发”的项目用户关联pojo对象，并添加到集合中
+        for (int i=0; i<developPeople.length; i++) {
+            TestProjectUserModel relativeModel = new TestProjectUserModel();
+            relativeModel.setProjectId(projectId);
+            relativeModel.setUserId(Long.parseLong(developPeople[i]));
+            relativeModel.setUserRole(1);
+            relativeModel.setGmtCreate(System.currentTimeMillis());
+            relativeModel.setGmtModify(System.currentTimeMillis());
+            projectUserRecordlist.add(relativeModel);
         }
-        return 1;
+
+        //批量创建角色为“测试”的项目用户关联pojo对象，并添加到集合中
+        for (int i=0; i<testPeople.length; i++) {
+            TestProjectUserModel relativeModel = new TestProjectUserModel();
+            relativeModel.setProjectId(projectId);
+            relativeModel.setUserId(Long.parseLong(testPeople[i]));
+            relativeModel.setUserRole(2);
+            relativeModel.setGmtCreate(System.currentTimeMillis());
+            relativeModel.setGmtModify(System.currentTimeMillis());
+            projectUserRecordlist.add(relativeModel);
+        }
+
+        //批量创建角色为“运维”的项目用户关联pojo对象，并添加到集合中
+        for (int i=0; i<operationsPeople.length; i++) {
+            TestProjectUserModel relativeModel = new TestProjectUserModel();
+            relativeModel.setProjectId(projectId);
+            relativeModel.setUserId(Long.parseLong(operationsPeople[i]));
+            relativeModel.setUserRole(3);
+            relativeModel.setGmtCreate(System.currentTimeMillis());
+            relativeModel.setGmtModify(System.currentTimeMillis());
+            projectUserRecordlist.add(relativeModel);
+        }
+        testProjectUserMapper.batchInsert(projectUserRecordlist);
+        return projectId;
     }
 }

@@ -15,7 +15,7 @@ public interface ILaunchFormService {
 
     LaunchFormModel selectByFormId(Long formId);
 
-    int insertLaunchForm(LaunchFormModel launchFormModel);
+    Long insertLaunchForm(LaunchFormModel launchFormModel);
 
     int updateLaunchForm(LaunchFormModel launchFormModel);
 }

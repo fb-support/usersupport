@@ -3,15 +3,21 @@ package com.facebank.usersupport.online.process.controller;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RestModel;
+import com.facebank.usersupport.model.UserModel;
 import com.facebank.usersupport.online.process.controller.base.BaseController;
 import com.facebank.usersupport.online.process.model.TestProjectModel;
+import com.facebank.usersupport.online.process.model.TestProjectRecordModel;
+import com.facebank.usersupport.online.process.service.ITestProjectRecordService;
 import com.facebank.usersupport.online.process.service.ITestProjectService;
+import com.facebank.usersupport.online.process.service.IUserService;
+import com.facebank.usersupport.online.process.service.impl.TestProjectRecordImpl;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -26,6 +32,10 @@ public class TestProjectController extends BaseController {
 
     @Autowired
     private ITestProjectService testProjectService;
+    @Autowired
+    private IUserService userService;
+    @Autowired
+    private ITestProjectRecordService testProjectRecordService;
 
     /**
      * 分页查询
@@ -69,14 +79,16 @@ public class TestProjectController extends BaseController {
                                     String testPeople,
                                     String operationsPeople,
                                     String str_beginTime,
-                                    String str_endTime) {
-
-        //规范数据
-        String[] developPeopleIds = developPeople.split(",");
-        String[] testPeopleIds = testPeople.split(",");
-        String[] operationsPeopleIds = operationsPeople.split(",");
+                                    String str_endTime,
+                                    HttpSession session) {
 
         try {
+
+            //规范数据
+            String[] developPeopleIds = developPeople.split(",");
+            String[] testPeopleIds = testPeople.split(",");
+            String[] operationsPeopleIds = operationsPeople.split(",");
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date beginDate = formatter.parse(str_beginTime);
             // date类型转成long类型
@@ -87,11 +99,30 @@ public class TestProjectController extends BaseController {
             // date类型转成long类型
             long endTime = endDate.getTime();
             model.setEndTime(endTime);
+
+            // 调用数据库插入项目
+            Long projectId =  testProjectService.insertProject(model, developPeopleIds, testPeopleIds, operationsPeopleIds);
+
+            // 调用数据库记录操作流水
+            // 1.获取当前登录用户
+            UserModel userModel = userService.getActiveUser();
+            // 2.封装操作流水model
+            TestProjectRecordModel testProjectRecordModel = new TestProjectRecordModel();
+            testProjectRecordModel.setGmtCreate(System.currentTimeMillis());
+            testProjectRecordModel.setGmtModify(System.currentTimeMillis());
+            testProjectRecordModel.setFormType(0);
+            testProjectRecordModel.setOperatingPeople(userModel.getUsername());
+            testProjectRecordModel.setOperatingPeopleId(userModel.getUserId());
+            testProjectRecordModel.setProjectId(projectId);
+            testProjectRecordModel.setOperatingContent("创建了新项目。");
+            // 3.插入数据库
+            testProjectRecordService.insertRecord(testProjectRecordModel);
+            return this.success(projectId);
         } catch (Exception e) {
             e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
         }
 
-        int i =  testProjectService.insertProject(model, developPeopleIds, testPeopleIds, operationsPeopleIds);
-        return this.success(null);
+
     }
 }

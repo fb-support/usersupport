@@ -11,6 +11,8 @@
         <result column="accept_develop_username" jdbcType="VARCHAR" property="acceptDevelopUsername"/>
         <result column="accept_test_user" jdbcType="BIGINT" property="acceptTestUser"/>
         <result column="accept_test_username" jdbcType="VARCHAR" property="acceptTestUsername"/>
+        <result column="operations_user" jdbcType="BIGINT" property="operationsUser"/>
+        <result column="operations_username" jdbcType="VARCHAR" property="operationsUsername"/>
         <result column="form_status" jdbcType="INTEGER" property="formStatus"/>
         <result column="note" jdbcType="VARCHAR" property="note"/>
         <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
@@ -32,6 +34,8 @@
         accept_develop_username,
         accept_test_user,
         accept_test_username,
+        operations_user,
+        operations_username,
         form_status,
         gmt_create,
         gmt_modify,
@@ -56,7 +60,7 @@
         </if>-->
     </select>
 
-    <insert id="insert" parameterType="com.facebank.usersupport.online.process.model.LaunchFormModel">
+    <insert id="insertGetKey" useGeneratedKeys="true" keyProperty="formId" parameterType="com.facebank.usersupport.online.process.model.LaunchFormModel">
         INSERT INTO launch_form (project_id,
         test_form_id,
         create_username,
@@ -85,6 +89,8 @@
         accept_develop_username,
         accept_test_user,
         accept_test_username,
+        operations_user,
+        operations_username,
         form_status,
         gmt_create,
         gmt_modify,
@@ -105,13 +111,17 @@
             accept_test_user = #{acceptTestUser,jdbcType=BIGINT},
             accept_test_username = #{acceptTestUsername,jdbcType=VARCHAR},
         </if>
+        <if test="operationsUser!=null">
+            operations_user = #{operationsUser,jdbcType=BIGINT},
+            operations_username = #{operationsUsername,jdbcType=VARCHAR},
+        </if>
         <if test="formContent!=null">
             form_content = #{formContent,jdbcType=LONGVARCHAR},
         </if>
         <if test="formStatus!=null">
             form_status = #{formStatus,jdbcType=INTEGER} ,
         </if>
-        gmt_modify = #{gmtCreate,jdbcType=BIGINT}
+        gmt_modify = #{gmtModify,jdbcType=BIGINT}
         WHERE
         form_id = #{formId,jdbcType=BIGINT}
     </update>

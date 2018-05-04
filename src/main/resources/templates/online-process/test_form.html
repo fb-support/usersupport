@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html th:fragment="test_former" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:include="common/head_info::head_infor"></div>
-    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
-    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../online-process/css/testForm.css}">
     <script type="text/javascript" th:src="@{../online-process/js/testForm.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
 </head>
 <body>
-<div id="content">
     <div class="container-fluid">
         <form class="form-inline">
             <div class="form-group">
+                <input type="text" class="form-control" id="testForm_projectId" placeholder="请输入项目编号"/>
                 <label>提测服务名称:</label>
                 <input type="text" class="form-control" id="service-search" placeholder="请输入提测服务名称"/>
                 <div class="form-group">
@@ -25,7 +22,7 @@
                         <option value="3">测试成功</option>
                     </select>
                 </div>
-                <button type="button" onclick="javascript:search();" class="btn btn-primary">查询</button>
+                <button type="button" onclick="javascript:testForm_search();" class="btn btn-primary">查询</button>
                 <button type="button" onclick="$('#addForm').modal();" class="btn btn-primary">增加工单</button>
             </div>
         </form>
@@ -34,13 +31,8 @@
             <tr>
                 <th>提测服务</th>
                 <th>提测分支</th>
-                <th>数据库变更</th>
-                <th>配置文件变更</th>
-                <th>MQ是否变更</th>
                 <th>是否已经自测</th>
                 <th>是否已经review</th>
-                <th>影响范围</th>
-                <th>其他变更</th>
                 <th>创建人员</th>
                 <th>接单人员</th>
                 <th>提测状态</th>
@@ -50,96 +42,97 @@
             </thead>
     </table>
     </div>
-</div>
 
-<!--增加工单-->
-<div class="modal fade" id="addForm" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" >增加工单</h4>
-            </div>
-            <div class="modal-body">
-                <form id="Form_add">
-                    <div class="form-group">
-                        <label class="control-label">提测服务名称:</label>
-                        <input type="text" class="form-control" name="name" id="form_service" />
-                        <label class="control-label">提测分支:</label>
-                        <input type="text" class="form-control" name="description" id="form_branch"/>
-                        <label class="control-label">影响范围:</label>
-                        <input type="text" class="form-control" name="description" id="influence_scope"/>
-                        <label class="control-label">SQL变更信息:</label>
-                        <textarea class="form-control" rows="3" id="sql_change"></textarea>
-                        <label class="control-label">配置变更信息:</label>
-                        <textarea class="form-control" rows="3" id="configure_change"></textarea>
-                        <label class="control-label">MQ变更信息:</label>
-                        <textarea class="form-control" rows="3" id="mq_change"></textarea>
-                        <label class="control-label">其他变更信息:</label>
-                        <input type="text" class="form-control" name="description" id="other_change"/>
-                        <label class="control-label">是否自测:</label>
-                        <div id="is_test">
-                            <input type="radio"  name="testMethod" value="1" />是
-                            <input type="radio"  name="testMethod" value="0" />否
+    <!--增加工单-->
+    <div class="modal fade" id="addForm" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" >增加工单</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="Form_add">
+                        <div class="form-group">
+                            <label class="control-label">提测服务名称:</label>
+                            <input type="text" class="form-control" name="name" id="form_service" />
+                            <label class="control-label">提测分支:</label>
+                            <input type="text" class="form-control" name="description" id="form_branch"/>
+                            <label class="control-label">影响范围:</label>
+                            <input type="text" class="form-control" name="description" id="influence_scope"/>
+                            <label class="control-label">SQL变更信息:</label>
+                            <textarea class="form-control" rows="3" id="sql_change"></textarea>
+                            <label class="control-label">配置变更信息:</label>
+                            <textarea class="form-control" rows="3" id="configure_change"></textarea>
+                            <label class="control-label">MQ变更信息:</label>
+                            <textarea class="form-control" rows="3" id="mq_change"></textarea>
+                            <label class="control-label">其他变更信息:</label>
+                            <input type="text" class="form-control" name="description" id="other_change"/>
+                            <label class="control-label">是否自测:</label>
+                            <div id="is_test">
+                                <input type="radio"  name="testMethod" value="1" />是
+                                <input type="radio"  name="testMethod" value="0" />否
+                            </div>
+                            <label class="control-label">是否review:</label>
+                            <div id="is_review">
+                                <input type="radio" name="reMethod" value="1" />是
+                                <input type="radio" name="reMethod" value="0" />否
+                            </div>
                         </div>
-                        <label class="control-label">是否review:</label>
-                        <div id="is_review">
-                            <input type="radio" name="reMethod" value="1" />是
-                            <input type="radio" name="reMethod" value="0" />否
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" onclick="saveForm();" class="btn btn-primary">保存</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="saveForm();" class="btn btn-primary">保存</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!--修改工单-->
-<div class="modal fade" id="updateForm" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" >修改工单</h4>
-            </div>
-            <div class="modal-body">
-                <form id="Form_update">
-                    <div class="form-group">
-                        <label class="control-label">提测服务名称:</label>
-                        <input type="text" class="form-control" name="name" id="u_form_service" />
-                        <label class="control-label">提测分支:</label>
-                        <input type="text" class="form-control" name="description" id="u_form_branch"/>
-                        <label class="control-label">影响范围:</label>
-                        <input type="text" class="form-control" name="description" id="u_influence_scope"/>
-                        <label class="control-label">SQL变更信息:</label>
-                        <textarea class="form-control" rows="3" id="u_sql_change"></textarea>
-                        <label class="control-label">配置变更信息:</label>
-                        <textarea class="form-control" rows="3" id="u_configure_change"></textarea>
-                        <label class="control-label">MQ变更信息:</label>
-                        <textarea class="form-control" rows="3" id="u_mq_change"></textarea>
-                        <label class="control-label">其他变更信息:</label>
-                        <input type="text" class="form-control" name="description" id="u_other_change"/>
-                        <label class="control-label">是否自测:</label>
-                        <div id="u_is_test">
-                            <input type="radio" class="radio_t" name="testMethod" value="1" />是
-                            <input type="radio" class="radio_t" name="testMethod" value="0" />否
+    <!--修改工单-->
+    <div class="modal fade" id="updateForm" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title model-title-modify model-title-look" >修改工单</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="Form_update">
+                        <div class="form-group">
+                            <label class="control-label">提测服务名称:</label>
+                            <input type="text" class="form-control" name="name" id="u_form_service" />
+                            <label class="control-label">提测分支:</label>
+                            <input type="text" class="form-control" name="description" id="u_form_branch"/>
+                            <label class="control-label">影响范围:</label>
+                            <input type="text" class="form-control" name="description" id="u_influence_scope"/>
+                            <label class="control-label">SQL变更信息:</label>
+                            <textarea class="form-control" rows="3" id="u_sql_change"></textarea>
+                            <label class="control-label">配置变更信息:</label>
+                            <textarea class="form-control" rows="3" id="u_configure_change"></textarea>
+                            <label class="control-label">MQ变更信息:</label>
+                            <textarea class="form-control" rows="3" id="u_mq_change"></textarea>
+                            <label class="control-label">其他变更信息:</label>
+                            <input type="text" class="form-control" name="description" id="u_other_change"/>
+                            <label class="control-label">是否自测:</label>
+                            <div id="u_is_test">
+                                <input type="radio" class="radio_t" name="testMethod" value="1" />是
+                                <input type="radio" class="radio_t" name="testMethod" value="0" />否
+                            </div>
+                            <label class="control-label">是否review:</label>
+                            <div id="u_is_review">
+                                <input type="radio" class="radio_r" name="reMethod" value="1" />是
+                                <input type="radio" class="radio_r" name="reMethod" value="0" />否
+                            </div>
                         </div>
-                        <label class="control-label">是否review:</label>
-                        <div id="u_is_review">
-                            <input type="radio" class="radio_r" name="reMethod" value="1" />是
-                            <input type="radio" class="radio_r" name="reMethod" value="0" />否
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" onclick="updateForm();" class="btn btn-primary">修改</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="updateForm();" class="btn btn-primary btn_testForm_modify">修改</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</body>
+</html>

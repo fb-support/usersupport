@@ -1,10 +1,13 @@
 package com.facebank.usersupport.online.process.service.impl;
 
 import com.facebank.usersupport.common.MessageKeyEnum;
+import com.facebank.usersupport.dto.UserRoleDO;
 import com.facebank.usersupport.mapper.usersupport.usersupport.UserMapper;
 import com.facebank.usersupport.model.UserModel;
 import com.facebank.usersupport.online.process.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -54,5 +57,29 @@ public class UserServiceImpl implements IUserService {
 
         // 返回
         return userList_username;
+    }
+
+
+    /**
+     * 获取当前登录的用户
+     * @return
+     */
+    @Override
+    public UserModel getActiveUser() {
+        // 获取当前登录用户的详细信息
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        // 根据用户名查询出指定用户（夹带角色信息）。
+        UserRoleDO userRoleDO = userMapper.selectBySelectiveForPermission(userDetails.getUsername());
+
+        UserModel userModel = new UserModel();
+        userModel.setUserId(userRoleDO.getUserId());
+        userModel.setUsername(userRoleDO.getUsername());
+        userModel.setWorkNumber(userRoleDO.getWorkNumber());
+        userModel.setEmail(userRoleDO.getEmail());
+        userModel.setPhone(userRoleDO.getPhone());
+        return userModel;
     }
 }

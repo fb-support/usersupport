@@ -27,6 +27,12 @@
     <if test="formType!=null">
       and form_type like CONCAT(CONCAT(#{formType,jdbcType=INTEGER}),'%')
     </if>
+    <if test="gmtCreate!=null">
+      and gmt_create > #{gmtCreate, jdbcType=BIGINT}
+    </if>
+    <if test="gmtModify!=null">
+      and gmt_create &lt; #{gmtModify, jdbcType=BIGINT}
+    </if>
     order by gmt_create DESC
   </select>
   <insert id="insertRecord" parameterType="com.facebank.usersupport.online.process.model.TestProjectRecordModel">

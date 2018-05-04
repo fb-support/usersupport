@@ -1,0 +1,29 @@
+
+
+#project-search {
+    display: none;
+}
+
+
+.project_detail_child_menu {
+    padding: 10px 15px;
+    font-size: 13px;
+}
+
+.child_menu_selected {
+    padding: 10px 15px;
+    font-size: 13px;
+    background-color: #2aabd2;
+    color: #FFFFFF;
+
+}
+
+.ul_project_detail_menu {
+    margin-left: 20px;
+}
+
+.ul_project_detail_menu li{
+    margin-bottom: 8px;
+    float: left;
+}
+

@@ -1,0 +1,38 @@
+#content {
+    background-color: #f5f2f2;
+    padding: 15px 20px;
+    height: 580px;
+}
+
+.project_content_1 {
+    padding: 10px;
+    border: 2px solid #2aabd2;
+    background-color: #FFFFFF;
+}
+
+.project_detail_child_menu {
+    padding: 10px 15px;
+    font-size: 13px;
+}
+
+.child_menu_selected {
+    padding: 10px 15px;
+    font-size: 13px;
+    background-color: #2aabd2;
+    color: #FFFFFF;
+
+}
+
+.ul_project_detail_menu {
+    margin-left: 20px;
+}
+
+.ul_project_detail_menu li{
+    margin-bottom: 8px;
+    float: left;
+    cursor: pointer;
+}
+
+.page_test_form, .page_launch_form {
+    display: none;
+}

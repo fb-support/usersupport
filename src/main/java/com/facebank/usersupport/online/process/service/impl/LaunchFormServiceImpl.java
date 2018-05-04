@@ -39,12 +39,12 @@ public class LaunchFormServiceImpl implements ILaunchFormService {
     }
 
     @Override
-    public int insertLaunchForm(LaunchFormModel launchFormModel) {
+    public Long insertLaunchForm(LaunchFormModel launchFormModel) {
         launchFormModel.setGmtCreate(System.currentTimeMillis());
         launchFormModel.setGmtModify(System.currentTimeMillis());
         launchFormModel.setFormStatus(0);
-        launchFormMapper.insert(launchFormModel);
-        return 0;
+        Long formId = launchFormMapper.insertGetKey(launchFormModel);
+        return formId;
     }
 
     @Override

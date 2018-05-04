@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html th:fragment="TestProjectRecord" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:include="common/head_info::head_infor"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{../online-process/css/test_project_detail.css}">
+    <script type="text/javascript"  th:src="@{../online-process/js/test_project_detail.js}"></script>
+</head>
+<body>
+
+<div id="content">
+    <div class="project_detail_menu">
+        <ul class="nav ul_project_detail_menu">
+            <li><span value="1" class="project_detail_child_menu child_menu_selected">项目操作记录</span></li>
+            <li><span value="2" class="project_detail_child_menu">提测工单</span></li>
+            <li><span value="3" class="project_detail_child_menu">上线工单</span></li>
+        </ul>
+        <!--项目操作记录页面-->
+        <div class="project_content_1 page_project_record" th:include="online-process/TestProjectRecord::TestProjectRecorder"></div>
+        <!--提测工单页面-->
+        <div class="project_content_1 page_test_form" th:include="online-process/test_form::test_former"></div>
+        <!--上线工单页面-->
+        <div class="project_content_1 page_launch_form" th:include="online-process/launchForm::launchFormer"></div>
+    </div>
+</div>
+</body>
+</html>

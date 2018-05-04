@@ -15,4 +15,10 @@ public interface IUserService {
      * @return
      */
     List<UserModel> getUserForOnlineProcess(String query);
+
+    /**
+     * 获取当前登录的用户对象
+     * @return
+     */
+    UserModel getActiveUser();
 }

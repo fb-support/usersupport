@@ -31,6 +31,10 @@ public class TestProjectRecordController extends BaseController {
                                          String draw,
                                          TestProjectRecordModel testProjectRecordModel){
         try {
+            /*
+            这里将查询时间范围（开始时间和结束时间）分别赋值到testProjectRecordModel的
+            gmtCreate和gmtModify属性上，
+             */
             int pageNo = start / length + 1;
             PageInfo pageInfo = testProjectRecordService.selectByPage(length, pageNo, testProjectRecordModel);
             PageRestModel pageRestModel = new PageRestModel(

@@ -1,0 +1,14 @@
+.div_launchForm_projectId {
+    display: none !important;
+}
+
+.btn-launchForm_opera {
+    display: none;
+}
+
+.launchForm_formContent {
+    width: 150px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

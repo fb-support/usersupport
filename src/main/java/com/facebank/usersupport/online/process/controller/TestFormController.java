@@ -4,8 +4,13 @@ import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RestModel;
+import com.facebank.usersupport.model.UserModel;
+import com.facebank.usersupport.online.process.model.TestFormModel;
 import com.facebank.usersupport.online.process.model.TestFormWithBLOBsModel;
+import com.facebank.usersupport.online.process.model.TestProjectRecordModel;
 import com.facebank.usersupport.online.process.service.ITestFormService;
+import com.facebank.usersupport.online.process.service.ITestProjectRecordService;
+import com.facebank.usersupport.online.process.service.IUserService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +30,10 @@ public class TestFormController extends BaseController {
 
     @Autowired
     private ITestFormService testFormService;
+    @Autowired
+    private IUserService userService;
+    @Autowired
+    private ITestProjectRecordService testProjectRecordService;
 
     /**
      * 新建测试工单
@@ -35,12 +44,30 @@ public class TestFormController extends BaseController {
     @PostMapping("tf/insertTestForm")
     public RestModel insertForm(TestFormWithBLOBsModel model) {
         try {
-            //TODO ①获取当前操作人id，username保存到创建人员 ②插入流水表
-            model.setCreateUser(2L);
-            model.setCreateUsername("冯宝宝");
+            // 1. 获取当前登录用户
+            UserModel userModel = userService.getActiveUser();
+            // 将当前登录用户赋值到要插入的model中
+            model.setCreateUser(userModel.getUserId());
+            model.setCreateUsername(userModel.getUsername());
             model.setFormStatus(0);
-            int i = testFormService.insertForm(model);
-            if (i > 0) {
+            // 插入数据库
+            Long formId = testFormService.insertForm(model);
+
+            if (formId != null) {
+                //记录当次操作的流水
+                // 2.封装操作流水model
+                TestProjectRecordModel testProjectRecordModel = new TestProjectRecordModel();
+                testProjectRecordModel.setGmtCreate(System.currentTimeMillis());
+                testProjectRecordModel.setGmtModify(System.currentTimeMillis());
+                testProjectRecordModel.setFormType(1);
+                testProjectRecordModel.setFormId(formId);
+                testProjectRecordModel.setOperatingPeople(userModel.getUsername());
+                testProjectRecordModel.setOperatingPeopleId(userModel.getUserId());
+                testProjectRecordModel.setProjectId(model.getProjectId());
+                testProjectRecordModel.setOperatingContent("创建了新的测试工单。测试工单编号为：" + model.getFormId() +
+                        ",测试工单服务名称："+model.getFormService());
+                // 3.插入数据库
+                testProjectRecordService.insertRecord(testProjectRecordModel);
                 return this.success(MessageKeyEnum.SUCCESS);
             } else {
                 return this.excpRestModel(MessageKeyEnum.ERROR);
@@ -59,10 +86,26 @@ public class TestFormController extends BaseController {
      */
     @PostMapping("tf/updateTestForm")
     public RestModel updateForm(TestFormWithBLOBsModel model) {
-        //TODO ②插入流水表
+
         try {
             int i = testFormService.updateTestForm(model);
             if (i > 0) {
+
+                // 1. 获取当前登录用户
+                UserModel userModel = userService.getActiveUser();
+                //记录当次操作的流水
+                // 2.封装操作流水model
+                TestProjectRecordModel testProjectRecordModel = new TestProjectRecordModel();
+                testProjectRecordModel.setGmtCreate(System.currentTimeMillis());
+                testProjectRecordModel.setGmtModify(System.currentTimeMillis());
+                testProjectRecordModel.setFormType(1);
+                testProjectRecordModel.setFormId(model.getFormId());
+                testProjectRecordModel.setOperatingPeople(userModel.getUsername());
+                testProjectRecordModel.setOperatingPeopleId(userModel.getUserId());
+                testProjectRecordModel.setProjectId(model.getProjectId());
+                testProjectRecordModel.setOperatingContent(userModel.getUsername()+" 修改了工单。");
+                // 3.插入数据库
+                testProjectRecordService.insertRecord(testProjectRecordModel);
                 return this.success(MessageKeyEnum.SUCCESS);
             } else {
                 return this.excpRestModel(MessageKeyEnum.ERROR);
@@ -94,25 +137,27 @@ public class TestFormController extends BaseController {
      * @param start
      * @param length
      * @param draw
-     * @param formService
+     * @param testFormModel
      * @return
      */
     @GetMapping("/tf/getFormByPage")
     public RestModel getUserListByPage(@RequestParam(required = false, defaultValue = "1") int start,
                                        @RequestParam(required = false, defaultValue = "10") int length,
                                        String draw,
-                                       String formService,
-                                       @RequestParam(required = true) Integer formStatus){
+                                       TestFormModel testFormModel){
         try {
             int pageNo = start / length + 1;
-            if (formStatus == -1) formStatus = null;
-            PageInfo pageInfo = testFormService.selectByPage(length, pageNo, formService,formStatus);
+            if (testFormModel.getFormStatus()!=null && testFormModel.getFormStatus() == -1) {
+                testFormModel.setFormStatus(null);
+            }
+            PageInfo pageInfo = testFormService.selectByPage(length, pageNo, testFormModel);
             PageRestModel pageRestModel = new PageRestModel(
                     draw,
                     pageInfo.getTotal(),
                     pageInfo.getTotal(),
                     pageInfo.getList()
             );
+
             return this.success(pageRestModel);
         }
         catch (Exception e){
@@ -123,19 +168,55 @@ public class TestFormController extends BaseController {
 
     /**
      * 修改工单状态
-     * @param formId
-     * @param formStatus
+     * @param testFormModel
      * @return
      */
     @PostMapping("tf/updateTestFormStatus")
-    public RestModel updateFormStatus(Long formId, Integer formStatus) {
-        //TODO ①判断当前用户是否是测试人员 ②获取当前用户id username 保存到接单人员 ②插入流水表
+    public RestModel updateFormStatus(TestFormModel testFormModel) {
+        //TODO ①判断当前用户是否是测试人员
         try {
-            int i = testFormService.updateTestFormStatus(formId,formStatus);
-            if (i > 0)
+            // 1. 获取当前登录用户
+            UserModel userModel = userService.getActiveUser();
+            if(testFormModel.getFormStatus() == 1) {
+                // 封装数据对象
+                testFormModel.setAcceptUser(userModel.getUserId());
+                testFormModel.setAcceptUsername(userModel.getUsername());
+            }
+            // 调用service
+            int i = testFormService.updateTestFormStatus(testFormModel);
+            if (i > 0) {
+                //记录当次修改状态操作的流水
+                // 2.封装操作流水model
+                TestProjectRecordModel testProjectRecordModel = new TestProjectRecordModel();
+                testProjectRecordModel.setGmtCreate(System.currentTimeMillis());
+                testProjectRecordModel.setGmtModify(System.currentTimeMillis());
+                testProjectRecordModel.setFormType(1);
+                testProjectRecordModel.setFormId(testFormModel.getFormId());
+                testProjectRecordModel.setOperatingPeople(userModel.getUsername());
+                testProjectRecordModel.setOperatingPeopleId(userModel.getUserId());
+                testProjectRecordModel.setProjectId(testFormModel.getProjectId());
+                switch(testFormModel.getFormStatus()) {
+                    case 1:
+                        testProjectRecordModel.setOperatingContent(userModel.getUsername()+" 接受了测试工单");
+                        break;
+                    case 2:
+                        testProjectRecordModel.setOperatingContent(userModel.getUsername()+" 标记该测试工单为未通过。");
+                        break;
+                    case 3:
+                        testProjectRecordModel.setOperatingContent(userModel.getUsername()+" 标记该测试工单为已通过");
+                        break;
+                        default:
+                            testProjectRecordModel.setOperatingContent(" 修改了测试工单状态。");
+                            break;
+                }
+
+                // 3.插入数据库
+                testProjectRecordService.insertRecord(testProjectRecordModel);
+
                 return this.success(MessageKeyEnum.SUCCESS);
-            else
+            } else {
                 return this.excpRestModel(MessageKeyEnum.ERROR);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);

@@ -23,9 +23,9 @@ public interface ITestProjectService {
      * @param developPeople
      * @param testPeople
      * @param operationsPeople
-     * @return
+     * @return 项目编号
      */
-    int insertProject(TestProjectModel model,
+    Long insertProject(TestProjectModel model,
                       String[] developPeople,
                       String[] testPeople,
                       String[] operationsPeople);
