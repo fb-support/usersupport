@@ -33,4 +33,8 @@
         </where>
     </select>
 
+    <select id="selectAttendanceRecordByAttendanceDate" parameterType="java.lang.String" resultType="com.facebank.usersupport.attendance.model.EmpAttendanceModel">
+        SELECT * FROM emp_attendance where month(attendance_date) = date_format(#{attendanceDate}, '%m') and year(attendance_date) = date_format(#{attendanceDate}, '%Y')
+    </select>
+
 </mapper>

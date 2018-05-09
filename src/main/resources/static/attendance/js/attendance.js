@@ -11,18 +11,22 @@ $(function () {
     // });
 
     //一键上传
-    $("#importExcel").upload({
-        action:'/attendance/import',
-        name:'file',
-        onComplete: function (data, self, element) {
-            alert(data);
-            if(data == "0"){
-                layer.msg("数据导入成功");
-            }else{
-                layer.msg("数据导入失败，请稍后重试");
+    $("#importExcel").upload = function (options) {
+        options = $.extend({
+            action:'/attendance/import',
+            name:'file',
+            onComplete: function (data) {
+                alert(data);
+                if(data == "0"){
+                    layer.msg("数据导入成功");
+                }else{
+                    layer.msg("数据导入失败，请稍后重试");
+                }
             }
-        }
-    });
+        },options);
+        return new $.ocupload(this, options);
+    };
+
 
     // 初始化部门
     $.ajax({
@@ -41,6 +45,32 @@ $(function () {
     });
 });
 
+function importAttendance() {
+    var formData = new FormData($("#importForm")[0]);
+    console.info(formData);
+    $.ajax({
+        url:'/attendance/import',
+        type:'POST',
+        async: false,
+        cache: false,
+        contentType: false,
+        processData: false,
+        data:formData,
+        dataType:'JSON',
+        success:function (msg) {
+            // alert(msg);
+            console.info(msg);
+            if(msg.code == 1){
+                layer.msg("数据导入成功");
+                var file = $("#importExcel");
+                file.after(file.clone().val(""));
+                file.remove();
+            }else{
+                layer.msg("数据导入失败，请稍后重试");
+            }
+        }
+    })
+}
 function getEmpByNumber() {
     var deptNumber = $("#companySelect").val();
     // 保存部门名称

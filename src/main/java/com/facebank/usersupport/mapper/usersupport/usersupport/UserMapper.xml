@@ -120,7 +120,7 @@
         user_role ur ON u.user_id = ur.user_id
         LEFT JOIN
         role r ON ur.role_id = r.role_id
-        where  u.status = 0 AND (username = #{loginName,jdbcType=VARCHAR} OR
+        where  u.status = 1 AND (username = #{loginName,jdbcType=VARCHAR} OR
         phone = #{loginName,jdbcType=VARCHAR} OR
         email = #{loginName,jdbcType=VARCHAR})
     </select>

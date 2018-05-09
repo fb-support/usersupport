@@ -28,4 +28,9 @@ public class EmpAttendanceServiceImpl implements IEmpAttendanceService {
     public List<EmpAttendanceModel> getAttendanceRecordByForm(GetAttendanceForm attendanceForm) {
         return empAttendanceMapper.selectAttendanceRecordByForm(attendanceForm);
     }
+
+    @Override
+    public List<EmpAttendanceModel> selectAttendanceRecordByAttendanceDate(String attendanceDate) {
+        return empAttendanceMapper.selectAttendanceRecordByAttendanceDate(attendanceDate);
+    }
 }

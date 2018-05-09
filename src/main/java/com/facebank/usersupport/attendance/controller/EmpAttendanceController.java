@@ -14,9 +14,9 @@ import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
@@ -24,12 +24,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author HuBiao
  * @date 2018/4/4 0004 9:25
  **/
 @Controller
 public class EmpAttendanceController extends BaseController {
+    //日志
+    private static Logger logger= LoggerFactory.getLogger(EmpAttendanceController.class);
 
     @Autowired
     private IEmpAttendanceService empAttendanceService;
@@ -42,6 +47,7 @@ public class EmpAttendanceController extends BaseController {
     @PostMapping("/attendance/import")
     @ResponseBody
     public RestModel attendanceImport(MultipartFile file) {
+        int errorWorkNumber = 0;
         try {
             // 校验上传的excel文件格式
             String fileName = file.getOriginalFilename();
@@ -60,6 +66,7 @@ public class EmpAttendanceController extends BaseController {
             int lastRowNum = sheet.getLastRowNum();
             int year = 0;
             int month = 0;
+            int day=0;
             int dayInMonth = 0;
             int workNumber = 0;
             String empName = "";
@@ -78,6 +85,12 @@ public class EmpAttendanceController extends BaseController {
                     String dateStr = row.getCell(2).getStringCellValue();
                     year = Integer.parseInt(dateStr.substring(0, 4));
                     month = Integer.parseInt(dateStr.substring(5, 7));
+                    day=Integer.parseInt(dateStr.substring(8, 10));
+                    String strDate = year+"-"+month+"-"+day;
+                    List<EmpAttendanceModel> empAttendanceModels = empAttendanceService.selectAttendanceRecordByAttendanceDate(strDate);
+                    if(empAttendanceModels.size()>0){
+                        return this.excpRestModel(MessageKeyEnum.ERROR);
+                    }
                 } else if (i == 3) {
                     // 解析第四行获取本月一共有多少天
                     dayInMonth = row.getLastCellNum();
@@ -86,6 +99,7 @@ public class EmpAttendanceController extends BaseController {
                     if (i % 2 == 0) {
                         // 解析偶数行获取员工的工号、姓名、所属部门信息
                         workNumber = Integer.parseInt(row.getCell(2).getStringCellValue());
+                        errorWorkNumber = workNumber;
                         empName = row.getCell(10).getStringCellValue();
                         deptName = row.getCell(20).getStringCellValue();
                     } else {
@@ -150,8 +164,10 @@ public class EmpAttendanceController extends BaseController {
             // 解析完成，调用serivice层方法
             empAttendanceService.importAttendance(list);
 
-            return success(null);
+            return success(MessageKeyEnum.SUCCESS);
         } catch (Exception e) {
+            System.out.println("员工号为"+errorWorkNumber+"的考勤信息出错");
+            logger.error("员工号为{}的考勤信息出错",errorWorkNumber);
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
         }

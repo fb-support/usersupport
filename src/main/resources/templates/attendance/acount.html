@@ -16,6 +16,9 @@
         .Wdate{
             background-image:url('../My97DatePicker/skin/datePicker.gif');
         }
+        label{
+            margin:0 5px;
+        }
     </style>
 </head>
 <body>
@@ -25,7 +28,7 @@
         <form class="form-inline">
 
 
-            <div class="form-group">
+            <div class="form-group" style="padding: 15px 0;">
                 <label class="labe_l">考勤时间:</label>
                 <!--<input type="text" class="form_datetime form-control" id="datetimeStart" name="startTime" readonly>-->
                 <input class="Wdate form-control" type="text" id="datetimeStart" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM',readOnly:true})" readonly>
@@ -39,8 +42,8 @@
                     <option value="">--请选择--</option>
                 </select>
             </div>
-            <span class="btn btn-default" onclick="search(1)">按年统计</span>
-            <span class="btn btn-default" onclick="search(0)">按月统计</span>
+            <span class="btn btn-primary" onclick="search(1)" style="margin-left: 10px;">按年统计</span>
+            <span class="btn btn-primary" onclick="search(0)" style="margin: 0 10px;">按月统计</span>
             <span class="btn btn-default" onclick="search(2)">查询</span>
         </form>
         <form>

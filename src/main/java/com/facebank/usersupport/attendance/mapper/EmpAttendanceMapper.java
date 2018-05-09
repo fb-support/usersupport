@@ -17,4 +17,6 @@ public interface EmpAttendanceMapper {
 
     List<EmpAttendanceModel> selectAttendanceRecordByForm(GetAttendanceForm attendanceForm);
 
+    List<EmpAttendanceModel> selectAttendanceRecordByAttendanceDate(String attendanceDate);
+
 }

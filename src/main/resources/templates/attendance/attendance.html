@@ -18,6 +18,9 @@
         .Wdate{
             background-image:url('../My97DatePicker/skin/datePicker.gif');
         }
+        label{
+            margin:0 5px;
+        }
     </style>
     <style type="text/css">
         .exportHide{
@@ -30,7 +33,7 @@
     <div id="content">
         <div class="container-fluid">
 
-            <form id="attendanceForm" class="form-inline" method="post" action="">
+            <form id="attendanceForm" style="padding-top: 15px; float: left;width: 90%;" class="form-inline" method="post" action="">
                 <div class="form-group">
                     <label class="labe_l" for="companySelect">部门:</label>
                     <select id="companySelect" class="form-control" name="deptNumber" onchange="getEmpByNumber()">
@@ -46,11 +49,16 @@
                     <input class="Wdate form-control" type="text" id="attendanceDate" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM',readOnly:true})" readonly>
                     <input type="hidden" id="attendanceDateInput" name="attendanceDate" value="">
                 </div>
-                <span class="btn btn-default" onclick="searchAttendance()">查询</span>
+                <span class="btn btn-primary" onclick="searchAttendance()">查询</span>
+            </form>
+
+            <form id="importForm" enctype="multipart/form-data" style="padding-top: 15px;float: right">
                 <span style="float: right">
-                    <input type="button" class="form-control" value="导入" id="importExcel"/>
+                <label class="form-control btn btn-info" for="importExcel">导入</label><input type="file" name="file" onchange="importAttendance()" style="display: none" id="importExcel"/>
                 </span>
             </form>
+
+            <div style="clear: both"></div>
 
             <div>
                 <form class="form-inline">
