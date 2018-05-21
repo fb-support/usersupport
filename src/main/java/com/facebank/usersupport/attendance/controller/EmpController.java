@@ -6,7 +6,7 @@ import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.RestModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class EmpController extends BaseController {
     @Autowired
     private IEmpService empService;
 
-    @GetMapping("/emp/getEmpListByDeptNumber")
+    @PostMapping("/emp/getEmpListByDeptNumber")
     public RestModel getEmpListByDeptNumber(Integer deptNumber){
         try {
             List<EmpModel> list = empService.getEmpListByDeptNumber(deptNumber);

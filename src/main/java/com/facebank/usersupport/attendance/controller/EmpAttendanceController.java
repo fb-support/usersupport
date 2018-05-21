@@ -5,27 +5,27 @@ import com.facebank.usersupport.attendance.model.EmpAttendanceModel;
 import com.facebank.usersupport.attendance.service.IEmpAttendanceService;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
-import com.facebank.usersupport.model.PageRestModel;
+import com.facebank.usersupport.model.PageBeanModel;
 import com.facebank.usersupport.model.RestModel;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author HuBiao
@@ -49,6 +49,7 @@ public class EmpAttendanceController extends BaseController {
     public RestModel attendanceImport(MultipartFile file) {
         int errorWorkNumber = 0;
         try {
+            System.out.println("+===——");
             // 校验上传的excel文件格式
             String fileName = file.getOriginalFilename();
             String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -180,31 +181,32 @@ public class EmpAttendanceController extends BaseController {
      * @param request
      * @return
      */
-    @PostMapping("/attendance/getAttendanceRecord")
+   /* @PostMapping("/attendance/getAttendanceRecord")
     @ResponseBody
     public RestModel getAttendanceRecord(GetAttendanceForm attendanceForm, String draw, HttpServletRequest request){
         try {
             // 根据页面传递参数组合查询考勤信息
             List<EmpAttendanceModel> attendanceRecord = empAttendanceService.getAttendanceRecordByForm(attendanceForm);
-            // 将考勤信息查询参数存入session中，方便导出时使用
-            request.getSession().setAttribute("attendanceForm",attendanceForm);
-            PageRestModel pageRestModel = new PageRestModel(
-                    draw,
-                    new Long(attendanceRecord.size()+""),
-                    new Long(attendanceRecord.size()+""),
-                    attendanceRecord
+           // 将考勤信息查询参数存入session中，方便导出时使用
+           request.getSession().setAttribute("attendanceForm",attendanceForm);
+           PageRestModel pageRestModel = new PageRestModel(
+                   draw,
+                  new Long(attendanceRecord.size()+""),
+                   new Long(attendanceRecord.size()+""),
+                   attendanceRecord
             );
             return success(pageRestModel);
+
         } catch (Exception e) {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
         }
-    }
+    }*/
 
     /**
      * 将考勤信息导出Excel
      */
-    @PostMapping("/attendance/export")
+    /*@PostMapping("/attendance/export")
     public void output(HttpServletRequest request,HttpServletResponse response) throws Exception {
         // 从session中取出考勤信息
         GetAttendanceForm attendanceForm = (GetAttendanceForm) request.getSession().getAttribute("attendanceForm");
@@ -335,6 +337,30 @@ public class EmpAttendanceController extends BaseController {
         os.flush();
         os.close();
 
+    }*/
+    @PostMapping("/attendance/getAttendanceRecord")
+    @ResponseBody
+    public RestModel getAttendanceRecord(GetAttendanceForm attendanceForm, HttpServletRequest request){
+        try {
+
+            System.out.println("进入方法");
+            // 根据页面传递参数组合查询考勤信息
+            PageInfo<EmpAttendanceModel> pageinfos = empAttendanceService.getAttendanceRecordByForm(attendanceForm);
+            // 将考勤信息查询参数存入session中，方便导出时使用
+            request.getSession().setAttribute("attendanceForm",attendanceForm);
+            PageBeanModel pageRestModel=new PageBeanModel();
+            pageRestModel.setData(pageinfos.getList());
+            pageRestModel.setPage(pageinfos.getPageNum());
+            pageRestModel.setPageSize(pageinfos.getPageSize());
+            pageRestModel.setTotalCount(pageinfos.getTotal());
+            pageRestModel.setTotalPage(pageinfos.getPages());
+            return success(pageRestModel);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
     }
+
 
 }

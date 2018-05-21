@@ -16,6 +16,26 @@ public class GetAttendanceForm {
 
     private Date attendanceDate;
 
+    private Integer pageSize;
+
+    private  Integer pageNumber;
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
     public Integer getDeptNumber() {
         return deptNumber;
     }

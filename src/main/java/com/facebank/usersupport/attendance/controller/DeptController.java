@@ -6,7 +6,7 @@ import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.RestModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class DeptController extends BaseController {
     @Autowired
     private IDeptService deptService;
 
-    @GetMapping("/dept/getAllDept")
+    @RequestMapping("/dept/getAllDept")
     public RestModel getAllDept(){
         try {
             List<DeptModel> depts = deptService.getAllDept();

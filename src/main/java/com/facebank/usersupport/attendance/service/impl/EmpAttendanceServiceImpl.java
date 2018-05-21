@@ -4,6 +4,8 @@ import com.facebank.usersupport.attendance.dto.reqDto.GetAttendanceForm;
 import com.facebank.usersupport.attendance.mapper.EmpAttendanceMapper;
 import com.facebank.usersupport.attendance.model.EmpAttendanceModel;
 import com.facebank.usersupport.attendance.service.IEmpAttendanceService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +27,17 @@ public class EmpAttendanceServiceImpl implements IEmpAttendanceService {
     }
 
     @Override
-    public List<EmpAttendanceModel> getAttendanceRecordByForm(GetAttendanceForm attendanceForm) {
-        return empAttendanceMapper.selectAttendanceRecordByForm(attendanceForm);
+    public PageInfo<EmpAttendanceModel> getAttendanceRecordByForm(GetAttendanceForm attendanceForm) {
+        PageHelper.startPage(attendanceForm.getPageNumber(),attendanceForm.getPageSize());
+        List<EmpAttendanceModel> empAttendanceModels = empAttendanceMapper.selectAttendanceRecordByForm(attendanceForm);
+        PageInfo<EmpAttendanceModel> pageInfo =new PageInfo<>(empAttendanceModels);
+        return pageInfo;
     }
+
+//    @Override
+//    public List<EmpAttendanceModel> getAttendanceRecordByForm(GetAttendanceForm attendanceForm) {
+//        return empAttendanceMapper.selectAttendanceRecordByForm(attendanceForm);
+//    }
 
     @Override
     public List<EmpAttendanceModel> selectAttendanceRecordByAttendanceDate(String attendanceDate) {
