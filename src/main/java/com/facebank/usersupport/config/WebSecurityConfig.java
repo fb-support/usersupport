@@ -39,10 +39,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .successHandler(new AuthenticationSuccessHandler() {
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+                httpServletResponse.setContentType("application/json;charset=utf-8");
+                PrintWriter out = httpServletResponse.getWriter();
+                ObjectMapper objectMapper = new ObjectMapper();
+                String s = "{\"status\":\"success\",\"msg\":" + objectMapper.writeValueAsString(HrUtils.getCurrentHr()) + "}";
+                out.write(s);
+                out.flush();
+                out.close(); }})
                 //static resources configuration
                 .antMatchers("/resources/**", "/webjars/**", "/img/**","/css/**","/js/**","/fonts/**","/lang/**","/plugins/**").permitAll()
                 //login page and registration end-point
-                .antMatchers("/login", "/register","/verity/**").permitAll()
+                .antMatchers("/login", "/register","/verity/**","/log/**").permitAll()
                 //all other requests
                 .anyRequest().authenticated()
                 .and()
