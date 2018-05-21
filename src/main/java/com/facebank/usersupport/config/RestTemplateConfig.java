@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class RestTemplateConfig {
+
     @Bean
     public RestTemplate restTemplate(@Qualifier("httpComponentsClientHttpRequestFactory") ClientHttpRequestFactory factory){
         return new RestTemplate(factory);
