@@ -26,7 +26,26 @@ public class AcountVo {
     /**
      * 部门号
      */
-    private Long deptNumber;
+    private Integer deptNumber;
+
+    private  Integer pageNumber;
+    private Integer  pageSize;
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 
     public Date getYear() {
         return year;
@@ -52,11 +71,11 @@ public class AcountVo {
         this.workNumber = workNumber;
     }
 
-    public Long getDeptNumber() {
+    public Integer getDeptNumber() {
         return deptNumber;
     }
 
-    public void setDeptNumber(Long deptNumber) {
+    public void setDeptNumber(Integer deptNumber) {
         this.deptNumber = deptNumber;
     }
 }

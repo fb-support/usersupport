@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 考勤统计
- * @author zhanguo.huang
- * @date 2018-04-11
+ *
  */
 @Service
 public class AcountServiceImpl implements IAcountService {
@@ -24,16 +22,17 @@ public class AcountServiceImpl implements IAcountService {
 
     /**
      * 分页获取考勤
-     * @param pageSize
-     * @param pageNumber
+     * @param
      * @param acountVo
      * @return
      */
     @Override
-    public PageInfo getAcountByPage(int pageSize, int pageNumber, AcountVo acountVo) {
-        PageHelper.startPage(pageNumber,pageSize);
+    public PageInfo<AcountDto> getAcountByPage(AcountVo acountVo) {
+        PageHelper.startPage(acountVo.getPageNumber(),acountVo.getPageSize());
         List<AcountDto> acountDtoList = acountMapper.acountAll(acountVo);
+
         PageInfo<AcountDto> pageInfo =new PageInfo<>(acountDtoList);
+
         return pageInfo;
     }
 }

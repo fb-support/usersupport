@@ -138,4 +138,21 @@ public class AcountDto {
     public void setOvertimeDuration(Float overtimeDuration) {
         this.overtimeDuration = overtimeDuration;
     }
+
+    @Override
+    public String toString() {
+        return "AcountDto{" +
+                "workNumber=" + workNumber +
+                ", empName='" + empName + '\'' +
+                ", deptNumber=" + deptNumber +
+                ", late=" + late +
+                ", early=" + early +
+                ", lateAndEarly=" + lateAndEarly +
+                ", absent=" + absent +
+                ", exp=" + exp +
+                ", leaveDuration=" + leaveDuration +
+                ", restDuration=" + restDuration +
+                ", overtimeDuration=" + overtimeDuration +
+                '}';
+    }
 }

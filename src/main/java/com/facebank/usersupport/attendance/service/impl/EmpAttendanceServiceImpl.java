@@ -34,10 +34,10 @@ public class EmpAttendanceServiceImpl implements IEmpAttendanceService {
         return pageInfo;
     }
 
-//    @Override
-//    public List<EmpAttendanceModel> getAttendanceRecordByForm(GetAttendanceForm attendanceForm) {
-//        return empAttendanceMapper.selectAttendanceRecordByForm(attendanceForm);
-//    }
+    @Override
+    public List<EmpAttendanceModel> getAttendanceRecordByForm1(GetAttendanceForm attendanceForm) {
+        return empAttendanceMapper.selectAttendanceRecordByForm(attendanceForm);
+    }
 
     @Override
     public List<EmpAttendanceModel> selectAttendanceRecordByAttendanceDate(String attendanceDate) {

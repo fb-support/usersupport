@@ -1,5 +1,6 @@
 package com.facebank.usersupport.attendance.service;
 
+import com.facebank.usersupport.attendance.dto.AcountDto;
 import com.facebank.usersupport.attendance.dto.reqDto.AcountVo;
 import com.github.pagehelper.PageInfo;
 
@@ -17,5 +18,5 @@ public interface IAcountService {
      * @param acountVo
      * @return
      */
-    PageInfo getAcountByPage(int pageSize, int pageNumber, AcountVo acountVo);
+    PageInfo<AcountDto> getAcountByPage(AcountVo acountVo);
 }

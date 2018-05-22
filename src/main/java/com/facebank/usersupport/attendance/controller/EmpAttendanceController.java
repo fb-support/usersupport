@@ -9,9 +9,9 @@ import com.facebank.usersupport.model.PageBeanModel;
 import com.facebank.usersupport.model.RestModel;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +21,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
- * @author HuBiao
- * @date 2018/4/4 0004 9:25
- **/
+ *考勤管理
+ */
 @Controller
 public class EmpAttendanceController extends BaseController {
     //日志
@@ -176,8 +175,8 @@ public class EmpAttendanceController extends BaseController {
 
     /**
      * 查询考勤信息
-     * @param attendanceForm
-     * @param draw
+     * @param
+     * @param
      * @param request
      * @return
      */
@@ -202,16 +201,13 @@ public class EmpAttendanceController extends BaseController {
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
         }
     }*/
-
-    /**
-     * 将考勤信息导出Excel
-     */
-    /*@PostMapping("/attendance/export")
+    //将考勤信息导出Excel
+    @PostMapping("/attendance/export")
     public void output(HttpServletRequest request,HttpServletResponse response) throws Exception {
         // 从session中取出考勤信息
         GetAttendanceForm attendanceForm = (GetAttendanceForm) request.getSession().getAttribute("attendanceForm");
         // 从数据库中查询考勤信息
-        List<EmpAttendanceModel> list = empAttendanceService.getAttendanceRecordByForm(attendanceForm);
+        List<EmpAttendanceModel> list = empAttendanceService.getAttendanceRecordByForm1(attendanceForm);
         // 遍历集合，将集合中的数据根据员工号进行分组，并保持到map中
         Map<Integer,List<EmpAttendanceModel>> map = new HashMap<>();
         for (EmpAttendanceModel empAttendanceModel : list) {
@@ -337,7 +333,7 @@ public class EmpAttendanceController extends BaseController {
         os.flush();
         os.close();
 
-    }*/
+    }
     @PostMapping("/attendance/getAttendanceRecord")
     @ResponseBody
     public RestModel getAttendanceRecord(GetAttendanceForm attendanceForm, HttpServletRequest request){

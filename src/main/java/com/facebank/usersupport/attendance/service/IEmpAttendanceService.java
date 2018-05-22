@@ -14,7 +14,7 @@ public interface IEmpAttendanceService {
 
     void importAttendance(List<EmpAttendanceModel> list);
 
-//    List<EmpAttendanceModel> getAttendanceRecordByForm(GetAttendanceForm attendanceForm);
+    List<EmpAttendanceModel> getAttendanceRecordByForm1(GetAttendanceForm attendanceForm);
     PageInfo<EmpAttendanceModel> getAttendanceRecordByForm(GetAttendanceForm attendanceForm);
 
     List<EmpAttendanceModel> selectAttendanceRecordByAttendanceDate(String attendanceDate);
