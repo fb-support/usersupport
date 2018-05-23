@@ -94,28 +94,19 @@ public class UserController extends BaseController {
 
     /**
      * 分页查询
-     * @param length 单页查询数量
-     * @param start 页数
      * @return
      */
     @GetMapping("/um/getUserByPage")
-    public RestModel getUserListByPage( @RequestParam(required = false, defaultValue = "1") int start,
-                                        @RequestParam(required = false, defaultValue = "10") int length,
-                                        String draw, UserModel model){
+    public RestModel getUserListByPage(UserModel model,Integer pageNumber,Integer pageSize){
         try {
-            int pageNo = start / length + 1;
-            //判断状态并规范
-            if(model.getStatus() == -1) {
-                model.setStatus(null);
-            }
-            PageInfo pageInfo = userService.selectByPage(length, pageNo, model);
-            PageRestModel pageRestModel = new PageRestModel(
-                    draw,
-                    pageInfo.getTotal(),
-                    pageInfo.getTotal(),
-                    pageInfo.getList()
-            );
-            return this.success(pageRestModel);
+            PageInfo pageInfo = userService.selectByPage(model,pageNumber,pageSize);
+            PageBeanModel pageBeanModel = new PageBeanModel();
+            pageBeanModel.setData(pageInfo.getList());
+            pageBeanModel.setPage(pageInfo.getPageNum());
+            pageBeanModel.setPageSize(pageInfo.getPageSize());
+            pageBeanModel.setTotalCount(pageInfo.getTotal());
+            pageBeanModel.setTotalPage(pageInfo.getPages());
+            return this.success(pageBeanModel);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -129,9 +120,10 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("um/deleteUserByIds")
-    public RestModel deleteUserByIds(@RequestParam(value = "id[]") Integer[] id){
+    public RestModel deleteUserByIds(Integer id){
         try{
-            userService.deleteByUserIds(id);
+            Integer[] ids = {id};
+            userService.deleteByUserIds(ids);
             return this.success(MessageKeyEnum.SUCCESS);
         }catch (Exception e){
             e.printStackTrace();
@@ -145,9 +137,10 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("um/banUserByIds")
-    public RestModel banUserByIds(@RequestParam(value = "id[]") Integer[] id){
+    public RestModel banUserByIds(Integer id){
         try{
-            userService.banByUserIds(id);
+            Integer[] ids = {id};
+            userService.banByUserIds(ids);
             return this.success(MessageKeyEnum.SUCCESS);
         }catch (Exception e){
             e.printStackTrace();
@@ -161,9 +154,10 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("um/enableUserByIds")
-    public RestModel enableUserByIds(@RequestParam(value = "id[]") Integer[] id){
+    public RestModel enableUserByIds(Integer id){
         try{
-            userService.enableUserByIds(id);
+            Integer[] ids = {id};
+            userService.enableUserByIds(ids);
             return this.success(MessageKeyEnum.SUCCESS);
         }catch (Exception e){
             e.printStackTrace();

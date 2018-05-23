@@ -33,8 +33,6 @@ public class AcountController extends BaseController {
     @RequestMapping("/attendance/getAcountAll")
     public RestModel getAcountByCondition(AcountVo acountVo){
         try{
-            System.out.println(acountVo.getMonth());
-            System.out.println(acountVo.getYear());
             PageInfo<AcountDto> pageinfos = acountService.getAcountByPage(acountVo);
             PageBeanModel pageRestModel=new PageBeanModel();
             pageRestModel.setData(pageinfos.getList());

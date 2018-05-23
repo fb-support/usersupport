@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/uploadImg.css}">
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <script type="text/javascript" th:src="@{../js/customerRecord.js}"></script>
+    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+</head>
+<body>
+<!--问题详情-->
+<div>
+    <button type="button" id="start" class="btn btn-info" onclick="startServer('solveProblem')">开始服务</button></div>
+<div class="container center" style="margin-top: 20px;display:none;" id="solveProblem">
+    <form  id="formData">
+    <!--客户信息-->
+    <div class="container center" style="width:100%;">
+        <div class="container center" style="width:100%;">
+            <form class="navbar-form navbar-left" role="search" >
+                <div class="form-group">
+                    电话：<input type="text" class="form-control" name="phoneNumber"  id="phoneNumber" placeholder="请输入电话号码">
+                    客户姓名：<input type="text" class="form-control"  name="name" id="name" placeholder="请输入客户姓名">
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container center" style="width:100%;">
+        <div class="container center" style="width:100%;">
+                <div class="form-group" id="sanji">
+                    问题类型：<select class="form-control" id="type" ></select>
+                    --<select class="form-control" id="type1"><option value="-1" id="-2">---请选择---</option></select>
+                    --<select class="form-control" id="type2"><option value="-1" id="-3">---请选择---</option></select>
+        </div>
+    </div>
+
+
+        <div class="form-group">
+            <label for="title">问题标题</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="请输入问题标题">
+        </div>
+        <div class="form-group">
+            <label for="description">问题详情</label>
+            <textarea class="form-control" rows="3" id="description" name="description"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="solve">问题处理</label>
+            <textarea class="form-control" rows="3" id="solve" name="solve"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="file">图片</label>
+            <input type="file" id="file"  multiple="multiple" accept="image/png,image/jpg,image/gif,image/JPEG">
+        </div>
+        <div id="imgBox" style="padding-bottom:15px; "></div>
+        <div>
+            <button type="button" class="btn btn-info" onclick="insertService(0)">草稿</button>
+            <button type="button"  class="btn btn-success" onclick="insertService(1)">待处理</button>
+        </div>
+
+    <!--问题详情结束-->
+    </div>
+    </form>
+
+</div>
+
+</div>
+</body>
+</html>

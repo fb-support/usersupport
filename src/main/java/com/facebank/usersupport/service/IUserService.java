@@ -51,12 +51,10 @@ public interface IUserService {
 
     /**
      * 分页，多条件模糊查询
-     * @param pageSize
-     * @param pageNumber
      * @param model
      * @return
      */
-    PageInfo selectByPage(int pageSize, int pageNumber, UserModel model);
+    PageInfo selectByPage(UserModel model,Integer pagenumber,Integer pageSize);
 
     /**
      * 批量删除用户

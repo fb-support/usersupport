@@ -26,6 +26,10 @@ public class UserModel implements Serializable {
 
     private Short status;
 
+    private  Integer pageNumber;
+
+    private Integer  pageSize;
+
     public Long getUserId() {
         return userId;
     }
@@ -96,6 +100,22 @@ public class UserModel implements Serializable {
 
     public void setStatus(Short status) {
         this.status = status;
+    }
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 
     @Override

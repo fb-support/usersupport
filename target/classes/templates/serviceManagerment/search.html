@@ -1,0 +1,165 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/moment-with-locales.min.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript" th:src="@{../js/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+    <script type="text/javascript" th:src="@{../js/dateFormat.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.showLoading.min.js}"></script>
+    <script type="text/javascript" th:src="@{../js/search.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{../My97DatePicker/WdatePicker.js}"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-datetimepicker.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/showLoading.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+    <style>
+        td.details-control {
+            background: url('../images/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+        tr.shown td.details-control {
+            background: url('../images/details_close.png') no-repeat center center;
+        }
+        .Wdate{
+            background-image:url('../My97DatePicker/skin/datePicker.gif');
+        }
+
+        #content {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #orderId {
+            margin-right: 10px;
+        }
+
+        #bizStatus {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+    <div id="content">
+        <div class="container-fluid">
+            <form class="form-inline" id="repaymentForm" method="post">
+                <!--用于存储当前iframe的id-->
+                <input type="hidden" name="iframeId" id="iframeId">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="mobile" name="mobile" placeholder="手机号">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="orderId" name="orderId" placeholder="订单ID">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="creditId" name="creditId" placeholder="债权ID">
+                </div>
+                <div class="form-group">
+                    <input class="Wdate form-control" type="text" id="datetimeStart" name="startTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm',readOnly:true})" readonly>
+                    --
+                    <input class="Wdate form-control" type="text" id="datetimeEnd" name="endTime" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm',readOnly:true})" readonly>
+
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="bizStatus" name="bizStatus">
+                        <option value="">全部</option>
+                        <option value="200">已还</option>
+                        <option value="100">未还</option>
+                    </select>
+                </div>
+                <div style="float: right">
+                    <span class="btn btn-default" onclick="reset()" >重置</span>&nbsp;&nbsp;
+                    <span class="btn btn-default" onclick="search()" >查询</span>
+                </div>
+            </form>
+
+            <div>
+                <label>用户资产信息：</label>
+            </div>
+            <table id="datatable2" class="table table-bordered data-table display" cellspacing="0" style="width:100%;word-break: keep-all;white-space:nowrap">
+                <thead>
+                    <tr>
+                        <th>用户ID</th>
+                        <th>用户名</th>
+                        <th>手机号</th>
+                        <th>可用余额</th>
+                        <th>在投金额</th>
+                        <th>提现冻结金额</th>
+                        <th>债权计划本金总额</th>
+                        <th>债权实收本金总额</th>
+                        <th>债权计划利息总额</th>
+                        <th>债权实收利息总额</th>
+                        <th>应收红包总额</th>
+                        <th>实收红包总额</th>
+                        <th>应收vip总收益</th>
+                        <th>实收vip总收益</th>
+                        <th>应收加息总额</th>
+                        <th>实收加息总额</th>
+                        <th>总资产</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <div style="margin-top: 20px">
+                <label>用户债权还款信息：</label>
+                <span style="float: right">
+                    <input type="button" class="form-control hide" onclick="exportRepayment()" value="导出查询结果" id="exportExcel"/>
+                </span>
+            </div>
+            <table id="datatable" class="table table-bordered data-table display" cellspacing="0" style="width:100%;word-break: keep-all;white-space:nowrap">
+                <thead>
+                    <tr>
+                        <!--<th></th>-->
+                        <th>编号</th>
+                        <th>债权ID</th>
+                        <th>订单ID</th>
+                        <th>用户ID</th>
+                        <th>计划还款时间</th>
+                        <th>是否还款</th>
+                        <th>债权计划本金</th>
+                        <th>债权实收本金</th>
+                        <th>债权计划利息</th>
+                        <th>债权实收利息</th>
+                        <th>应收红包金额</th>
+                        <th>实收红包金额</th>
+                        <th>vip利率</th>
+                        <th>应收vip收益</th>
+                        <th>实收vip收益</th>
+                        <th>vip期数</th>
+                        <th>应收加息金额</th>
+                        <th>实收加息金额</th>
+                        <th>加息期数</th>
+                        <th>加息类型</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <!--<th></th>-->
+                        <th>编号</th>
+                        <th>债权ID</th>
+                        <th>订单ID</th>
+                        <th>用户ID</th>
+                        <th>计划还款时间</th>
+                        <th>是否还款</th>
+                        <th>债权计划本金</th>
+                        <th>债权实收本金</th>
+                        <th>债权计划利息</th>
+                        <th>债权实收利息</th>
+                        <th>应收红包金额</th>
+                        <th>实收红包金额</th>
+                        <th>vip利率</th>
+                        <th>应收vip收益</th>
+                        <th>实收vip收益</th>
+                        <th>vip期数</th>
+                        <th>应收加息金额</th>
+                        <th>实收加息金额</th>
+                        <th>加息期数</th>
+                        <th>加息类型</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+</html>

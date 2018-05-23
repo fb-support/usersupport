@@ -1,5 +1,6 @@
 package com.facebank.usersupport.service.impl;
 
+import com.facebank.usersupport.attendance.dto.AcountDto;
 import com.facebank.usersupport.dto.UserRoleDO;
 import com.facebank.usersupport.dto.reqDto.UserForm;
 import com.facebank.usersupport.mapper.usersupport.usersupport.UserMapper;
@@ -93,18 +94,12 @@ public class UserServiceImpl extends BaseService implements IUserService {
         return userMapper.updateBaseInfomationById(model);
     }
 
-    /**
-     * 根据不定条件查询用户，并分页
-     * @param pageSize
-     * @param pageNumber
-     * @param model
-     * @return
-     */
     @Override
-    public PageInfo selectByPage(int pageSize, int pageNumber, UserModel model) {
-        PageHelper.startPage(pageNumber,pageSize);
-        List<UserModel> userList = userMapper.selectAllByCondition(model);
-        PageInfo<UserModel> pageInfo =new PageInfo<>(userList);
+    public PageInfo selectByPage(UserModel model,Integer pagenumber,Integer pageSize) {
+        PageHelper.startPage(pagenumber,pageSize);
+        List<UserModel> userModels = userMapper.selectAllByCondition(model);
+        PageInfo<UserModel> pageInfo =new PageInfo<>(userModels);
+
         return pageInfo;
     }
 
