@@ -156,6 +156,7 @@ public class UserController extends BaseController {
     @PostMapping("um/enableUserByIds")
     public RestModel enableUserByIds(Integer id){
         try{
+            System.out.println("启用用户");
             Integer[] ids = {id};
             userService.enableUserByIds(ids);
             return this.success(MessageKeyEnum.SUCCESS);
@@ -171,9 +172,10 @@ public class UserController extends BaseController {
      * @param model
      * @return
      */
-    @GetMapping("um/check")
+    @PostMapping("um/check")
     public RestModel CheckUserModel(UserModel model){
         try{
+            System.out.println("进入字段验证方法");
             UserCheckModel checkModel = new UserCheckModel();
             UserModel TempModel = new UserModel();
             // 进行phone判断

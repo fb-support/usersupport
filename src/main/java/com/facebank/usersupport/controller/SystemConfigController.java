@@ -62,7 +62,6 @@ public class SystemConfigController extends BaseController {
 
         Long userId = userService.getActiveUserId();
         SessionUtil.setUser(session,userService.getByUserId(userId));
-        System.out.println(userId);
         try{
             UserModel model = userService.getByUserId(userId);
             model.setPassword("");
