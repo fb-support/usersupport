@@ -1,13 +1,10 @@
 package com.facebank.usersupport.service.impl;
 
-import com.facebank.usersupport.dto.CapitalDto;
-import com.facebank.usersupport.dto.PageDto;
 import com.facebank.usersupport.mapper.usersupport.p2p.MoneyRecordMapper;
 import com.facebank.usersupport.model.MoneyRecord;
 import com.facebank.usersupport.model.PageRestModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.service.ICapitalService;
-import com.facebank.usersupport.util.PageUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,16 @@ import java.util.List;
 public class CapitalServiceImpl implements ICapitalService {
     @Autowired
     private MoneyRecordMapper moneyRecordMapper;
+
+    @Override
+    public PageInfo<MoneyRecord> getMoneyRecord(String mobile, String type, Date starttime, Date endtime, Integer pageSize, Integer pageNumber){
+        PageHelper.startPage(pageNumber,pageSize);
+        List<MoneyRecord> moneyRecords = moneyRecordMapper.selectByMobile(mobile,type,starttime,endtime);
+        PageInfo<MoneyRecord> pageInfo = new PageInfo<MoneyRecord>(moneyRecords);
+        return pageInfo;
+    }
+
+
 
     @Override
     public RestModel selectByMobile(String mobile, String type, Date starttime, Date endtime, String draw){
