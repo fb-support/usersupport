@@ -11,5 +11,6 @@ import java.util.List;
 public interface IDeptService {
 
     List<DeptModel> getAllDept();
+    DeptModel getWorkNumberByDeptNumber(Integer deptNumber);
 
 }

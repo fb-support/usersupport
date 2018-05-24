@@ -1,8 +1,12 @@
 package com.facebank.usersupport.attendance.controller;
 
 import com.facebank.usersupport.attendance.dto.reqDto.GetAttendanceForm;
+import com.facebank.usersupport.attendance.model.DeptModel;
 import com.facebank.usersupport.attendance.model.EmpAttendanceModel;
+import com.facebank.usersupport.attendance.model.EmpModel;
+import com.facebank.usersupport.attendance.service.IDeptService;
 import com.facebank.usersupport.attendance.service.IEmpAttendanceService;
+import com.facebank.usersupport.attendance.service.IEmpService;
 import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.model.PageBeanModel;
@@ -17,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +42,8 @@ public class EmpAttendanceController extends BaseController {
 
     @Autowired
     private IEmpAttendanceService empAttendanceService;
-
+    @Autowired
+    private IDeptService iDeptService;
     /**
      * 从excel导入考勤记录
      * @param file
@@ -338,7 +344,8 @@ public class EmpAttendanceController extends BaseController {
     @ResponseBody
     public RestModel getAttendanceRecord(GetAttendanceForm attendanceForm, HttpServletRequest request){
         try {
-
+            DeptModel deptModel = iDeptService.getWorkNumberByDeptNumber(attendanceForm.getDeptNumber());
+            attendanceForm.setDeptName(deptModel.getDeptName());
             System.out.println("进入方法");
             // 根据页面传递参数组合查询考勤信息
             PageInfo<EmpAttendanceModel> pageinfos = empAttendanceService.getAttendanceRecordByForm(attendanceForm);

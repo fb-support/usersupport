@@ -12,4 +12,9 @@
         SELECT id,dept_number,dept_name FROM dept
     </select>
 
+    <select id="getWorkNumberByDeptNumber" parameterType="java.lang.Integer" resultMap="deptResult">
+        SELECT dept_name FROM dept where dept_number=#{deptNumber}
+    </select>
+
+
 </mapper>

@@ -23,4 +23,9 @@ public class DeptServiceImpl implements IDeptService {
     public List<DeptModel> getAllDept() {
         return deptMapper.getAllDept();
     }
+
+    @Override
+    public DeptModel getWorkNumberByDeptNumber(Integer deptNumber) {
+        return deptMapper.getWorkNumberByDeptNumber(deptNumber);
+    }
 }
