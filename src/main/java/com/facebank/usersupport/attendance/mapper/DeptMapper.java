@@ -14,5 +14,5 @@ import java.util.List;
 public interface DeptMapper {
 
     List<DeptModel> getAllDept();
-
+    DeptModel getWorkNumberByDeptNumber(Integer deptNumber);
 }
