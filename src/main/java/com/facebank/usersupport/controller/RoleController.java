@@ -1,8 +1,10 @@
 package com.facebank.usersupport.controller;
 
 
+import com.facebank.usersupport.common.MessageKeyEnum;
 import com.facebank.usersupport.controller.base.BaseController;
 import com.facebank.usersupport.dto.UserRoleDO;
+import com.facebank.usersupport.model.PageBeanModel;
 import com.facebank.usersupport.model.RestModel;
 import com.facebank.usersupport.model.RoleMenuModel;
 import com.facebank.usersupport.model.RoleModel;
@@ -127,13 +129,24 @@ public class RoleController extends BaseController {
      * @auther: yaozun
      * @date:
      */
-    @RequestMapping("/role/findUserByPage")
+    @PostMapping("/role/findUserByPage")
     public RestModel findUserByPage(@RequestParam(required = false, defaultValue = "1") int pageNo,
                                     @RequestParam(required = false, defaultValue = "10") int length, UserRoleDO model){
-        System.out.println(pageNo);
-        PageInfo pageInfo = userRoleService.selectByPage(length, pageNo, model);
-        System.out.println(pageInfo);
-        return this.success(pageInfo);
+        try {
+            System.out.println(pageNo);
+            PageInfo pageInfo = userRoleService.selectByPage(length, pageNo, model);
+            PageBeanModel pageBeanModel = new PageBeanModel();
+            pageBeanModel.setData(pageInfo.getList());
+            pageBeanModel.setPage(pageInfo.getPageNum());
+            pageBeanModel.setPageSize(pageInfo.getPageSize());
+            pageBeanModel.setTotalCount(pageInfo.getTotal());
+            pageBeanModel.setTotalPage(pageInfo.getPages());
+            return this.success(pageBeanModel);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
+        }
+
     }
     /**
      * 功能描述: 查找所有角色
@@ -153,7 +166,7 @@ public class RoleController extends BaseController {
      * @auther: yaozun
      * @date:
      */
-    @RequestMapping("/role/findRoleBegin")
+    @PostMapping("/role/findRoleBegin")
     public RestModel findRoleBegin(Long userId){
         return userRoleService.findRoleBegin(userId);
     }
