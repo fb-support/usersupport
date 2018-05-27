@@ -179,6 +179,7 @@ public class RoleController extends BaseController {
       */
     @RequestMapping("/role/updateRole")
     public RestModel updateRole(@RequestParam(value ="ids[]") Long[] ids, Long id) {
+        System.out.println("更改权限");
         return userRoleService.updateRole(ids, id);
     }
     /**
