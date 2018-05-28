@@ -22,9 +22,9 @@ public class RepaymentForm {
 
     private Long endTime;
 
-    private Integer start = 1;
+    private Integer PageNumber;
 
-    private Integer length = 10;
+    private Integer PageSize;
 
     public Long getCreditId() {
         return creditId;
@@ -82,19 +82,19 @@ public class RepaymentForm {
         this.orderId = orderId;
     }
 
-    public Integer getStart() {
-        return start;
+    public Integer getPageNumber() {
+        return PageNumber;
     }
 
-    public void setStart(Integer start) {
-        this.start = start;
+    public void setPageNumber(Integer pageNumber) {
+        PageNumber = pageNumber;
     }
 
-    public Integer getLength() {
-        return length;
+    public Integer getPageSize() {
+        return PageSize;
     }
 
-    public void setLength(Integer length) {
-        this.length = length;
+    public void setPageSize(Integer pageSize) {
+        PageSize = pageSize;
     }
 }

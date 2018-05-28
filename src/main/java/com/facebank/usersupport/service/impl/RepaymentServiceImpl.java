@@ -1,5 +1,6 @@
 package com.facebank.usersupport.service.impl;
 
+import com.facebank.usersupport.attendance.model.EmpAttendanceModel;
 import com.facebank.usersupport.dto.reqDto.RepaymentForm;
 import com.facebank.usersupport.mapper.usersupport.p2p.RepaymentMapper;
 import com.facebank.usersupport.model.RepaymentModel;
@@ -30,7 +31,7 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
      * @return
      */
     @Override
-    public List<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm) {
+    public PageInfo<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm) {
         /*Integer page = repaymentForm.getStart() / repaymentForm.getLength() + 1;
         PageHelper.startPage(page, repaymentForm.getLength());
         ...
@@ -83,7 +84,8 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         for (Map.Entry<String, RepaymentModel> RepaymentModelEntry : entrySet) {
             repaymentModels.add(RepaymentModelEntry.getValue());
         }
-        return repaymentModels;
+        PageInfo<RepaymentModel> pageInfo =new PageInfo<>(repaymentModels);
+        return pageInfo;
     }
 
     /**

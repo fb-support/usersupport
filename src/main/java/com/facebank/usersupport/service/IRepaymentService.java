@@ -17,7 +17,8 @@ public interface IRepaymentService {
      * 根据手机号、用户名、还款日期组合条件查询债券还款信息
      * @return
      */
-    List<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm);
+    PageInfo<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm);
+
 
     /**
      * 根据组合条件查询债券还款明细
