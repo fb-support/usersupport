@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="common/head_info::head_infor"></div>
+    <script type="text/javascript" th:src="@{../js/layer.js}"></script>
+    <script type="text/javascript" th:src="@{../js/jquery.dataTables.min.js}"></script>
+    <!--<script type="text/javascript" th:src="@{../attendance/js/applyTable.js}"></script>-->
+    <script type="text/javascript" th:src="@{../attendance/js/acount.js}"></script>
+    <script type="text/javascript" th:src="@{../attendance/js/jquery.ocupload-1.1.2.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{../attendance/css/apply.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/dataTables-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{../css/jquery.dataTables.min.css}">
+    <script type="text/javascript" th:src="@{../My97DatePicker/WdatePicker.js}"></script>
+
+    <style type="text/css">
+        .Wdate{
+            background-image:url('../My97DatePicker/skin/datePicker.gif');
+        }
+        label{
+            margin:0 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="content">
+    <div class="container-fluid">
+        <form class="form-inline">
+
+
+            <div class="form-group" style="padding: 15px 0;">
+                <label class="labe_l">考勤时间:</label>
+                <!--<input type="text" class="form_datetime form-control" id="datetimeStart" name="startTime" readonly>-->
+                <input class="Wdate form-control" type="text" id="datetimeStart" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM',readOnly:true})" readonly>
+                <label class="labe_l" for="companySelect">部门:</label>
+                <select id="companySelect" class="form-control" name="deptNumber" onchange="getEmpByNumber()">
+                    <option value="">--请选择部门--</option>
+                </select>
+                <input type="hidden" id="deptNameInput" name="deptName" value="">
+                <label class="labe_l" for="empSelect">人员:</label>
+                <select id="empSelect" class="form-control" name="workNumber">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+            <span class="btn btn-primary" onclick="search(1)" style="margin-left: 10px;">按年统计</span>
+            <span class="btn btn-primary" onclick="search(0)" style="margin: 0 10px;">按月统计</span>
+            <span class="btn btn-default" onclick="search(2)">查询</span>
+        </form>
+        <form>
+            <table class="table table-bordered data-table" cellspacing="0" width="100%" id="datatable">
+                <thead>
+                <tr>
+                    <th>员工号</th>
+                    <th>姓名</th>
+                    <th>部门</th>
+                    <th>迟到(次数)</th>
+                    <th>早退(次数)</th>
+                    <th>迟到早退(次数)</th>
+                    <th>旷工(次数)</th>
+                    <th>异常(次数)</th>
+                    <th>请假(时长)</th>
+                    <th>调休(时长)</th>
+                    <th>加班(时长)</th>
+                </tr>
+                </thead>
+            </table>
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

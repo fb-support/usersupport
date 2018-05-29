@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.mapper.usersupport.p2p.GeneralJournalMapper">
+  <resultMap id="BaseResultMap" type="com.facebank.usersupport.model.GeneralJournalModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="journalType" jdbcType="SMALLINT" property="journaltype" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="nickName" jdbcType="VARCHAR" property="nickname" />
+    <result column="serialNumber" jdbcType="VARCHAR" property="serialnumber" />
+    <result column="startTime" jdbcType="BIGINT" property="starttime" />
+    <result column="endTime" jdbcType="BIGINT" property="endtime" />
+    <result column="relationId" jdbcType="VARCHAR" property="relationid" />
+    <result column="inOutType" jdbcType="TINYINT" property="inouttype" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="balance" jdbcType="DECIMAL" property="balance" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="createTime" jdbcType="BIGINT" property="createtime" />
+    <result column="modifyTime" jdbcType="BIGINT" property="modifytime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, journalType, userId, nickName, serialNumber, startTime, endTime, relationId,
+    inOutType, amount, balance, remarks, status, createTime, modifyTime
+  </sql>
+
+  <select id="selectByMobile" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    FROM p2ptest.general_journal
+    <where>
+      <if test="mobile != null and mobile != ''">
+        nickName = #{mobile}
+      </if>
+      <if test="type != -1">
+        and inOutType = #{type}
+      </if>
+      <if test="endTime != null and endTime != '' and endTime !=0">
+        and startTime &lt;= #{endTime}
+      </if>
+      <if test="startTime != null and startTime != '' and startTime != 0">
+        and startTime &gt;= #{startTime}
+      </if>
+    </where>
+    ORDER BY endTime DESC
+  </select>
+</mapper>

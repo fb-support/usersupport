@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.mapper.usersupport.usersupport.UserMapper">
+    <resultMap id="BaseResultMap" type="com.facebank.usersupport.model.UserModel">
+        <id column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="work_number" jdbcType="INTEGER" property="workNumber" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+        <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
+        <result column="status" jdbcType="SMALLINT" property="status" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.facebank.usersupport.model.UserModel">
+        insert into user (work_number, username,
+        password, email, phone,
+        gmt_create, gmt_modify, status
+        )
+        values (#{workNumber,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR},
+        #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+        #{gmtCreate,jdbcType=BIGINT}, #{gmtModify,jdbcType=BIGINT}, #{status,jdbcType=SMALLINT}
+        )
+    </insert>
+
+
+    <select id="selectByUserModel" parameterType="com.facebank.usersupport.model.UserModel"
+            resultMap="BaseResultMap">
+        select user_id from user
+        where 1=1
+        <if test="workNumber != null">
+            and work_number = #{workNumber,jdbcType=INTEGER}
+        </if>
+        <if test="username != null">
+            and username = #{username,jdbcType=VARCHAR}
+        </if>
+        <if test="email != null">
+            and email = #{email,jdbcType=VARCHAR}
+        </if>
+        <if test="phone != null">
+            and phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        and status = 0
+    </select>
+    <select id="getUserById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select user_id,work_number,username,password,email,phone,
+        status
+        from user
+        where user_id=#{userId,jdbcType=BIGINT}
+    </select>
+
+    <update id="updatePasswordById" parameterType="com.facebank.usersupport.model.UserModel">
+        update user
+        SET
+        password = #{password,jdbcType=VARCHAR},
+        gmt_modify = #{gmtModify,jdbcType=BIGINT}
+        where user_id = #{userId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateBaseInfomationById" parameterType="com.facebank.usersupport.model.UserModel">
+        UPDATE  user
+          SET
+        username = #{username,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        gmt_modify = #{gmtModify,jdbcType=BIGINT}
+          WHERE
+        user_id = #{userId,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectAllByCondition" parameterType="com.facebank.usersupport.model.UserModel"
+            resultMap="BaseResultMap">
+        select user_id,work_number, username,
+        password, email, phone,
+        gmt_create, gmt_modify, status from user
+        where 1 = 1
+        <if test="username!=null">
+           and username like CONCAT(CONCAT('%', #{username,jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="phone!=null">
+            and phone like CONCAT(CONCAT(#{phone,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="workNumber!=null">
+            and work_number like CONCAT(CONCAT(#{workNumber,jdbcType=INTEGER}),'%')
+        </if>
+        <if test="status!=null">
+            and status = #{status,jdbcType=SMALLINT}
+        </if>
+    </select>
+
+    <delete id="batchDeleteUsers" parameterType="int">
+        delete from user where user_id in
+        <foreach item="userItem" collection="array" open="(" separator="," close=")">
+            #{userItem}
+        </foreach>
+    </delete>
+	
+    <resultMap id="user_role_map" type="com.facebank.usersupport.dto.UserRoleDO">
+        <id column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="work_number" jdbcType="INTEGER" property="workNumber" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+        <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
+        <result column="status" jdbcType="SMALLINT" property="status" />
+        <collection property="roles" ofType="com.facebank.usersupport.model.RoleModel">
+            <id column="role_id" jdbcType="BIGINT" property="roleId" />
+            <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+        </collection>
+    </resultMap>
+
+    <select id="selectBySelectiveForPermission" parameterType="String" resultMap="user_role_map">
+        select
+        u.*,r.role_id,r.role_name
+        from user u
+        LEFT JOIN
+        user_role ur ON u.user_id = ur.user_id
+        LEFT JOIN
+        role r ON ur.role_id = r.role_id
+        where  u.status = 1 AND (username = #{loginName,jdbcType=VARCHAR} OR
+        phone = #{loginName,jdbcType=VARCHAR} OR
+        email = #{loginName,jdbcType=VARCHAR})
+    </select>
+
+    <update id="updateStatusForBanUser" parameterType="int">
+        UPDATE user SET status = 0
+        where 1=1 AND
+        <foreach item="userId" collection="array" open="(" separator="or" close=")">
+             user_id = #{userId,jdbcType=BIGINT}
+        </foreach>
+
+    </update>
+
+    <update id="updateStatusForEnableUser" parameterType="int">
+        UPDATE user SET status = 1
+        where 1=1 AND
+        <foreach item="userId" collection="array" open="(" separator="or" close=")">
+            user_id = #{userId,jdbcType=BIGINT}
+        </foreach>
+
+    </update>
+
+</mapper>

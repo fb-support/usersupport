@@ -31,9 +31,9 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
      *
      * @return
      */
-    @Cacheable(value="repaymentCache")
+    @Cacheable(value="repaymentCache",key="'repayment'+#userId")
     @Override
-    public PageInfo<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm) {
+    public PageInfo<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm,Long userId) {
 
         List<RepaymentModel> repaymentModelList1 = repaymentMapper.getCreditInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList2 = repaymentMapper.getRedPackageInfoByRepaymentForm(repaymentForm);
@@ -80,6 +80,7 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         for (Map.Entry<String, RepaymentModel> RepaymentModelEntry : entrySet) {
             repaymentModels.add(RepaymentModelEntry.getValue());
         }
+        System.err.println("缓存里没有"+repaymentForm+",所以这边没有走缓存，从数据库拿数据");
         PageInfo<RepaymentModel> pageInfo =new PageInfo<>(repaymentModels);
         return pageInfo;
     }

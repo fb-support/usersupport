@@ -50,7 +50,7 @@ public class RepaymentController extends BaseController {
      */
     @PostMapping("/service/repayment")
     @ResponseBody
-    public RestModel repaymentSearch(RepaymentForm repaymentForm, HttpServletRequest request,String iframeId) {
+    public RestModel repaymentSearch(RepaymentForm repaymentForm,HttpServletRequest request,String iframeId) {
         try {
             // 手机号和orderId都为空
             boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getMobile());
@@ -65,7 +65,7 @@ public class RepaymentController extends BaseController {
                 repaymentForm.setUserId(userId);
             }
             // 查询还款信息
-            PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm);
+            PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,repaymentForm.getUserId());
             // 查询参数保存到session，方便用于导出数据
             request.getSession().setAttribute( "repaymentForm", repaymentForm);
 
@@ -315,7 +315,7 @@ public class RepaymentController extends BaseController {
         // 从session中获取查询参数
         RepaymentForm repaymentForm = (RepaymentForm) request.getSession().getAttribute( "repaymentForm");
         // 从数据库中查询要导出的数据
-        PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm);
+        PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,repaymentForm.getUserId());
         if (repaymentModels.getList() != null && repaymentModels.getList().size() > 0) {
             // 生成Excel文件
             XSSFWorkbook workbook = new XSSFWorkbook();

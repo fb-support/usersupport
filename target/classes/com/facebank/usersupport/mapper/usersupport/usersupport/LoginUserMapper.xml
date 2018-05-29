@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.mapper.usersupport.usersupport.LoginUserMapper">
+    <resultMap id="BaseResultMap" type="com.facebank.usersupport.model.LoginUserModel">
+        <id column="login_id" jdbcType="BIGINT" property="loginId" />
+        <result column="login_way" jdbcType="INTEGER" property="loginWay" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="work_number" jdbcType="INTEGER" property="workNumber" />
+        <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
+        <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+        <result column="login_time" jdbcType="BIGINT" property="loginTime" />
+        <result column="logout_time" jdbcType="BIGINT" property="logoutTime" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.facebank.usersupport.model.LoginUserModel">
+        insert into
+        login_user (login_way,
+              username,
+              work_number,
+              gmt_modified,
+              gmt_create,
+              login_time)
+        values (#{loginWay,jdbcType=INTEGER},
+                #{username,jdbcType=VARCHAR},
+                #{workNumber,jdbcType=INTEGER},
+                #{gmtModified,jdbcType=BIGINT},
+                #{gmtCreate,jdbcType=BIGINT},
+                #{loginTime,jdbcType=BIGINT})
+    </insert>
+
+
+    <update id="updateLoginOutTime" parameterType="com.facebank.usersupport.model.LoginUserModel">
+      UPDATE login_user
+        SET logout_time = #{logoutTime}
+        WHERE username = #{username}
+        ORDER BY login_time DESC limit 1;
+    </update>
+
+
+    <select id="selectAllByCondition" parameterType="com.facebank.usersupport.model.LoginUserModel"
+            resultMap="BaseResultMap">
+        select login_id,login_way,username,work_number,gmt_modified,
+        gmt_create,login_time,logout_time
+        from login_user
+        where 1 = 1
+        <if test="username!=null">
+            and username like CONCAT(CONCAT('%', #{username,jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="workNumber!=null">
+            and work_number like CONCAT(CONCAT(#{workNumber,jdbcType=INTEGER}),'%')
+        </if>
+        <if test="loginTime != null ">
+            and login_time>#{loginTime}
+        </if>
+        <if test="logoutTime != null ">
+            and #{logoutTime} > logout_time
+        </if>
+        order by login_time DESC
+    </select>
+</mapper>

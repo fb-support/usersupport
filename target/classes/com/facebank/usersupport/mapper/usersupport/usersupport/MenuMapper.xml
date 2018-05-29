@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.facebank.usersupport.mapper.usersupport.usersupport.MenuMapper">
+  <resultMap id="BaseResultMap" type="com.facebank.usersupport.model.MenuModel">
+    <id column="menu_id" jdbcType="BIGINT" property="menuId" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    menu_id, menu_name, menu_url, status, gmt_create, gmt_modify, creator, description
+  </sql>
+  <select id="queryAllMenu"  resultMap="BaseResultMap">
+    select
+    *
+    from menu
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    *
+    from menu
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </select>
+  <select id="getMenu" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from menu
+    where 1=1
+    <if test="menuName != null">
+      and menu_name =  #{menuName,jdbcType=VARCHAR}
+    </if>
+    <if test="menuUrl != null">
+      and menu_url = #{menuUrl,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null">
+      and status = #{status,jdbcType=SMALLINT}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from menu
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.facebank.usersupport.model.MenuModel">
+    insert into menu (menu_id, menu_name, menu_url, 
+      status, gmt_create, gmt_modify, 
+      creator, description)
+    values (#{menuId,jdbcType=BIGINT}, #{menuName,jdbcType=VARCHAR}, #{menuUrl,jdbcType=VARCHAR}, 
+      #{status,jdbcType=SMALLINT}, #{gmtCreate,jdbcType=BIGINT}, #{gmtModify,jdbcType=BIGINT}, 
+      #{creator,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.facebank.usersupport.model.MenuModel">
+    insert into menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        menu_id,
+      </if>
+      <if test="menuName != null">
+        menu_name,
+      </if>
+      <if test="menuUrl != null">
+        menu_url,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        #{menuId,jdbcType=BIGINT},
+      </if>
+      <if test="menuName != null">
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null">
+        #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.facebank.usersupport.model.MenuModel">
+    update menu
+    <set>
+      <if test="menuName != null">
+        menu_name = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null">
+        menu_url = #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModify != null">
+        gmt_modify = #{gmtModify,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.facebank.usersupport.model.MenuModel">
+    update menu
+    set menu_name = #{menuName,jdbcType=VARCHAR},
+      menu_url = #{menuUrl,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      gmt_modify = #{gmtModify,jdbcType=BIGINT},
+      creator = #{creator,jdbcType=BIGINT},
+      description = #{description,jdbcType=VARCHAR}
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </update>
+  <select id="queryMenuByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT * FROM(
+	SELECT role_menu.menu_id FROM(
+		SELECT trole.role_id from (SELECT user_role.* from (SELECT user_id FROM user
+			where username = #{username,jdbcType=VARCHAR}) as tuser
+				INNER JOIN user_role	on tuser.user_id = user_role.user_id) as tuser_role
+				INNER JOIN (SELECT role_id FROM	role where status = 1)as trole
+				ON tuser_role.role_id = trole.role_id ) as trole_menu
+				INNER JOIN role_menu ON trole_menu.role_id = role_menu.role_id
+	)as tmenu INNER JOIN (select * from menu where menu.status=1)as tmp ON tmenu.menu_id = tmp.menu_id;
+  </select>
+  <select id="queryMenuByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+     SELECT menu.* FROM(
+      SELECT role_menu.menu_id FROM (
+      SELECT tuser_role.role_id from (
+      SELECT user_role.role_id from  user_role
+      where user_role.user_id = #{userId,jdbcType=BIGINT}) as tuser_role
+      INNER JOIN (SELECT role_id FROM	role where status = 1)as trole
+      ON tuser_role.role_id = trole.role_id ) as trole_menu
+
+      INNER JOIN role_menu ON trole_menu.role_id = role_menu.role_id
+  )as tmenu INNER JOIN menu ON tmenu.menu_id = menu.menu_id;
+  </select>
+
+</mapper>
