@@ -31,9 +31,9 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
      *
      * @return
      */
-    @Cacheable(value="repaymentCache",key="'repayment'+#userId")
+    @Cacheable(value="repaymentCache",key="'repayment'+#UserId")
     @Override
-    public PageInfo<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm,Long userId) {
+    public PageInfo<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm,String UserId) {
 
         List<RepaymentModel> repaymentModelList1 = repaymentMapper.getCreditInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList2 = repaymentMapper.getRedPackageInfoByRepaymentForm(repaymentForm);

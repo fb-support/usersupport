@@ -52,6 +52,23 @@ public class RepaymentController extends BaseController {
     @ResponseBody
     public RestModel repaymentSearch(RepaymentForm repaymentForm,HttpServletRequest request,String iframeId) {
         try {
+            //拼接ecache的key
+            String telephone=repaymentForm.getMobile();
+            String orderId=repaymentForm.getOrderId().toString();
+            String credidId=repaymentForm.getCreditId().toString();
+            SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");
+            Long time=repaymentForm.getStartTime();
+            Long time1=repaymentForm.getEndTime();
+            String d = format.format(time);
+            String b=format.format(time1);
+            Date date=format.parse(d);
+            Date date1=format.parse(b);
+            String bizStatus="";
+            if(repaymentForm.getBizStatus()!=null) {
+                bizStatus = repaymentForm.getBizStatus().toString();
+            }
+            String UserId=telephone+"/"+orderId+"/"+credidId+"/"+date+"/"+date1+"/"+bizStatus;
+
             // 手机号和orderId都为空
             boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getMobile());
             // 开始时间大于结束时间
@@ -65,7 +82,7 @@ public class RepaymentController extends BaseController {
                 repaymentForm.setUserId(userId);
             }
             // 查询还款信息
-            PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,repaymentForm.getUserId());
+            PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,UserId);
             // 查询参数保存到session，方便用于导出数据
             request.getSession().setAttribute( "repaymentForm", repaymentForm);
 
@@ -176,8 +193,9 @@ public class RepaymentController extends BaseController {
      */
     @PostMapping("/service/repaymentOrder")
     @ResponseBody
-    public RestModel repaymentOrderSearch(RepaymentForm repaymentForm, String draw, HttpServletRequest request,String iframeId) {
+    public RestModel repaymentOrderSearch(RepaymentForm repaymentForm,String draw, HttpServletRequest request,String iframeId) {
         try {
+
             // 手机号和orderId都为空
             boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getMobile());
             // 开始时间大于结束时间
@@ -315,7 +333,7 @@ public class RepaymentController extends BaseController {
         // 从session中获取查询参数
         RepaymentForm repaymentForm = (RepaymentForm) request.getSession().getAttribute( "repaymentForm");
         // 从数据库中查询要导出的数据
-        PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,repaymentForm.getUserId());
+        PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,null);
         if (repaymentModels.getList() != null && repaymentModels.getList().size() > 0) {
             // 生成Excel文件
             XSSFWorkbook workbook = new XSSFWorkbook();
