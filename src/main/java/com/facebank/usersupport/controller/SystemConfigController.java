@@ -66,8 +66,29 @@ public class SystemConfigController extends BaseController {
             UserModel model = userService.getByUserId(userId);
             model.setPassword("");
             SessionUtil.setUser(session,model);
-            System.out.println(model.getWorkNumber());
             return this.success(JSONObject.parseObject(JSON.toJSONString(model)));
+        }catch (Exception e){
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.ERROR);
+        }
+    }
+
+    /**
+     * 根据用户ID获取信息
+     * @param
+     * @return
+     */
+    @PostMapping("/sc/getByUserPassword")
+    public RestModel getByUserPassword(String password) {
+        try{
+            Long userId = userService.getActiveUserId();
+            UserModel model = userService.getByUserId(userId);
+            if(model.getPassword().equals(password)) {
+                model.setPassword(null);
+                return this.success(JSONObject.parseObject(JSON.toJSONString(model)));
+            }else {
+                return this.excpRestModel(MessageKeyEnum.ERROR);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.ERROR);
