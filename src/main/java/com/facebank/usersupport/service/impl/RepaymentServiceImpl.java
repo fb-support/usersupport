@@ -33,7 +33,7 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
      */
     @Cacheable(value="repaymentCache",key="'repayment'+#UserId")
     @Override
-    public PageInfo<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm,String UserId) {
+    public List<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm,String UserId) {
 
         List<RepaymentModel> repaymentModelList1 = repaymentMapper.getCreditInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList2 = repaymentMapper.getRedPackageInfoByRepaymentForm(repaymentForm);
@@ -80,19 +80,19 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         for (Map.Entry<String, RepaymentModel> RepaymentModelEntry : entrySet) {
             repaymentModels.add(RepaymentModelEntry.getValue());
         }
-        System.err.println("缓存里没有"+repaymentForm+",所以这边没有走缓存，从数据库拿数据");
-        PageInfo<RepaymentModel> pageInfo =new PageInfo<>(repaymentModels);
-        return pageInfo;
+
+        return repaymentModels;
     }
 
-    /**
-     * 多条件组合查询债权还款明细信息
+   /**
+           * 多条件组合查询债权还款明细信息
      *
-     * @param repaymentForm
+             * @param repaymentForm
      * @return
-     */
+             */
+    @Cacheable(value="repaymentCache",key="'orderDetail'+#searchKey")
     @Override
-    public List<RepaymentModel> getRepaymentDetailByRepaymentForm(RepaymentForm repaymentForm) {
+    public PageInfo<RepaymentModel> getRepaymentDetailByRepaymentForm(RepaymentForm repaymentForm,String searchKey) {
         // List<RepaymentModel> repaymentModels = repaymentMapper.getRepaymentDetailByRepaymentForm(repaymentForm);
 
         List<RepaymentModel> repaymentModelList1 = repaymentMapper.getCreditDetailByRepaymentForm(repaymentForm);
@@ -137,8 +137,11 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         for (Map.Entry<String, RepaymentModel> RepaymentModelEntry : entrySet) {
             repaymentModels.add(RepaymentModelEntry.getValue());
         }
+        System.err.println("缓存里没有"+repaymentForm+",所以这边没有走缓存，从数据库拿数据");
+        PageInfo<RepaymentModel> pageInfo =new PageInfo<>(repaymentModels);
+        return pageInfo;
 
-        return repaymentModels;
+//        return repaymentModels;
     }
 
     /**
@@ -146,10 +149,10 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
      *
      * @return
      */
+    @Cacheable(value="repaymentCache",key="'order'+#searchKey")
     @Override
-    public List<RepaymentModel> getRepaymentOrderByRepaymentForm(RepaymentForm repaymentForm) {
+    public PageInfo<RepaymentModel> getRepaymentOrderByRepaymentForm(RepaymentForm repaymentForm,String searchKey) {
         // List<RepaymentModel> repaymentModels = repaymentMapper.getOrderRepaymentModelListByRepaymentForm(repaymentForm);
-
         List<RepaymentModel> repaymentModelList1 = repaymentMapper.getOrderCreditInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList2 = repaymentMapper.getOrderRedPackageInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList3 = repaymentMapper.getOrderVipInfoByRepaymentForm(repaymentForm);
@@ -188,8 +191,10 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
         for (Map.Entry<String, RepaymentModel> RepaymentModelEntry : entrySet) {
             repaymentModels.add(RepaymentModelEntry.getValue());
         }
-
-        return repaymentModels;
+        System.err.println("缓存里没有"+repaymentForm+",所以这边没有走缓存，从数据库拿数据");
+        PageInfo<RepaymentModel> pageInfo =new PageInfo<>(repaymentModels);
+        return pageInfo;
+//        return repaymentModels;
     }
 
 }

@@ -82,140 +82,14 @@ public class RepaymentController extends BaseController {
                 repaymentForm.setUserId(userId);
             }
             // 查询还款信息
-            PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,UserId);
+            List<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,UserId);
             // 查询参数保存到session，方便用于导出数据
             request.getSession().setAttribute( "repaymentForm", repaymentForm);
 
             // 统计用户资产信息
             List<UserCapitalInfoModel> userCapitalInfoModels = new ArrayList<>();
-            if (repaymentModels.getList() != null && repaymentModels.getList().size() > 0) {
-                // 查询用户资产信息
-                UserCapitalInfoModel userCapitalInfoModel = userMainP2PReadMapper.selectUserCapitalByUserId(repaymentModels.getList().get(0).getUserId());
-
-                // 计算债权计划本金总额
-                BigDecimal totalCredPlanPrincipal = new BigDecimal(0);
-                // 计算债权实收本金总额
-                BigDecimal totalCredRealPrincipal = new BigDecimal(0);
-                // 计算债权计划利息总额
-                BigDecimal totalCredPlanInterest = new BigDecimal(0);
-                // 计算债权实收利息总额
-                BigDecimal totalCredRealInterest = new BigDecimal(0);
-                // 计算应收红包总额
-                BigDecimal totalRedPlanAmount = new BigDecimal(0);
-                // 计算实收红包总额
-                BigDecimal totalRedRealAmount = new BigDecimal(0);
-                // 计算应收vip总收益
-                BigDecimal totalVipPlanAmount = new BigDecimal(0);
-                // 计算实收vip总收益
-                BigDecimal totalVipRealAmount = new BigDecimal(0);
-                // 计算应收加息总额
-                BigDecimal totalPfPlanAmount = new BigDecimal(0);
-                // 计算实收加息总额
-                BigDecimal totalPfRealAmount = new BigDecimal(0);
-                for (RepaymentModel repaymentModel : repaymentModels.getList()) {
-                    totalCredPlanPrincipal = totalCredPlanPrincipal.add(repaymentModel.getCredPlanPrincipal());
-                    totalCredRealPrincipal = totalCredRealPrincipal.add(repaymentModel.getCredRealPrincipal());
-                    totalCredPlanInterest = totalCredPlanInterest.add(repaymentModel.getCredPlanInterest());
-                    totalCredRealInterest = totalCredRealInterest.add(repaymentModel.getCredRealInterest());
-                    if(repaymentModel.getRedPlanAmount() != null){
-                        totalRedPlanAmount = totalRedPlanAmount.add(repaymentModel.getRedPlanAmount());
-                    }
-                    if(repaymentModel.getRedRealAmount() != null){
-                        totalRedRealAmount = totalRedRealAmount.add(repaymentModel.getRedRealAmount());
-                    }
-                    if(repaymentModel.getVipPlanAmount() != null){
-                        totalVipPlanAmount = totalVipPlanAmount.add(repaymentModel.getVipPlanAmount());
-                    }
-                    if(repaymentModel.getVipRealAmount() != null){
-                        totalVipRealAmount = totalVipRealAmount.add(repaymentModel.getVipRealAmount());
-                    }
-                    if(repaymentModel.getPfPlanAmount() != null){
-                        totalPfPlanAmount = totalPfPlanAmount.add(repaymentModel.getPfPlanAmount());
-                    }
-                    if(repaymentModel.getPfRealAmount() != null){
-                        totalPfRealAmount = totalPfRealAmount.add(repaymentModel.getPfRealAmount());
-                    }
-                }
-                userCapitalInfoModel.setTotalCredPlanPrincipal(totalCredPlanPrincipal);
-                userCapitalInfoModel.setTotalCredRealPrincipal(totalCredRealPrincipal);
-                userCapitalInfoModel.setTotalCredPlanInterest(totalCredPlanInterest);
-                userCapitalInfoModel.setTotalCredRealInterest(totalCredRealInterest);
-                userCapitalInfoModel.setTotalRedPlanAmount(totalRedPlanAmount);
-                userCapitalInfoModel.setTotalRedRealAmount(totalRedRealAmount);
-                userCapitalInfoModel.setTotalVipPlanAmount(totalVipPlanAmount);
-                userCapitalInfoModel.setTotalVipRealAmount(totalVipRealAmount);
-                userCapitalInfoModel.setTotalPfPlanAmount(totalPfPlanAmount);
-                userCapitalInfoModel.setTotalPfRealAmount(totalPfRealAmount);
-
-                // 计算总资产
-                BigDecimal totalAssets = userCapitalInfoModel.getCash().add(userCapitalInfoModel.getFrozenWithDrawCash()).add(totalCredPlanPrincipal)
-                        .add(totalCredPlanInterest).add(totalRedPlanAmount).add(totalVipPlanAmount).add(totalPfPlanAmount);
-                userCapitalInfoModel.setTotalAssets(totalAssets);
-                userCapitalInfoModels.add(userCapitalInfoModel);
-            }
-
-//            PageRestModel pageRestModel = new PageRestModel();
-//
-//
-//            PageRestModel pageRestModel2 = new PageRestModel(
-//                    draw,
-//                    new Long(userCapitalInfoModels.size() + ""),
-//                    new Long(userCapitalInfoModels.size() + ""),
-//                    userCapitalInfoModels
-//            );
-            PageBeanModel pageRestModel=new PageBeanModel();
-            pageRestModel.setData(repaymentModels.getList());
-            pageRestModel.setPage(repaymentModels.getPageNum());
-            pageRestModel.setPageSize(repaymentModels.getPageSize());
-            pageRestModel.setTotalCount(repaymentModels.getTotal());
-            pageRestModel.setTotalPage(repaymentModels.getPages());
-
-            PageBeanModel pageBeanModel2=new PageBeanModel();
-            pageBeanModel2.setData(userCapitalInfoModels);
-
-            PageBeanModel[] pageBeanModels = new PageBeanModel[2];
-
-            pageBeanModels[0] = pageRestModel;
-            pageBeanModels[1] = pageBeanModel2;
-
-            return this.success(pageBeanModels);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
-        }
-    }
-
-    /**
-     * 根据手机号、用户名、还款日期组合条件查询订单还款信息
-     *
-     * @param repaymentForm
-     * @return
-     */
-    @PostMapping("/service/repaymentOrder")
-    @ResponseBody
-    public RestModel repaymentOrderSearch(RepaymentForm repaymentForm,String draw, HttpServletRequest request,String iframeId) {
-        try {
-
-            // 手机号和orderId都为空
-            boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getMobile());
-            // 开始时间大于结束时间
-            boolean timeInterval = !StringUtils.isEmpty(repaymentForm.getStartTime()) && !StringUtils.isEmpty(repaymentForm.getEndTime()) && (repaymentForm.getEndTime() < repaymentForm.getStartTime());
-            // 用户ID与订单ID都为空或者开始时间大于结束时间则直接返回参数错误
-            if (isAllEmpty || timeInterval) {
-                return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
-            }
-            if (!StringUtils.isEmpty(repaymentForm.getMobile())) {
-                Long userId = userMainP2PReadMapper.selectUserIdByMobile(repaymentForm.getMobile());
-                repaymentForm.setUserId(userId);
-            }
-            // 查询还款信息
-            List<RepaymentModel> repaymentModels = repaymentService.getRepaymentOrderByRepaymentForm(repaymentForm);
-            // 查询参数保存到session，方便用于导出数据
-            request.getSession().setAttribute(iframeId + ":repaymentOrderForm", repaymentForm);
-
-            // 统计用户资产信息
-            List<UserCapitalInfoModel> userCapitalInfoModels = new ArrayList<>();
             if (repaymentModels != null && repaymentModels.size() > 0) {
+                // 查询用户资产信息
                 UserCapitalInfoModel userCapitalInfoModel = userMainP2PReadMapper.selectUserCapitalByUserId(repaymentModels.get(0).getUserId());
 
                 // 计算债权计划本金总额
@@ -280,23 +154,186 @@ public class RepaymentController extends BaseController {
                 userCapitalInfoModels.add(userCapitalInfoModel);
             }
 
-            PageRestModel pageRestModel = new PageRestModel(
-                    draw,
-                    new Long(repaymentModels.size() + ""),
-                    new Long(repaymentModels.size() + ""),
-                    repaymentModels
-            );
-            PageRestModel pageRestModel2 = new PageRestModel(
-                    draw,
-                    new Long(repaymentModels.size() + ""),
-                    new Long(repaymentModels.size() + ""),
-                    userCapitalInfoModels
-            );
-            PageRestModel[] pageRestModels = new PageRestModel[2];
-            pageRestModels[0] = pageRestModel;
-            pageRestModels[1] = pageRestModel2;
+//            PageRestModel pageRestModel = new PageRestModel();
+//
+//
+//            PageRestModel pageRestModel2 = new PageRestModel(
+//                    draw,
+//                    new Long(userCapitalInfoModels.size() + ""),
+//                    new Long(userCapitalInfoModels.size() + ""),
+//                    userCapitalInfoModels
+//            );
+            List<RepaymentModel> repaymentModelList = new ArrayList<RepaymentModel>();
+            Integer start = (repaymentForm.getPageNumber()-1)*repaymentForm.getPageSize();
+            Integer end = repaymentForm.getPageNumber()*repaymentForm.getPageSize();
+            if(repaymentModels.size() < repaymentForm.getPageSize()){
+                repaymentModelList = repaymentModels;
+            }else if(end > repaymentModels.size()){
+                repaymentModelList = repaymentModels.subList(start,repaymentModels.size());
+            }else {
+                repaymentModelList = repaymentModels.subList(start,end);
 
-            return this.success(pageRestModels);
+            }
+            PageBeanModel pageBeanModel=new PageBeanModel();
+            pageBeanModel.setData(repaymentModelList);
+            pageBeanModel.setPage(repaymentForm.getPageNumber());
+            pageBeanModel.setPageSize(repaymentForm.getPageSize());
+            pageBeanModel.setTotalCount(Long.valueOf(repaymentModels.size()));
+            pageBeanModel.setTotalPage(repaymentModels.size()%repaymentForm.getPageSize());
+
+            PageBeanModel pageBeanModel2=new PageBeanModel();
+            pageBeanModel2.setData(userCapitalInfoModels);
+
+            PageBeanModel[] pageBeanModels = new PageBeanModel[2];
+
+            pageBeanModels[0] = pageBeanModel;
+            pageBeanModels[1] = pageBeanModel2;
+
+            return this.success(pageBeanModels);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
+    }
+
+    /**
+     * 根据手机号、用户名、还款日期组合条件查询订单还款信息
+     *
+     * @param repaymentForm
+     * @return
+     */
+    @PostMapping("/service/repaymentOrder")
+    @ResponseBody
+    public RestModel repaymentOrderSearch(RepaymentForm repaymentForm, String draw, HttpServletRequest request,String iframeId) {
+        try {
+            // 手机号和orderId都为空
+            boolean isAllEmpty = StringUtils.isEmpty(repaymentForm.getOrderId()) && StringUtils.isEmpty(repaymentForm.getMobile());
+            // 开始时间大于结束时间
+            boolean timeInterval = !StringUtils.isEmpty(repaymentForm.getStartTime()) && !StringUtils.isEmpty(repaymentForm.getEndTime()) && (repaymentForm.getEndTime() < repaymentForm.getStartTime());
+            // 用户ID与订单ID都为空或者开始时间大于结束时间则直接返回参数错误
+            if (isAllEmpty || timeInterval) {
+                return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+            }
+            if (!StringUtils.isEmpty(repaymentForm.getMobile())) {
+                Long userId = userMainP2PReadMapper.selectUserIdByMobile(repaymentForm.getMobile());
+                repaymentForm.setUserId(userId);
+            }
+            String searchKey = ""+repaymentForm.getMobile()+repaymentForm.getOrderId()+repaymentForm.getStartTime()+repaymentForm.getEndTime();
+            // 查询还款信息
+            PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentOrderByRepaymentForm(repaymentForm,searchKey);
+            // 查询参数保存到session，方便用于导出数据
+            request.getSession().setAttribute(iframeId + ":repaymentOrderForm", repaymentForm);
+
+            // 统计用户资产信息
+            List<UserCapitalInfoModel> userCapitalInfoModels = new ArrayList<>();
+            if (repaymentModels.getList() != null && repaymentModels.getList().size() > 0) {
+                UserCapitalInfoModel userCapitalInfoModel = userMainP2PReadMapper.selectUserCapitalByUserId(repaymentModels.getList().get(0).getUserId());
+
+                // 计算债权计划本金总额
+                BigDecimal totalCredPlanPrincipal = new BigDecimal(0);
+                // 计算债权实收本金总额
+                BigDecimal totalCredRealPrincipal = new BigDecimal(0);
+                // 计算债权计划利息总额
+                BigDecimal totalCredPlanInterest = new BigDecimal(0);
+                // 计算债权实收利息总额
+                BigDecimal totalCredRealInterest = new BigDecimal(0);
+                // 计算应收红包总额
+                BigDecimal totalRedPlanAmount = new BigDecimal(0);
+                // 计算实收红包总额
+                BigDecimal totalRedRealAmount = new BigDecimal(0);
+                // 计算应收vip总收益
+                BigDecimal totalVipPlanAmount = new BigDecimal(0);
+                // 计算实收vip总收益
+                BigDecimal totalVipRealAmount = new BigDecimal(0);
+                // 计算应收加息总额
+                BigDecimal totalPfPlanAmount = new BigDecimal(0);
+                // 计算实收加息总额
+                BigDecimal totalPfRealAmount = new BigDecimal(0);
+                for (RepaymentModel repaymentModel : repaymentModels.getList()) {
+                    totalCredPlanPrincipal = totalCredPlanPrincipal.add(repaymentModel.getCredPlanPrincipal());
+                    totalCredRealPrincipal = totalCredRealPrincipal.add(repaymentModel.getCredRealPrincipal());
+                    totalCredPlanInterest = totalCredPlanInterest.add(repaymentModel.getCredPlanInterest());
+                    totalCredRealInterest = totalCredRealInterest.add(repaymentModel.getCredRealInterest());
+                    if(repaymentModel.getRedPlanAmount() != null){
+                        totalRedPlanAmount = totalRedPlanAmount.add(repaymentModel.getRedPlanAmount());
+                    }
+                    if(repaymentModel.getRedRealAmount() != null){
+                        totalRedRealAmount = totalRedRealAmount.add(repaymentModel.getRedRealAmount());
+                    }
+                    if(repaymentModel.getVipPlanAmount() != null){
+                        totalVipPlanAmount = totalVipPlanAmount.add(repaymentModel.getVipPlanAmount());
+                    }
+                    if(repaymentModel.getVipRealAmount() != null){
+                        totalVipRealAmount = totalVipRealAmount.add(repaymentModel.getVipRealAmount());
+                    }
+                    if(repaymentModel.getPfPlanAmount() != null){
+                        totalPfPlanAmount = totalPfPlanAmount.add(repaymentModel.getPfPlanAmount());
+                    }
+                    if(repaymentModel.getPfRealAmount() != null){
+                        totalPfRealAmount = totalPfRealAmount.add(repaymentModel.getPfRealAmount());
+                    }
+                }
+                userCapitalInfoModel.setTotalCredPlanPrincipal(totalCredPlanPrincipal);
+                userCapitalInfoModel.setTotalCredRealPrincipal(totalCredRealPrincipal);
+                userCapitalInfoModel.setTotalCredPlanInterest(totalCredPlanInterest);
+                userCapitalInfoModel.setTotalCredRealInterest(totalCredRealInterest);
+                userCapitalInfoModel.setTotalRedPlanAmount(totalRedPlanAmount);
+                userCapitalInfoModel.setTotalRedRealAmount(totalRedRealAmount);
+                userCapitalInfoModel.setTotalVipPlanAmount(totalVipPlanAmount);
+                userCapitalInfoModel.setTotalVipRealAmount(totalVipRealAmount);
+                userCapitalInfoModel.setTotalPfPlanAmount(totalPfPlanAmount);
+                userCapitalInfoModel.setTotalPfRealAmount(totalPfRealAmount);
+
+                // 计算总资产
+                BigDecimal totalAssets = userCapitalInfoModel.getCash().add(userCapitalInfoModel.getFrozenWithDrawCash()).add(totalCredPlanPrincipal)
+                        .add(totalCredPlanInterest).add(totalRedPlanAmount).add(totalVipPlanAmount).add(totalPfPlanAmount);
+                userCapitalInfoModel.setTotalAssets(totalAssets);
+                userCapitalInfoModels.add(userCapitalInfoModel);
+            }
+
+//            PageRestModel pageRestModel = new PageRestModel(
+//                    draw,
+//                    new Long(repaymentModels.getList().size() + ""),
+//                    new Long(repaymentModels.getList().size() + ""),
+//                    repaymentModels
+//            );
+//            PageRestModel pageRestModel2 = new PageRestModel(
+//                    draw,
+//                    new Long(repaymentModels.getList().size() + ""),
+//                    new Long(repaymentModels.getList().size() + ""),
+//                    userCapitalInfoModels
+//            );
+//            PageRestModel[] pageRestModels = new PageRestModel[2];
+//            pageRestModels[0] = pageRestModel;
+//            pageRestModels[1] = pageRestModel2;
+            PageBeanModel pageRestModel=new PageBeanModel();
+            List<RepaymentModel> repaymentModelList = new ArrayList<RepaymentModel>();
+            Integer start = (repaymentForm.getPageNumber()-1)*repaymentForm.getPageSize();
+            Integer end = repaymentForm.getPageNumber()*repaymentForm.getPageSize();
+            if(repaymentModels.getList().size() < repaymentForm.getPageSize()){
+                repaymentModelList = repaymentModels.getList();
+            }else if(end > repaymentModels.getList().size()){
+                repaymentModelList = repaymentModels.getList().subList(start,repaymentModels.getList().size());
+            }else {
+                repaymentModelList = repaymentModels.getList().subList(start,end);
+
+            }
+
+            pageRestModel.setData(repaymentModelList);
+            pageRestModel.setPage(repaymentModels.getPageNum());
+            pageRestModel.setPageSize(repaymentForm.getPageSize());
+            pageRestModel.setTotalCount(repaymentModels.getTotal());
+            pageRestModel.setTotalPage(repaymentModels.getPages());
+
+            PageBeanModel pageBeanModel2=new PageBeanModel();
+            pageBeanModel2.setData(userCapitalInfoModels);
+
+            PageBeanModel[] pageBeanModels = new PageBeanModel[2];
+
+            pageBeanModels[0] = pageRestModel;
+            pageBeanModels[1] = pageBeanModel2;
+
+            return this.success(pageBeanModels);
         } catch (Exception e) {
             e.printStackTrace();
             return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
@@ -305,22 +342,39 @@ public class RepaymentController extends BaseController {
 
     @PostMapping("/service/repaymentDetail")
     @ResponseBody
-    public RestModel searchRepaymentDetail(HttpServletRequest request,String draw,String iframeId){
+    public RestModel searchRepaymentDetail(RepaymentForm repaymentForm,HttpServletRequest request,String draw,String iframeId){
         try {
             // 从session中获取查询参数
-            RepaymentForm repaymentForm = (RepaymentForm) request.getSession().getAttribute(iframeId + ":repaymentOrderForm");
+//            RepaymentForm repaymentForm = (RepaymentForm) request.getSession().getAttribute(iframeId + ":repaymentOrderForm");
             if(repaymentForm.getOrderId() == null || repaymentForm.getOrderId() == 0L){
                 return this.excpRestModel(MessageKeyEnum.ORDERID_EMPTY);
             }
+            String searchKey = ""+repaymentForm.getMobile()+repaymentForm.getOrderId()+repaymentForm.getStartTime()+repaymentForm.getEndTime();
             // 查询债权还款明细
-            List<RepaymentModel> repaymentModels = repaymentService.getRepaymentDetailByRepaymentForm(repaymentForm);
+            PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentDetailByRepaymentForm(repaymentForm,searchKey);
+            List<RepaymentModel> repaymentModelList = new ArrayList<RepaymentModel>();
+            Integer start = (repaymentForm.getPageNumber()-1)*repaymentForm.getPageSize();
+            Integer end = repaymentForm.getPageNumber()*repaymentForm.getPageSize();
+            if(repaymentModels.getList().size() < repaymentForm.getPageSize()){
+                repaymentModelList = repaymentModels.getList();
+            }else if(end > repaymentModels.getList().size()){
+                repaymentModelList = repaymentModels.getList().subList(start,repaymentModels.getList().size());
+            }else {
+                repaymentModelList = repaymentModels.getList().subList(start,end);
 
-            PageRestModel pageRestModel = new PageRestModel(
-                    draw,
-                    new Long(repaymentModels.size() + ""),
-                    new Long(repaymentModels.size() + ""),
-                    repaymentModels
-            );
+            }
+            PageBeanModel pageRestModel=new PageBeanModel();
+            pageRestModel.setData(repaymentModelList);
+            pageRestModel.setPage(repaymentModels.getPageNum());
+            pageRestModel.setPageSize(repaymentForm.getPageSize());
+            pageRestModel.setTotalCount(repaymentModels.getTotal());
+            pageRestModel.setTotalPage(repaymentModels.getPages());
+//            PageRestModel pageRestModel = new PageRestModel(
+//                    draw,
+//                    new Long(repaymentModels.size() + ""),
+//                    new Long(repaymentModels.size() + ""),
+//                    repaymentModels
+//            );
             return this.success(pageRestModel);
         } catch (Exception e) {
             e.printStackTrace();
@@ -332,9 +386,25 @@ public class RepaymentController extends BaseController {
     public void exportRepayment(HttpServletRequest request, HttpServletResponse response,String iframeId) throws Exception {
         // 从session中获取查询参数
         RepaymentForm repaymentForm = (RepaymentForm) request.getSession().getAttribute( "repaymentForm");
+        //拼接ecache的key
+        String telephone=repaymentForm.getMobile();
+        String orderId=repaymentForm.getOrderId().toString();
+        String credidId=repaymentForm.getCreditId().toString();
+        SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");
+        Long time=repaymentForm.getStartTime();
+        Long time1=repaymentForm.getEndTime();
+        String d = format.format(time);
+        String b=format.format(time1);
+        Date date2=format.parse(d);
+        Date date1=format.parse(b);
+        String bizStatus="";
+        if(repaymentForm.getBizStatus()!=null) {
+            bizStatus = repaymentForm.getBizStatus().toString();
+        }
+        String UserId=telephone+"/"+orderId+"/"+credidId+"/"+date2+"/"+date1+"/"+bizStatus;
         // 从数据库中查询要导出的数据
-        PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,null);
-        if (repaymentModels.getList() != null && repaymentModels.getList().size() > 0) {
+        List<RepaymentModel> repaymentModels = repaymentService.getRepaymentModelByRepaymentForm(repaymentForm,UserId);
+        if (repaymentModels != null && repaymentModels.size() > 0) {
             // 生成Excel文件
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = workbook.createSheet("债权还款信息");
@@ -381,33 +451,33 @@ public class RepaymentController extends BaseController {
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-            for (int i = 0; i < repaymentModels.getList().size(); i++) {
+            for (int i = 0; i < repaymentModels.size(); i++) {
                 XSSFRow dateRow = sheet.createRow(i + 1);
                 XSSFCell dateCell1 = dateRow.createCell(0);
-                dateCell1.setCellValue(repaymentModels.getList().get(i).getCreditId());
+                dateCell1.setCellValue(repaymentModels.get(i).getCreditId());
                 XSSFCell dateCell2 = dateRow.createCell(1);
-                dateCell2.setCellValue(repaymentModels.getList().get(i).getOrderId());
+                dateCell2.setCellValue(repaymentModels.get(i).getOrderId());
                 XSSFCell dateCell3 = dateRow.createCell(2);
-                dateCell3.setCellValue(repaymentModels.getList().get(i).getUserId());
+                dateCell3.setCellValue(repaymentModels.get(i).getUserId());
                 XSSFCell dateCell4 = dateRow.createCell(3);
-                Date date = new Date(repaymentModels.getList().get(i).getPlanDate());
+                Date date = new Date(repaymentModels.get(i).getPlanDate());
                 dateCell4.setCellValue(dateFormat.format(date));
                 XSSFCell dateCell5 = dateRow.createCell(4);
-                if(repaymentModels.getList().get(i).getBizStatus() != null){
-                    if(repaymentModels.getList().get(i).getBizStatus() == 100){
+                if(repaymentModels.get(i).getBizStatus() != null){
+                    if(repaymentModels.get(i).getBizStatus() == 100){
                         dateCell5.setCellValue("未还");
-                    }else if(repaymentModels.getList().get(i).getBizStatus() == 200){
+                    }else if(repaymentModels.get(i).getBizStatus() == 200){
                         dateCell5.setCellValue("已还");
                     }
                 }
                 XSSFCell dateCell6 = dateRow.createCell(5);
-                dateCell6.setCellValue(repaymentModels.getList().get(i).getCredPlanPrincipal().doubleValue());
+                dateCell6.setCellValue(repaymentModels.get(i).getCredPlanPrincipal().doubleValue());
                 XSSFCell dateCell7 = dateRow.createCell(6);
-                dateCell7.setCellValue(repaymentModels.getList().get(i).getCredRealPrincipal().doubleValue());
+                dateCell7.setCellValue(repaymentModels.get(i).getCredRealPrincipal().doubleValue());
                 XSSFCell dateCell8 = dateRow.createCell(7);
-                dateCell8.setCellValue(repaymentModels.getList().get(i).getCredPlanInterest().doubleValue());
+                dateCell8.setCellValue(repaymentModels.get(i).getCredPlanInterest().doubleValue());
                 XSSFCell dateCell9 = dateRow.createCell(8);
-                dateCell9.setCellValue(repaymentModels.getList().get(i).getCredRealInterest().doubleValue());
+                dateCell9.setCellValue(repaymentModels.get(i).getCredRealInterest().doubleValue());
 
 
                 /*XSSFCell dateCell10 = dateRow.createCell(9);
@@ -417,14 +487,14 @@ public class RepaymentController extends BaseController {
                     dateCell10.setCellValue(parse.get("model_name").toString());
                 }*/
                 XSSFCell dateCell10 = dateRow.createCell(9);
-                if(repaymentModels.getList().get(i).getRedPlanAmount() != null){
-                    dateCell10.setCellValue(repaymentModels.getList().get(i).getRedPlanAmount().doubleValue());
+                if(repaymentModels.get(i).getRedPlanAmount() != null){
+                    dateCell10.setCellValue(repaymentModels.get(i).getRedPlanAmount().doubleValue());
                 }else {
                     dateCell10.setCellValue(0);
                 }
                 XSSFCell dateCell11 = dateRow.createCell(10);
-                if(repaymentModels.getList().get(i).getRedRealAmount() != null){
-                    dateCell11.setCellValue(repaymentModels.getList().get(i).getRedRealAmount().doubleValue());
+                if(repaymentModels.get(i).getRedRealAmount() != null){
+                    dateCell11.setCellValue(repaymentModels.get(i).getRedRealAmount().doubleValue());
                 }else {
                     dateCell11.setCellValue(0);
                 }
@@ -439,50 +509,50 @@ public class RepaymentController extends BaseController {
 
 
                 XSSFCell dateCell12 = dateRow.createCell(11);
-                if(repaymentModels.getList().get(i).getVipRate() != null){
-                    dateCell12.setCellValue(repaymentModels.getList().get(i).getVipRate().doubleValue());
+                if(repaymentModels.get(i).getVipRate() != null){
+                    dateCell12.setCellValue(repaymentModels.get(i).getVipRate().doubleValue());
                 }
                 XSSFCell dateCell13 = dateRow.createCell(12);
-                if(repaymentModels.getList().get(i).getVipPlanAmount() != null){
-                    dateCell13.setCellValue(repaymentModels.getList().get(i).getVipPlanAmount().doubleValue());
+                if(repaymentModels.get(i).getVipPlanAmount() != null){
+                    dateCell13.setCellValue(repaymentModels.get(i).getVipPlanAmount().doubleValue());
                 }else {
                     dateCell13.setCellValue(0);
                 }
                 XSSFCell dateCell14 = dateRow.createCell(13);
-                if(repaymentModels.getList().get(i).getVipRealAmount() != null){
-                    dateCell14.setCellValue(repaymentModels.getList().get(i).getVipRealAmount().doubleValue());
+                if(repaymentModels.get(i).getVipRealAmount() != null){
+                    dateCell14.setCellValue(repaymentModels.get(i).getVipRealAmount().doubleValue());
                 }else {
                     dateCell14.setCellValue(0);
                 }
                 XSSFCell dateCell15 = dateRow.createCell(14);
-                if(repaymentModels.getList().get(i).getVipTermNum() != null){
-                    dateCell15.setCellValue(repaymentModels.getList().get(i).getVipTermNum());
+                if(repaymentModels.get(i).getVipTermNum() != null){
+                    dateCell15.setCellValue(repaymentModels.get(i).getVipTermNum());
                 }
 
 
                 XSSFCell dateCell16 = dateRow.createCell(15);
-                if(repaymentModels.getList().get(i).getPfPlanAmount() != null){
-                    dateCell16.setCellValue(repaymentModels.getList().get(i).getPfPlanAmount().doubleValue());
+                if(repaymentModels.get(i).getPfPlanAmount() != null){
+                    dateCell16.setCellValue(repaymentModels.get(i).getPfPlanAmount().doubleValue());
                 }else {
                     dateCell16.setCellValue(0);
                 }
                 XSSFCell dateCell17 = dateRow.createCell(16);
-                if(repaymentModels.getList().get(i).getPfRealAmount() != null){
-                    dateCell17.setCellValue(repaymentModels.getList().get(i).getPfRealAmount().doubleValue());
+                if(repaymentModels.get(i).getPfRealAmount() != null){
+                    dateCell17.setCellValue(repaymentModels.get(i).getPfRealAmount().doubleValue());
                 }else {
                     dateCell17.setCellValue(0);
                 }
                 XSSFCell dateCell18 = dateRow.createCell(17);
-                if(repaymentModels.getList().get(i).getPfTermNum() != null){
-                    dateCell18.setCellValue(repaymentModels.getList().get(i).getPfTermNum());
+                if(repaymentModels.get(i).getPfTermNum() != null){
+                    dateCell18.setCellValue(repaymentModels.get(i).getPfTermNum());
                 }
                 XSSFCell dateCell19 = dateRow.createCell(18);
-                if(repaymentModels.getList().get(i).getPfType() != null){
-                    if(repaymentModels.getList().get(i).getPfType() == 100){
+                if(repaymentModels.get(i).getPfType() != null){
+                    if(repaymentModels.get(i).getPfType() == 100){
                         dateCell19.setCellValue("首购加息");
-                    }else if(repaymentModels.getList().get(i).getPfType() == 200){
+                    }else if(repaymentModels.get(i).getPfType() == 200){
                         dateCell19.setCellValue("限时加息");
-                    }else if(repaymentModels.getList().get(i).getPfType() == 300){
+                    }else if(repaymentModels.get(i).getPfType() == 300){
                         dateCell19.setCellValue("项目加息");
                     }
                 }
@@ -501,9 +571,10 @@ public class RepaymentController extends BaseController {
     public void exportRepaymentOrder(HttpServletRequest request, HttpServletResponse response,String iframeId) throws Exception {
         // 从session中获取查询参数
         RepaymentForm repaymentForm = (RepaymentForm) request.getSession().getAttribute(iframeId + ":repaymentOrderForm");
+        String searchKey = ""+repaymentForm.getMobile()+repaymentForm.getOrderId()+repaymentForm.getStartTime()+repaymentForm.getEndTime();
         // 从数据库中查询要导出的数据
-        List<RepaymentModel> repaymentModels = repaymentService.getRepaymentOrderByRepaymentForm(repaymentForm);
-        if (repaymentModels != null && repaymentModels.size() > 0) {
+        PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentOrderByRepaymentForm(repaymentForm,searchKey);
+        if (repaymentModels.getList() != null && repaymentModels.getList().size() > 0) {
             // 生成Excel文件
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = workbook.createSheet("订单还款信息");
@@ -540,86 +611,86 @@ public class RepaymentController extends BaseController {
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-            for (int i = 0; i < repaymentModels.size(); i++) {
+            for (int i = 0; i < repaymentModels.getList().size(); i++) {
                 XSSFRow dateRow = sheet.createRow(i + 1);
                 XSSFCell dateCell1 = dateRow.createCell(0);
-                dateCell1.setCellValue(repaymentModels.get(i).getOrderId());
+                dateCell1.setCellValue(repaymentModels.getList().get(i).getOrderId());
                 XSSFCell dateCell2 = dateRow.createCell(1);
-                dateCell2.setCellValue(repaymentModels.get(i).getUserId());
+                dateCell2.setCellValue(repaymentModels.getList().get(i).getUserId());
                 XSSFCell dateCell3 = dateRow.createCell(2);
-                Date date = new Date(repaymentModels.get(i).getPlanDate());
+                Date date = new Date(repaymentModels.getList().get(i).getPlanDate());
                 dateCell3.setCellValue(dateFormat.format(date));
                 XSSFCell dateCell4 = dateRow.createCell(3);
-                if(repaymentModels.get(i).getBizStatus() != null){
-                    if(repaymentModels.get(i).getBizStatus() == 100){
+                if(repaymentModels.getList().get(i).getBizStatus() != null){
+                    if(repaymentModels.getList().get(i).getBizStatus() == 100){
                         dateCell4.setCellValue("未还");
-                    }else if(repaymentModels.get(i).getBizStatus() == 200){
+                    }else if(repaymentModels.getList().get(i).getBizStatus() == 200){
                         dateCell4.setCellValue("已还");
                     }
                 }
                 XSSFCell dateCell5 = dateRow.createCell(4);
-                if(repaymentModels.get(i).getCredPlanPrincipal() != null){
-                    dateCell5.setCellValue(repaymentModels.get(i).getCredPlanPrincipal().doubleValue());
+                if(repaymentModels.getList().get(i).getCredPlanPrincipal() != null){
+                    dateCell5.setCellValue(repaymentModels.getList().get(i).getCredPlanPrincipal().doubleValue());
                 }else {
                     dateCell5.setCellValue(0);
                 }
                 XSSFCell dateCell6 = dateRow.createCell(5);
-                if(repaymentModels.get(i).getCredRealPrincipal() != null){
-                    dateCell6.setCellValue(repaymentModels.get(i).getCredRealPrincipal().doubleValue());
+                if(repaymentModels.getList().get(i).getCredRealPrincipal() != null){
+                    dateCell6.setCellValue(repaymentModels.getList().get(i).getCredRealPrincipal().doubleValue());
                 }else {
                     dateCell6.setCellValue(0);
                 }
                 XSSFCell dateCell7 = dateRow.createCell(6);
-                if(repaymentModels.get(i).getCredPlanInterest() != null){
-                    dateCell7.setCellValue(repaymentModels.get(i).getCredPlanInterest().doubleValue());
+                if(repaymentModels.getList().get(i).getCredPlanInterest() != null){
+                    dateCell7.setCellValue(repaymentModels.getList().get(i).getCredPlanInterest().doubleValue());
                 }else {
                     dateCell7.setCellValue(0);
                 }
                 XSSFCell dateCell8 = dateRow.createCell(7);
-                if(repaymentModels.get(i).getCredRealInterest() != null){
-                    dateCell8.setCellValue(repaymentModels.get(i).getCredRealInterest().doubleValue());
+                if(repaymentModels.getList().get(i).getCredRealInterest() != null){
+                    dateCell8.setCellValue(repaymentModels.getList().get(i).getCredRealInterest().doubleValue());
                 }else {
                     dateCell8.setCellValue(0);
                 }
 
 
                 XSSFCell dateCell9 = dateRow.createCell(8);
-                if(repaymentModels.get(i).getRedPlanAmount() != null){
-                    dateCell9.setCellValue(repaymentModels.get(i).getRedPlanAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getRedPlanAmount() != null){
+                    dateCell9.setCellValue(repaymentModels.getList().get(i).getRedPlanAmount().doubleValue());
                 }else {
                     dateCell9.setCellValue(0);
                 }
                 XSSFCell dateCell10 = dateRow.createCell(9);
-                if(repaymentModels.get(i).getRedRealAmount() != null){
-                    dateCell10.setCellValue(repaymentModels.get(i).getRedRealAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getRedRealAmount() != null){
+                    dateCell10.setCellValue(repaymentModels.getList().get(i).getRedRealAmount().doubleValue());
                 }else {
                     dateCell10.setCellValue(0);
                 }
 
 
                 XSSFCell dateCell11 = dateRow.createCell(10);
-                if(repaymentModels.get(i).getVipPlanAmount() != null){
-                    dateCell11.setCellValue(repaymentModels.get(i).getVipPlanAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getVipPlanAmount() != null){
+                    dateCell11.setCellValue(repaymentModels.getList().get(i).getVipPlanAmount().doubleValue());
                 }else {
                     dateCell11.setCellValue(0);
                 }
                 XSSFCell dateCell12 = dateRow.createCell(11);
-                if(repaymentModels.get(i).getVipRealAmount() != null){
-                    dateCell12.setCellValue(repaymentModels.get(i).getVipRealAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getVipRealAmount() != null){
+                    dateCell12.setCellValue(repaymentModels.getList().get(i).getVipRealAmount().doubleValue());
                 }else {
                     dateCell12.setCellValue(0);
                 }
 
 
                 XSSFCell dateCell13 = dateRow.createCell(12);
-                if(repaymentModels.get(i).getPfPlanAmount() != null){
-                    dateCell13.setCellValue(repaymentModels.get(i).getPfPlanAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getPfPlanAmount() != null){
+                    dateCell13.setCellValue(repaymentModels.getList().get(i).getPfPlanAmount().doubleValue());
                 }else {
                     dateCell13.setCellValue(0);
                 }
                 XSSFCell dateCell14 = dateRow.createCell(13);
-                if(repaymentModels.get(i).getPfRealAmount() != null){
-                    dateCell14.setCellValue(repaymentModels.get(i).getPfRealAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getPfRealAmount() != null){
+                    dateCell14.setCellValue(repaymentModels.getList().get(i).getPfRealAmount().doubleValue());
                 }else {
                     dateCell14.setCellValue(0);
                 }
@@ -638,10 +709,11 @@ public class RepaymentController extends BaseController {
     public void exportRepaymentDetail(HttpServletRequest request, HttpServletResponse response,String iframeId) throws Exception{
         // 从session中获取查询参数
         RepaymentForm repaymentForm = (RepaymentForm) request.getSession().getAttribute(iframeId + ":repaymentOrderForm");
+        String searchKey = ""+repaymentForm.getMobile()+repaymentForm.getOrderId()+repaymentForm.getStartTime()+repaymentForm.getEndTime();
         // 从数据库中查询要导出的数据
-        List<RepaymentModel> repaymentModels = repaymentService.getRepaymentDetailByRepaymentForm(repaymentForm);
+        PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentDetailByRepaymentForm(repaymentForm,searchKey);
 
-        if (repaymentModels != null && repaymentModels.size() > 0) {
+        if (repaymentModels.getList() != null && repaymentModels.getList().size() > 0) {
             // 生成Excel文件
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = workbook.createSheet("债权还款明细");
@@ -690,102 +762,102 @@ public class RepaymentController extends BaseController {
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-            for (int i = 0; i < repaymentModels.size(); i++) {
+            for (int i = 0; i < repaymentModels.getList().size(); i++) {
                 XSSFRow dateRow = sheet.createRow(i + 1);
                 XSSFCell dateCell1 = dateRow.createCell(0);
-                dateCell1.setCellValue(repaymentModels.get(i).getCreditId());
+                dateCell1.setCellValue(repaymentModels.getList().get(i).getCreditId());
                 XSSFCell dateCell2 = dateRow.createCell(1);
-                dateCell2.setCellValue(repaymentModels.get(i).getOrderId());
+                dateCell2.setCellValue(repaymentModels.getList().get(i).getOrderId());
                 XSSFCell dateCell3 = dateRow.createCell(2);
-                dateCell3.setCellValue(repaymentModels.get(i).getUserId());
+                dateCell3.setCellValue(repaymentModels.getList().get(i).getUserId());
                 XSSFCell dateCell4 = dateRow.createCell(3);
-                Date date = new Date(repaymentModels.get(i).getPlanDate());
+                Date date = new Date(repaymentModels.getList().get(i).getPlanDate());
                 dateCell4.setCellValue(dateFormat.format(date));
                 XSSFCell dateCell5 = dateRow.createCell(4);
-                if(repaymentModels.get(i).getBizStatus() != null){
-                    if(repaymentModels.get(i).getBizStatus() == 100){
+                if(repaymentModels.getList().get(i).getBizStatus() != null){
+                    if(repaymentModels.getList().get(i).getBizStatus() == 100){
                         dateCell5.setCellValue("未还");
-                    }else if(repaymentModels.get(i).getBizStatus() == 200){
+                    }else if(repaymentModels.getList().get(i).getBizStatus() == 200){
                         dateCell5.setCellValue("已还");
                     }
                 }
                 XSSFCell dateCell6 = dateRow.createCell(5);
-                dateCell6.setCellValue(repaymentModels.get(i).getCredPlanPrincipal().doubleValue());
+                dateCell6.setCellValue(repaymentModels.getList().get(i).getCredPlanPrincipal().doubleValue());
                 XSSFCell dateCell7 = dateRow.createCell(6);
-                dateCell7.setCellValue(repaymentModels.get(i).getCredRealPrincipal().doubleValue());
+                dateCell7.setCellValue(repaymentModels.getList().get(i).getCredRealPrincipal().doubleValue());
                 XSSFCell dateCell8 = dateRow.createCell(7);
-                dateCell8.setCellValue(repaymentModels.get(i).getCredPlanInterest().doubleValue());
+                dateCell8.setCellValue(repaymentModels.getList().get(i).getCredPlanInterest().doubleValue());
                 XSSFCell dateCell9 = dateRow.createCell(8);
-                dateCell9.setCellValue(repaymentModels.get(i).getCredRealInterest().doubleValue());
+                dateCell9.setCellValue(repaymentModels.getList().get(i).getCredRealInterest().doubleValue());
                 XSSFCell dateCell10 = dateRow.createCell(9);
-                dateCell10.setCellValue(repaymentModels.get(i).getCredTermNum()+"期");
+                dateCell10.setCellValue(repaymentModels.getList().get(i).getCredTermNum()+"期");
 
 
                 XSSFCell dateCell11 = dateRow.createCell(10);
-                String redLocalInfo = repaymentModels.get(i).getRedLocalInfo();
+                String redLocalInfo = repaymentModels.getList().get(i).getRedLocalInfo();
                 if (!StringUtils.isEmpty(redLocalInfo)) {
                     Map<String, Object> parse = (Map<String, Object>) JSONObject.parse(redLocalInfo);
                     dateCell11.setCellValue(parse.get("model_name").toString());
                 }
                 XSSFCell dateCell12 = dateRow.createCell(11);
-                if(repaymentModels.get(i).getRedPlanAmount() != null){
-                    dateCell12.setCellValue(repaymentModels.get(i).getRedPlanAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getRedPlanAmount() != null){
+                    dateCell12.setCellValue(repaymentModels.getList().get(i).getRedPlanAmount().doubleValue());
                 }else {
                     dateCell12.setCellValue(0);
                 }
                 XSSFCell dateCell13 = dateRow.createCell(12);
-                if(repaymentModels.get(i).getRedRealAmount() != null){
-                    dateCell13.setCellValue(repaymentModels.get(i).getRedRealAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getRedRealAmount() != null){
+                    dateCell13.setCellValue(repaymentModels.getList().get(i).getRedRealAmount().doubleValue());
                 }else {
                     dateCell13.setCellValue(0);
                 }
                 XSSFCell dateCell14 = dateRow.createCell(13);
-                if(repaymentModels.get(i).getRedPackageType() != null){
-                    if(repaymentModels.get(i).getRedPackageType() == 1000){
+                if(repaymentModels.getList().get(i).getRedPackageType() != null){
+                    if(repaymentModels.getList().get(i).getRedPackageType() == 1000){
                         dateCell14.setCellValue("加息红包");
-                    }else if(repaymentModels.get(i).getRedPackageType() == 1010){
+                    }else if(repaymentModels.getList().get(i).getRedPackageType() == 1010){
                         dateCell14.setCellValue("返现红包");
                     }
                 }
 
 
                 XSSFCell dateCell15 = dateRow.createCell(14);
-                if(repaymentModels.get(i).getVipRate() != null){
-                    dateCell15.setCellValue(repaymentModels.get(i).getVipRate().doubleValue());
+                if(repaymentModels.getList().get(i).getVipRate() != null){
+                    dateCell15.setCellValue(repaymentModels.getList().get(i).getVipRate().doubleValue());
                 }
                 XSSFCell dateCell16 = dateRow.createCell(15);
-                if(repaymentModels.get(i).getVipPlanAmount() != null){
-                    dateCell16.setCellValue(repaymentModels.get(i).getVipPlanAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getVipPlanAmount() != null){
+                    dateCell16.setCellValue(repaymentModels.getList().get(i).getVipPlanAmount().doubleValue());
                 }else {
                     dateCell16.setCellValue(0);
                 }
                 XSSFCell dateCell17 = dateRow.createCell(16);
-                if(repaymentModels.get(i).getVipRealAmount() != null){
-                    dateCell17.setCellValue(repaymentModels.get(i).getVipRealAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getVipRealAmount() != null){
+                    dateCell17.setCellValue(repaymentModels.getList().get(i).getVipRealAmount().doubleValue());
                 }else {
                     dateCell17.setCellValue(0);
                 }
 
 
                 XSSFCell dateCell18 = dateRow.createCell(17);
-                if(repaymentModels.get(i).getPfPlanAmount() != null){
-                    dateCell18.setCellValue(repaymentModels.get(i).getPfPlanAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getPfPlanAmount() != null){
+                    dateCell18.setCellValue(repaymentModels.getList().get(i).getPfPlanAmount().doubleValue());
                 }else {
                     dateCell18.setCellValue(0);
                 }
                 XSSFCell dateCell19 = dateRow.createCell(18);
-                if(repaymentModels.get(i).getPfRealAmount() != null){
-                    dateCell19.setCellValue(repaymentModels.get(i).getPfRealAmount().doubleValue());
+                if(repaymentModels.getList().get(i).getPfRealAmount() != null){
+                    dateCell19.setCellValue(repaymentModels.getList().get(i).getPfRealAmount().doubleValue());
                 }else {
                     dateCell19.setCellValue(0);
                 }
                 XSSFCell dateCell20 = dateRow.createCell(19);
-                if(repaymentModels.get(i).getPfType() != null){
-                    if(repaymentModels.get(i).getPfType() == 100){
+                if(repaymentModels.getList().get(i).getPfType() != null){
+                    if(repaymentModels.getList().get(i).getPfType() == 100){
                         dateCell20.setCellValue("首购加息");
-                    }else if(repaymentModels.get(i).getPfType() == 200){
+                    }else if(repaymentModels.getList().get(i).getPfType() == 200){
                         dateCell20.setCellValue("限时加息");
-                    }else if(repaymentModels.get(i).getPfType() == 300){
+                    }else if(repaymentModels.getList().get(i).getPfType() == 300){
                         dateCell20.setCellValue("项目加息");
                     }
                 }

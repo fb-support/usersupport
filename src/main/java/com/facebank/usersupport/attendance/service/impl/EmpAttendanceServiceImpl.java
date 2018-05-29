@@ -30,6 +30,7 @@ public class EmpAttendanceServiceImpl implements IEmpAttendanceService {
     public PageInfo<EmpAttendanceModel> getAttendanceRecordByForm(GetAttendanceForm attendanceForm) {
         PageHelper.startPage(attendanceForm.getPageNumber(),attendanceForm.getPageSize());
         List<EmpAttendanceModel> empAttendanceModels = empAttendanceMapper.selectAttendanceRecordByForm(attendanceForm);
+        System.out.println(empAttendanceModels.size());
         PageInfo<EmpAttendanceModel> pageInfo =new PageInfo<>(empAttendanceModels);
         return pageInfo;
     }
