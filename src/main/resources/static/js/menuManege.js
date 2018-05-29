@@ -6,7 +6,6 @@ function updataDate(){
 
         description: document.getElementById("umenuDescription").value
     }
-    console.log(data);
     $.ajax({
         url:"/menu/updateByPrimaryKey",
         type:"POST",

@@ -9,6 +9,7 @@ import com.facebank.usersupport.service.base.BaseService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -30,14 +31,9 @@ public class RepaymentServiceImpl extends BaseService implements IRepaymentServi
      *
      * @return
      */
+    @Cacheable(value="repaymentCache")
     @Override
     public PageInfo<RepaymentModel> getRepaymentModelByRepaymentForm(RepaymentForm repaymentForm) {
-        /*Integer page = repaymentForm.getStart() / repaymentForm.getLength() + 1;
-        PageHelper.startPage(page, repaymentForm.getLength());
-        ...
-        PageInfo<RepaymentModel> pageInfo=new PageInfo<RepaymentModel>(repaymentModels);*/
-
-        // List<RepaymentModel> repaymentModels = repaymentMapper.getRepaymentModelListByRepaymentForm(repaymentForm);
 
         List<RepaymentModel> repaymentModelList1 = repaymentMapper.getCreditInfoByRepaymentForm(repaymentForm);
         List<RepaymentModel> repaymentModelList2 = repaymentMapper.getRedPackageInfoByRepaymentForm(repaymentForm);
