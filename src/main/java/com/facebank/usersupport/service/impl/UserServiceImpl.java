@@ -145,6 +145,13 @@ public class UserServiceImpl extends BaseService implements IUserService {
         UserRoleDO userRoleDO = userMapper.selectBySelectiveForPermission(userDetails.getUsername());
         return userRoleDO.getUserId();
     }
+    /**
+     * 通过登录用户获取用户角色
+     */
 
+    public Integer selectRoleByusername(String username){
+        int roleId = userMapper.selectRoleByUsername(username);
+        return roleId;
+    }
 
 }

@@ -74,6 +74,10 @@ public interface UserMapper extends BaseWriteMapper<UserModel, Long> {
     UserRoleDO selectBySelectiveForPermission(String loginName);
 
     /**
+     * 通过用户名、手机号、email，查询用户角色
+     */
+    Integer selectRoleByUsername(String username);
+    /**
      * 禁用用户
      * @param ids
      * @return

@@ -294,4 +294,18 @@ public class UserController extends BaseController {
         }
         return this.excpRestModel(MessageKeyEnum.ERROR);
     }
+
+    /**
+     *
+     * 功能描述: 通过帐号获取获取用户角色
+     *
+     * @param:
+     * @return:
+     * @auther: yaozun
+     * @date:
+     */
+    @RequestMapping("/um/getRoleByUsername")
+    public RestModel getRoleByUsername(String username) {
+        return new RestModel(userService.selectRoleByusername(username));
+    }
 }

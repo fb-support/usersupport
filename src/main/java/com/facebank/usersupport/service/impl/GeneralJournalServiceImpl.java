@@ -30,14 +30,10 @@ public class GeneralJournalServiceImpl extends BaseService implements IGeneralJo
 
 
     @Override
-    public RestModel selectByMobile(String mobile, Integer type, Long startTime, Long endTime, String draw) {
+    public PageInfo<GeneralJournalModel> selectByMobile(String mobile, Integer type, Long startTime, Long endTime, Integer pageSize, Integer pageNumber) {
         List<GeneralJournalModel> generalJournalModels= generalJournalMapper.selectByMobile(mobile,type,startTime,endTime);
-        PageRestModel pageRestModel = new PageRestModel(
-                draw,
-                new Long(generalJournalModels.size() + ""),
-                new Long(generalJournalModels.size() + ""),
-                generalJournalModels
-        );
-        return new RestModel(pageRestModel);
+
+        PageInfo<GeneralJournalModel> pageInfo = new PageInfo(generalJournalModels);
+        return pageInfo;
     }
 }

@@ -125,6 +125,13 @@
         email = #{loginName,jdbcType=VARCHAR})
     </select>
 
+    <select id="selectRoleByUsername" parameterType="String" resultType="int">
+        select ur.role_id from user as u left join user_role as ur on u.user_id = ur.user_id
+        where  u.status = 1 AND (username = #{username,jdbcType=VARCHAR} OR
+        phone = #{username,jdbcType=VARCHAR} OR
+        email = #{username,jdbcType=VARCHAR})
+    </select>
+
     <update id="updateStatusForBanUser" parameterType="int">
         UPDATE user SET status = 0
         where 1=1 AND
