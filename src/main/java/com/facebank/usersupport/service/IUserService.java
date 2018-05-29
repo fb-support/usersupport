@@ -81,4 +81,5 @@ public interface IUserService {
     Long getActiveUserId();
 
 
+    Integer selectRoleByusername(String username);
 }
