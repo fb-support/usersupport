@@ -218,7 +218,7 @@ public class RepaymentController extends BaseController {
                 Long userId = userMainP2PReadMapper.selectUserIdByMobile(repaymentForm.getMobile());
                 repaymentForm.setUserId(userId);
             }
-            String searchKey = ""+repaymentForm.getMobile()+repaymentForm.getOrderId()+repaymentForm.getStartTime()+repaymentForm.getEndTime();
+            String searchKey = ""+repaymentForm.getMobile()+"/"+repaymentForm.getOrderId()+"/"+repaymentForm.getStartTime()+"/"+repaymentForm.getEndTime()+"/"+repaymentForm.getBizStatus();
             // 查询还款信息
             PageInfo<RepaymentModel> repaymentModels = repaymentService.getRepaymentOrderByRepaymentForm(repaymentForm,searchKey);
             // 查询参数保存到session，方便用于导出数据
