@@ -31,8 +31,7 @@ function search(type) {
                 //
                 var startTime = $("#datetimeStart").val();
                 var workNumber = $("#empSelect option:selected").val();
-                var deptNumber = $("#companySelect option:selected").val();
-                // var workNumber = $("#work_Number").val();
+                var deptName = $("#companySelect option:selected").text();
                 if(startTime != null && startTime != ""){
                     var dateStartTime = new Date(startTime);
                 }
@@ -56,7 +55,7 @@ function search(type) {
                         length:length,
                         draw:draw,
                         workNumber:workNumber,
-                        deptNumber:deptNumber,
+                        deptName:deptName,
                         year:year,
                         month:month
                     },
@@ -79,10 +78,7 @@ function search(type) {
                 },
                 {
                     "sClass": "text-center",
-                    "data": "deptNumber",
-                    "render": function (data, type, full, meta) {
-                        return "技术部";
-                    }
+                    "data": "deptName"
                 },
                 {
                     "sClass": "text-center",
@@ -121,25 +117,10 @@ function search(type) {
                 {
                     "sClass": "text-center",
                     "data": "overtimeDuration",
-
+                    "render": function (data, type, full, meta) {
+                        return data + '(约 ' + (data/60).toFixed(2) + ' 小时)';
+                    }
                 }
-                // {
-                //     "sClass": "text-center",
-                //     "data": "workNumber",
-                //     "render": function (data, type, full, meta) {
-                //         //                    class="btn btn-primary"
-                //         return '<button type="button" data-rowindex="'+meta.row+'" onclick="showUpdateModel('+meta.row+');" >查看详细信息</button>';
-                //     }
-                // },
-                // {
-                //     "sClass": "text-center",
-                //     "data": "id",
-                //     "render": function (data, type, full, meta) {
-                //         //                    class="btn btn-primary"
-                //         return '<button type="button" onclick="passApply('+data+');" >批准</button>'+
-                //             '<button type="button" onclick="showReject('+data+');" >不批准</button>';
-                //     }
-                // }
             ],
             columnDefs: [
                 {"orderable": false, "targets": 1},
@@ -188,17 +169,34 @@ function getEmpByNumber() {
     var deptName = $("#companySelect option:selected").text();
     $("#deptNameInput").val(deptName);
     // 初始化人员
+    // $.ajax({
+    //     async: false,
+    //     url: "/emp/getEmpListByDeptNumber?deptNumber="+deptNumber,
+    //     type: "get",
+    //     dataType: "json",
+    //     success: function (result) {
+    //         $("#empSelect").html("<option value=''>--请选择--</option>");
+    //         var empList = result.data;
+    //         var str = "";
+    //         for(var i = 0; i < empList.length; i++){
+    //             str += "<option value='"+empList[i].workNumber+"'>"+empList[i].name+"</option>"
+    //         }
+    //         $("#empSelect").append(str);
+    //     }
+    // });
+
+    // 初始化员工姓名
     $.ajax({
         async: false,
-        url: "/emp/getEmpListByDeptNumber?deptNumber="+deptNumber,
+        url: "/attendance/getAllEmpUser?deptName="+deptName,
         type: "get",
         dataType: "json",
         success: function (result) {
-            $("#empSelect").html("<option value=''>--请选择--</option>");
-            var empList = result.data;
+            var empUser = result.data;
+            console.log(empUser);
             var str = "";
-            for(var i = 0; i < empList.length; i++){
-                str += "<option value='"+empList[i].workNumber+"'>"+empList[i].name+"</option>"
+            for(var i = 0; i < empUser.length; i++){
+                str += "<option value='"+empUser[i].workNumber+"'>"+empUser[i].empName+"</option>"
             }
             $("#empSelect").append(str);
         }

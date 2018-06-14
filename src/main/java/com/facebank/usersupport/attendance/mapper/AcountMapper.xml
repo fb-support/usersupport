@@ -32,4 +32,35 @@
             ,month(`attendance_date`)
         </if>
   </select>
+
+    <select id="acountAllExtend" parameterType="com.facebank.usersupport.attendance.dto.reqDto.AcountVo" resultType="com.facebank.usersupport.attendance.dto.AcountDto">
+        select
+        a.work_number as workNumber,
+        ANY_VALUE(a.emp_name) as empName,
+        a.dept_name as deptName,
+        sum(a.status=1) as late,
+        sum(a.status=2) as early,
+        sum(a.status=3) as lateAndEarly,
+        sum(a.status=4) as absent,
+        sum(a.status=5) as exp,
+        sum(a.attend_count) as overtimeDuration
+        from emp_attendance as a
+        where 1=1
+        <if test="workNumber != null">
+            and a.work_number = #{workNumber}
+        </if>
+        <if test="deptName != null">
+            and a.dept_name = #{deptName}
+        </if>
+        <if test="year != null">
+            and year(attendance_date) = date_format(#{year}, '%Y')
+        </if>
+        <if test="month != null">
+            and month(attendance_date) = date_format(#{month}, '%m')
+        </if>
+        group by a.work_number,year(`attendance_date`)
+        <if test="month != null">
+            ,month(`attendance_date`)
+        </if>
+    </select>
 </mapper>

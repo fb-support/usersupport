@@ -17,7 +17,7 @@ public class AcountDto {
     /**
      * 部门
      */
-    private Integer deptNumber;
+    private String deptName;
     /**
      * 迟到
      */
@@ -67,12 +67,12 @@ public class AcountDto {
         this.empName = empName;
     }
 
-    public Integer getDeptNumber() {
-        return deptNumber;
+    public String getDeptName() {
+        return deptName;
     }
 
-    public void setDeptNumber(Integer deptNumber) {
-        this.deptNumber = deptNumber;
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 
     public Integer getLate() {

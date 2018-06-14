@@ -26,7 +26,7 @@ public class AcountVo {
     /**
      * 部门号
      */
-    private Long deptNumber;
+    private String deptName;
 
     public Date getYear() {
         return year;
@@ -52,11 +52,11 @@ public class AcountVo {
         this.workNumber = workNumber;
     }
 
-    public Long getDeptNumber() {
-        return deptNumber;
+    public String getDeptName() {
+        return deptName;
     }
 
-    public void setDeptNumber(Long deptNumber) {
-        this.deptNumber = deptNumber;
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 }

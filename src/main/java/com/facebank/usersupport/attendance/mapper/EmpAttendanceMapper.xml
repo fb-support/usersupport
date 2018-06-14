@@ -11,18 +11,20 @@
         <result column="start_time" property="startTime"/>
         <result column="end_time" property="endTime"/>
         <result column="status" property="status"/>
+        <result column="note" property="note"/>
+        <result column="attend_count" property="attendCount"/>
     </resultMap>
 
     <insert id="saveEmpAttendanceList" parameterType="java.util.List">
-        INSERT INTO emp_attendance(work_number,emp_name,dept_name,attendance_date,start_time,end_time,status)
+        INSERT INTO emp_attendance(work_number,emp_name,dept_name,attendance_date,start_time,end_time,status,attend_count,note)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.workNumber},#{item.empName},#{item.deptName},#{item.attendanceDate},#{item.startTime},#{item.endTime},#{item.status})
+            (#{item.workNumber},#{item.empName},#{item.deptName},#{item.attendanceDate},#{item.startTime},#{item.endTime},#{item.status},#{item.attendCount},#{item.note})
         </foreach>
     </insert>
 
     <select id="selectAttendanceRecordByForm" parameterType="com.facebank.usersupport.attendance.dto.reqDto.GetAttendanceForm" resultMap="attendanceResult">
-        SELECT id,work_number,emp_name,dept_name,attendance_date,start_time,end_time,status
+        SELECT id,work_number,emp_name,dept_name,attendance_date,start_time,end_time,status,attend_count,note
         FROM emp_attendance
         <where>
             dept_name = #{deptName}
@@ -35,6 +37,16 @@
 
     <select id="selectAttendanceRecordByAttendanceDate" parameterType="java.lang.String" resultType="com.facebank.usersupport.attendance.model.EmpAttendanceModel">
         SELECT * FROM emp_attendance where month(attendance_date) = date_format(#{attendanceDate}, '%m') and year(attendance_date) = date_format(#{attendanceDate}, '%Y')
+    </select>
+
+
+    <resultMap id="EmpUserDTO" type="com.facebank.usersupport.attendance.dto.EmpUserDto">
+        <result column="work_number" property="workNumber"/>
+        <result column="emp_name" property="empName"/>
+    </resultMap>
+
+    <select id="listEmpNames" parameterType="java.lang.String" resultMap="EmpUserDTO">
+        SELECT work_number,emp_name FROM emp_attendance where dept_name=#{deptName} GROUP by emp_name
     </select>
 
 </mapper>

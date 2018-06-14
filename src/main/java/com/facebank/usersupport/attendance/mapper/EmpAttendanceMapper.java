@@ -1,5 +1,6 @@
 package com.facebank.usersupport.attendance.mapper;
 
+import com.facebank.usersupport.attendance.dto.EmpUserDto;
 import com.facebank.usersupport.attendance.dto.reqDto.GetAttendanceForm;
 import com.facebank.usersupport.attendance.model.EmpAttendanceModel;
 import org.springframework.stereotype.Repository;
@@ -18,5 +19,7 @@ public interface EmpAttendanceMapper {
     List<EmpAttendanceModel> selectAttendanceRecordByForm(GetAttendanceForm attendanceForm);
 
     List<EmpAttendanceModel> selectAttendanceRecordByAttendanceDate(String attendanceDate);
+
+    List<EmpUserDto> listEmpNames(String deptName);
 
 }

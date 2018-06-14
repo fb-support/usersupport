@@ -43,6 +43,7 @@ $(function () {
             $("#companySelect").append(str);
         }
     });
+
 });
 
 function importAttendance() {
@@ -77,17 +78,34 @@ function getEmpByNumber() {
     var deptName = $("#companySelect option:selected").text();
     $("#deptNameInput").val(deptName);
     // 初始化人员
+    // $.ajax({
+    //     async: false,
+    //     url: "/emp/getEmpListByDeptNumber?deptNumber="+deptNumber,
+    //     type: "get",
+    //     dataType: "json",
+    //     success: function (result) {
+    //         $("#empSelect").html("<option value=''>--请选择--</option>");
+    //         var empList = result.data;
+    //         var str = "";
+    //         for(var i = 0; i < empList.length; i++){
+    //             str += "<option value='"+empList[i].workNumber+"'>"+empList[i].name+"</option>"
+    //         }
+    //         $("#empSelect").append(str);
+    //     }
+    // });
+
+    // 初始化员工姓名
     $.ajax({
         async: false,
-        url: "/emp/getEmpListByDeptNumber?deptNumber="+deptNumber,
+        url: "/attendance/getAllEmpUser?deptName="+deptName,
         type: "get",
         dataType: "json",
         success: function (result) {
-            $("#empSelect").html("<option value=''>--请选择--</option>");
-            var empList = result.data;
+            var empUser = result.data;
+            console.log(empUser);
             var str = "";
-            for(var i = 0; i < empList.length; i++){
-                str += "<option value='"+empList[i].workNumber+"'>"+empList[i].name+"</option>"
+            for(var i = 0; i < empUser.length; i++){
+                str += "<option value='"+empUser[i].workNumber+"'>"+empUser[i].empName+"</option>"
             }
             $("#empSelect").append(str);
         }
@@ -155,13 +173,19 @@ function searchAttendance() {
                 {
                     "data": "startTime",
                     "render": function (data, type, full, meta) {
-                        return Format(new Date(data)," HH:mm")
+                        if(data == null || "" == data) {
+                            return "";
+                        }
+                        return Format(new Date(data)," HH:mm");
                     }
                 },
                 {
                     "data": "endTime",
                     "render": function (data, type, full, meta) {
-                        return Format(new Date(data)," HH:mm")
+                        if(data == null || "" == data) {
+                            return "";
+                        }
+                        return Format(new Date(data)," HH:mm");
                     }
                 },
                 {
@@ -170,31 +194,38 @@ function searchAttendance() {
                         //类型：0导航菜单；1操作按钮。
                         switch (data) {
                             case 0:
-                                return "正常";
+                                return "<span class='attendanceStatus' style='background-color: #0080FF'>正常</span>";
                                 break;
                             case 1:
-                                return "迟到";
+                                return "<span class='attendanceStatus' style='background-color: #FF7777'>迟到</span>";
                                 break;
                             case 2:
-                                return "早退";
+                                return "<span class='attendanceStatus' style='background-color: #FF60AF'>早退</span>";
                                 break;
                             case 3:
-                                return "迟到早退";
+                                return "<span class='attendanceStatus' style='background-color: #FF2D2D'>迟到早退</span>";
                                 break;
                             case 4:
-                                return "旷工";
+                                return "<span class='attendanceStatus' style='background-color: #EA0000'>旷工</span>";
                                 break;
                             case 5:
-                                return "异常";
+                                return "<span class='attendanceStatus' style='background-color: #00EC00'>异常</span>";
                                 break;
                             case 6:
-                                return "请假";
+                                return "<span class='attendanceStatus' style='background-color: #84C1FF'>请假</span>";
                                 break;
                             case 7:
-                                return "调休";
+                                return "<span class='attendanceStatus' style='background-color: #80FFFF'>调休</span>";
+                                break;
+                            case 8:
+                                return "<span class='attendanceStatus' style='background-color: #00BB00'>加班</span>";
                                 break;
                         }
                     }
+                },
+                {
+                    "sClass": "text-center",
+                    "data": "note"
                 }
             ],
             "oLanguage": {    // 语言设置

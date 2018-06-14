@@ -19,6 +19,11 @@ public class EmpAttendanceModel {
     private Date endTime;
     //状态（0：正常，1：迟到，2：早退，3：迟到早退，4：旷工，5：异常，6：请假，7：调休）
     private Integer status;
+    //加班时长
+    private Integer attendCount;
+    //备注字段，
+    private String note;
+
 
     public Long getId() {
         return id;
@@ -82,5 +87,21 @@ public class EmpAttendanceModel {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getAttendCount() {
+        return attendCount;
+    }
+
+    public void setAttendCount(Integer attendCount) {
+        this.attendCount = attendCount;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

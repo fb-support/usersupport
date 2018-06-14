@@ -1,5 +1,6 @@
 package com.facebank.usersupport.attendance.service.impl;
 
+import com.facebank.usersupport.attendance.dto.EmpUserDto;
 import com.facebank.usersupport.attendance.dto.reqDto.GetAttendanceForm;
 import com.facebank.usersupport.attendance.mapper.EmpAttendanceMapper;
 import com.facebank.usersupport.attendance.model.EmpAttendanceModel;
@@ -32,5 +33,10 @@ public class EmpAttendanceServiceImpl implements IEmpAttendanceService {
     @Override
     public List<EmpAttendanceModel> selectAttendanceRecordByAttendanceDate(String attendanceDate) {
         return empAttendanceMapper.selectAttendanceRecordByAttendanceDate(attendanceDate);
+    }
+
+    @Override
+    public List<EmpUserDto> getAllEmpUsers(String deptName) {
+        return empAttendanceMapper.listEmpNames(deptName);
     }
 }

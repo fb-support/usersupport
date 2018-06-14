@@ -1,5 +1,6 @@
 package com.facebank.usersupport.attendance.service;
 
+import com.facebank.usersupport.attendance.dto.EmpUserDto;
 import com.facebank.usersupport.attendance.dto.reqDto.GetAttendanceForm;
 import com.facebank.usersupport.attendance.model.EmpAttendanceModel;
 
@@ -16,5 +17,7 @@ public interface IEmpAttendanceService {
     List<EmpAttendanceModel> getAttendanceRecordByForm(GetAttendanceForm attendanceForm);
 
     List<EmpAttendanceModel> selectAttendanceRecordByAttendanceDate(String attendanceDate);
+
+    List<EmpUserDto> getAllEmpUsers(String deptName);
 
 }

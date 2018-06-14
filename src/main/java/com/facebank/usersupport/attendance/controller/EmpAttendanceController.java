@@ -1,6 +1,8 @@
 package com.facebank.usersupport.attendance.controller;
 
+import com.facebank.usersupport.attendance.dto.EmpUserDto;
 import com.facebank.usersupport.attendance.dto.reqDto.GetAttendanceForm;
+import com.facebank.usersupport.attendance.model.DeptModel;
 import com.facebank.usersupport.attendance.model.EmpAttendanceModel;
 import com.facebank.usersupport.attendance.service.IEmpAttendanceService;
 import com.facebank.usersupport.common.MessageKeyEnum;
@@ -13,6 +15,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +26,8 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +80,12 @@ public class EmpAttendanceController extends BaseController {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             DateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
             List<EmpAttendanceModel> list = new ArrayList<>();
+
+            //获取一个日历对象，用于下面验证过程中获取日期对应为星期几
+            Calendar calendar = Calendar.getInstance();
+
+            //中文字符检测模板
+            Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]");
             for (int i = 0; i <= lastRowNum; i++) {
                 if (i < 2) {
                     continue;
@@ -105,15 +116,50 @@ public class EmpAttendanceController extends BaseController {
                     } else {
                         // 解析奇数行获取上下班打卡时间
                         for (int j = 0; j < dayInMonth; j++) {
+                            //获取打卡栏内容
                             String clockRecord = row.getCell(j).getStringCellValue();
+                            //使用字符串匹配，为了验证打卡栏中是否有中文字符。
+                            Matcher m = pattern.matcher(clockRecord);
+                            // 获取这一天的日期Date类型
+                            Date attendanceDate = dateFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1));
+                            // 将这一天的Date日期设置进日历中
+                            calendar.setTime(attendanceDate);
+                            // 获取当前为星期几。
+                            int day_in_week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+
                             if ("".equals(clockRecord)) {
-                                continue;
+                                // 若为周六日，则不作处理
+                                if(day_in_week == 6 || day_in_week == 0) {
+                                    continue;
+                                } else {
+                                // 否则，作为缺勤处理
+                                    // 创建一个Model保存考勤信息
+                                    EmpAttendanceModel empAttendanceModel = new EmpAttendanceModel();
+                                    empAttendanceModel.setStatus(4);
+                                    empAttendanceModel.setNote("工作日未上班");
+                                    empAttendanceModel.setWorkNumber(workNumber);
+                                    empAttendanceModel.setEmpName(empName);
+                                    empAttendanceModel.setDeptName(deptName);
+                                    empAttendanceModel.setAttendanceDate(attendanceDate);
+                                    list.add(empAttendanceModel);
+                                }
+                            } else if(m.find()) {
+                                // 创建一个Model保存考勤信息
+                                EmpAttendanceModel empAttendanceModel = new EmpAttendanceModel();
+                                empAttendanceModel.setStatus(5);
+                                empAttendanceModel.setNote(clockRecord);
+                                empAttendanceModel.setWorkNumber(workNumber);
+                                empAttendanceModel.setEmpName(empName);
+                                empAttendanceModel.setDeptName(deptName);
+                                empAttendanceModel.setAttendanceDate(attendanceDate);
+                                list.add(empAttendanceModel);
                             } else {
                                 // 解析上下班打卡时间
                                 String[] clockTimes = StringUtils.split(clockRecord, "\n");
                                 Date startTime = null;
                                 Date endTime = null;
                                 int status = 0;
+                                String note = "";
                                 // 标准上下班时间
                                 Date start = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " 09:00");
                                 Date end = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " 18:00");
@@ -130,6 +176,7 @@ public class EmpAttendanceController extends BaseController {
                                     endTime = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " " + clockTimes[clockTimes.length - 1]);
                                 }
 
+
                                 // 判断是否迟到早退
                                 if(clockTimes.length != 1){
                                     if (startTime.getTime() > start.getTime()) {
@@ -144,13 +191,35 @@ public class EmpAttendanceController extends BaseController {
                                         }
                                     }
                                 }
-                                // 获取这一天的Date类型
-                                Date attendanceDate = dateFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1));
+
+                                //获取员工加班时长。
+                                int attend_count = 0;
+                                if(clockTimes.length == 2) {
+                                    //若为周六日，则全天上班时间都为加班时长
+                                    if(day_in_week == 6 || day_in_week == 0) {
+                                        //计算时间长
+                                        attend_count = Integer.parseInt((endTime.getTime() - startTime.getTime()) + "")/(60*1000);
+                                        //设置状态
+                                        status = 8;
+                                        //设置备注内容
+                                        note = "周末上班";
+                                    } else {
+                                        //超过当天19:00后的时间记为加班时长
+                                        if(endTime.getHours() >= 19) {
+                                            int hour_count = (endTime.getHours() - 19)*60;
+                                            int minute_count = endTime.getMinutes();
+                                            attend_count = hour_count + minute_count;
+                                        }
+                                    }
+                                }
+
                                 // 创建一个Model保存考勤信息
                                 EmpAttendanceModel empAttendanceModel = new EmpAttendanceModel();
                                 empAttendanceModel.setStartTime(startTime);
                                 empAttendanceModel.setEndTime(endTime);
                                 empAttendanceModel.setStatus(status);
+                                empAttendanceModel.setNote(note);
+                                empAttendanceModel.setAttendCount(attend_count);
                                 empAttendanceModel.setWorkNumber(workNumber);
                                 empAttendanceModel.setEmpName(empName);
                                 empAttendanceModel.setDeptName(deptName);
@@ -335,6 +404,23 @@ public class EmpAttendanceController extends BaseController {
         os.flush();
         os.close();
 
+    }
+
+    /**
+     * 获取对应部门的成员集合
+     * @param deptName
+     * @return
+     */
+    @GetMapping("/attendance/getAllEmpUser")
+    @ResponseBody
+    public RestModel getAllEmpUser(String deptName){
+        try {
+            List<EmpUserDto> EmpUsers = empAttendanceService.getAllEmpUsers(deptName);
+            return this.success(EmpUsers);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return this.excpRestModel(MessageKeyEnum.UNCHECK_REQUEST_ERROR);
+        }
     }
 
 }

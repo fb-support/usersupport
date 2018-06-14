@@ -32,7 +32,7 @@ public class AcountServiceImpl implements IAcountService {
     @Override
     public PageInfo getAcountByPage(int pageSize, int pageNumber, AcountVo acountVo) {
         PageHelper.startPage(pageNumber,pageSize);
-        List<AcountDto> acountDtoList = acountMapper.acountAll(acountVo);
+        List<AcountDto> acountDtoList = acountMapper.acountAllExtend(acountVo);
         PageInfo<AcountDto> pageInfo =new PageInfo<>(acountDtoList);
         return pageInfo;
     }

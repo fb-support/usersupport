@@ -37,9 +37,6 @@ public class AcountController extends BaseController {
                                           String draw,
                                           AcountVo acountVo){
         try{
-//            Long userId = userService.getActiveUserId();
-//            UserModel userModel = userService.getByUserId(userId);
-//            queryVo.setWorkNumber(userModel.getWorkNumber());
             int pageNo = start / length + 1;
             PageInfo pageInfo = acountService.getAcountByPage(length,pageNo,acountVo);
             PageRestModel pageRestModel = new PageRestModel(

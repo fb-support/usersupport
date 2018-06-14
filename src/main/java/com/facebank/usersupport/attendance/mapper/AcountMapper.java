@@ -15,9 +15,17 @@ import java.util.List;
 public interface AcountMapper {
 
     /**
-     * 获取所以得统计记录
+     * 获取所以得统计记录,暂时弃用
      * @param acountVo
      * @return
      */
     List<AcountDto> acountAll(AcountVo acountVo);
+
+
+    /**
+     * 获取所以得统计记录
+     * @param acountVo
+     * @return
+     */
+    List<AcountDto> acountAllExtend(AcountVo acountVo);
 }
