@@ -161,16 +161,22 @@ public class EmpAttendanceController extends BaseController {
                                 int status = 0;
                                 String note = "";
                                 // 标准上下班时间
-                                Date start = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " 09:00");
-                                Date end = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " 18:00");
+                                Date start = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " 10:00");
+                                Date end = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " 19:00");
                                 if (clockTimes.length == 2) {
                                     // 上班打卡时间
                                     startTime = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " " + clockTimes[0]);
                                     // 下班打卡时间
                                     endTime = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " " + clockTimes[1]);
                                 } else if (clockTimes.length == 1) {
-                                    startTime = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " " + clockTimes[0]);
-                                    status = 5;
+                                    Integer temp = Integer.valueOf(clockTimes[0].substring(0,2));
+                                    if (temp < 14) {
+                                        startTime = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " " + clockTimes[0]);
+                                        status = 5;
+                                    } else if (temp >14) {
+                                        endTime = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " " + clockTimes[0]);
+                                        status = 5;
+                                    }
                                 } else if (clockTimes.length >= 3) {
                                     startTime = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " " + clockTimes[0]);
                                     endTime = timeFormat.parse(year + "-" + month + "-" + String.format("%02d", j + 1) + " " + clockTimes[clockTimes.length - 1]);
@@ -207,7 +213,7 @@ public class EmpAttendanceController extends BaseController {
                                         //超过当天19:00后的时间记为加班时长
                                         if(endTime.getHours() >= 19) {
                                             int hour_count = (endTime.getHours() - 19)*60;
-                                            int minute_count = endTime.getMinutes();
+                                            int minute_count = endTime.getMinutes() ;
                                             attend_count = hour_count + minute_count;
                                         }
                                     }
